@@ -1,0 +1,74 @@
+--------Covid Resource Aggregator--------
+
+Scope:
+	-Automatic Supplier Verification
+	-Automatic Aggregation of resources
+	-Resources:
+		-ICU Beds
+		-Non-ICU Beds
+		-Plasma
+		-Oxygen
+		----------------
+		-Remdisivir: Is this applicable?
+		-Ambulances?
+		-Testing Center
+	-Languages:
+		-English
+		----------------
+		-Hindi
+	-Type of Service:
+		-Whatsapp bot
+		-Backend Verification API
+		-Backend Aggregation API
+		----------------
+		-Website
+	-Websites:
+		-Covid Fight Club
+		-Covid Facts
+		-Covid Helpers
+		-Covid Win
+		-Covid Resources
+		-Covid Aid
+		-Covid Citizens (IntroBot)
+		-Twitter
+		-Compiled Google Sheets
+		----------------
+	-Non-functional:
+		-Cloud-based hosting (AWS/GCP)
+		-Start small with single server, promote to Docker if traffic increases
+		-Down-time is ok
+		
+-Modules:
+	-Verification
+		-
+	-Aggregation
+		-Aggregator:
+			-High-level role:
+				-Async processor, aggregates data from third-party
+				-Gets Covid Resource requests to add in aggregation queue
+				-Resource queue element has input params with pagination
+				-Updates resources in our DB according to some policy
+				-Deletes resource if expired and cache update policy does not apply to this
+				-Cache Update Policy: TBD (Periodic / MFU / MRU)
+			-Language: Python
+			-Major Components:
+				1. Aggregator (root)
+				2. [KAPIL] Covid Resource Web Crawler? (Pagination, get request)
+				3. [SAHIL] Covid Resource Web Scraper/Parser
+				4. [DEEPALI] Covid Resource Cache Updater (uses update policy, spawns thread to update given queue item)
+				5. Resource Repo (DB)
+		-Aggregated Covid Resource Provider (Business):
+			-High-level role:
+				-Query based
+				-Always fetches resource from cache, times out if does not appear in some time
+				-Sends resource request to Aggregator to add in queue, and 
+			-Language: Python
+		-Query Service (Web API):
+			-High-level role:
+				-
+			-Python
+		-DB:
+			-Firebase Firestore
+		-Front-end:
+			-Webpage HTML/CSS/JS
+	-
