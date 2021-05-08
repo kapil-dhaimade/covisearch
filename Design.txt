@@ -91,6 +91,7 @@ covisearch.aggregation.api:
 	-def getResourcesForFilter(filter: json, next_pos: in-out, int, optional) -> data json
 		convert next_pos to pagination_range_param
 		call aggregateResourceForFilter
+		update stats
 
 covisearch.aggregation.datasyncer:
 	-init.py
