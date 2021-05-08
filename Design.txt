@@ -51,11 +51,11 @@ Scope:
 				-Deletes resource if expired and cache update policy does not apply to this
 				-Cache Update Policy: TBD (Periodic / MFU / MRU)
 			-Language: Python
-			-Major Components:
+			-Major Classes:
 				1. Aggregator (root)
-				2. [KAPIL] Covid Resource Web Crawler? (Pagination, get request)
-				3. [SAHIL] Covid Resource Web Scraper/Parser
-				4. [DEEPALI] Covid Resource Cache Updater (uses update policy, spawns thread to update given queue item)
+				2. Covid Resource Web Crawler? (Pagination, get request)
+				3. Covid Resource Web Scraper/Parser
+				4. Covid Resource Cache Updater (uses update policy, spawns thread to update given queue item)
 				5. Resource Repo (DB)
 		-Aggregated Covid Resource Provider (Business):
 			-High-level role: 
@@ -96,8 +96,8 @@ covisearch.aggregation.aggregator:
 	-init.py
 	-aggregator.py
 		[DEEPALI]
-		-def resyncAggregatedRepo() -> void:
-			# -syncs already existing resources from third-party sources in our DB
+		-def refreshAggregatedData() -> void:
+			# -refreshes already existing resources from third-party sources in our DB
 			# -woken up periodically by Cloud fns
 			# -iterate all items from filtered resource list from store
 			# -calls aggregateResourceForFilter() for each item according to 
