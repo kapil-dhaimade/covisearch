@@ -92,11 +92,11 @@ covisearch.aggregation.api:
 		convert next_pos to pagination_range_param
 		call aggregateResourceForFilter
 
-covisearch.aggregation.aggregator:
+covisearch.aggregation.datasyncer:
 	-init.py
-	-aggregator.py
+	-datasyncer
 		[DEEPALI]
-		-def refreshAggregatedData() -> void:
+		-def resyncAggregatedData() -> void:
 			# -refreshes already existing resources from third-party sources in our DB
 			# -woken up periodically by Cloud fns
 			# -iterate all items from filtered resource list from store
@@ -104,7 +104,8 @@ covisearch.aggregation.aggregator:
 			# update refresh policy of resource
 			# -refer 'cache_design' label below
 			# -will only refer stats table for calculating update policy and send filter to aggregateResourceForFilterCompletely() responsibility wise
-			
+		
+covisearch.aggregation.aggregator:	
 		[SAHIL]
 		-def aggregateNewResourceForFilter(count_of_new_pages_to_fetch):
 			# will read DB table, read curr_max_page, then bring count_of_new_pages_to_fetch number of pages from that page 
