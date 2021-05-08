@@ -58,7 +58,7 @@ Scope:
 				4. [DEEPALI] Covid Resource Cache Updater (uses update policy, spawns thread to update given queue item)
 				5. Resource Repo (DB)
 		-Aggregated Covid Resource Provider (Business):
-			-High-level role:
+			-High-level role: 
 				-Query based
 				-Always fetches resource from cache, times out if does not appear in some time
 				-Sends resource request to Aggregator to add in queue, and 
@@ -71,4 +71,74 @@ Scope:
 			-Firebase Firestore
 		-Front-end:
 			-Webpage HTML/CSS/JS
-	-
+			
+
+-------------------------------------
+DB:
+{
+	"filtered-resource-data": 
+		{
+			"oxygen,mumbai":
+				{ 
+					"curr_end_page": 2,
+					"data": [{},{},{}] 
+				} ,
+			"plasma,delhi":{}
+		}
+}
+
+covisearch.aggregation.api:
+	-def getResourcesForFilter(filter: json, next_pos: in-out, int, optional) -> data json
+		convert next_pos to pagination_range_param
+		call aggregateResourceForFilter
+
+covisearch.aggregation.aggregator:
+	-init.py
+	-aggregator.py
+		[DEEPALI]
+		-def resyncAggregatedRepo() -> void:
+			# -syncs already existing resources from third-party sources in our DB
+			# -woken up periodically by Cloud fns
+			# -iterate all items from filtered resource list from store
+			# -calls aggregateResourceForFilter() for each item according to 
+			# update refresh policy of resource
+			# -refer 'cache_design' label below
+			# -will only refer stats table for calculating update policy and send filter to aggregateResourceForFilterCompletely() responsibility wise
+			
+		[SAHIL]
+		-def aggregateNewResourceForFilter(count_of_new_pages_to_fetch):
+			# will read DB table, read curr_max_page, then bring count_of_new_pages_to_fetch number of pages from that page 
+		
+		# in future this fn may take max-page param if we update each page according to different policy
+		-def aggregateResourceForFilterCompletely(filter) -> void:
+			# will aggregate given filter for filter from 1 to curr_max_page
+			
+	-cache_design:
+		-one cache update policy for per resource type
+		-no expiry field in filter item as it is refreshed periodically
+		-some cache update policy may depend on stats of usage of filters
+		-stats will be kept per filter level eg: stats of 'oxygen in mumbai'
+	
+	-pagination_design:
+		-DB entries (JSON children) not stored by pagination, all pages combined for filter in DB row, need to append?
+		-API won't take param for number of entries of pages. API will decide to return fix number of entries. Value: 100?
+		-pagination needs to be handled only at actual aggregateResourceForFilter() fn.
+		-No provision in API to fetch random access entries by skipping some entries. Entries will be fetched in sequence.
+		-When doing pagination while fetching on-demand a new page, we won't re-sort existing entries in the DB for the same filter. simply sort current entries and append to node.
+		-While refreshing cache, all page entries will be fetched together and re-sorted and replaced in DB for the filter
+		
+	b.py
+	c.py
+
+
+
+
+
+
+
+
+
+
+
+
+
