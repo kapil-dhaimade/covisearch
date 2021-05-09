@@ -1,21 +1,29 @@
 import datetime
+from typing import List, Callable
 from abc import ABC, abstractmethod
-
-from covisearch.aggregation.datasyncer.config import Config
 
 
 # ----Resync policy----
-# Resync policy for resource
-def should_resync_filter_data(filter_stats: 'FilterStats', config: Config) -> bool:
+# Resync policy factory function
+def get_resync_policy() -> Callable[['FilterStats', 'ResyncerConfig'], bool]:
+    return should_resync_filter_data_generic
+
+
+# Resync policy interface function
+def should_resync_filter_data(filter_stats: 'FilterStats',
+                              config: 'ResyncerConfig') -> bool:
     raise NotImplementedError('should_resync_filter_data is an interface function')
 
 
-def should_resync_filter_data_generic(filter_stats: 'FilterStats', config: Config) -> bool:
+# Concrete resync policies
+def should_resync_filter_data_generic(filter_stats: 'FilterStats',
+                                      config: 'ResyncerConfig') -> bool:
     if(_days_since_last_query(filter_stats._last_query_time_utc) >
             config.idle_resync_threshold_in_days):
         return False
     else:
         return True
+# ----Resync policy----
 
 
 def _days_since_last_query(_last_query_time_utc: datetime.datetime) -> int:
@@ -38,6 +46,16 @@ class FilterStats:
 
 
 class FilterStatsRepo(ABC):
+    # convert to return enumerator if performance concern
     @abstractmethod
-    def get_all(self) -> list[FilterStats]:
+    def get_all(self) -> List[FilterStats]:
         raise NotImplementedError('FilterStatsRepo is an interface')
+
+
+class ResyncerConfig:
+    def __init__(self, idle_resync_threshold_in_days: int):
+        self._idle_resync_threshold_in_days = idle_resync_threshold_in_days
+
+    @property
+    def idle_resync_threshold_in_days(self):
+        return self._idle_resync_threshold_in_days
