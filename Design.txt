@@ -38,6 +38,11 @@ Scope:
 		-Start small with single server, promote to Docker if traffic increases
 		-Down-time is ok
 		
+-Deployment:
+	-Google Cloud
+		-Google Cloud Funtions?
+		-Google Cloud Firestore
+		
 -Modules:
 	-Verification
 		-
