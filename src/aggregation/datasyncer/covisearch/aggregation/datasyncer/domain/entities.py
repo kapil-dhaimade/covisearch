@@ -5,7 +5,8 @@ from abc import ABC, abstractmethod
 
 # ----Resync policy----
 # Resync policy factory function
-def get_resync_policy() -> Callable[['FilterStats', 'ResyncerConfig'], bool]:
+def get_resync_policy_for_filter(filter_stats: 'FilterStats') -> \
+        Callable[['FilterStats', 'ResyncerConfig'], bool]:
     return should_resync_filter_data_generic
 
 
