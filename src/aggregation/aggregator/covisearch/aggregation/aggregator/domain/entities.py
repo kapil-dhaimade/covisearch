@@ -41,14 +41,15 @@ class Serializable:
 
 
 class Address(Serializable):
-    def __init__(self, address1: str,city: str,state: str,pin_code: int):
+    def __init__(self, address1: str, city: str, state: str, pin_code: int):
         self.address1 = address1
         self.city = city
         self.state = state
         self.pin_code = pin_code
 
+
 class ResourceInfo(Serializable):
-    def __init__(self, name: str,resource_name: str,address: Address):
+    def __init__(self, name: str, resource_name: str, address: Address):
         self.name = name
         self.resource_name = resource_name
         self.address = address
@@ -67,23 +68,30 @@ class BloodGroup(enum.Enum):
 
 class PlasmaInfo(ResourceInfo):
     resource_name = "Plasma"
-    blood_group: BloodGroup
+
+    def __init__(self, blood_group: BloodGroup):
+        self.blood_group = blood_group
 
 
 class OxygenInfo(ResourceInfo):
     resource_name = "Oxygen"
-    litres: int
+
+    def __init__(self, litres: int):
+        self.litres = litres
 
 
 class HospitalBedsInfo(ResourceInfo):
     resource_name = "HospitalBeds"
-    beds: int
+
+    def __init__(self, beds: int):
+        self.beds = beds
 
 
 class FilteredAggregatedResourceInfo(Serializable):
-    filter: dict
-    curr_end_page: int
-    data: list[ResourceInfo]
+    def __init__(self, search_filter: dict, curr_end_page: int, data: list[ResourceInfo]):
+        self.search_filter = search_filter
+        self.curr_end_page = curr_end_page
+        self.data = data
 
 
 class AggregatedResourceInfoRepo(ABC):
