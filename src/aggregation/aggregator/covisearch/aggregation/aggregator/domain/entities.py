@@ -3,27 +3,55 @@ import enum
 
 
 class Serializable:
-    version=1
+    curr_version = 1
+    k_nested_objects = "nested_objects"
+    k_class_name = "class_name"
+    k_data = "data"
+    k_variable = "variable"
 
-    @staticmethod
-    def to_object(self, data_dict: dict):
-        self.version = data_dict["version"]
+    def __init__(self):
+        self.version = self.__class__.curr_version
+
+    @classmethod
+    def to_object(cls, data_dict: dict):
+        self = cls.__new__(cls)
+        if Serializable.k_nested_objects in data_dict:
+            nested_objects = data_dict[Serializable.k_nested_objects]
+            for nested_object in nested_objects:
+                nested_cls = globals()[nested_object[Serializable.k_class_name]]
+                nested_obj = nested_cls.to_object(nested_object[Serializable.k_data])
+                data_dict[nested_object[Serializable.k_variable]] = nested_obj
+            data_dict.pop(Serializable.k_nested_objects)
+        self.__dict__.update(data_dict)
+        return self
 
     def to_data(self) -> dict:
-        return {"version":self.version}
+        d = self.__dict__.copy()
+        for k, v in self.__dict__.items():
+            if isinstance(v, Serializable):
+                d.pop(k)
+                nested_object = {Serializable.k_variable: k,
+                                 Serializable.k_data: v.to_data(),
+                                 Serializable.k_class_name: v.__class__.__name__}
+                if Serializable.k_nested_objects in d:
+                    d[Serializable.k_nested_objects].append(nested_object)
+                else:
+                    d[Serializable.k_nested_objects] = [nested_object]
+        return d
 
 
-class Address:
-    address1: str
-    city: str
-    state: str
-    pin_code: int
-
+class Address(Serializable):
+    def __init__(self, address1: str,city: str,state: str,pin_code: int):
+        self.address1 = address1
+        self.city = city
+        self.state = state
+        self.pin_code = pin_code
 
 class ResourceInfo(Serializable):
-    name: str
-    resource_name: str
-    address: Address
+    def __init__(self, name: str,resource_name: str,address: Address):
+        self.name = name
+        self.resource_name = resource_name
+        self.address = address
 
 
 class BloodGroup(enum.Enum):
@@ -56,18 +84,6 @@ class FilteredAggregatedResourceInfo(Serializable):
     filter: dict
     curr_end_page: int
     data: list[ResourceInfo]
-
-    def __init__(self, data_dict: dict):
-        self.filter = data_dict["filter"]
-        self.curr_end_page = data_dict["curr_end_page"]
-        self.data = []
-        for data in data_dict["data"]:
-            data[]
-            if(data)
-            self.data.append()
-
-    def to_data(self) -> dict:
-        raise NotImplementedError('Serializable is an interface')
 
 
 class AggregatedResourceInfoRepo(ABC):
