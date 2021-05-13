@@ -55,13 +55,27 @@
 -TODO: Move this to different file
 -App Authentication: App Default Creds (ADC) are needed to run program with Firestore DB from local machine. Use 'gcloud auth application-default login' command to authenticate app. You will be redirected to browser to give permissions on your profile to app-auth. 
 	-Sources:
-		-Google Cloud Client Libraries Docs- Authentication:
+		-Google Cloud Client Libraries Docs - Authentication:
 		https://googleapis.dev/python/google-api-core/latest/auth.html
 		-Google Cloud Docs: Authenticating as a Service account:
 		https://cloud.google.com/docs/authentication/production
 		
--Deployment: 
-	-Open 'run as admin' cmd from root folder of Python project and run following command:
+-Deployment:
+	-Specify package dependencies: 
+		-We need to create 'requirements.txt' file to specify third-party packages used by project
+		-Create requirements.txt in Python project root folder. Use command 'pip freeze > requirements.txt' in terminal to do the same.
+		-Sources:
+			-Google Cloud Docs: Cloud Functions: Specifying dependencies in Python:
+			https://cloud.google.com/functions/docs/writing/specifying-dependencies-python
+	-Create custom '.gcloudignore' file (similar to '.gitignore') if needed to ignore files from getting deployed to Google Cloud. 'gcloud functions deploy' command creates this file by default if needed.
+		-Sources:
+			-Google Cloud Docs: gcloud topic gcloudignore:
+			https://cloud.google.com/sdk/gcloud/reference/topic/gcloudignore
+			-SO: How to include files in .gcloudignore that are ignored in .gitignore:
+			https://stackoverflow.com/questions/56751106/how-to-include-files-in-gcloudignore-that-are-ignored-in-gitignore
+			-SO: How to ignore files when running gcloud app deploy:
+			https://stackoverflow.com/questions/46434270/how-to-ignore-files-when-running-gcloud-app-deploy/46434356
+	-Deploy: Open 'run as admin' cmd from root folder of Python project and run following command:
 		-gcloud functions deploy <FUNCTION_NAME> --runtime python37 --trigger-topic <Pub/Sub_Topic_Name> --max-instances <NUM_OF_INSTANCES> --memory <MEM_IN_MBs> --region <REGION_ID>
 		-Eg: gcloud functions deploy resync_aggregated_data --runtime python37 --trigger-topic resync-schedule-topic --max-instances 1 --memory 128MB --region asia-south1
 	-Running same command multiple times for same fn name with region ID updates given cloud function with new version
