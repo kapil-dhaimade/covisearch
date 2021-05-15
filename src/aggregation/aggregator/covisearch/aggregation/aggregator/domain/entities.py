@@ -1,46 +1,10 @@
 from abc import ABC, abstractmethod
 import enum
+import datetime
+import covisearch.aggregation.aggregator.infra.util as util
 
 
-class Serializable:
-    curr_version = 1
-    k_nested_objects = "nested_objects"
-    k_class_name = "class_name"
-    k_data = "data"
-    k_variable = "variable"
-
-    def __init__(self):
-        self.version = self.__class__.curr_version
-
-    @classmethod
-    def to_object(cls, data_dict: dict):
-        self = cls.__new__(cls)
-        if Serializable.k_nested_objects in data_dict:
-            nested_objects = data_dict[Serializable.k_nested_objects]
-            for nested_object in nested_objects:
-                nested_cls = globals()[nested_object[Serializable.k_class_name]]
-                nested_obj = nested_cls.to_object(nested_object[Serializable.k_data])
-                data_dict[nested_object[Serializable.k_variable]] = nested_obj
-            data_dict.pop(Serializable.k_nested_objects)
-        self.__dict__.update(data_dict)
-        return self
-
-    def to_data(self) -> dict:
-        d = self.__dict__.copy()
-        for k, v in self.__dict__.items():
-            if isinstance(v, Serializable):
-                d.pop(k)
-                nested_object = {Serializable.k_variable: k,
-                                 Serializable.k_data: v.to_data(),
-                                 Serializable.k_class_name: v.__class__.__name__}
-                if Serializable.k_nested_objects in d:
-                    d[Serializable.k_nested_objects].append(nested_object)
-                else:
-                    d[Serializable.k_nested_objects] = [nested_object]
-        return d
-
-
-class Address(Serializable):
+class Address(util.Serializable):
     def __init__(self, address1: str, city: str, state: str, pin_code: int):
         self.address1 = address1
         self.city = city
@@ -48,11 +12,59 @@ class Address(Serializable):
         self.pin_code = pin_code
 
 
-class ResourceInfo(Serializable):
-    def __init__(self, name: str, resource_name: str, address: Address):
-        self.name = name
-        self.resource_name = resource_name
+class VerificationInfo:
+    def __init__(self,
+                 last_verified: datetime,
+                 status: bool):
+        self.last_verified = last_verified
+        self.status = status
+
+
+class ResourceType(enum.Enum):
+    Plasma = 1
+    Oxygen = 2
+    HospitalBeds = 3
+
+
+# Todo - Think do we need resource_type as param?
+class ResourceInfo(util.Serializable, util.PY3CMP):
+    def __init__(self,
+                 contact_name: str,
+                 resource_type: ResourceType,
+                 address: Address,
+                 phone_no: str,
+                 verification_info: VerificationInfo,
+                 post_time: datetime):
+        self.contact_name = contact_name
+        self.resource_type = resource_type
         self.address = address
+        self.phone_no = phone_no
+        # verification_info None means not verified
+        self.verification_info = verification_info
+        self.post_time = post_time
+
+    def __eq__(self, other):
+        # No need to check resource type as isinstance will do the needful check
+        if isinstance(other, self.__class__):
+            return self.phone_no == other.phone_no
+        return False
+
+    def __cmp__(self, other):
+        if self == other:
+            return 0
+        return self.rank() > other.rank()
+
+    def rank(self) -> int:
+        rank = 0
+        if self.verification_info is not None:
+            verified_ago = util.elapsed_days(self.verification_info.last_verified)
+            if verified_ago < 5:
+                rank += 5 - verified_ago
+        if self.post_time:
+            posted_ago = util.elapsed_days(self.post_time)
+            if posted_ago < 1:
+                rank += 1 - posted_ago
+        return rank
 
 
 class BloodGroup(enum.Enum):
@@ -67,27 +79,73 @@ class BloodGroup(enum.Enum):
 
 
 class PlasmaInfo(ResourceInfo):
-    resource_name = "Plasma"
 
-    def __init__(self, blood_group: BloodGroup):
+    def __init__(self,
+                 contact_name: str,
+                 resource_type: ResourceType,
+                 address: Address,
+                 phone_no: str,
+                 verification_info: VerificationInfo,
+                 post_time: datetime,
+                 blood_group: BloodGroup):
+        super().__init__(contact_name,
+                         ResourceType.Plasma,
+                         address,
+                         phone_no,
+                         verification_info,
+                         post_time)
         self.blood_group = blood_group
 
 
 class OxygenInfo(ResourceInfo):
-    resource_name = "Oxygen"
 
-    def __init__(self, litres: int):
+    def __init__(self,
+                 contact_name: str,
+                 resource_type: ResourceType,
+                 address: Address,
+                 phone_no: str,
+                 verification_info: VerificationInfo,
+                 post_time: datetime,
+                 litres: int):
+        super().__init__(contact_name,
+                         ResourceType.Oxygen,
+                         address,
+                         phone_no,
+                         verification_info,
+                         post_time)
         self.litres = litres
+
+    def rank(self) -> int:
+        rank = super().rank()
+        rank += self.litres
+        return rank
 
 
 class HospitalBedsInfo(ResourceInfo):
-    resource_name = "HospitalBeds"
 
-    def __init__(self, beds: int):
+    def __init__(self,
+                 contact_name: str,
+                 resource_type: ResourceType,
+                 address: Address,
+                 phone_no: str,
+                 verification_info: VerificationInfo,
+                 post_time: datetime,
+                 beds: int):
+        super().__init__(contact_name,
+                         ResourceType.HospitalBeds,
+                         address,
+                         phone_no,
+                         verification_info,
+                         post_time)
         self.beds = beds
 
+    def rank(self) -> int:
+        rank = super().rank()
+        rank += self.beds
+        return rank
 
-class FilteredAggregatedResourceInfo(Serializable):
+
+class FilteredAggregatedResourceInfo(util.Serializable):
     def __init__(self, search_filter: dict, curr_end_page: int, data: list[ResourceInfo]):
         self.search_filter = search_filter
         self.curr_end_page = curr_end_page
