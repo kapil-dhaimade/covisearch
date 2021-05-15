@@ -1,11 +1,17 @@
 from abc import ABC, abstractmethod
+from typing import Dict, List
 import enum
 import datetime
-import covisearch.aggregation.aggregator.infra.util as util
+
+import covisearch.util as util
 
 
 class Address(util.Serializable):
+    CITY_LABEL = 'city'
+    ADDRESS1_LABEL = 'address'
+
     def __init__(self, address1: str, city: str, state: str, pin_code: int):
+        super().__init__()
         self.address1 = address1
         self.city = city
         self.state = state
@@ -13,14 +19,30 @@ class Address(util.Serializable):
 
 
 class VerificationInfo:
+    LAST_VERIFIED_UTC_LABEL = 'last_verified_utc'
+
     def __init__(self,
-                 last_verified: datetime,
+                 last_verified_utc: datetime,
                  description: str):
-        self.last_verified = last_verified
+        self.last_verified_utc = last_verified_utc
         self.description = description
 
 
-class ResourceInfo(util.Serializable, util.PY3CMP):
+class CovidResourceType(enum.Enum):
+    OXYGEN = 1,
+    PLASMA = 2,
+    HOSPITAL_BED = 3,
+    HOSPITAL_BED_ICU = 4,
+
+
+class CovidResourceInfo(util.Serializable, util.PY3CMP):
+    CONTACT_NAME_LABEL = 'contact_name'
+    ADDRESS_LABEL = 'address'
+    DESCRIPTION_LABEL = 'description'
+    PHONE_NO_LABEL = 'phone_no'
+    VERIFICATION_INFO_LABEL = 'verification_info'
+    POST_TIME_LABEL = 'post_time'
+
     def __init__(self,
                  contact_name: str,
                  address: Address,
@@ -28,6 +50,7 @@ class ResourceInfo(util.Serializable, util.PY3CMP):
                  phone_no: str,
                  verification_info: VerificationInfo,
                  post_time: datetime):
+        super().__init__()
         self.contact_name = contact_name
         self.address = address
         self.description = description
@@ -50,10 +73,10 @@ class ResourceInfo(util.Serializable, util.PY3CMP):
     def rank(self) -> int:
         rank = 0
         if self.verification_info is not None:
-            verified_ago = util.elapsed_days(self.verification_info.last_verified)
+            verified_ago = util.elapsed_days(self.verification_info.last_verified_utc)
             if verified_ago < 5:
                 rank += 5 - verified_ago
-        if self.post_time:
+        if self.post_time is not None:
             posted_ago = util.elapsed_days(self.post_time)
             if posted_ago < 1:
                 rank += 1 - posted_ago
@@ -72,8 +95,7 @@ class BloodGroup(enum.Enum):
     AB_N = 8
 
 
-class PlasmaInfo(ResourceInfo):
-
+class PlasmaInfo(CovidResourceInfo):
     def __init__(self,
                  contact_name: str,
                  address: Address,
@@ -91,8 +113,7 @@ class PlasmaInfo(ResourceInfo):
         self.blood_group = blood_group
 
 
-class OxygenInfo(ResourceInfo):
-
+class OxygenInfo(CovidResourceInfo):
     def __init__(self,
                  contact_name: str,
                  address: Address,
@@ -115,8 +136,7 @@ class OxygenInfo(ResourceInfo):
         return rank
 
 
-class HospitalBedsInfo(ResourceInfo):
-
+class HospitalBedsInfo(CovidResourceInfo):
     def __init__(self,
                  contact_name: str,
                  address: Address,
@@ -140,7 +160,8 @@ class HospitalBedsInfo(ResourceInfo):
 
 
 class FilteredAggregatedResourceInfo(util.Serializable):
-    def __init__(self, search_filter: dict, curr_end_page: int, data: list[ResourceInfo]):
+    def __init__(self, search_filter: Dict, curr_end_page: int, data: List[CovidResourceInfo]):
+        super().__init__()
         self.search_filter = search_filter
         self.curr_end_page = curr_end_page
         self.data = data
@@ -148,10 +169,10 @@ class FilteredAggregatedResourceInfo(util.Serializable):
 
 class AggregatedResourceInfoRepo(ABC):
     @abstractmethod
-    def get_filtered_resources(self, search_filter: dict) -> FilteredAggregatedResourceInfo:
+    def get_filtered_resources(self, search_filter: Dict) -> FilteredAggregatedResourceInfo:
         raise NotImplementedError('FilteredAggregatedResourceInfoRepo is an interface')
 
     @abstractmethod
-    def set_filtered_resources(self, search_filter: dict,
+    def set_filtered_resources(self, search_filter: Dict,
                                filtered_aggregated_resource_info: FilteredAggregatedResourceInfo):
         raise NotImplementedError('FilteredAggregatedResourceInfoRepo is an interface')
