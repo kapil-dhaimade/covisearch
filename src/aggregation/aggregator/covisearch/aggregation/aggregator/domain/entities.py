@@ -60,6 +60,7 @@ class ResourceInfo(util.Serializable, util.PY3CMP):
         return rank
 
 
+# todo - check serialization of enum
 class BloodGroup(enum.Enum):
     A_P = 1
     A_N = 2
