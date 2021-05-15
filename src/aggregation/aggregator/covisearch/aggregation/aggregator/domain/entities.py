@@ -15,29 +15,22 @@ class Address(util.Serializable):
 class VerificationInfo:
     def __init__(self,
                  last_verified: datetime,
-                 status: bool):
+                 description: str):
         self.last_verified = last_verified
-        self.status = status
+        self.description = description
 
 
-class ResourceType(enum.Enum):
-    Plasma = 1
-    Oxygen = 2
-    HospitalBeds = 3
-
-
-# Todo - Think do we need resource_type as param?
 class ResourceInfo(util.Serializable, util.PY3CMP):
     def __init__(self,
                  contact_name: str,
-                 resource_type: ResourceType,
                  address: Address,
+                 description: str,
                  phone_no: str,
                  verification_info: VerificationInfo,
                  post_time: datetime):
         self.contact_name = contact_name
-        self.resource_type = resource_type
         self.address = address
+        self.description = description
         self.phone_no = phone_no
         # verification_info None means not verified
         self.verification_info = verification_info
@@ -82,15 +75,15 @@ class PlasmaInfo(ResourceInfo):
 
     def __init__(self,
                  contact_name: str,
-                 resource_type: ResourceType,
                  address: Address,
+                 description: str,
                  phone_no: str,
                  verification_info: VerificationInfo,
                  post_time: datetime,
                  blood_group: BloodGroup):
         super().__init__(contact_name,
-                         ResourceType.Plasma,
                          address,
+                         description,
                          phone_no,
                          verification_info,
                          post_time)
@@ -101,15 +94,15 @@ class OxygenInfo(ResourceInfo):
 
     def __init__(self,
                  contact_name: str,
-                 resource_type: ResourceType,
                  address: Address,
+                 description: str,
                  phone_no: str,
                  verification_info: VerificationInfo,
                  post_time: datetime,
                  litres: int):
         super().__init__(contact_name,
-                         ResourceType.Oxygen,
                          address,
+                         description,
                          phone_no,
                          verification_info,
                          post_time)
@@ -125,15 +118,15 @@ class HospitalBedsInfo(ResourceInfo):
 
     def __init__(self,
                  contact_name: str,
-                 resource_type: ResourceType,
                  address: Address,
+                 description: str,
                  phone_no: str,
                  verification_info: VerificationInfo,
                  post_time: datetime,
                  beds: int):
         super().__init__(contact_name,
-                         ResourceType.HospitalBeds,
                          address,
+                         description,
                          phone_no,
                          verification_info,
                          post_time)
