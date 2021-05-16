@@ -1,5 +1,9 @@
 from enum import Enum
 from typing import List, Dict, Tuple
+import re
+import datetime
+from datetime import datetime
+from dateutil import relativedelta
 
 from covisearch.util.types import *
 import covisearch.aggregation.aggregator.domain.entities as entities
@@ -74,17 +78,121 @@ def _map_common_res_info(web_src_res_info: Dict, res_mapping_desc: List[Tuple[st
 
 # NOTE: KAPIL: Desc format:
 # -Tuple['covisearch_res_field_name',
-#       'optional remove_chars(chars) split_on(delim) datetimeconvert(ago/none) web_src_field_name']
+#        'mandatory,remove-chars(chars),split-on(delim),datetimeformat(ago/none),<web_src_field_name>']
 # Eg: Mandatory field, remove '+' and 'space' chars, split multiple numbers on '\n'
-#       -('phone_no', 'remove_chars(+\ ) split_on(\n) mobile-nos')
+#       -('phone_no', 'mandatory,remove-chars(+ ),split-on(\n),mobile-nos')
 # Eg: Optional last verified, web src res format is 'hours/days ago', convert to UTC
-#       -('last_verified_utc', 'optional datetimeconvert(ago) lastVerified')
-# TODO: KAPIL: Implement remove_chars(), split_on() later.
-class ResMappingDesc:
-    def __init__(self, res_mapping_desc: List[Tuple[str, str]]):
-        pass
+#       -('last_verified_utc', 'datetimeformat(ago),lastVerified')
+# TODO: KAPIL: Implement mandatory, remove_chars(), split_on() later.
+class FieldMappingDesc:
+    DATETIMEFORMAT_TOKEN = 'datetimeformat'
 
-    def _split_mapping_desc_csv(self, desc: str) -> List[str]:
-        pass
+    def __init__(self, field_mapping_desc: Tuple[str, str]):
+        self._covisearch_field_name = field_mapping_desc[0]
+        mapping_desc_tokens = self._split_mapping_desc_csv(field_mapping_desc[1])
+        self._web_src_field_name = mapping_desc_tokens.pop()
+        self._datetime_fmt_mapping = self._get_datetime_fmt_mapping_if_present(mapping_desc_tokens)
+
+    @staticmethod
+    def _get_datetime_fmt_mapping_if_present(mapping_desc_tokens):
+        datetimeformat_mapping_token = [fmt for fmt in mapping_desc_tokens if
+                                         FieldMappingDesc.DATETIMEFORMAT_TOKEN in fmt]
+        if datetimeformat_mapping_token is not []:
+            datetimefmt_mapping = datetimeformat_mapping_token[0]
+            datetime_fmt_str = re.search('\((.*)\)', datetimefmt_mapping).group(1)
+            return datetime_format_from_str(datetime_fmt_str)
+        else:
+            return None
+
+    @staticmethod
+    def _split_mapping_desc_csv(desc: str) -> List[str]:
+        return desc.split(',')
+
+
+class DatetimeFormat(enum.Enum):
+    # '5 hours ago' OR '2 days ago' manner
+    AGO = 1,
+    UTC_TIMESTAMP = 2,
+    # 2/05 5:35 PM OR 27/12 at 6:09 AM
+    DD_SLASH_MM_H_M_12 = 3
+
+
+def datetime_format_to_str(datetime_format: DatetimeFormat) -> str:
+    datetime_format_strings = {
+        DatetimeFormat.AGO: 'ago',
+        DatetimeFormat.UTC_TIMESTAMP: 'utc-timestamp'
+    }
+    return datetime_format_strings[datetime_format]
+
+
+def datetime_format_from_str(datetime_format_str: str) -> DatetimeFormat:
+    datetime_formats = {
+        'ago': DatetimeFormat.AGO,
+        'utc-timestamp': DatetimeFormat.UTC_TIMESTAMP
+    }
+    return datetime_formats[datetime_format_str]
+
+
+# NOTE: KAPIL: Refer 'https://regexr.com/' to test out regex
+def map_ago_format_timestamp_to_covisearch(ago_format_datetime: str) -> datetime:
+    # Minutes
+    re_minutes_result = re.search('(\d+|a)\s+minutes?\s+ago', ago_format_datetime, re.IGNORECASE)
+    if re_minutes_result is not None:
+        mins_ago_str = re_minutes_result.group(1)
+        if mins_ago_str.lower() == 'a':
+            mins_ago = 1
+        else:
+            mins_ago = float(mins_ago_str)
+        return datetime.now(datetime.timezone.utc) - datetime.timedelta(minutes=mins_ago)
+
+    # Hours
+    re_hours_result = re.search('(\d+|an)\s+hours?\s+ago', ago_format_datetime, re.IGNORECASE)
+    if re_hours_result is not None:
+        hrs_ago_str = re_hours_result.group(1)
+        if hrs_ago_str.lower() == 'an':
+            hrs_ago = 1
+        else:
+            hrs_ago = float(hrs_ago_str)
+        return datetime.now(datetime.timezone.utc) - datetime.timedelta(hours=hrs_ago)
+
+    # Days
+    re_days_result = re.search('(\d+|a)\s+days?\s+ago', ago_format_datetime, re.IGNORECASE)
+    if re_days_result is not None:
+        days_ago_str = re_days_result.group(1)
+        if days_ago_str.lower() == 'a':
+            days_ago = 1
+        else:
+            days_ago = float(days_ago_str)
+        return datetime.now(datetime.timezone.utc) - datetime.timedelta(days=days_ago)
+
+    # Weeks
+    re_weeks_result = re.search('(\d+|a)\s+weeks?\s+ago', ago_format_datetime, re.IGNORECASE)
+    if re_weeks_result is not None:
+        weeks_ago_str = re_weeks_result.group(1)
+        if weeks_ago_str.lower() == 'a':
+            weeks_ago = 1
+        else:
+            weeks_ago = float(weeks_ago_str)
+        return datetime.now(datetime.timezone.utc) - datetime.timedelta(weeks=weeks_ago)
+
+    # Months
+    re_months_result = re.search('(\d+|a)\s+months?\s+ago', ago_format_datetime, re.IGNORECASE)
+    if re_months_result is not None:
+        months_ago_str = re_months_result.group(1)
+        if months_ago_str.lower() == 'a':
+            months_ago = 1
+        else:
+            months_ago = float(months_ago_str)
+        return datetime.now(datetime.timezone.utc) - relativedelta(months=months_ago)
+
+    # Years
+    re_years_result = re.search('(\d+|a)\s+years?\s+ago', ago_format_datetime, re.IGNORECASE)
+    if re_years_result is not None:
+        years_ago_str = re_years_result.group(1)
+        if years_ago_str.lower() == 'a':
+            years_ago = 1
+        else:
+            years_ago = float(years_ago_str)
+        return datetime.now(datetime.timezone.utc) - relativedelta(years=years_ago)
 # verified/updated time, phone number separation, mandatory, remove chars
 # ----Covid Resource Web Source - ENDS ----
