@@ -1,13 +1,13 @@
 from enum import Enum
 from typing import List, Dict, Tuple
 import re
-import datetime
-from datetime import datetime
-from dateutil import relativedelta
+from datetime import datetime, timezone
+from dateutil import tz
 
 from covisearch.util.types import *
 import covisearch.aggregation.aggregator.domain.entities as entities
 from covisearch.aggregation.aggregator.domain.entities import CovidResourceInfo, CovidResourceType
+import covisearch.util.datetimeutil
 
 
 # NOTE: KAPIL: Python Dict convertible to JSON provided data types are
@@ -109,90 +109,88 @@ class FieldMappingDesc:
         return desc.split(',')
 
 
-class DatetimeFormat(enum.Enum):
-    # '5 hours ago' OR '2 days ago' manner
-    AGO = 1,
-    UTC_TIMESTAMP = 2,
-    # 2/05 5:35 PM OR 27/12 at 6:09 AM
-    DD_SLASH_MM_H_M_12 = 3
-
-
-def datetime_format_to_str(datetime_format: DatetimeFormat) -> str:
+def datetime_format_to_str(datetime_format: covisearch.util.datetimeutil.DatetimeFormat) -> str:
     datetime_format_strings = {
-        DatetimeFormat.AGO: 'ago',
-        DatetimeFormat.UTC_TIMESTAMP: 'utc-timestamp'
+        covisearch.util.datetimeutil.DatetimeFormat.AGO: 'ago',
+        covisearch.util.datetimeutil.DatetimeFormat.ISOFORMAT: 'isoformat',
+        covisearch.util.datetimeutil.DatetimeFormat.SHORT_DATETIME: 'short-datetime'
     }
     return datetime_format_strings[datetime_format]
 
 
-def datetime_format_from_str(datetime_format_str: str) -> DatetimeFormat:
+def datetime_format_from_str(datetime_format_str: str) -> \
+        covisearch.util.datetimeutil.DatetimeFormat:
     datetime_formats = {
-        'ago': DatetimeFormat.AGO,
-        'utc-timestamp': DatetimeFormat.UTC_TIMESTAMP
+        'ago': covisearch.util.datetimeutil.DatetimeFormat.AGO,
+        'isoformat': covisearch.util.datetimeutil.DatetimeFormat.ISOFORMAT,
+        'short-datetime': covisearch.util.datetimeutil.DatetimeFormat.SHORT_DATETIME
     }
     return datetime_formats[datetime_format_str]
 
 
 # NOTE: KAPIL: Refer 'https://regexr.com/' to test out regex
 def map_ago_format_timestamp_to_covisearch(ago_format_datetime: str) -> datetime:
-    # Minutes
-    re_minutes_result = re.search('(\d+|a)\s+minutes?\s+ago', ago_format_datetime, re.IGNORECASE)
-    if re_minutes_result is not None:
-        mins_ago_str = re_minutes_result.group(1)
-        if mins_ago_str.lower() == 'a':
-            mins_ago = 1
-        else:
-            mins_ago = float(mins_ago_str)
-        return datetime.now(datetime.timezone.utc) - datetime.timedelta(minutes=mins_ago)
+    return covisearch.util.datetimeutil.\
+        map_ago_format_timestamp_to_isoformat(ago_format_datetime)
 
-    # Hours
-    re_hours_result = re.search('(\d+|an)\s+hours?\s+ago', ago_format_datetime, re.IGNORECASE)
-    if re_hours_result is not None:
-        hrs_ago_str = re_hours_result.group(1)
-        if hrs_ago_str.lower() == 'an':
-            hrs_ago = 1
-        else:
-            hrs_ago = float(hrs_ago_str)
-        return datetime.now(datetime.timezone.utc) - datetime.timedelta(hours=hrs_ago)
 
-    # Days
-    re_days_result = re.search('(\d+|a)\s+days?\s+ago', ago_format_datetime, re.IGNORECASE)
-    if re_days_result is not None:
-        days_ago_str = re_days_result.group(1)
-        if days_ago_str.lower() == 'a':
-            days_ago = 1
-        else:
-            days_ago = float(days_ago_str)
-        return datetime.now(datetime.timezone.utc) - datetime.timedelta(days=days_ago)
+def map_isoformat_timestamp_to_covisearch(isoformat_datetime_str: str) -> datetime:
+    covisearch_datetime = datetime.fromisoformat(isoformat_datetime_str)
+    # NOTE: KAPIL: Since we operate in IST, setting default to IST.
+    # Need to change if region changes or becomes multi-region.
+    covisearch_datetime = set_timezone_ist_if_not_present(covisearch_datetime)
+    covisearch_datetime = covisearch_datetime.astimezone(tz=timezone.utc)
+    return covisearch_datetime
 
-    # Weeks
-    re_weeks_result = re.search('(\d+|a)\s+weeks?\s+ago', ago_format_datetime, re.IGNORECASE)
-    if re_weeks_result is not None:
-        weeks_ago_str = re_weeks_result.group(1)
-        if weeks_ago_str.lower() == 'a':
-            weeks_ago = 1
-        else:
-            weeks_ago = float(weeks_ago_str)
-        return datetime.now(datetime.timezone.utc) - datetime.timedelta(weeks=weeks_ago)
 
-    # Months
-    re_months_result = re.search('(\d+|a)\s+months?\s+ago', ago_format_datetime, re.IGNORECASE)
-    if re_months_result is not None:
-        months_ago_str = re_months_result.group(1)
-        if months_ago_str.lower() == 'a':
-            months_ago = 1
-        else:
-            months_ago = float(months_ago_str)
-        return datetime.now(datetime.timezone.utc) - relativedelta(months=months_ago)
+def map_short_datetime_timestamp_to_covisearch(short_datetime_str) -> datetime:
+    covisearch.util.datetimeutil.map_short_datetime_dd_mm_to_isoformat(short_datetime_str)
 
-    # Years
-    re_years_result = re.search('(\d+|a)\s+years?\s+ago', ago_format_datetime, re.IGNORECASE)
-    if re_years_result is not None:
-        years_ago_str = re_years_result.group(1)
-        if years_ago_str.lower() == 'a':
-            years_ago = 1
-        else:
-            years_ago = float(years_ago_str)
-        return datetime.now(datetime.timezone.utc) - relativedelta(years=years_ago)
+
+def set_timezone_ist_if_not_present(timestamp: datetime) -> datetime:
+    if not covisearch.util.datetimeutil.is_timezone_aware(timestamp):
+        timestamp = timestamp.replace(tzinfo=tz.gettz('Asia/Kolkata'))
+    return timestamp
 # verified/updated time, phone number separation, mandatory, remove chars
 # ----Covid Resource Web Source - ENDS ----
+
+
+if __name__ == '__main__':
+
+    dt = datetime.fromisoformat('2021-05-16T21:06:17.000000')
+    dt = dt.replace(tzinfo=tz.gettz('America/New_York'))
+    dt = dt.astimezone(tz=timezone.utc)
+    st = dt.isoformat()
+    # print('a minute ago = ' + str(map_ago_format_timestamp_to_covisearch('a minute ago')))
+    # print('an hour ago = ' + str(map_ago_format_timestamp_to_covisearch('an hour ago')))
+    # print('a day ago = ' + str(map_ago_format_timestamp_to_covisearch('a day ago')))
+    # print('a week ago = ' + str(map_ago_format_timestamp_to_covisearch('a week ago')))
+    # print('a month ago = ' + str(map_ago_format_timestamp_to_covisearch('a month ago')))
+    # print('a year ago = ' + str(map_ago_format_timestamp_to_covisearch('a year ago')))
+    #
+    # print('1 minute ago = ' + str(map_ago_format_timestamp_to_covisearch('1 minute ago')))
+    # print('1 hour ago = ' + str(map_ago_format_timestamp_to_covisearch('1 hour ago')))
+    # print('1 day ago = ' + str(map_ago_format_timestamp_to_covisearch('1 day ago')))
+    # print('1 week ago = ' + str(map_ago_format_timestamp_to_covisearch('1 week ago')))
+    # print('1 month ago = ' + str(map_ago_format_timestamp_to_covisearch('1 month ago')))
+    # print('1 year ago = ' + str(map_ago_format_timestamp_to_covisearch('1 year ago')))
+    #
+    # print('5 minutes ago = ' + str(map_ago_format_timestamp_to_covisearch('5 minutes ago')))
+    # print('5 hours ago = ' + str(map_ago_format_timestamp_to_covisearch('5 hours ago')))
+    # print('5 days ago = ' + str(map_ago_format_timestamp_to_covisearch('5 days ago')))
+    # print('5 weeks ago = ' + str(map_ago_format_timestamp_to_covisearch('5 weeks ago')))
+    # print('5 months ago = ' + str(map_ago_format_timestamp_to_covisearch('5 months ago')))
+    # print('5 years ago = ' + str(map_ago_format_timestamp_to_covisearch('5 years ago')))
+    #
+    # print('15 minutes ago = ' + str(map_ago_format_timestamp_to_covisearch('15 minutes ago')))
+    # print('15 days ago = ' + str(map_ago_format_timestamp_to_covisearch('15 days ago')))
+    # print('15 weeks ago = ' + str(map_ago_format_timestamp_to_covisearch('15 weeks ago')))
+    # print('15 hours ago = ' + str(map_ago_format_timestamp_to_covisearch('15 hours ago')))
+    # print('6 months ago = ' + str(map_ago_format_timestamp_to_covisearch('6 months ago')))
+    # print('3 years ago = ' + str(map_ago_format_timestamp_to_covisearch('3 years ago')))
+    #
+    # print('150 minutes ago = ' + str(map_ago_format_timestamp_to_covisearch('150 minutes ago')))
+    # print('72 hours ago = ' + str(map_ago_format_timestamp_to_covisearch('72 hours ago')))
+    # print('40 days ago = ' + str(map_ago_format_timestamp_to_covisearch('40 days ago')))
+    # print('18 months ago = ' + str(map_ago_format_timestamp_to_covisearch('18 months ago')))
+    print('end')
