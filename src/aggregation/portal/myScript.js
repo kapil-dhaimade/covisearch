@@ -2,7 +2,7 @@ var app = angular.module('myApp', []);
 app.controller('formCtrl', function($scope,$http) {
     const api_base_url ="https://api.covidcitizens.org/api/v1/leadbyquery?";
     $scope.dataFetched=false;
-    $scope.master = {city:{city:"Surat"}, resource:{type:"Plasma"}};
+    $scope.master = {city:{city:"Mumbai"}, resource:{type:"Plasma"}};
     $scope.cityList = [
         {city : "Mumbai"},
         {city : "Delhi"},
