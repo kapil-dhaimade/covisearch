@@ -1,63 +1,39 @@
 from abc import ABC, abstractmethod
 from typing import Dict, List
 import enum
-import datetime
 
 import covisearch.util as util
 
 
-class Address(util.Serializable):
-    CITY_LABEL = 'city'
-    ADDRESS1_LABEL = 'address'
-
-    def __init__(self, address1: str, city: str, state: str, pin_code: int):
-        super().__init__()
-        self.address1 = address1
-        self.city = city
-        self.state = state
-        self.pin_code = pin_code
-
-
 class VerificationInfo:
     LAST_VERIFIED_UTC_LABEL = 'last_verified_utc'
-
-    def __init__(self,
-                 last_verified_utc: datetime,
-                 description: str):
-        self.last_verified_utc = last_verified_utc
-        self.description = description
 
 
 class CovidResourceType(enum.Enum):
     OXYGEN = 1,
     PLASMA = 2,
     HOSPITAL_BED = 3,
-    HOSPITAL_BED_ICU = 4,
+    HOSPITAL_BED_ICU = 4
+
+    @staticmethod
+    def to_string(resource_type: 'CovidResourceType') -> str:
+        res_type_strings = {
+            CovidResourceType.PLASMA: 'plasma',
+            CovidResourceType.HOSPITAL_BED_ICU: 'hospital_bed_icu',
+            CovidResourceType.HOSPITAL_BED: 'hospital_bed',
+            CovidResourceType.OXYGEN: 'oxygen'
+        }
+        return res_type_strings[resource_type]
 
 
-class CovidResourceInfo(util.Serializable, util.PY3CMP):
+class CovidResourceInfo(util.PY3CMP):
     CONTACT_NAME_LABEL = 'contact_name'
     ADDRESS_LABEL = 'address'
-    DESCRIPTION_LABEL = 'description'
+    DETAILS_LABEL = 'details'
     PHONE_NO_LABEL = 'phone_no'
     VERIFICATION_INFO_LABEL = 'verification_info'
     POST_TIME_LABEL = 'post_time'
-
-    def __init__(self,
-                 contact_name: str,
-                 address: Address,
-                 description: str,
-                 phone_no: str,
-                 verification_info: VerificationInfo,
-                 post_time: datetime):
-        super().__init__()
-        self.contact_name = contact_name
-        self.address = address
-        self.description = description
-        self.phone_no = phone_no
-        # verification_info None means not verified
-        self.verification_info = verification_info
-        self.post_time = post_time
+    RESOURCE_TYPE_LABEL = 'resource_type'
 
     def __eq__(self, other):
         # No need to check resource type as isinstance will do the needful check
@@ -68,19 +44,24 @@ class CovidResourceInfo(util.Serializable, util.PY3CMP):
     def __cmp__(self, other):
         if self == other:
             return 0
-        return self.rank() > other.rank()
+        return self.score() > other.score()
 
-    def rank(self) -> int:
-        rank = 0
-        if self.verification_info is not None:
-            verified_ago = util.elapsed_days(self.verification_info.last_verified_utc)
+    @classmethod
+    def score(cls, res_info: Dict) -> int:
+        score = 0
+        verification_info = res_info[cls.VERIFICATION_INFO_LABEL]
+        if verification_info is not None:
+            verified_ago = util.elapsed_days(
+                verification_info[VerificationInfo.LAST_VERIFIED_UTC_LABEL])
             if verified_ago < 5:
-                rank += 5 - verified_ago
-        if self.post_time is not None:
-            posted_ago = util.elapsed_days(self.post_time)
+                score += 5 - verified_ago
+
+        post_time = res_info[cls.POST_TIME_LABEL]
+        if post_time is not None:
+            posted_ago = util.elapsed_days(post_time)
             if posted_ago < 1:
-                rank += 1 - posted_ago
-        return rank
+                score += 1 - posted_ago
+        return score
 
 
 # todo - check serialization of enum
@@ -96,74 +77,61 @@ class BloodGroup(enum.Enum):
 
 
 class PlasmaInfo(CovidResourceInfo):
-    def __init__(self,
-                 contact_name: str,
-                 address: Address,
-                 description: str,
-                 phone_no: str,
-                 verification_info: VerificationInfo,
-                 post_time: datetime,
-                 blood_group: BloodGroup):
-        super().__init__(contact_name,
-                         address,
-                         description,
-                         phone_no,
-                         verification_info,
-                         post_time)
-        self.blood_group = blood_group
+    BLOOD_GROUP_LABEL = 'blood_group'
 
 
 class OxygenInfo(CovidResourceInfo):
-    def __init__(self,
-                 contact_name: str,
-                 address: Address,
-                 description: str,
-                 phone_no: str,
-                 verification_info: VerificationInfo,
-                 post_time: datetime,
-                 litres: int):
-        super().__init__(contact_name,
-                         address,
-                         description,
-                         phone_no,
-                         verification_info,
-                         post_time)
-        self.litres = litres
+    LITRES_LABEL = 'litre'
 
-    def rank(self) -> int:
-        rank = super().rank()
-        rank += self.litres
-        return rank
+    @classmethod
+    def score(cls, res_info: Dict) -> int:
+        score = super().score(res_info)
+        litres = res_info[cls.LITRES_LABEL]
+        if litres is not None:
+            score += litres
+        return score
 
 
 class HospitalBedsInfo(CovidResourceInfo):
-    def __init__(self,
-                 contact_name: str,
-                 address: Address,
-                 description: str,
-                 phone_no: str,
-                 verification_info: VerificationInfo,
-                 post_time: datetime,
-                 beds: int):
-        super().__init__(contact_name,
-                         address,
-                         description,
-                         phone_no,
-                         verification_info,
-                         post_time)
-        self.beds = beds
+    AVAILABLE_BEDS_LABEL = 'available_beds'
 
-    def rank(self) -> int:
-        rank = super().rank()
-        rank += self.beds
-        return rank
+    @classmethod
+    def score(cls, res_info: Dict) -> int:
+        score = super().score(res_info)
+        available_beds = res_info[cls.AVAILABLE_BEDS_LABEL]
+        if available_beds is not None:
+            score += available_beds
+        return score
+
+
+class SearchFilter:
+    def __init__(self, city: str, resource_type: CovidResourceType, blood_group: BloodGroup):
+        self._city: str = city
+        self._resource_type: CovidResourceType = resource_type
+        self._blood_group: BloodGroup = blood_group
+
+    @property
+    def city(self) -> str:
+        return self._city
+
+    @property
+    def resource_type(self) -> CovidResourceType:
+        return self._resource_type
+
+    @property
+    def blood_group(self) -> BloodGroup:
+        return self._blood_group
+
+    @staticmethod
+    def create_from_url_query_params_fmt(search_filter: str) -> 'SearchFilter':
+        filter_tokens = search_filter.split('&')
+        city_param = [city for city in filter_tokens if 'city=' in city][0]
 
 
 class FilteredAggregatedResourceInfo(util.Serializable):
-    def __init__(self, search_filter: Dict, curr_end_page: int, data: List[CovidResourceInfo]):
+    def __init__(self, search_filter: Dict, data: List[CovidResourceInfo]):
         super().__init__()
         self.search_filter = search_filter
-        self.curr_end_page = curr_end_page
         self.data = data
 
 
