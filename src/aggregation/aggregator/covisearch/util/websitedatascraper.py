@@ -160,7 +160,7 @@ class JSONSelectorParser(ContentTypeSelectorParser):
         self._json_content = json.loads(content)
 
     def get_all_vals_matching_selector(self, selector: str) -> List[str]:
-        return [match.value for match in jsonpath_ng.parse(selector).find(self._json_content)]
+        return [str(match.value) for match in jsonpath_ng.parse(selector).find(self._json_content)]
 
 
 class HTMLSelectorParser(ContentTypeSelectorParser):

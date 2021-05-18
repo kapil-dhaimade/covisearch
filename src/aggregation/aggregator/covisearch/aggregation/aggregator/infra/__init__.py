@@ -8,12 +8,12 @@ db = firestore.Client()
 
 
 class AggregatedResourceInfoRepoImpl(entities.AggregatedResourceInfoRepo):
-    def get_filtered_resources(self, search_filter: dict) -> entities.FilteredAggregatedResourceInfo:
+    def get_resources_for_filter(self, search_filter: dict) -> entities.FilteredAggregatedResourceInfo:
         resource_info_db_coll = db.collection('filtered-aggregated-resource-info').stream()
         return firestore_to_resource_info(resource_info_db_coll, search_filter)
 
-    def set_filtered_resources(self, search_filter: dict,
-                               filtered_aggregated_resource_info: entities.FilteredAggregatedResourceInfo):
+    def set_resources_for_filter(self, search_filter: dict,
+                                 filtered_aggregated_resource_info: entities.FilteredAggregatedResourceInfo):
         resource_info_db_coll = db.collection('filtered-aggregated-resource-info').stream()
         resource_info_to_firestore(resource_info_db_coll, search_filter,
                                    filtered_aggregated_resource_info)
