@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
   <script src="myScript.js"></script>
 </head>
 
@@ -69,10 +70,14 @@
               <span><b>Location:</b> {{x.location}}</span><br>
               <span><b>Category:</b> {{x.category}}</span><br>
               <span><b>Source:</b> {{x.source}}</span><br>
+              <span><b>Date:</b> {{date}}</span><br>
+              <span><b>Numbers:</b> <a ng-repeat="y in numbers.split(',')" href="tel:{{y}}"> {{y}}</a>
+              </span>
+              
             </div>
             <div class="float-right col">
-              <div class="float-right">
-                <span><span class="fa fa-phone"></span> <a href="tel:{{x.phone}}">{{x.phone}}</a></span><br>
+              <div class="float-right" ng-repeat="y in x.phone.split(',')">
+                <span><span class="fa fa-phone"></span> <a href="tel:{{y}}">{{y}}</a></span><br>
               </div>
             </div>
           </div>
