@@ -4,10 +4,11 @@ import re
 from datetime import datetime, timezone
 from dateutil import tz
 from abc import ABC, abstractmethod
+import urllib.parse
 
 from covisearch.util.types import *
-import covisearch.aggregation.aggregator.domain.entities as entities
-from covisearch.aggregation.aggregator.domain.entities import \
+import covisearch.aggregation.core.domain.entities as entities
+from covisearch.aggregation.core.domain.entities import \
     CovidResourceInfo, CovidResourceType, OxygenInfo, \
     PlasmaInfo, HospitalBedsInfo, SearchFilter
 import covisearch.util.datetimeutil
@@ -87,12 +88,13 @@ class WebSource:
         web_resource_url = web_res_url_template
 
         web_resource_url = web_resource_url.replace(
-            cls.WEB_RES_URL_TEMPLATE_CITY_PLACEHOLDER, search_filter.city)
+            cls.WEB_RES_URL_TEMPLATE_CITY_PLACEHOLDER,
+            urllib.parse.quote(search_filter.city))
 
         filter_res_type_str = CovidResourceType.to_string(search_filter.resource_type)
         web_resource_url = web_resource_url.replace(
             cls.WEB_RES_URL_TEMPLATE_RESOURCE_TYPE_PLACEHOLDER,
-            resource_type_label_mapping[filter_res_type_str])
+            urllib.parse.quote(resource_type_label_mapping[filter_res_type_str]))
 
         # TODO: KAPIL: Blood group filter mapping
 
@@ -286,7 +288,7 @@ class FieldMappingDesc:
     def _get_datetime_fmt_if_specified(cls, mapping_desc_tokens):
         datetimeformat_mapping_token = [fmt for fmt in mapping_desc_tokens if
                                         FieldMappingDesc.DATETIMEFORMAT_TOKEN in fmt]
-        if datetimeformat_mapping_token is not []:
+        if datetimeformat_mapping_token:
             datetimefmt_mapping = datetimeformat_mapping_token[0]
             datetime_fmt_str = cls.re_datetime_fmt_str_pattern.search(
                 datetimefmt_mapping).group(1)

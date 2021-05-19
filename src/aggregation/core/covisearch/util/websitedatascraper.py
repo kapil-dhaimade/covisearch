@@ -1,4 +1,4 @@
-from typing import Tuple, List, Dict
+from typing import List, Dict
 import json
 from abc import ABC
 
@@ -22,14 +22,14 @@ def scrape_data_from_websites(
 class DataScrapingParams:
     def __init__(self, url: URL, response_content_type: ContentType,
                  table_column_selectors: Dict[str, str],
-                 fields_selector_list: Dict[str, str]):
+                 fields_selectors: Dict[str, str]):
         self._url = url
         self._response_content_type = response_content_type
         # NOTE: KAPIL: Selector may be XPath, JSONPath, etc. based on content type
         # Refer 'https://jsonpathfinder.com/' to get JSONPaths from JSON
         # Refer 'http://videlibri.sourceforge.net/cgi-bin/xidelcgi' to get XPath from XML/HTML
         self._table_column_selectors = table_column_selectors
-        self._fields_selector_list = fields_selector_list
+        self._fields_selectors = fields_selectors
 
     @property
     def url(self) -> URL:
@@ -44,8 +44,8 @@ class DataScrapingParams:
         return self._table_column_selectors
 
     @property
-    def fields_selector_list(self) -> Dict[str, str]:
-        return self._fields_selector_list
+    def fields_selectors(self) -> Dict[str, str]:
+        return self._fields_selectors
 
 
 class ScrapedData:
@@ -126,7 +126,7 @@ def scrape_data_from_response(response_content: str,
 def scrape_fields_from_response(scraping_params: DataScrapingParams,
                                 selector_parser: 'ContentTypeSelectorParser') -> Dict[str, str]:
     field_selector_pairs = [selector_pair for selector_pair in
-                            scraping_params.fields_selector_list.items()]
+                            scraping_params.fields_selectors.items()]
     field_selector_vals = [field_selector_pair[1] for field_selector_pair in field_selector_pairs]
     field_vals: List[str] = \
         [selector_parser.get_all_vals_matching_selector(field_selector)
@@ -160,6 +160,7 @@ class JSONSelectorParser(ContentTypeSelectorParser):
     def __init__(self, content: str):
         self._json_content = json.loads(content)
 
+    # TODO: KAPIL: Fix to return default values for missing values too.
     def get_all_vals_matching_selector(self, selector: str) -> List[str]:
         return [str(match.value) for match in jsonpath_ng.parse(selector).find(self._json_content)]
 
@@ -172,25 +173,25 @@ class HTMLSelectorParser(ContentTypeSelectorParser):
         return [value for value in self._selector.xpath(selector).getall()]
 
 
-# # NOTE: KAPIL: Uncomment while testing
+# NOTE: KAPIL: Uncomment while testing
 # if __name__ == '__main__':
 #     data_scraping_params2 = [
 #         DataScrapingParams('https://1platefood.com/portal/resources?page=2&type=oxygen&'
 #                            'city=Mumbai&sort=last_verified_at&availability=Available',
 #                            ContentType.JSON,
-#                            {'name': 'data[*].name', 'city': 'data[*].city',
-#                             'phone': 'data[*].phone',
-#                             'last_verified_at': 'data[*].last_verified_at'},
-#                            {'page_num': 'page', 'total_pages': 'num_pages',
-#                             'page_size': 'page_size', 'total_entries': 'total'}),
+#                            [('name', 'data[*].name'), ('city', 'data[*].city'),
+#                             ('phone', 'data[*].phone'),
+#                             ('last_verified_at', 'data[*].last_verified_at')],
+#                            [('page_num', 'page'), ('total_pages', 'num_pages'),
+#                             ('page_size', 'page_size'), ('total_entries', 'total')]),
 #
 #         DataScrapingParams('https://api.covidcitizens.org/api/v1/leadbyquery?location=delhi&'
 #                            'category=plasma',
 #                            ContentType.JSON,
-#                            {'name': 'data[*].name', 'city': 'data[*].location',
-#                             'phone': 'data[*].phone',
-#                             'last_verified': 'data[*].lastverified'},
-#                            {'total_entries': 'noOfLeads'})
+#                            [('name', 'data[*].name'), ('city', 'data[*].location'),
+#                             ('phone', 'data[*].phone'),
+#                             ('last_verified', 'data[*].lastverified')],
+#                            [('total_entries', 'noOfLeads')])
 #     ]
 #     scraped_data = scrape_data_from_websites(data_scraping_params2)
 #     print(9)

@@ -1,22 +1,23 @@
 from typing import List, Dict
 import functools
 
-import covisearch.aggregation.aggregator.domain.entities as entities
-from covisearch.aggregation.aggregator.domain.entities import \
+import covisearch.aggregation.core.domain.entities as entities
+from covisearch.aggregation.core.domain.entities import \
     AggregatedResourceInfoRepo, FilteredAggregatedResourceInfo, SearchFilter, CovidResourceInfo
-import covisearch.aggregation.aggregator.domain.resourcemapping as resourcemapping
+import covisearch.aggregation.core.domain.resourcemapping as resourcemapping
 import covisearch.util.websitedatascraper as webdatascraper
 
 
-def aggregate_completely_and_replace_in_cache(
+def aggregate_covid_resources(
         search_filter: SearchFilter, resource_info_repo: AggregatedResourceInfoRepo,
         web_src_repo: resourcemapping.WebSourceRepo):
-    aggregated_resources = aggregate_resources_from_covid_sources(search_filter, web_src_repo)
-    filtered_data = FilteredAggregatedResourceInfo(search_filter, aggregated_resources)
-    resource_info_repo.set_resources_for_filter(filtered_data)
+
+        aggregated_resources = _aggregate_resources_from_covid_sources(search_filter, web_src_repo)
+        filtered_data = FilteredAggregatedResourceInfo(search_filter, aggregated_resources)
+        resource_info_repo.set_resources_for_filter(filtered_data)
 
 
-def aggregate_resources_from_covid_sources(
+def _aggregate_resources_from_covid_sources(
         search_filter: SearchFilter, web_src_repo: resourcemapping.WebSourceRepo) -> List[Dict]:
 
     web_sources = web_src_repo.get_web_sources_for_filter(search_filter)
@@ -29,6 +30,7 @@ def aggregate_resources_from_covid_sources(
 
     covisearch_resources = CovidResourceInfo.remove_duplicates(covisearch_resources)
     covisearch_resources = CovidResourceInfo.remove_unavailable_resources(covisearch_resources)
+    # TODO: KAPIL: Remove 'availability' field from dict.
     covisearch_resources.sort(key=functools.cmp_to_key(entities.compare_res_info))
 
     return covisearch_resources
@@ -48,7 +50,24 @@ def _scrape_data_from_web_sources(web_sources: Dict[str, resourcemapping.WebSour
     data_scraping_params = [
         webdatascraper.DataScrapingParams(
             web_src.web_resource_url, web_src.response_content_type,
-            web_src.data_table_extract_selectors, [])
+            web_src.data_table_extract_selectors, {})
         for web_src in web_sources.values()
     ]
     return webdatascraper.scrape_data_from_websites(data_scraping_params)
+
+
+import covisearch.aggregation.core.infra as infra
+import google.cloud.firestore as firestore
+import sys
+
+
+if __name__ == '__main__':
+    try:
+        db = firestore.Client()
+        aggregated_res_info_repo = infra.AggregatedResourceInfoRepoImpl(db)
+        web_src_repo = infra.WebSourceRepoImpl(db)
+        search_filter = SearchFilter('bengaluru', entities.CovidResourceType.PLASMA, None)
+        aggregate_covid_resources(search_filter, aggregated_res_info_repo, web_src_repo)
+    except:
+        print(sys.exc_info()[0])
+    print(9)
