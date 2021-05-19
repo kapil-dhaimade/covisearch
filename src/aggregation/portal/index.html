@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
   <script src="myScript.js"></script>
 </head>
 
@@ -21,35 +22,41 @@
     <div ng-include="'header.html'" class="text-center"></div>
     <!-- <div ng-include="'filter.html'"></div> -->
     <div id="mainDiv">
-      
-      <div id="filter" class="text-center">
-        <div class="form-inline justify-content-center form-row">
 
-          <div class="form-group col-6 custom-width">
-            <label for="city">City:</label>
-            <select id="city" class="form-control" ng-model="filter.city" ng-options="x.city for x in cityList" placeholder="Enter"></select>
+      <form name="filterForm" id="filter" class="text-center">
+        <div class="form-inline justify-content-center">
+
+          <div class="form-group custom-width float-right">
+            <!-- <label for="city">City:    </label> -->
+            <input list="city" ng-model="filter.city" placeholder="Enter the City">
+            <datalist id="city">
+              <option class="form-control" ng-repeat="x in cityList" value={{x}}>{{x}}</option>
+            </datalist>
           </div>
 
-          <div class="form-group col-6 custom-width">
-            <label for="resource">Resource:</label>
-            <select id="resource" class="form-control" ng-model="filter.resource" " ng-options=" x.type for x in resourceList"></select>
+          <div class="form-group custom-width">
+            <!-- <label for="resource">Resource:</label> -->
+            <input list="resource" ng-model="filter.resource" placeholder="Enter the resource">
+            <datalist id="resource">
+              <option class="form-control" ng-repeat="x in resourceList" value={{x}}>{{x}}</option>
+            </datalist>
           </div>
         </div>
-        <button ng-click="submit()" class="btn btn-outline-primary">SUBMIT</button>
+        <button ng-click="submit()" ng-disabled="filterForm.filter.city.$invalid" class="btn btn-outline-primary">SUBMIT</button>
         <button ng-click="reset()" class="btn btn-outline-primary">RESET</button>
 
         <!-- </form> -->
-      </div>
+      </form>
 
-     <!-- <p>form = {{filter}}</p > -->
+      <!-- <p>form = {{filter}}</p > -->
       <!-- <p>master = {{master}}</p> -->
-      <p>Currently showing data for {{filter.city.city}} and {{filter.resource.type}}</p>
+      <p>Currently showing data for {{filter.city}} and {{filter.resource}}</p>
       <!-- <p>Looping data:</p> -->
       <div id="noDataFound" ng-if="leads.noOfLeads <= 0" class="bg-danger center">
         <span>No Data found</span>
       </div>
       <div id="loading" ng-if="dataFetched == false">
-        LOADING............
+        :P
       </div>
       <div id="data" ng-if="leads.noOfLeads > 0" class="">
         <div class="card" ng-repeat="x in leads.data ">
@@ -69,10 +76,14 @@
               <span><b>Location:</b> {{x.location}}</span><br>
               <span><b>Category:</b> {{x.category}}</span><br>
               <span><b>Source:</b> {{x.source}}</span><br>
+              <span><b>Date:</b> {{date}}</span><br>
+              <span><b>Numbers:</b> <a ng-repeat="y in numbers.split(',')" href="tel:{{y}}"> {{y}}</a>
+              </span>
+
             </div>
             <div class="float-right col">
-              <div class="float-right">
-                <span><span class="fa fa-phone"></span> <a href="tel:{{x.phone}}">{{x.phone}}</a></span><br>
+              <div class="float-right" ng-repeat="y in x.phone.split(',')">
+                <span><span class="fa fa-phone"></span> <a href="tel:{{y}}">{{y}}</a></span><br>
               </div>
             </div>
           </div>

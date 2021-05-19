@@ -208,7 +208,8 @@ def compare_res_info(res_info_a: Dict, res_info_b: Dict) -> int:
         CovidResourceType.HOSPITAL_BED: HospitalBedsInfo,
         CovidResourceType.HOSPITAL_BED_ICU: HospitalBedsInfo
     }
-    return res_type_classes[res_type].compare(res_info_a, res_info_b)
+    return res_type_classes[CovidResourceType.from_string(res_type)].\
+        compare(res_info_a, res_info_b)
 
 
 class SearchFilter:
@@ -279,6 +280,7 @@ class FilteredAggregatedResourceInfo:
 
 
 class AggregatedResourceInfoRepo(ABC):
+    # TODO: KAPIL: Check timezone of datetime returned from Firestore. Convert to UTC.
     @abstractmethod
     def get_resources_for_filter(self, search_filter: SearchFilter) -> FilteredAggregatedResourceInfo:
         raise NotImplementedError('FilteredAggregatedResourceInfoRepo is an interface')

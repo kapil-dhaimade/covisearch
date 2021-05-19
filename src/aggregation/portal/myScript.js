@@ -2,21 +2,21 @@ var app = angular.module('myApp', []);
 app.controller('formCtrl', function($scope,$http) {
     const api_base_url ="https://api.covidcitizens.org/api/v1/leadbyquery?";
     $scope.dataFetched=false;
-    $scope.master = {city:{city:"Mumbai"}, resource:{type:"Plasma"}};
+    // $scope.master = {city:{city:"Mumbai"}, resource:"Plasma"};
     $scope.cityList = [
-        {city : "Mumbai"},
-        {city : "Delhi"},
-        {city : "Banglore"},
-        {city : "Pune"},
-        {city : "Lucknow"},
-        {city : "Surat"}
+        "Mumbai",
+        "Delhi",
+        "Banglore",
+        "Pune",
+        "Lucknow",
+        "Surat"
     ];
 
     $scope.resourceList = [
-        {type : "Ambulance"},
-        {type : "Plasma"},
-        {type : "Hospital"},
-        {type : "Oxygen"}
+        "Ambulance",
+        "Plasma",
+        "Hospital",
+         "Oxygen"
     ];
 
     $scope.bloodGroup = [
@@ -32,7 +32,7 @@ app.controller('formCtrl', function($scope,$http) {
     // ]
 
     $scope.fetch = function(data){
-        url = api_base_url+"category="+data.resource.type+"&location="+data.city.city;
+        url = api_base_url+"category="+data.resource+"&location="+data.city;
         console.log("URL:  "+ url);
         $http.get(url).then(function (response) {
             $scope.leads = response.data;
@@ -40,13 +40,19 @@ app.controller('formCtrl', function($scope,$http) {
             console.log($scope.leads.data);
         });
         $scope.dataFetched=true;
+        var now =moment("2021-05-17#10:26:08.937881-06:00").fromNow();
+        $scope.date= now;
+        var str ='12345,23456,34,567';
+        $scope.numbers = str;
     }
     
     $scope.reset = function() {
         $scope.filter = angular.copy($scope.master);
-        $scope.fetch($scope.master);
+        // $scope.fetch($scope.master);
+        $scope.dataFetched=false;
+        $scope.leads = "";
     };
-    $scope.reset();
+    // $scope.reset();
 
 
 
