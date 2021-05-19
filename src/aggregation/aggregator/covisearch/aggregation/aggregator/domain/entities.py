@@ -35,15 +35,15 @@ class CovidResourceType(enum.Enum):
 
 
 class CovidResourceInfo:
-    CONTACT_NAME_LABEL = 'contact_name'
+    CONTACT_NAME_LABEL = 'contact-name'
     ADDRESS_LABEL = 'address'
     DETAILS_LABEL = 'details'
-    PHONE_NO_LABEL = 'phone_no'
-    POST_TIME_LABEL = 'post_time'
-    RESOURCE_TYPE_LABEL = 'resource_type'
+    PHONE_NO_LABEL = 'phone-no'
+    POST_TIME_LABEL = 'post-time'
+    RESOURCE_TYPE_LABEL = 'resource-type'
     CITY_LABEL = 'city'
     AVAILABILITY_LABEL = 'availability'
-    LAST_VERIFIED_UTC_LABEL = 'last_verified_utc'
+    LAST_VERIFIED_UTC_LABEL = 'last-verified-utc'
 
     def __eq__(self, other):
         # No need to check resource type as isinstance will do the needful check
@@ -104,7 +104,6 @@ class CovidResourceInfo:
 
         return 0
 
-
     @classmethod
     def _get_more_recently_verified_res_info(cls, res_info_a: Dict, res_info_b: Dict) -> Dict:
         last_verified_label = cls.LAST_VERIFIED_UTC_LABEL
@@ -126,7 +125,6 @@ class CovidResourceInfo:
         return datetimeutil.compare_datetimes(res_info_a[field_name], res_info_b[field_name])
 
 
-# todo - check serialization of enum
 class BloodGroup(enum.Enum):
     A_P = 1
     A_N = 2
@@ -170,7 +168,7 @@ class BloodGroup(enum.Enum):
 
 
 class PlasmaInfo(CovidResourceInfo):
-    BLOOD_GROUP_LABEL = 'blood_group'
+    BLOOD_GROUP_LABEL = 'blood-group'
 
 
 class OxygenInfo(CovidResourceInfo):
@@ -183,7 +181,7 @@ class OxygenInfo(CovidResourceInfo):
 
 
 class HospitalBedsInfo(CovidResourceInfo):
-    AVAILABLE_BEDS_LABEL = 'available_beds'
+    AVAILABLE_BEDS_LABEL = 'available-beds'
 
     @classmethod
     def compare(cls, res_info_a: Dict, res_info_b: Dict) -> int:
@@ -234,15 +232,15 @@ class SearchFilter:
     def blood_group(self) -> BloodGroup:
         return self._blood_group
 
-    def to_url_query_params_fmt(self) -> str:
-        query_params = \
+    def to_url_query_string_fmt(self) -> str:
+        query_string = \
             self.CITY_LABEL + '=' + urllib.parse.quote(self._city) + '&' + \
             self.RESOURCE_TYPE_LABEL + '=' + \
             urllib.parse.quote(CovidResourceType.to_string(self._resource_type))
         if self._blood_group is not None and self._blood_group is not '':
-            query_params = query_params + '&' + self.BLOOD_GROUP_LABEL + '=' + \
+            query_string = query_string + '&' + self.BLOOD_GROUP_LABEL + '=' + \
                            urllib.parse.quote(BloodGroup.to_string(self._blood_group))
-        return query_params
+        return query_string
 
     def _validate(self):
         if self._city is None or self._city is '':
@@ -251,7 +249,7 @@ class SearchFilter:
             raise ValueError('resource-type param must have non-empty value')
 
     @staticmethod
-    def create_from_url_query_params_fmt(search_filter: str) -> 'SearchFilter':
+    def create_from_url_query_string_fmt(search_filter: str) -> 'SearchFilter':
         query_params = \
             urllib.parse.parse_qs(search_filter, keep_blank_values=True, strict_parsing=True)
 
@@ -284,7 +282,7 @@ class AggregatedResourceInfoRepo(ABC):
         raise NotImplementedError('FilteredAggregatedResourceInfoRepo is an interface')
 
     @abstractmethod
-    def set_resources_for_filter(self, search_filter: SearchFilter,
+    def set_resources_for_filter(self,
                                  filtered_aggregated_resource_info: FilteredAggregatedResourceInfo):
         raise NotImplementedError('FilteredAggregatedResourceInfoRepo is an interface')
 

@@ -18,6 +18,7 @@ def aggregate_completely_and_replace_in_cache(
 
 def aggregate_resources_from_covid_sources(
         search_filter: SearchFilter, web_src_repo: resourcemapping.WebSourceRepo) -> List[Dict]:
+
     web_sources = web_src_repo.get_web_sources_for_filter(search_filter)
 
     scraped_data_list: List[webdatascraper.ScrapedData] = \
@@ -36,7 +37,7 @@ def aggregate_resources_from_covid_sources(
 def _map_scraped_data_to_covisearch_resources(scraped_data_list, search_filter, web_sources):
     return [
         resourcemapping.map_res_info_to_covisearch(
-            web_src_res_info, search_filter, web_sources[scraped_data.url].res_mapping_desc)
+            web_src_res_info, search_filter, web_sources[scraped_data.url].resource_mapping_desc)
         for scraped_data in scraped_data_list for web_src_res_info in scraped_data.table_rows
     ]
 

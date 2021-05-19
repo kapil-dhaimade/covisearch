@@ -21,8 +21,8 @@ def scrape_data_from_websites(
 
 class DataScrapingParams:
     def __init__(self, url: URL, response_content_type: ContentType,
-                 table_column_selectors: List[Tuple[str, str]],
-                 fields_selector_list: List[Tuple[str, str]]):
+                 table_column_selectors: Dict[str, str],
+                 fields_selector_list: Dict[str, str]):
         self._url = url
         self._response_content_type = response_content_type
         # NOTE: KAPIL: Selector may be XPath, JSONPath, etc. based on content type
@@ -40,11 +40,11 @@ class DataScrapingParams:
         return self._response_content_type
 
     @property
-    def table_column_selectors(self) -> List[Tuple[str, str]]:
+    def table_column_selectors(self) -> Dict[str, str]:
         return self._table_column_selectors
 
     @property
-    def fields_selector_list(self) -> List[Tuple[str, str]]:
+    def fields_selector_list(self) -> Dict[str, str]:
         return self._fields_selector_list
 
 
@@ -125,13 +125,13 @@ def scrape_data_from_response(response_content: str,
 
 def scrape_fields_from_response(scraping_params: DataScrapingParams,
                                 selector_parser: 'ContentTypeSelectorParser') -> Dict[str, str]:
-    field_selectors = [field_selector_pair[1] for field_selector_pair in
-                       scraping_params.fields_selector_list]
+    field_selector_pairs = [selector_pair for selector_pair in
+                            scraping_params.fields_selector_list.items()]
+    field_selector_vals = [field_selector_pair[1] for field_selector_pair in field_selector_pairs]
     field_vals: List[str] = \
         [selector_parser.get_all_vals_matching_selector(field_selector)
-         for field_selector in field_selectors]
-    field_names = [field_selector_pair[0] for field_selector_pair in
-                   scraping_params.fields_selector_list]
+         for field_selector in field_selector_vals]
+    field_names = [field_selector_pair[0] for field_selector_pair in field_selector_pairs]
     fields = {key: val for key, val in zip(field_names, field_vals)}
     return fields
 
@@ -139,7 +139,8 @@ def scrape_fields_from_response(scraping_params: DataScrapingParams,
 def scrape_table_from_response(
         scraping_params: DataScrapingParams,
         selector_parser: 'ContentTypeSelectorParser') -> List[Dict[str, str]]:
-    table_column_selectors = scraping_params.table_column_selectors
+    table_column_selectors = [col_selector_pair for col_selector_pair in
+                              scraping_params.table_column_selectors.items()]
     column_selector_values = [col_selector_pair[1] for col_selector_pair in table_column_selectors]
     table_vals_by_column: List[List[str]] = \
         [selector_parser.get_all_vals_matching_selector(col_selector)

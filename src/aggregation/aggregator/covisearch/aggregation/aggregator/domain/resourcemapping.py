@@ -40,18 +40,25 @@ class WebSourceType(Enum):
 
 
 class WebSource:
-    def __init__(self, name: str, homepage_url: URL, web_resource_url: URL,
+    WEB_RES_URL_TEMPLATE_CITY_PLACEHOLDER = '{CITY}'
+    WEB_RES_URL_TEMPLATE_RESOURCE_TYPE_PLACEHOLDER = '{RESOURCE_TYPE}'
+
+    def __init__(self, name: str, homepage_url: URL, web_resource_url_template: URL,
                  source_type: WebSourceType, response_content_type: ContentType,
-                 data_table_extract_selectors: List[Tuple[str, str]],
-                 res_mapping_desc: Dict[str, 'FieldMappingDesc']):
+                 data_table_extract_selectors: Dict[str, str],
+                 resource_mapping_desc: Dict[str, 'FieldMappingDesc'],
+                 resource_type_label_mapping: Dict[str, str], search_filter: SearchFilter):
         self._name = name
         self._homepage_url: URL = homepage_url
-        self._web_resource_url = web_resource_url
+        # NOTE: KAPIL: URL with place-holders for search filter params in {param} blocks
+        # Eg: http://covidres.com/city={CITY}&resource={RESOURCE_TYPE}
+        self._web_resource_url = self._web_resource_url_from_template(
+            web_resource_url_template, search_filter, resource_type_label_mapping)
         self._source_type: WebSourceType = source_type
         self._response_content_type: ContentType = response_content_type
-        self._data_table_extract_selectors: List[Tuple[str, str]] = \
+        self._data_table_extract_selectors: Dict[str, str] = \
             data_table_extract_selectors
-        self._res_mapping_desc: Dict[str, 'FieldMappingDesc'] = res_mapping_desc
+        self._resource_mapping_desc: Dict[str, 'FieldMappingDesc'] = resource_mapping_desc
 
     @property
     def name(self) -> str:
@@ -74,12 +81,31 @@ class WebSource:
         return self._response_content_type
 
     @property
-    def data_table_extract_selectors(self) -> List[Tuple[str, str]]:
+    def data_table_extract_selectors(self) -> Dict[str, str]:
         return self._data_table_extract_selectors
 
     @property
-    def res_mapping_desc(self) -> Dict[str, 'FieldMappingDesc']:
-        return self._res_mapping_desc
+    def resource_mapping_desc(self) -> Dict[str, 'FieldMappingDesc']:
+        return self._resource_mapping_desc
+
+    @classmethod
+    def _web_resource_url_from_template(
+            cls, web_res_url_template: URL, search_filter: SearchFilter,
+            resource_type_label_mapping: Dict[str, str]) -> URL:
+
+        web_resource_url = web_res_url_template
+
+        web_resource_url = web_resource_url.replace(
+            cls.WEB_RES_URL_TEMPLATE_CITY_PLACEHOLDER, search_filter.city)
+
+        filter_res_type_str = CovidResourceType.to_string(search_filter.resource_type)
+        web_resource_url = web_resource_url.replace(
+            cls.WEB_RES_URL_TEMPLATE_RESOURCE_TYPE_PLACEHOLDER,
+            resource_type_label_mapping[filter_res_type_str])
+
+        # TODO: KAPIL: Blood group filter mapping
+
+        return web_resource_url
 
 
 class WebSourceRepo(ABC):
@@ -165,7 +191,7 @@ def _map_phone(covisearch_res, res_mapping_desc, web_src_res_info):
     phone_label = CovidResourceInfo.PHONE_NO_LABEL
     phone_mapping = res_mapping_desc[phone_label]
     web_src_phone_no = web_src_res_info[phone_mapping.web_src_field_name]
-    covisearch_res[phone_label] = _sanitize_string_field(web_src_phone_no)
+    covisearch_res[phone_label] = _sanitize_phone_no(web_src_phone_no)
 
 
 def _map_address(covisearch_res, res_mapping_desc, web_src_res_info):
@@ -217,6 +243,16 @@ def _map_hospital_bed(web_src_res_info: Dict, res_mapping_desc: Dict[str, 'Field
             covisearch_res[available_beds_label] = None
     else:
         covisearch_res[available_beds_label] = None
+
+
+def _sanitize_phone_no(phone_no: str):
+    # NOTE: KAPIL: Intended format: '8888888888 / 9999999999'
+    sanitized_phone_no = phone_no.strip()
+    sanitized_phone_no = sanitized_phone_no.replace(',', ' /')
+    sanitized_phone_no = sanitized_phone_no.replace('\n', ' / ')
+    sanitized_phone_no = sanitized_phone_no.replace('\r', '')
+    sanitized_phone_no = sanitized_phone_no.replace('\t', ' ')
+    return sanitized_phone_no
 
 
 def _sanitize_string_field(field_value: str):
