@@ -37,12 +37,4 @@ def covisearch_api_request_handler(request: Request):
     # callbacks, or system processes), you must terminate or otherwise resolve these tasks
     # before returning an HTTP response. Any tasks not terminated prior to an HTTP response
     # may not be completed, and may also cause undefined behavior.
-    content_type = request.headers['content-type']
-    if content_type == 'application/json':
-        request_json = request.get_json(silent=True)
-        if request_json:
-            return fetch_resource_for_filter(request_json)
-        else:
-            raise ValueError("JSON is invalid")
-    else:
-        raise ValueError("invalid content type")
+    return fetch_resource_for_filter(request)
