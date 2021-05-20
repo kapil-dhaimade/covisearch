@@ -159,10 +159,21 @@ class ContentTypeSelectorParser(ABC):
 class JSONSelectorParser(ContentTypeSelectorParser):
     def __init__(self, content: str):
         self._json_content = json.loads(content)
+        self._cached_parent_nodes = {}
 
-    # TODO: KAPIL: Fix to return default values for missing values too.
     def get_all_vals_matching_selector(self, selector: str) -> List[str]:
-        return [str(match.value) for match in jsonpath_ng.parse(selector).find(self._json_content)]
+        selector_tokens = selector.rsplit('.', 1)
+        selector_till_parent = selector_tokens[0]
+
+        if selector_till_parent in self._cached_parent_nodes:
+            parent_nodes = self._cached_parent_nodes[selector_till_parent]
+        else:
+            parent_nodes = [match.value for match in
+                            jsonpath_ng.parse(selector_till_parent).find(self._json_content)]
+            self._cached_parent_nodes[selector_till_parent] = parent_nodes
+
+        field_selector = selector_tokens[1]
+        return [parent_node.get(field_selector, '') for parent_node in parent_nodes]
 
 
 class HTMLSelectorParser(ContentTypeSelectorParser):

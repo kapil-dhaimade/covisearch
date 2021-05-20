@@ -24,9 +24,10 @@ import covisearch.util.datetimeutil
 def map_res_info_to_covisearch(web_src_res_info: Dict, search_filter: SearchFilter,
                                web_src: 'WebSource') -> Dict:
     covisearch_res_info = {
-        CovidResourceInfo.RESOURCE_TYPE_LABEL:
-            CovidResourceType.to_string(search_filter.resource_type),
-        CovidResourceInfo.CITY_LABEL: search_filter.city,
+        # NOTE: KAPIL: Commenting for now as res-type and city are redundant.
+        # CovidResourceInfo.RESOURCE_TYPE_LABEL:
+        #     CovidResourceType.to_string(search_filter.resource_type),
+        # CovidResourceInfo.CITY_LABEL: search_filter.city,
         CovidResourceInfo.WEB_SOURCE_NAME_LABEL: web_src.name,
         CovidResourceInfo.WEB_SOURCE_HOMEPAGE_LABEL: web_src.homepage_url
     }
@@ -287,7 +288,7 @@ class FieldMappingDesc:
     @classmethod
     def _get_datetime_fmt_if_specified(cls, mapping_desc_tokens):
         datetimeformat_mapping_token = [fmt for fmt in mapping_desc_tokens if
-                                        FieldMappingDesc.DATETIMEFORMAT_TOKEN in fmt]
+                                        FieldMappingDesc.DATETIMEFORMAT_TOKEN in fmt.lower()]
         if datetimeformat_mapping_token:
             datetimefmt_mapping = datetimeformat_mapping_token[0]
             datetime_fmt_str = cls.re_datetime_fmt_str_pattern.search(
@@ -349,7 +350,7 @@ def datetime_format_from_str(datetime_format_str: str) -> \
         'short-datetime-dd-mm':
             covisearch.util.datetimeutil.DatetimeFormat.SHORT_DATETIME_DD_MM
     }
-    return datetime_formats[datetime_format_str]
+    return datetime_formats[datetime_format_str.lower()]
 
 
 def _set_timezone_ist_if_not_present(timestamp: datetime) -> datetime:

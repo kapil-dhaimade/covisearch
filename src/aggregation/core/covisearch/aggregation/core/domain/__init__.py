@@ -3,7 +3,8 @@ import functools
 
 import covisearch.aggregation.core.domain.entities as entities
 from covisearch.aggregation.core.domain.entities import \
-    AggregatedResourceInfoRepo, FilteredAggregatedResourceInfo, SearchFilter, CovidResourceInfo
+    AggregatedResourceInfoRepo, FilteredAggregatedResourceInfo, SearchFilter, CovidResourceInfo, \
+    CovidResourceType
 import covisearch.aggregation.core.domain.resourcemapping as resourcemapping
 import covisearch.util.websitedatascraper as webdatascraper
 
@@ -30,8 +31,9 @@ def _aggregate_resources_from_covid_sources(
 
     covisearch_resources = CovidResourceInfo.remove_duplicates(covisearch_resources)
     covisearch_resources = CovidResourceInfo.remove_unavailable_resources(covisearch_resources)
-    # TODO: KAPIL: Remove 'availability' field from dict.
-    covisearch_resources.sort(key=functools.cmp_to_key(entities.compare_res_info))
+    covisearch_resources = CovidResourceInfo.remove_redundant_fields(covisearch_resources)
+    covisearch_resources.sort(key=functools.cmp_to_key(
+        entities.get_res_info_comparator(search_filter.resource_type)))
 
     return covisearch_resources
 
@@ -59,6 +61,7 @@ def _scrape_data_from_web_sources(web_sources: Dict[str, resourcemapping.WebSour
 import covisearch.aggregation.core.infra as infra
 import google.cloud.firestore as firestore
 import sys
+import traceback
 
 
 if __name__ == '__main__':
@@ -68,6 +71,7 @@ if __name__ == '__main__':
         web_src_repo = infra.WebSourceRepoImpl(db)
         search_filter = SearchFilter('bengaluru', entities.CovidResourceType.PLASMA, None)
         aggregate_covid_resources(search_filter, aggregated_res_info_repo, web_src_repo)
-    except:
+    except Exception as ex:
         print(sys.exc_info()[0])
+        print(traceback.print_exception(*sys.exc_info()))
     print(9)

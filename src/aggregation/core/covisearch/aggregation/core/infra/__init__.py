@@ -5,24 +5,26 @@ import google.cloud.firestore as firestore
 import covisearch.aggregation.core.domain.entities as entities
 import covisearch.aggregation.core.domain.resourcemapping as resourcemapping
 import covisearch.util.types as types
+import covisearch.util.geoutil as geoutil
 
 
 class AggregatedResourceInfoRepoImpl(entities.AggregatedResourceInfoRepo):
     def __init__(self, db: firestore.Client):
         self._db = db
 
-    def get_resources_for_filter(self, search_filter: entities.SearchFilter) -> \
-            entities.FilteredAggregatedResourceInfo:
-
-        res_info_filter_id = search_filter.to_url_query_string_fmt()
-        res_info_doc = self._db.collection('filtered-aggregated-resource-info').\
-            document(res_info_filter_id).get()
-
-        if not res_info_doc.exists:
-            return None
-
-        return entities.FilteredAggregatedResourceInfo(
-            search_filter, res_info_doc.get('res-info-data'))
+    # # NOTE: KAPIL: Uncommenting as implemented in covisearchapi project.
+    # def get_resources_for_filter(self, search_filter: entities.SearchFilter) -> \
+    #         entities.FilteredAggregatedResourceInfo:
+    #
+    #     res_info_filter_id = search_filter.to_url_query_string_fmt()
+    #     res_info_doc = self._db.collection('filtered-aggregated-resource-info').\
+    #         document(res_info_filter_id).get()
+    #
+    #     if not res_info_doc.exists:
+    #         return None
+    #
+    #     return entities.FilteredAggregatedResourceInfo(
+    #         search_filter, res_info_doc.get('res-info-data'))
 
     def set_resources_for_filter(
             self, filtered_aggregated_resource_info: entities.FilteredAggregatedResourceInfo):
@@ -47,15 +49,22 @@ class WebSourceRepoImpl(resourcemapping.WebSourceRepo):
         return {web_src.web_resource_url: web_src for web_src in web_srcs_for_filter}
 
 
-# TODO: KAPIL: Take care of state-wide sources and subset of resources later. Eg: mumbai-oxygen-plasma
-# Eg. values: pan-india-all-resources, pan-india-plasma, delhi-hospital-bed
+# NOTE: KAPIL: Take care of state-wide sources and subset of resources later. Eg: mumbai-oxygen-plasma
+# Eg. values: pan-india-all-resources, maharashtra-plasma, bengaluru-hospital-bed,
 def _possible_web_src_scopes_for_filter(search_filter: entities.SearchFilter):
     res_type_string = entities.CovidResourceType.to_string(search_filter.resource_type)
-    return [
+    possible_web_scopes = [
         'pan-india-all-resources', 'pan-india-' + res_type_string,
         search_filter.city + '-all-resources',
-        search_filter.city + res_type_string
+        search_filter.city + '-' + res_type_string,
     ]
+    possible_states_for_city = geoutil.get_state_for_city(search_filter.city)
+    for state in possible_states_for_city:
+        possible_web_scopes.extend(
+            [
+                state + '-all-resources', state + '-' + res_type_string
+            ])
+    return possible_web_scopes
 
 
 def _firestore_to_web_src(

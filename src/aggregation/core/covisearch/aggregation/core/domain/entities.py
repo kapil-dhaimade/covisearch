@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Dict, List
+from typing import Dict, List, Callable
 import enum
 import urllib.parse
 
@@ -31,7 +31,7 @@ class CovidResourceType(enum.Enum):
             'hospital-bed': CovidResourceType.HOSPITAL_BED,
             'oxygen': CovidResourceType.OXYGEN
         }
-        return res_types[resource_type_str]
+        return res_types[resource_type_str.lower()]
 
 
 class CovidResourceInfo:
@@ -46,17 +46,6 @@ class CovidResourceInfo:
     LAST_VERIFIED_UTC_LABEL = 'last-verified-utc'
     WEB_SOURCE_NAME_LABEL = 'web-source-name'
     WEB_SOURCE_HOMEPAGE_LABEL = 'web-source-homepage'
-
-    def __eq__(self, other):
-        # No need to check resource type as isinstance will do the needful check
-        if isinstance(other, self.__class__):
-            return self.phone_no == other.phone_no
-        return False
-
-    def __cmp__(self, other):
-        if self == other:
-            return 0
-        return self.score() > other.score()
 
     @classmethod
     def score(cls, res_info: Dict) -> int:
@@ -93,6 +82,12 @@ class CovidResourceInfo:
         return [x for x in covisearch_resources if x[cls.AVAILABILITY_LABEL] is True]
 
     @classmethod
+    def remove_redundant_fields(cls, covisearch_resources: List[Dict]) -> List[Dict]:
+        cls._remove_availability_field(covisearch_resources)
+        # TODO:KAPIL: Remove empty fields if we decide to
+        return covisearch_resources
+
+    @classmethod
     def compare(cls, res_info_a: Dict, res_info_b: Dict) -> int:
         last_verified_times_comp = cls._compare_datetime_field(
             res_info_a, res_info_b, cls.LAST_VERIFIED_UTC_LABEL)
@@ -120,6 +115,11 @@ class CovidResourceInfo:
             return res_info_a
         else:
             return res_info_b
+
+    @classmethod
+    def _remove_availability_field(cls, covisearch_resources: List[Dict]):
+        for res_info in covisearch_resources:
+            res_info.pop(cls.AVAILABILITY_LABEL, None)
 
     @classmethod
     def _compare_datetime_field(cls, res_info_a: Dict, res_info_b: Dict,
@@ -166,7 +166,7 @@ class BloodGroup(enum.Enum):
             'ab-': cls.AB_N,
             'all': cls.ALL
         }
-        return blood_grp_str_mapping[blood_grp_str]
+        return blood_grp_str_mapping[blood_grp_str.lower()]
 
 
 class PlasmaInfo(CovidResourceInfo):
@@ -174,7 +174,7 @@ class PlasmaInfo(CovidResourceInfo):
 
 
 class OxygenInfo(CovidResourceInfo):
-    LITRES_LABEL = 'litre'
+    LITRES_LABEL = 'litres'
 
     # TODO: Change when oxygen litres are implemented.
     @classmethod
@@ -200,16 +200,14 @@ class HospitalBedsInfo(CovidResourceInfo):
         return 0
 
 
-def compare_res_info(res_info_a: Dict, res_info_b: Dict) -> int:
-    res_type = res_info_a[CovidResourceInfo.RESOURCE_TYPE_LABEL]
+def get_res_info_comparator(resource_type: CovidResourceType):
     res_type_classes = {
         CovidResourceType.PLASMA: PlasmaInfo,
         CovidResourceType.OXYGEN: OxygenInfo,
         CovidResourceType.HOSPITAL_BED: HospitalBedsInfo,
         CovidResourceType.HOSPITAL_BED_ICU: HospitalBedsInfo
     }
-    return res_type_classes[CovidResourceType.from_string(res_type)].\
-        compare(res_info_a, res_info_b)
+    return res_type_classes[resource_type].compare
 
 
 class SearchFilter:
@@ -218,7 +216,7 @@ class SearchFilter:
     BLOOD_GROUP_LABEL = 'blood-group'
 
     def __init__(self, city: str, resource_type: CovidResourceType, blood_group: BloodGroup):
-        self._city: str = city
+        self._city: str = city.lower()
         self._resource_type: CovidResourceType = resource_type
         self._blood_group: BloodGroup = blood_group
         self._validate()
@@ -280,11 +278,6 @@ class FilteredAggregatedResourceInfo:
 
 
 class AggregatedResourceInfoRepo(ABC):
-    # TODO: KAPIL: Check timezone of datetime returned from Firestore. Convert to UTC.
-    @abstractmethod
-    def get_resources_for_filter(self, search_filter: SearchFilter) -> FilteredAggregatedResourceInfo:
-        raise NotImplementedError('FilteredAggregatedResourceInfoRepo is an interface')
-
     @abstractmethod
     def set_resources_for_filter(self,
                                  filtered_aggregated_resource_info: FilteredAggregatedResourceInfo):
