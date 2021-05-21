@@ -256,14 +256,14 @@ class SearchFilter:
 
         if 'city' not in query_params:
             raise ValueError('city param is mandatory')
-        city = query_params['city']
+        city = query_params['city'][0]
 
         if 'resource-type' not in query_params:
             raise ValueError('resource-type param is mandatory')
-        resource_type = CovidResourceType.from_string(query_params['resource-type'])
+        resource_type = CovidResourceType.from_string(query_params['resource-type'][0])
 
         if 'blood-group' in query_params:
-            blood_group = BloodGroup.from_string(query_params['blood-group'])
+            blood_group = BloodGroup.from_string(query_params['blood-group'][0])
         else:
             blood_group = None
 
