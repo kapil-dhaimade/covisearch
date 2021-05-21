@@ -2,9 +2,11 @@ from typing import List, Dict
 import json
 from abc import ABC
 import traceback
+import multiprocessing
 
 import scrapy
 from scrapy import crawler
+from scrapy.utils.project import get_project_settings
 import jsonpath_ng
 
 from covisearch.util.types import URL as URL
@@ -13,11 +15,53 @@ from covisearch.util.types import ContentType as ContentType
 
 def scrape_data_from_websites(
         data_scraping_params: List['DataScrapingParams']) -> List['ScrapedData']:
+
     operation_ctxs_by_url = ScrapingOperationCtx(data_scraping_params)
-    process = crawler.CrawlerProcess()
-    process.crawl(WebsiteDataSpider, operation_ctxs_by_url)
-    process.start()
+
+    # NOTE: KAPIL: See scrapy_child_process_fn for explanation of child process being spawned here.
+    scrapy_process_ret_queue = multiprocessing.Queue()
+    scrapy_process = multiprocessing.Process(
+        target=scrapy_child_process_fn, args=(scrapy_process_ret_queue, operation_ctxs_by_url))
+    scrapy_process.start()
+    scrapy_process.join()
+
+    scrapy_process_result = scrapy_process_ret_queue.get()
+    if type(scrapy_process_result) is Exception:
+        raise scrapy_process_result
+    else:
+        operation_ctxs_by_url = scrapy_process_result
+
     return operation_ctxs_by_url.get_all_scraped_data()
+
+
+# NOTE: KAPIL: Scrapy uses Twisted and it's not idempotent. Meaning if we launch Scrapy
+# CrawlerProcess twice in same process, it does not work as it uses many global objects.
+# As a result, if our Cloud Function instance is reused, Scrapy fails. To fix this, we
+# need to use 'multiprocessing' of Python to launch child process every time to run
+# Scrapy crawler. Please note that param sent to this child process if not by reference
+# and output data set by child process is lost. Hence, have to send data back from
+# child process using its queue and collect in parent process in case of success. This
+# queue is also used to throw exception from child process.
+# We also encountered another problem when child process was not used. Cloud Function
+# failed with error saying Scrapy process should be called in main thread only. Maybe
+# Cloud function environment was calling it in worker thread. But that issue also got
+# fixed by using this child process to run Scrapy.
+# Source:
+# Running a Scrapy spider in a GCP cloud function:
+#   -https://weautomate.org/articles/running-scrapy-spider-cloud-function/
+def scrapy_child_process_fn(queue, operation_ctxs_by_url):
+    try:
+        settings = get_project_settings()
+        settings.setdict({
+            'LOG_LEVEL': 'ERROR',
+            'LOG_ENABLED': True
+        })
+        process = crawler.CrawlerProcess(settings)
+        process.crawl(WebsiteDataSpider, operation_ctxs_by_url)
+        process.start()
+        queue.put(operation_ctxs_by_url)
+    except Exception as e:
+        queue.put(e)
 
 
 class DataScrapingParams:

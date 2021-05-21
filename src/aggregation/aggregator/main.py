@@ -9,7 +9,7 @@ import covisearch.aggregation.core.domain as domain
 
 # Starting point called by Google Cloud Function
 # Do init and call corresponding domain function
-def aggregate_new_resources_and_append_to_cache(event, context):
+def aggregate_covid_resources(event, context):
     db = firestore.Client()
     aggregated_res_info_repo = infra.AggregatedResourceInfoRepoImpl(db)
     web_src_repo = infra.WebSourceRepoImpl(db)
@@ -19,4 +19,6 @@ def aggregate_new_resources_and_append_to_cache(event, context):
 
 
 # if __name__=='__main__':
-#     aggregate_new_resources_and_append_to_cache({'data': 'Y2l0eT1jaGVubmFpJnJlc291cmNlLXR5cGU9b3h5Z2Vu'}, None)
+#     aggregate_covid_resources({'data': 'Y2l0eT1jaGVubmFpJnJlc291cmNlLXR5cGU9b3h5Z2Vu'}, None)
+#     aggregate_covid_resources({'data': 'Y2l0eT1jaGVubmFpJnJlc291cmNlLXR5cGU9b3h5Z2Vu'}, None)
+#     print(9)
