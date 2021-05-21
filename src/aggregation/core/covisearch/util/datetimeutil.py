@@ -6,9 +6,9 @@ import enum
 
 class DatetimeFormat(enum.Enum):
     # '5 hours ago', '2 days ago', etc.
-    AGO = 1,
+    AGO = 1
     # 2021-05-16T21:06:17.000000+05:30
-    ISOFORMAT = 2,
+    ISOFORMAT = 2
     # 2/05 5:35 PM, 27/12 at 6:09 AM, etc.
     SHORT_DATETIME_DD_MM = 3
 
@@ -104,3 +104,17 @@ def map_short_datetime_dd_mm_to_isoformat(short_datetime_str) -> datetime:
 def is_timezone_aware(timestamp: datetime):
     return timestamp.tzinfo is not None and \
            timestamp.tzinfo.utcoffset(timestamp) is not None
+
+
+def compare_datetimes(datetime_a, datetime_b) -> int:
+    if datetime_a is None and datetime_b is None:
+        return 0
+    if datetime_a is not None and datetime_b is None:
+        return -1
+    if datetime_b is not None and datetime_a is None:
+        return 1
+    if datetime_a < datetime_b:
+        return -1
+    if datetime_a > datetime_b:
+        return 1
+    return 0

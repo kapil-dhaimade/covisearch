@@ -98,6 +98,13 @@
 	-Cloud Scheduler settings:
 		-Interval: 15mins (cron schedule expressions: */15 * * * *)
 		-Pub/Sub topic: resync-schedule-topic
+		
+-Aggregator:
+	-Cloud Function:
+		-Deployment command and settings:
+			gcloud functions deploy aggregate_covid_resources --runtime python37 --trigger-topic aggregate-topic --memory 256MB --region asia-south1
+	-Pub/Sub settings:
+		-Topic name: aggregate-topic
 	
 	
 ----Additional Sources----

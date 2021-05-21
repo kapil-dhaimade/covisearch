@@ -1,9 +1,12 @@
-from typing import Tuple, List, Dict
+from typing import List, Dict
 import json
 from abc import ABC
+import traceback
+import multiprocessing
 
 import scrapy
 from scrapy import crawler
+from scrapy.utils.project import get_project_settings
 import jsonpath_ng
 
 from covisearch.util.types import URL as URL
@@ -12,24 +15,66 @@ from covisearch.util.types import ContentType as ContentType
 
 def scrape_data_from_websites(
         data_scraping_params: List['DataScrapingParams']) -> List['ScrapedData']:
+
     operation_ctxs_by_url = ScrapingOperationCtx(data_scraping_params)
-    process = crawler.CrawlerProcess()
-    process.crawl(WebsiteDataSpider, operation_ctxs_by_url)
-    process.start()
+
+    # NOTE: KAPIL: See scrapy_child_process_fn for explanation of child process being spawned here.
+    scrapy_process_ret_queue = multiprocessing.Queue()
+    scrapy_process = multiprocessing.Process(
+        target=scrapy_child_process_fn, args=(scrapy_process_ret_queue, operation_ctxs_by_url))
+    scrapy_process.start()
+    scrapy_process.join()
+
+    scrapy_process_result = scrapy_process_ret_queue.get()
+    if type(scrapy_process_result) is Exception:
+        raise scrapy_process_result
+    else:
+        operation_ctxs_by_url = scrapy_process_result
+
     return operation_ctxs_by_url.get_all_scraped_data()
+
+
+# NOTE: KAPIL: Scrapy uses Twisted and it's not idempotent. Meaning if we launch Scrapy
+# CrawlerProcess twice in same process, it does not work as it uses many global objects.
+# As a result, if our Cloud Function instance is reused, Scrapy fails. To fix this, we
+# need to use 'multiprocessing' of Python to launch child process every time to run
+# Scrapy crawler. Please note that param sent to this child process if not by reference
+# and output data set by child process is lost. Hence, have to send data back from
+# child process using its queue and collect in parent process in case of success. This
+# queue is also used to throw exception from child process.
+# We also encountered another problem when child process was not used. Cloud Function
+# failed with error saying Scrapy process should be called in main thread only. Maybe
+# Cloud function environment was calling it in worker thread. But that issue also got
+# fixed by using this child process to run Scrapy.
+# Source:
+# Running a Scrapy spider in a GCP cloud function:
+#   -https://weautomate.org/articles/running-scrapy-spider-cloud-function/
+def scrapy_child_process_fn(queue, operation_ctxs_by_url):
+    try:
+        settings = get_project_settings()
+        settings.setdict({
+            'LOG_LEVEL': 'ERROR',
+            'LOG_ENABLED': True
+        })
+        process = crawler.CrawlerProcess(settings)
+        process.crawl(WebsiteDataSpider, operation_ctxs_by_url)
+        process.start()
+        queue.put(operation_ctxs_by_url)
+    except Exception as e:
+        queue.put(e)
 
 
 class DataScrapingParams:
     def __init__(self, url: URL, response_content_type: ContentType,
-                 table_column_selectors: List[Tuple[str, str]],
-                 fields_selector_list: List[Tuple[str, str]]):
+                 table_column_selectors: Dict[str, str],
+                 fields_selectors: Dict[str, str]):
         self._url = url
         self._response_content_type = response_content_type
         # NOTE: KAPIL: Selector may be XPath, JSONPath, etc. based on content type
         # Refer 'https://jsonpathfinder.com/' to get JSONPaths from JSON
         # Refer 'http://videlibri.sourceforge.net/cgi-bin/xidelcgi' to get XPath from XML/HTML
         self._table_column_selectors = table_column_selectors
-        self._fields_selector_list = fields_selector_list
+        self._fields_selectors = fields_selectors
 
     @property
     def url(self) -> URL:
@@ -40,12 +85,12 @@ class DataScrapingParams:
         return self._response_content_type
 
     @property
-    def table_column_selectors(self) -> List[Tuple[str, str]]:
+    def table_column_selectors(self) -> Dict[str, str]:
         return self._table_column_selectors
 
     @property
-    def fields_selector_list(self) -> List[Tuple[str, str]]:
-        return self._fields_selector_list
+    def fields_selectors(self) -> Dict[str, str]:
+        return self._fields_selectors
 
 
 class ScrapedData:
@@ -78,10 +123,18 @@ class WebsiteDataSpider(scrapy.Spider):
 
     def parse(self, response: scrapy.http.Response, **kwargs):
         if response.status != 200:
+            print('Scrapy returned HTTP code: \'' + str(response.status) + '\' for url: \'' +
+                  response.url + '\'')
             return
-        scraping_params = self._operation_ctx.get_scraping_params_for_url(response.url)
-        scraped_data = scrape_data_from_response(response.body, scraping_params)
-        self._operation_ctx.set_scraped_data_for_url(response.url, scraped_data)
+
+        try:
+            scraping_params = self._operation_ctx.get_scraping_params_for_url(response.url)
+            scraped_data = scrape_data_from_response(response.body, scraping_params)
+            self._operation_ctx.set_scraped_data_for_url(response.url, scraped_data)
+        except Exception:
+            print('Exception while parsing Scrapy response for url: \'' + response.url + '\'. ' +
+                  'Ignoring error.')
+            print(traceback.print_exc())
 
 
 class ScrapingOperationCtx:
@@ -125,13 +178,13 @@ def scrape_data_from_response(response_content: str,
 
 def scrape_fields_from_response(scraping_params: DataScrapingParams,
                                 selector_parser: 'ContentTypeSelectorParser') -> Dict[str, str]:
-    field_selectors = [field_selector_pair[1] for field_selector_pair in
-                       scraping_params.fields_selector_list]
+    field_selector_pairs = [selector_pair for selector_pair in
+                            scraping_params.fields_selectors.items()]
+    field_selector_vals = [field_selector_pair[1] for field_selector_pair in field_selector_pairs]
     field_vals: List[str] = \
         [selector_parser.get_all_vals_matching_selector(field_selector)
-         for field_selector in field_selectors]
-    field_names = [field_selector_pair[0] for field_selector_pair in
-                   scraping_params.fields_selector_list]
+         for field_selector in field_selector_vals]
+    field_names = [field_selector_pair[0] for field_selector_pair in field_selector_pairs]
     fields = {key: val for key, val in zip(field_names, field_vals)}
     return fields
 
@@ -139,7 +192,8 @@ def scrape_fields_from_response(scraping_params: DataScrapingParams,
 def scrape_table_from_response(
         scraping_params: DataScrapingParams,
         selector_parser: 'ContentTypeSelectorParser') -> List[Dict[str, str]]:
-    table_column_selectors = scraping_params.table_column_selectors
+    table_column_selectors = [col_selector_pair for col_selector_pair in
+                              scraping_params.table_column_selectors.items()]
     column_selector_values = [col_selector_pair[1] for col_selector_pair in table_column_selectors]
     table_vals_by_column: List[List[str]] = \
         [selector_parser.get_all_vals_matching_selector(col_selector)
@@ -158,9 +212,21 @@ class ContentTypeSelectorParser(ABC):
 class JSONSelectorParser(ContentTypeSelectorParser):
     def __init__(self, content: str):
         self._json_content = json.loads(content)
+        self._cached_parent_nodes = {}
 
     def get_all_vals_matching_selector(self, selector: str) -> List[str]:
-        return [match.value for match in jsonpath_ng.parse(selector).find(self._json_content)]
+        selector_tokens = selector.rsplit('.', 1)
+        selector_till_parent = selector_tokens[0]
+
+        if selector_till_parent in self._cached_parent_nodes:
+            parent_nodes = self._cached_parent_nodes[selector_till_parent]
+        else:
+            parent_nodes = [match.value for match in
+                            jsonpath_ng.parse(selector_till_parent).find(self._json_content)]
+            self._cached_parent_nodes[selector_till_parent] = parent_nodes
+
+        field_selector = selector_tokens[1]
+        return [parent_node.get(field_selector, '') for parent_node in parent_nodes]
 
 
 class HTMLSelectorParser(ContentTypeSelectorParser):
