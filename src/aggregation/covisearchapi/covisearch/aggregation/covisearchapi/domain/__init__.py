@@ -34,8 +34,7 @@ def fetch_resource_for_filter(request: Request):
 
     query_time = {"last-query-time-utc": DatetimeWithNanoseconds.today()}
     if not filter_stat_doc.exists:
-        db.collection('filter-stats').add(query_time, "res_info_filter_id")
-        raise abort(202)
+        db.collection('filter-stats').add(query_time, res_info_filter_id)
     else:
         db.collection('filter-stats'). \
             document(res_info_filter_id).set(query_time)
