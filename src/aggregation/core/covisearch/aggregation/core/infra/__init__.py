@@ -33,7 +33,7 @@ class AggregatedResourceInfoRepoImpl(entities.AggregatedResourceInfoRepo):
             search_filter.to_url_query_string_fmt()
         self._db.collection('filtered-aggregated-resource-info').\
             document(res_info_filter_id).set(
-            {'res-info-data': filtered_aggregated_resource_info.data})
+            {'resource-info-data': filtered_aggregated_resource_info.data})
 
 
 class WebSourceRepoImpl(resourcemapping.WebSourceRepo):

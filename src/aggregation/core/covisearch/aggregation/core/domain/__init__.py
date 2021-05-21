@@ -13,9 +13,9 @@ def aggregate_covid_resources(
         search_filter: SearchFilter, resource_info_repo: AggregatedResourceInfoRepo,
         web_src_repo: resourcemapping.WebSourceRepo):
 
-        aggregated_resources = _aggregate_resources_from_covid_sources(search_filter, web_src_repo)
-        filtered_data = FilteredAggregatedResourceInfo(search_filter, aggregated_resources)
-        resource_info_repo.set_resources_for_filter(filtered_data)
+    aggregated_resources = _aggregate_resources_from_covid_sources(search_filter, web_src_repo)
+    filtered_data = FilteredAggregatedResourceInfo(search_filter, aggregated_resources)
+    resource_info_repo.set_resources_for_filter(filtered_data)
 
 
 def _aggregate_resources_from_covid_sources(
@@ -58,20 +58,54 @@ def _scrape_data_from_web_sources(web_sources: Dict[str, resourcemapping.WebSour
     return webdatascraper.scrape_data_from_websites(data_scraping_params)
 
 
-import covisearch.aggregation.core.infra as infra
-import google.cloud.firestore as firestore
-import sys
-import traceback
-
-
-if __name__ == '__main__':
-    try:
-        db = firestore.Client()
-        aggregated_res_info_repo = infra.AggregatedResourceInfoRepoImpl(db)
-        web_src_repo = infra.WebSourceRepoImpl(db)
-        search_filter = SearchFilter('bengaluru', entities.CovidResourceType.PLASMA, None)
-        aggregate_covid_resources(search_filter, aggregated_res_info_repo, web_src_repo)
-    except Exception as ex:
-        print(sys.exc_info()[0])
-        print(traceback.print_exception(*sys.exc_info()))
-    print(9)
+# import covisearch.aggregation.core.infra as infra
+# import google.cloud.firestore as firestore
+# import sys
+# import traceback
+#
+#
+# if __name__ == '__main__':
+#     try:
+#         db = firestore.Client()
+#         aggregated_res_info_repo = infra.AggregatedResourceInfoRepoImpl(db)
+#         web_src_repo = infra.WebSourceRepoImpl(db)
+#         search_filter = SearchFilter('bengaluru', entities.CovidResourceType.PLASMA, None)
+#         aggregate_covid_resources(search_filter, aggregated_res_info_repo, web_src_repo)
+#     except Exception as ex:
+#         # <class 'IndexError'>
+#         print(sys.exc_info()[0])
+#
+#         # None
+#         # Traceback (most recent call last):
+#         #   File "D:/Code/covisearch/src/aggregation/core/covisearch/aggregation/core/domain/
+#         # __init__.py", line 75, in <module>
+#         #     aggregate_covid_resources(search_filter, aggregated_res_info_repo, web_src_repo)
+#         #   File "D:/Code/covisearch/src/aggregation/core/covisearch/aggregation/core/domain/
+#         # __init__.py", line 17, in aggregate_covid_resources
+#         #     i = li[2]
+#         # IndexError: list index out of range
+#         print(traceback.print_exception(*sys.exc_info()))
+#
+#         # None
+#         #   File "D:/Code/covisearch/src/aggregation/core/covisearch/aggregation/core/domain/
+#         # __init__.py", line 75, in <module>
+#         #     aggregate_covid_resources(search_filter, aggregated_res_info_repo, web_src_repo)
+#         #   File "D:/Code/covisearch/src/aggregation/core/covisearch/aggregation/core/domain/
+#         # __init__.py", line 17, in aggregate_covid_resources
+#         #     i = li[2]
+#         print(traceback.print_tb(ex.__traceback__))
+#
+#         # list index out of range
+#         print(str(ex))
+#
+#         # None
+#         # Traceback (most recent call last):
+#         #   File "D:/Code/covisearch/src/aggregation/core/covisearch/aggregation/core/domain/
+#         # __init__.py", line 75, in <module>
+#         #     aggregate_covid_resources(search_filter, aggregated_res_info_repo, web_src_repo)
+#         #   File "D:/Code/covisearch/src/aggregation/core/covisearch/aggregation/core/domain/
+#         # __init__.py", line 17, in aggregate_covid_resources
+#         #     i = li[2]
+#         # IndexError: list index out of range
+#         print(traceback.print_exc())
+#     print(9)

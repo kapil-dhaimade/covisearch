@@ -1,6 +1,7 @@
 from typing import List, Dict
 import json
 from abc import ABC
+import traceback
 
 import scrapy
 from scrapy import crawler
@@ -78,10 +79,18 @@ class WebsiteDataSpider(scrapy.Spider):
 
     def parse(self, response: scrapy.http.Response, **kwargs):
         if response.status != 200:
+            print('Scrapy returned HTTP code: \'' + str(response.status) + '\' for url: \'' +
+                  response.url + '\'')
             return
-        scraping_params = self._operation_ctx.get_scraping_params_for_url(response.url)
-        scraped_data = scrape_data_from_response(response.body, scraping_params)
-        self._operation_ctx.set_scraped_data_for_url(response.url, scraped_data)
+
+        try:
+            scraping_params = self._operation_ctx.get_scraping_params_for_url(response.url)
+            scraped_data = scrape_data_from_response(response.body, scraping_params)
+            self._operation_ctx.set_scraped_data_for_url(response.url, scraped_data)
+        except Exception:
+            print('Exception while parsing Scrapy response for url: \'' + response.url + '\'. ' +
+                  'Ignoring error.')
+            print(traceback.print_exc())
 
 
 class ScrapingOperationCtx:
