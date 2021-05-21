@@ -57,6 +57,8 @@
 .card
 {
   margin: 2% 1% 2% 1%;
+  background-color: white;
+  /* max-width: 100px; */
 }
 
 .min-width
@@ -66,6 +68,16 @@
 .jumbotron
 {
   padding: 0.25rem 0.25rem !important;
+}
+
+.form-input
+{
+  margin: 0rem 1rem 1rem 1rem;
+}
+
+.test
+{
+  display: inline-block;
 }
 /* 
 html, body {
