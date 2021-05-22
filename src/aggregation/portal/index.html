@@ -24,30 +24,39 @@
 
       <div ng-include="'filter.html'"></div>
 
+      <div class="text-center">
+        <button ng-click="fetchPreviousBatch()" class="btn btn-outline-primary" ng-if="pageNumber > 1">Previous</button>
+        <button ng-click="fetchNextBatch()" class="btn btn-outline-primary" ng-if="hasMoreData == true">Next</button>
+      </div>
+
       <!-- <p>form = {{filter}}</p > -->
       <!-- <p>master = {{master}}</p> -->
       <p>Currently showing data for {{filter.city}} and {{filter.resource}}</p>
+      <!-- <p ng-if="dataFetched == true">Currently showing data for {{citySearched}} and {{resourceSearched}}</p> -->
       <!-- <p>Looping data:</p> -->
-      <div id="noDataFound" ng-if="leads.noOfLeads <= 0" class="bg-danger center">
+      <div id="noDataFound" ng-if="dataFetched == true && leads.length <= 0 && waiting == false"
+        class="bg-danger center">
         <span>No Data found</span>
       </div>
+
+
       <div id="loading" ng-if="waiting == true">
-        Data is loading...
-        <br>
-        Please wait...
+        <div class="text-center">
+          <div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+        </div>
       </div>
-      <div id="loading" ng-if="keepLoading == true">
-        Please keep loading.................
-        <br>
-        Please wait...
-      </div>
+
 
       <div ng-include="'card.html'"></div>
-    </div>
 
-    <div class="text-center">
-      <button ng-click="fetchPreviousBatch()" class="btn btn-outline-primary" ng-if="pageNumber > 1">Previous</button>
-      <button ng-click="fetchNextBatch()" class="btn btn-outline-primary" ng-if="moreData == true">Next</button>
+      <div class="text-center"  ng-if="waiting == false">
+        <a ng-click="fetchPreviousBatch()" ng-if="pageNumber > 1">Previous</a>
+        <a ng-click="fetchNextBatch()" ng-if="hasMoreData == true">Next</a>
+        <!-- <button ng-click="fetchPreviousBatch()" class="btn btn-outline-primary" ng-if="pageNumber > 1">Previous</button>
+        <button ng-click="fetchNextBatch()" class="btn btn-outline-primary" ng-if="hasMoreData == true">Next</button> -->
+      </div>
     </div>
 
     <div ng-include="'footer.html'" class="text-center"></div>

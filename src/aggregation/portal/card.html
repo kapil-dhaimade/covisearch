@@ -1,31 +1,32 @@
-<div id="data" ng-if="leads.noOfLeads > 0" class="row">
-
-    <div class="col-sm-4" ng-repeat="x in leads.data" id="card-wrapper">
+<!-- <div id="data" ng-if="leads.length > 0" class="row"> -->
+<!-- <div class="col-sm-4" ng-repeat="x in leads" id="card-wrapper"> -->
+<div id="data" ng-if="leads.length > 0" class="">
+    <div class="" ng-repeat="x in leads" id="card-wrapper">
         <div class="card mx-auto">
             <div class="card-header row">
                 <div class="float-left col text-left">
-                    <span><b>{{x.name}}</b></span>
+                    <span><b>{{x.contact_name}}</b></span>
                 </div>
                 <div class="float-rights">
                     <div class="float-right">
-                        <span>Verified: <span class="badge badge-info">{{x.lastverified}}</span></span>
+                        <span>Verified: <span class="badge badge-info">{{getFromNowDate(x.last_verified_utc)}}</span></span>
                     </div>
 
                 </div>
             </div>
             <div class="card-body row">
-                <div class="float-left col text-left">
-                    <span><b>Location:</b> {{x.location}}</span><br>
-                    <span><b>Category:</b> {{x.category}}</span><br>
-                    <span><b>Source:</b> {{x.source}}</span><br>
-                    <span><b>Date:</b> {{date}}</span><br>
+                <div class="float-left col-8 text-left">
+                    <span><b>Litres Available:</b> {{x.litres}}</a></span><br>
+                    <span><b>Source:</b><a href="{{x.web_source_homepage}}"> {{x.web_source_name}}</a></span><br>
                     <span ng-if="x.abc"><b>ABC:</b> {{x.abc}}</span><br ng-if="x.abc">
-                    <span><b>Numbers:</b> <a ng-repeat="y in numbers.split(',')" href="tel:{{y}}"> {{y}}</a>
+                    <span ng-if="x.address"><b>Address:</b> {{x.address}}</a></span><br ng-if="x.address">
+                    <span ng-if="x.details"><b>Details:</b> {{x.details}}</a></span><br ng-if="x.details">
+                    <span ng-if="x.post_time"><b>Posted On:</b> {{x.post_time}}</a></span><br ng-if="x.post_time">
                     </span>
 
                 </div>
-                <div class="float-right col">
-                    <div class="float-right" ng-repeat="y in x.phone.split(',')">
+                <div class="float-right col-4">
+                    <div class="float-right" ng-repeat="y in x.phone_no.split(',')">
                         <span><span class="fa fa-phone"></span> <a href="tel:{{y}}">{{y}}</a></span><br>
                     </div>
                 </div>
