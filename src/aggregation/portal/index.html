@@ -23,31 +23,30 @@
     <!-- <div ng-include="'filter.html'"></div> -->
     <div id="mainDiv">
 
-      <form name="filterForm" id="filter" class="text-center">
+      <form name="filterForm" id="filter" class="text-center" ng-submit="MyForm.$valid">
         <div class="form-inline justify-content-center">
 
-          <div class="form-group custom-width float-right">
-            <!-- <label for="city">City:    </label> -->
-            <input list="city" ng-model="filter.city" placeholder="Enter the City">
+          <div class="form-group float-right">
+            <input name="filter.city" class="form-control form-input" list="city" ng-model="filter.city"
+              placeholder="Enter the City" required>
             <datalist id="city">
-              <option class="form-control" ng-repeat="x in cityList" value={{x}}>{{x}}</option>
+              <option ng-repeat="x in cityList" value={{x}}>{{x}}</option>
             </datalist>
           </div>
 
-          <div class="form-group custom-width">
-            <!-- <label for="resource">Resource:</label> -->
-            <input list="resource" ng-model="filter.resource" placeholder="Enter the resource">
+          <div class="form-group">
+            <input name="resource" class="form-control form-input" list="resource" ng-model="filter.resource"
+              placeholder="Enter the resource" required>
             <datalist id="resource">
-              <option class="form-control" ng-repeat="x in resourceList" value={{x}}>{{x}}</option>
+              <option ng-repeat="x in resourceList" value={{x}}>{{x}}</option>
             </datalist>
           </div>
+
         </div>
-        <button ng-click="submit()" ng-disabled="filterForm.filter.city.$invalid" class="btn btn-outline-primary">SUBMIT</button>
+        <button ng-click="submit()" ng-disabled="MyForm.$invalid" class="btn btn-outline-primary">SUBMIT</button>
         <button ng-click="reset()" class="btn btn-outline-primary">RESET</button>
 
-        <!-- </form> -->
       </form>
-
       <!-- <p>form = {{filter}}</p > -->
       <!-- <p>master = {{master}}</p> -->
       <p>Currently showing data for {{filter.city}} and {{filter.resource}}</p>
@@ -55,41 +54,58 @@
       <div id="noDataFound" ng-if="leads.noOfLeads <= 0" class="bg-danger center">
         <span>No Data found</span>
       </div>
-      <div id="loading" ng-if="dataFetched == false">
-        :P
+      <div id="loading" ng-if="waiting == true">
+        Data is loading...
+        <br>
+        Please wait...
       </div>
-      <div id="data" ng-if="leads.noOfLeads > 0" class="">
-        <div class="card" ng-repeat="x in leads.data ">
-          <div class="card-header row">
-            <div class="float-left col text-left">
-              <span><b>{{x.name}}</b></span>
-            </div>
-            <div class="float-right col">
-              <div class="float-right">
-                <span>Verified: <span class="badge badge-info">{{x.lastverified}}</span></span>
+      <div id="loading" ng-if="keepLoading == true">
+        Please keep loading.................
+        <br>
+        Please wait...
+      </div>
+      <div id="data" ng-if="leads.noOfLeads > 0" class="row">
+        <div class="col-sm-4" ng-repeat="x in leads.data" id="card-wrapper">
+          <div class="card mx-auto" >
+            <div class="card-header row">
+              <div class="float-left col text-left">
+                <span><b>{{x.name}}</b></span>
               </div>
+              <div class="float-rights">
+                <div class="float-right">
+                  <span>Verified: <span class="badge badge-info">{{x.lastverified}}</span></span>
+                </div>
 
-            </div>
-          </div>
-          <div class="card-body row">
-            <div class="float-left col text-left">
-              <span><b>Location:</b> {{x.location}}</span><br>
-              <span><b>Category:</b> {{x.category}}</span><br>
-              <span><b>Source:</b> {{x.source}}</span><br>
-              <span><b>Date:</b> {{date}}</span><br>
-              <span><b>Numbers:</b> <a ng-repeat="y in numbers.split(',')" href="tel:{{y}}"> {{y}}</a>
-              </span>
-
-            </div>
-            <div class="float-right col">
-              <div class="float-right" ng-repeat="y in x.phone.split(',')">
-                <span><span class="fa fa-phone"></span> <a href="tel:{{y}}">{{y}}</a></span><br>
               </div>
             </div>
+            <div class="card-body row">
+              <div class="float-left col text-left">
+                <span><b>Location:</b> {{x.location}}</span><br>
+                <span><b>Category:</b> {{x.category}}</span><br>
+                <span><b>Source:</b> {{x.source}}</span><br>
+                <span><b>Date:</b> {{date}}</span><br>
+                <span><b>Numbers:</b> <a ng-repeat="y in numbers.split(',')" href="tel:{{y}}"> {{y}}</a>
+                </span>
+
+              </div>
+              <div class="float-right col">
+                <div class="float-right" ng-repeat="y in x.phone.split(',')">
+                  <span><span class="fa fa-phone"></span> <a href="tel:{{y}}">{{y}}</a></span><br>
+                </div>
+              </div>
+            </div>
           </div>
+
         </div>
+
       </div>
     </div>
+
+    <div class="text-center">
+      <button ng-click="fetchPreviousBatch()" class="btn btn-outline-primary" ng-if="pageNumber > 1">Previous</button>
+      <button ng-click="fetchNextBatch()" class="btn btn-outline-primary" ng-if="moreData == true">Next</button>
+    </div>
+
     <div ng-include="'footer.html'" class="text-center"></div>
   </div>
 
