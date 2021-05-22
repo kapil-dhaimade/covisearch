@@ -40,6 +40,21 @@
 		https://cloud.google.com/scheduler/docs/quickstart
 		-How to periodically run a Google Cloud Function using Google Cloud Scheduler:
 		https://edigleyssonsilva.medium.com/how-to-periodically-run-a-cloud-function-using-google-cloud-scheduler-a3e44b5d867c
+		
+-Web Portal Static Hosting:
+	-Go to domain name provider, add CNAME record to point 'www' to 'c.storage.googleapis.com'.
+	-Creating Google Cloud Storage Bucket: Go Google Cloud Console -> Cloud Storage -> Create Bucket -> give name as 'www.domain.com', eg: www.covisearch.in -> select region/location -> Standard storage for frequently accessed data -> Uniform access -> Google generate encryption key -> don't click Create, read below.
+	-Domain Verification by Google Cloud: Before clicking 'Create' -> go to Name section -> click 'Naming guidelines' -> search for Domain verification docs, read it -> go to Google Search Console -> enter domain name -> click Verify -> follow verification steps. May involve copying the Google generated verification ID and creating TXT record in our domain's DNS server with the verification ID, then clicking Verify.
+	-Bucket Creation Last step: After DNS verification is done, click 'Create' in Google Cloud Storage Bucket.
+	-NOTE: This creates an HTTP site. Additional load-balancer steps needed for HTTPS.
+	-Making website public: Go to Permissions tab in bucket -> Add Member -> Enter member name as 'allUsers' -> select role 'Cloud Storage->Storage Object Viewer' -> click 'Allow public access'.
+	-Upload website pages to the bucket
+	-Assign special web pages: Go to Cloud Storage -> click vertical '...' more options -> select 'Edit Website configuration' -> give main page (eg: index.html) as main page, give error page.
+	-Sources:
+		-Google Cloud Docs: Hosting a static website using HTTP:
+		https://cloud.google.com/storage/docs/hosting-static-website-http
+		-Google Cloud Docs: Domain name bucket verification:
+		https://cloud.google.com/storage/docs/domain-name-verification
 
 
 ----Deplyment Steps----
@@ -60,7 +75,7 @@
 		-Google Cloud Docs: Authenticating as a Service account:
 		https://cloud.google.com/docs/authentication/production
 		
--Deployment:
+-Cloud Functions Deployment:
 	-Specify package dependencies: 
 		-We need to create 'requirements.txt' file to specify third-party packages used by project
 		-Create requirements.txt in Python project root folder. Use command 'pip freeze > requirements.txt' in terminal to do the same.
@@ -105,6 +120,10 @@
 			gcloud functions deploy aggregate_covid_resources --runtime python37 --trigger-topic aggregate-topic --memory 256MB --region asia-south1
 	-Pub/Sub settings:
 		-Topic name: aggregate-topic
+		
+-Portal:
+	-Cloud Hosting Static Page:
+		-Cloud Storage
 	
 	
 ----Additional Sources----

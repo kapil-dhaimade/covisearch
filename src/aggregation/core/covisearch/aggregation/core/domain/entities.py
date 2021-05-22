@@ -12,14 +12,16 @@ class CovidResourceType(enum.Enum):
     PLASMA = 2
     HOSPITAL_BED = 3
     HOSPITAL_BED_ICU = 4
+    AMBULANCE = 5
 
     @staticmethod
     def to_string(resource_type: 'CovidResourceType') -> str:
         res_type_strings = {
             CovidResourceType.PLASMA: 'plasma',
-            CovidResourceType.HOSPITAL_BED_ICU: 'hospital-bed-icu',
-            CovidResourceType.HOSPITAL_BED: 'hospital-bed',
-            CovidResourceType.OXYGEN: 'oxygen'
+            CovidResourceType.HOSPITAL_BED_ICU: 'hospital_bed_icu',
+            CovidResourceType.HOSPITAL_BED: 'hospital_bed',
+            CovidResourceType.OXYGEN: 'oxygen',
+            CovidResourceType.AMBULANCE: 'ambulance',
         }
         return res_type_strings[resource_type]
 
@@ -27,25 +29,26 @@ class CovidResourceType(enum.Enum):
     def from_string(resource_type_str: str) -> 'CovidResourceType':
         res_types = {
             'plasma': CovidResourceType.PLASMA,
-            'hospital-bed-icu': CovidResourceType.HOSPITAL_BED_ICU,
-            'hospital-bed': CovidResourceType.HOSPITAL_BED,
-            'oxygen': CovidResourceType.OXYGEN
+            'hospital_bed_icu': CovidResourceType.HOSPITAL_BED_ICU,
+            'hospital_bed': CovidResourceType.HOSPITAL_BED,
+            'oxygen': CovidResourceType.OXYGEN,
+            'ambulance': CovidResourceType.AMBULANCE
         }
         return res_types[resource_type_str.lower()]
 
 
 class CovidResourceInfo:
-    CONTACT_NAME_LABEL = 'contact-name'
+    CONTACT_NAME_LABEL = 'contact_name'
     ADDRESS_LABEL = 'address'
     DETAILS_LABEL = 'details'
-    PHONE_NO_LABEL = 'phone-no'
-    POST_TIME_LABEL = 'post-time'
-    RESOURCE_TYPE_LABEL = 'resource-type'
+    PHONE_NO_LABEL = 'phone_no'
+    POST_TIME_LABEL = 'post_time'
+    RESOURCE_TYPE_LABEL = 'resource_type'
     CITY_LABEL = 'city'
     AVAILABILITY_LABEL = 'availability'
-    LAST_VERIFIED_UTC_LABEL = 'last-verified-utc'
-    WEB_SOURCE_NAME_LABEL = 'web-source-name'
-    WEB_SOURCE_HOMEPAGE_LABEL = 'web-source-homepage'
+    LAST_VERIFIED_UTC_LABEL = 'last_verified_utc'
+    WEB_SOURCE_NAME_LABEL = 'web_source_name'
+    WEB_SOURCE_HOMEPAGE_LABEL = 'web_source_homepage'
 
     @classmethod
     def score(cls, res_info: Dict) -> int:
@@ -170,7 +173,11 @@ class BloodGroup(enum.Enum):
 
 
 class PlasmaInfo(CovidResourceInfo):
-    BLOOD_GROUP_LABEL = 'blood-group'
+    BLOOD_GROUP_LABEL = 'blood_group'
+
+    @classmethod
+    def compare(cls, res_info_a: Dict, res_info_b: Dict) -> int:
+        return super().compare(res_info_a, res_info_b)
 
 
 class OxygenInfo(CovidResourceInfo):
@@ -183,7 +190,7 @@ class OxygenInfo(CovidResourceInfo):
 
 
 class HospitalBedsInfo(CovidResourceInfo):
-    AVAILABLE_BEDS_LABEL = 'available-beds'
+    AVAILABLE_BEDS_LABEL = 'available_beds'
 
     @classmethod
     def compare(cls, res_info_a: Dict, res_info_b: Dict) -> int:
@@ -193,6 +200,12 @@ class HospitalBedsInfo(CovidResourceInfo):
 
         available_beds_a = res_info_a[cls.AVAILABLE_BEDS_LABEL]
         available_beds_b = res_info_b[cls.AVAILABLE_BEDS_LABEL]
+        if available_beds_a is not None and available_beds_b is None:
+            return -1
+        if available_beds_b is not None and available_beds_a is None:
+            return 1
+        if available_beds_a is None and available_beds_b is None:
+            return 0
         if available_beds_a > available_beds_b:
             return -1
         if available_beds_b > available_beds_a:
@@ -200,20 +213,27 @@ class HospitalBedsInfo(CovidResourceInfo):
         return 0
 
 
+class AmbulanceInfo(CovidResourceInfo):
+    @classmethod
+    def compare(cls, res_info_a: Dict, res_info_b: Dict) -> int:
+        return super().compare(res_info_a, res_info_b)
+
+
 def get_res_info_comparator(resource_type: CovidResourceType):
     res_type_classes = {
         CovidResourceType.PLASMA: PlasmaInfo,
         CovidResourceType.OXYGEN: OxygenInfo,
         CovidResourceType.HOSPITAL_BED: HospitalBedsInfo,
-        CovidResourceType.HOSPITAL_BED_ICU: HospitalBedsInfo
+        CovidResourceType.HOSPITAL_BED_ICU: HospitalBedsInfo,
+        CovidResourceType.AMBULANCE: AmbulanceInfo
     }
     return res_type_classes[resource_type].compare
 
 
 class SearchFilter:
     CITY_LABEL = 'city'
-    RESOURCE_TYPE_LABEL = 'resource-type'
-    BLOOD_GROUP_LABEL = 'blood-group'
+    RESOURCE_TYPE_LABEL = 'resource_type'
+    BLOOD_GROUP_LABEL = 'blood_group'
 
     def __init__(self, city: str, resource_type: CovidResourceType, blood_group: BloodGroup):
         self._city: str = city.lower()
@@ -247,23 +267,23 @@ class SearchFilter:
         if self._city is None or self._city is '':
             raise ValueError('city param must have non-empty value')
         if self._resource_type is None or self._resource_type is '':
-            raise ValueError('resource-type param must have non-empty value')
+            raise ValueError('resource_type param must have non-empty value')
 
-    @staticmethod
-    def create_from_url_query_string_fmt(search_filter: str) -> 'SearchFilter':
+    @classmethod
+    def create_from_url_query_string_fmt(cls, search_filter: str) -> 'SearchFilter':
         query_params = \
             urllib.parse.parse_qs(search_filter, keep_blank_values=True, strict_parsing=True)
 
-        if 'city' not in query_params:
+        if cls.CITY_LABEL not in query_params:
             raise ValueError('city param is mandatory')
-        city = query_params['city'][0]
+        city = query_params[cls.CITY_LABEL][0]
 
-        if 'resource-type' not in query_params:
-            raise ValueError('resource-type param is mandatory')
-        resource_type = CovidResourceType.from_string(query_params['resource-type'][0])
+        if cls.RESOURCE_TYPE_LABEL not in query_params:
+            raise ValueError('resource_type param is mandatory')
+        resource_type = CovidResourceType.from_string(query_params[cls.RESOURCE_TYPE_LABEL][0])
 
-        if 'blood-group' in query_params:
-            blood_group = BloodGroup.from_string(query_params['blood-group'][0])
+        if cls.BLOOD_GROUP_LABEL in query_params:
+            blood_group = BloodGroup.from_string(query_params[cls.BLOOD_GROUP_LABEL][0])
         else:
             blood_group = None
 

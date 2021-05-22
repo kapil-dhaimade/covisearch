@@ -19,6 +19,10 @@ def aggregate_covid_resources(event, context):
 
 
 # if __name__=='__main__':
-#     aggregate_covid_resources({'data': 'Y2l0eT1jaGVubmFpJnJlc291cmNlLXR5cGU9b3h5Z2Vu'}, None)
-#     aggregate_covid_resources({'data': 'Y2l0eT1jaGVubmFpJnJlc291cmNlLXR5cGU9b3h5Z2Vu'}, None)
+#     # city=chennai&resource_type=plasma
+#     aggregate_covid_resources({'data': 'Y2l0eT1jaGVubmFpJnJlc291cmNlX3R5cGU9cGxhc21h'}, None)
+#     # # city=mumbai&resource_type=oxygen
+#     # aggregate_covid_resources({'data': 'Y2l0eT1tdW1iYWkmcmVzb3VyY2VfdHlwZT1veHlnZW4='}, None)
+#     # city=mumbai&resource_type=ambulance
+#     aggregate_covid_resources({'data': 'Y2l0eT1tdW1iYWkmcmVzb3VyY2VfdHlwZT1hbWJ1bGFuY2U='}, None)
 #     print(9)

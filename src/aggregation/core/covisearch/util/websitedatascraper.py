@@ -140,21 +140,21 @@ class WebsiteDataSpider(scrapy.Spider):
 class ScrapingOperationCtx:
     def __init__(self, data_scraping_params: List['DataScrapingParams']):
         self._operation_ctx_for_url = \
-            {scraping_params.url: {'scraping-params': scraping_params, 'scraped-data': None}
+            {scraping_params.url: {'scraping_params': scraping_params, 'scraped_data': None}
              for scraping_params in data_scraping_params}
 
     def get_scraping_params_for_url(self, url: URL) -> DataScrapingParams:
-        return self._operation_ctx_for_url[url]['scraping-params']
+        return self._operation_ctx_for_url[url]['scraping_params']
 
     def set_scraped_data_for_url(
             self, url: URL, scraped_data: ScrapedData) -> None:
-        self._operation_ctx_for_url[url]['scraped-data'] = scraped_data
+        self._operation_ctx_for_url[url]['scraped_data'] = scraped_data
 
     def get_all_urls_for_scraping(self) -> List[URL]:
         return list(self._operation_ctx_for_url.keys())
 
     def get_all_scraped_data(self) -> List['ScrapedData']:
-        return [x['scraped-data'] for x in list(self._operation_ctx_for_url.values())]
+        return [x['scraped_data'] for x in list(self._operation_ctx_for_url.values())]
 
 
 # Factory for content type selector parser

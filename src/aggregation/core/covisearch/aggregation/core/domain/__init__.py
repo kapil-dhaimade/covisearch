@@ -23,6 +23,10 @@ def _aggregate_resources_from_covid_sources(
 
     web_sources = web_src_repo.get_web_sources_for_filter(search_filter)
 
+    if not web_sources:
+        raise ValueError('No matching web source found for filter: ' +
+                         search_filter.to_url_query_string_fmt())
+
     scraped_data_list: List[webdatascraper.ScrapedData] = \
         _scrape_data_from_web_sources(web_sources)
 
