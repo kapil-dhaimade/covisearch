@@ -14,8 +14,8 @@ import urllib.parse
 
 def fetch_resource_for_filter(request: Request):
     city = request.args["city"]
-    resource_type = request.args["resource-type"]
-    page_no = request.args["page-no"]
+    resource_type = request.args["resource_type"]
+    page_no = request.args["page_no"]
 
     if resource_type is None or city is None:
         raise abort(400)
@@ -31,18 +31,18 @@ def fetch_resource_for_filter(request: Request):
     # This is auto-initialized when main program loads
     db = firestore.Client()
 
-    res_info_filter_id = "city=" + city + "&resource-type=" + resource_type
+    res_info_filter_id = "city=" + city + "&resource_type=" + resource_type
     update_stats(res_info_filter_id, db)
 
     # ======================fetching resource======================
-    res_info_doc = db.collection('filtered-aggregated-resource-info'). \
+    res_info_doc = db.collection('filtered_aggregated_resource_info'). \
         document(res_info_filter_id).get()
 
     if not res_info_doc.exists:
         resync_invoke_schedule(res_info_filter_id)
         raise abort(202)
 
-    resources = res_info_doc.get(db.field_path('resource-info-data'))
+    resources = res_info_doc.get(db.field_path('resource_info_data'))
     page_size = 20
     if len(resources) < page_no * page_size:
         if len(resources) < (page_no - 1) * page_size:
@@ -55,23 +55,23 @@ def fetch_resource_for_filter(request: Request):
         res_info_data = resources[(page_no - 1) * page_size:page_no * page_size]
 
     response_dict = {
-        "meta-info": {
-            "more-data-available": more_data_available,
+        "meta_info": {
+            "more_data_available": more_data_available,
         },
-        "resource-info-data": res_info_data
+        "resource_info_data": res_info_data
     }
     return json.dumps(response_dict, cls=DateTimeEncoder)
 
 
 def update_stats(res_info_filter_id: str, db):
-    filter_stat_doc = db.collection('filter-stats'). \
+    filter_stat_doc = db.collection('filter_stats'). \
         document(res_info_filter_id).get()
 
-    query_time = {"last-query-time-utc": DatetimeWithNanoseconds.today()}
+    query_time = {"last_query_time_utc": DatetimeWithNanoseconds.today()}
     if not filter_stat_doc.exists:
-        db.collection('filter-stats').add(query_time, res_info_filter_id)
+        db.collection('filter_stats').add(query_time, res_info_filter_id)
     else:
-        db.collection('filter-stats'). \
+        db.collection('filter_stats'). \
             document(res_info_filter_id).set(query_time)
 
 
