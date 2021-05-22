@@ -193,6 +193,12 @@ class HospitalBedsInfo(CovidResourceInfo):
 
         available_beds_a = res_info_a[cls.AVAILABLE_BEDS_LABEL]
         available_beds_b = res_info_b[cls.AVAILABLE_BEDS_LABEL]
+        if available_beds_a is not None and available_beds_b is None:
+            return -1
+        if available_beds_b is not None and available_beds_a is None:
+            return 1
+        if available_beds_a is None and available_beds_b is None:
+            return 0
         if available_beds_a > available_beds_b:
             return -1
         if available_beds_b > available_beds_a:
