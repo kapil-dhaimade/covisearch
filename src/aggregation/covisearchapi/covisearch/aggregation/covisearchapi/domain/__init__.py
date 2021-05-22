@@ -18,7 +18,7 @@ def fetch_resource_for_filter(request: Request):
     page_no = request.args["page_no"]
 
     if resource_type is None or city is None:
-        raise abort(400)
+        return "Invalid Input!!!" , 400
     else:
         city = urllib.parse.quote(city).lower()
         resource_type = urllib.parse.quote(resource_type).lower()
@@ -40,13 +40,13 @@ def fetch_resource_for_filter(request: Request):
 
     if not res_info_doc.exists:
         resync_invoke_schedule(res_info_filter_id)
-        raise abort(202)
+        return "Collecting data... Try again after few seconds" , 202
 
     resources = res_info_doc.get(db.field_path('resource_info_data'))
-    page_size = 20
+    page_size = 10
     if len(resources) < page_no * page_size:
         if len(resources) < (page_no - 1) * page_size:
-            raise abort(400)
+            return "Invalid Page no", 400
         else:
             more_data_available = False
             res_info_data = resources[(page_no - 1) * page_size:len(resources) - 1]
