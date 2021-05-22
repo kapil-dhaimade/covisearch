@@ -14,30 +14,24 @@ from google.cloud import pubsub_v1
 def fetch_resource_for_filter(request: Request):
     city = request.args["city"]
     resource_type = request.args["resource-type"]
-    page_no = request.args["page_no"]
+    page_no = request.args["page-no"]
 
     if resource_type is None or city is None:
         raise abort(400)
-
+    else:
+        city = city.lower()
+        resource_type = resource_type.lower()
     if page_no is None:
         page_no = 1
     else:
         page_no = int(page_no)
 
+
     # This is auto-initialized when main program loads
     db = firestore.Client()
 
-    # ======================updating stats======================
     res_info_filter_id = "city=" + city + "&resource-type=" + resource_type
-    filter_stat_doc = db.collection('filter-stats'). \
-        document(res_info_filter_id).get()
-
-    query_time = {"last-query-time-utc": DatetimeWithNanoseconds.today()}
-    if not filter_stat_doc.exists:
-        db.collection('filter-stats').add(query_time, res_info_filter_id)
-    else:
-        db.collection('filter-stats'). \
-            document(res_info_filter_id).set(query_time)
+    update_stats(res_info_filter_id, db)
 
     # ======================fetching resource======================
     res_info_doc = db.collection('filtered-aggregated-resource-info'). \
@@ -47,8 +41,8 @@ def fetch_resource_for_filter(request: Request):
         resync_invoke_schedule(res_info_filter_id)
         raise abort(202)
 
-    resources = res_info_doc.get(db.field_path('res-info-data'))
-    page_size = 10
+    resources = res_info_doc.get(db.field_path('resource-info-data'))
+    page_size = 20
     if len(resources) < page_no * page_size:
         if len(resources) < (page_no - 1) * page_size:
             raise abort(400)
@@ -63,9 +57,21 @@ def fetch_resource_for_filter(request: Request):
         "meta-info": {
             "more-data-available": more_data_available,
         },
-        "res-info-data": res_info_data
+        "resource-info-data": res_info_data
     }
     return json.dumps(response_dict, cls=DateTimeEncoder)
+
+
+def update_stats(res_info_filter_id: str, db):
+    filter_stat_doc = db.collection('filter-stats'). \
+        document(res_info_filter_id).get()
+
+    query_time = {"last-query-time-utc": DatetimeWithNanoseconds.today()}
+    if not filter_stat_doc.exists:
+        db.collection('filter-stats').add(query_time, res_info_filter_id)
+    else:
+        db.collection('filter-stats'). \
+            document(res_info_filter_id).set(query_time)
 
 
 # Publishes a message to a Cloud Pub/Sub topic.
@@ -75,7 +81,7 @@ def resync_invoke_schedule(res_info_filter_id: str):
     PROJECT_ID = os.getenv('GOOGLE_CLOUD_PROJECT')
 
     # References an existing topic
-    topic_path = publisher.topic_path(PROJECT_ID, "resync-schedule-topic")
+    topic_path = publisher.topic_path(PROJECT_ID, "aggregate-topic")
 
     message_bytes = res_info_filter_id.encode('utf-8')
 
