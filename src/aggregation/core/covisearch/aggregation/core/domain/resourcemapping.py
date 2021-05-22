@@ -93,6 +93,10 @@ class WebSource:
             urllib.parse.quote(search_filter.city))
 
         filter_res_type_str = CovidResourceType.to_string(search_filter.resource_type)
+
+        if filter_res_type_str not in resource_type_label_mapping:
+            raise NoResourceTypeMappingError()
+
         web_resource_url = web_resource_url.replace(
             cls.WEB_RES_URL_TEMPLATE_RESOURCE_TYPE_PLACEHOLDER,
             urllib.parse.quote(resource_type_label_mapping[filter_res_type_str]))
@@ -100,6 +104,10 @@ class WebSource:
         # TODO: KAPIL: Blood group filter mapping
 
         return web_resource_url
+
+
+class NoResourceTypeMappingError(Exception):
+    pass
 
 
 class WebSourceRepo(ABC):
@@ -114,6 +122,7 @@ def _get_specific_res_info_mapper(res_type: CovidResourceType):
         entities.CovidResourceType.OXYGEN: _map_oxygen,
         entities.CovidResourceType.HOSPITAL_BED: _map_hospital_bed,
         entities.CovidResourceType.HOSPITAL_BED_ICU: _map_hospital_bed,
+        entities.CovidResourceType.AMBULANCE: _map_ambulance
     }
     return _web_res_to_covisearch_res_mapper[res_type]
 
@@ -237,6 +246,11 @@ def _map_hospital_bed(web_src_res_info: Dict, res_mapping_desc: Dict[str, 'Field
             covisearch_res[available_beds_label] = None
     else:
         covisearch_res[available_beds_label] = None
+
+
+def _map_ambulance(web_src_res_info: Dict, res_mapping_desc: Dict[str, 'FieldMappingDesc'],
+                   covisearch_res: Dict):
+    pass
 
 
 def _sanitize_phone_no(phone_no: str):

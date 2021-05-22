@@ -46,7 +46,8 @@ class WebSourceRepoImpl(resourcemapping.WebSourceRepo):
             'scope', 'in', _possible_web_src_scopes_for_filter(search_filter)).stream()
         web_srcs_for_filter = [_firestore_to_web_src(x, search_filter)
                                for x in web_src_doc_collection]
-        return {web_src.web_resource_url: web_src for web_src in web_srcs_for_filter}
+        return {web_src.web_resource_url: web_src
+                for web_src in web_srcs_for_filter if web_src is not None}
 
 
 # NOTE: KAPIL: Take care of state-wide sources and subset of resources later.
@@ -72,14 +73,18 @@ def _firestore_to_web_src(
         search_filter: entities.SearchFilter) -> resourcemapping.WebSource:
 
     web_src_dict = web_src_doc.to_dict()
-    return resourcemapping.WebSource(
-        web_src_dict['name'], web_src_dict['homepage_url'],
-        web_src_dict['web_resource_url_template'],
-        _response_content_type_from_string(web_src_dict['response_content_type']),
-        web_src_dict['data_table_extract_selectors'],
-        _get_resource_mapping_desc_model(web_src_dict['resource_mapping_desc']),
-        web_src_dict['resource_type_label_mapping'],
-        search_filter)
+    try:
+        return resourcemapping.WebSource(
+            web_src_dict['name'], web_src_dict['homepage_url'],
+            web_src_dict['web_resource_url_template'],
+            _response_content_type_from_string(web_src_dict['response_content_type']),
+            web_src_dict['data_table_extract_selectors'],
+            _get_resource_mapping_desc_model(web_src_dict['resource_mapping_desc']),
+            web_src_dict['resource_type_label_mapping'],
+            search_filter)
+
+    except resourcemapping.NoResourceTypeMappingError:
+        return None
 
 
 def _get_resource_mapping_desc_model(resource_mapping_desc_dict: Dict[str, str]) -> \

@@ -12,6 +12,7 @@ class CovidResourceType(enum.Enum):
     PLASMA = 2
     HOSPITAL_BED = 3
     HOSPITAL_BED_ICU = 4
+    AMBULANCE = 5
 
     @staticmethod
     def to_string(resource_type: 'CovidResourceType') -> str:
@@ -19,7 +20,8 @@ class CovidResourceType(enum.Enum):
             CovidResourceType.PLASMA: 'plasma',
             CovidResourceType.HOSPITAL_BED_ICU: 'hospital_bed_icu',
             CovidResourceType.HOSPITAL_BED: 'hospital_bed',
-            CovidResourceType.OXYGEN: 'oxygen'
+            CovidResourceType.OXYGEN: 'oxygen',
+            CovidResourceType.AMBULANCE: 'ambulance',
         }
         return res_type_strings[resource_type]
 
@@ -29,7 +31,8 @@ class CovidResourceType(enum.Enum):
             'plasma': CovidResourceType.PLASMA,
             'hospital_bed_icu': CovidResourceType.HOSPITAL_BED_ICU,
             'hospital_bed': CovidResourceType.HOSPITAL_BED,
-            'oxygen': CovidResourceType.OXYGEN
+            'oxygen': CovidResourceType.OXYGEN,
+            'ambulance': CovidResourceType.AMBULANCE
         }
         return res_types[resource_type_str.lower()]
 
@@ -172,6 +175,10 @@ class BloodGroup(enum.Enum):
 class PlasmaInfo(CovidResourceInfo):
     BLOOD_GROUP_LABEL = 'blood_group'
 
+    @classmethod
+    def compare(cls, res_info_a: Dict, res_info_b: Dict) -> int:
+        return super().compare(res_info_a, res_info_b)
+
 
 class OxygenInfo(CovidResourceInfo):
     LITRES_LABEL = 'litres'
@@ -206,12 +213,19 @@ class HospitalBedsInfo(CovidResourceInfo):
         return 0
 
 
+class AmbulanceInfo(CovidResourceInfo):
+    @classmethod
+    def compare(cls, res_info_a: Dict, res_info_b: Dict) -> int:
+        return super().compare(res_info_a, res_info_b)
+
+
 def get_res_info_comparator(resource_type: CovidResourceType):
     res_type_classes = {
         CovidResourceType.PLASMA: PlasmaInfo,
         CovidResourceType.OXYGEN: OxygenInfo,
         CovidResourceType.HOSPITAL_BED: HospitalBedsInfo,
-        CovidResourceType.HOSPITAL_BED_ICU: HospitalBedsInfo
+        CovidResourceType.HOSPITAL_BED_ICU: HospitalBedsInfo,
+        CovidResourceType.AMBULANCE: AmbulanceInfo
     }
     return res_type_classes[resource_type].compare
 
