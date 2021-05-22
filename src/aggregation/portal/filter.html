@@ -1,0 +1,24 @@
+<form name="filterForm" id="filter" class="text-center" ng-submit="MyForm.$valid">
+    <div class="form-inline justify-content-center">
+
+      <div class="form-group float-right">
+        <input name="filter.city" class="form-control form-input" list="city" ng-model="filter.city"
+          placeholder="Enter the City" required>
+        <datalist id="city">
+          <option ng-repeat="x in cityList" value={{x}}>{{x}}</option>
+        </datalist>
+      </div>
+
+      <div class="form-group">
+        <input name="resource" class="form-control form-input" list="resource" ng-model="filter.resource"
+          placeholder="Enter the resource" required>
+        <datalist id="resource">
+          <option ng-repeat="x in resourceList" value={{x}}>{{x}}</option>
+        </datalist>
+      </div>
+
+    </div>
+    <button ng-click="submit()" ng-disabled="MyForm.$invalid" class="btn btn-outline-primary">SUBMIT</button>
+    <button ng-click="reset()" class="btn btn-outline-primary">RESET</button>
+
+  </form>
