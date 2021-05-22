@@ -33,13 +33,13 @@ def _days_since_last_query(_last_query_time_utc: datetime.datetime) -> int:
 
 
 class FilterStats:
-    def __init__(self, data_filter: str, last_query_time_utc: datetime.datetime):
-        self._data_filter = data_filter
+    def __init__(self, search_filter: str, last_query_time_utc: datetime.datetime):
+        self._search_filter = search_filter
         self._last_query_time_utc = last_query_time_utc
 
     @property
-    def data_filter(self):
-        return self._data_filter
+    def search_filter(self):
+        return self._search_filter
 
     @property
     def last_query_time_utc(self):
