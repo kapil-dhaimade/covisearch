@@ -1,7 +1,7 @@
-<!-- <div id="data" ng-if="leads.length > 0" class="row"> -->
-<!-- <div class="col-sm-4" ng-repeat="x in leads" id="card-wrapper"> -->
-<div id="data" ng-if="leads.length > 0" class="">
-    <div class="" ng-repeat="x in leads" id="card-wrapper">
+<div id="data" ng-if="leads.length > 0" class="row">
+    <div class="col-sm-4" ng-repeat="x in leads" id="card-wrapper">
+        <!-- <div id="data" ng-if="leads.length > 0" class=""> -->
+        <!-- <div class="" ng-repeat="x in leads" id="card-wrapper"> -->
         <div class="card mx-auto">
             <div class="card-header row">
                 <div class="float-left col text-left">
@@ -9,29 +9,45 @@
                 </div>
                 <div class="float-rights">
                     <div class="float-right">
-                        <span>Verified: <span class="badge badge-info">{{getFromNowDate(x.last_verified_utc)}}</span></span>
+                        <span>Verified: <span
+                                class="badge badge-info">{{getFromNowDate(x.last_verified_utc)}}</span></span>
                     </div>
 
                 </div>
             </div>
-            <div class="card-body row">
-                <div class="float-left col-8 text-left">
-                    <span><b>Litres Available:</b> {{x.litres}}</a></span><br>
-                    <span><b>Source:</b><a href="{{x.web_source_homepage}}"> {{x.web_source_name}}</a></span><br>
-                    <span ng-if="x.abc"><b>ABC:</b> {{x.abc}}</span><br ng-if="x.abc">
-                    <span ng-if="x.address"><b>Address:</b> {{x.address}}</a></span><br ng-if="x.address">
-                    <span ng-if="x.details"><b>Details:</b> {{x.details}}</a></span><br ng-if="x.details">
-                    <span ng-if="x.post_time"><b>Posted On:</b> {{x.post_time}}</a></span><br ng-if="x.post_time">
+            <div class="card-body" id="card-body-wrapper-outer">
+                <!-- <div class="" id="card-body-wrapper-inner" style="background-color: blueviolet;"> -->
+                <div id="data" class="w-100 clearfix">
+                    
+                    <div class="float-right rightCard" ng-repeat="y in x.phone_no.split('/')">
+                        <span id="phone"><span class="fa fa-phone"></span> <a href="tel:{{y}}">{{y}}</a></span><br>
+                    </div>
+
+                    <div class="float-left">
+                        <span ng-if="x.litres"><b>Litres Available:</b> <br ng-if="x.litres">{{x.litres}}</a></span><br
+                            ng-if="x.litres">
+                        <span><b>Source:</b><a href="{{x.web_source_homepage}}"><br>{{x.web_source_name}}</a></span><br>
+                    </div>
+
+                </div>
+                <div id="extraData">
+                    <span ng-if="x.post_time"><b>Updated On:</b><br ng-if="x.post_time"> {{x.post_time}}</a></span><br
+                        ng-if="x.post_time">
                     </span>
-
                 </div>
-                <div class="float-right col-4">
-                    <div class="float-right" ng-repeat="y in x.phone_no.split(',')">
-                        <span><span class="fa fa-phone"></span> <a href="tel:{{y}}">{{y}}</a></span><br>
+                <div id="knowMore" class="">
+                    <span class="pointer rounded-lg light-back px-1" data-toggle="collapse" data-target="#demo{{$index}}"><b>Know More ></b></span><br>
+                    <div id="demo{{$index}}" class="collapse">
+                        <span ng-if="x.address"><b>Address:</b> <br ng-if="x.address">{{x.address}}</span><br
+                            ng-if="x.address">
+                        <span ng-if="x.details"><b>Details:</b> <br ng-if="x.details">{{x.details}}</span><br
+                            ng-if="x.details">
+                        <span ng-if="x.details == '' && x.address == ''" >No More Details </span><br
+                            ng-if="x.details">
                     </div>
                 </div>
             </div>
+            <!-- </div> -->
         </div>
-
     </div>
 </div>

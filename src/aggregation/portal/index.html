@@ -11,8 +11,10 @@
   <link rel="stylesheet" href="myStyle.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <script src="myScript.js"></script>
 </head>
 
@@ -32,12 +34,17 @@
       <!-- <p>form = {{filter}}</p > -->
       <!-- <p>master = {{master}}</p> -->
       <p>Currently showing data for {{filter.city}} and {{filter.resource}}</p>
-      <!-- <p ng-if="dataFetched == true">Currently showing data for {{citySearched}} and {{resourceSearched}}</p> -->
+      <p ng-if="dataFetched == true">Currently showing data for {{citySearched}} and {{resourceSearched}}</p>
       <!-- <p>Looping data:</p> -->
       <div id="noDataFound" ng-if="dataFetched == true && leads.length <= 0 && waiting == false"
         class="bg-danger center">
         <span>No Data found</span>
       </div>
+
+      <div id="errorBlock" ng-if="error == true"
+      class="bg-danger center">
+      <span>ERROR OCCURED</span>
+    </div>
 
 
       <div id="loading" ng-if="waiting == true">

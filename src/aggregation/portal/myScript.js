@@ -9,7 +9,7 @@ app.controller('formCtrl', function ($scope, $http, $timeout) {
     
     $scope.init = function () {
         $scope.pageNumber = 0;
-        $scope.retryCount = 2;
+        $scope.retryCount = 3;
         $scope.dataFetched = false;
     };
 
@@ -17,18 +17,13 @@ app.controller('formCtrl', function ($scope, $http, $timeout) {
         "ambulance",
         "plasma",
         "hospital_bed",
-        "hospital_bed_icu"
-    ];
-
-    $scope.bloodGroup = [
-        { type: "ap" },
-        { type: "an" },
-        { type: "bp" },
-        { type: "bn" }
+        "hospital_bed_icu",
+        "oxygen"
     ];
 
     $scope.fetch = function (data) {
-        url = api_base_url + "resource_type=" + data.resource + "&city=" + data.city + "&page_no=" + $scope.pageNumber;
+        // url = api_base_url + "resource_type=" + data.resource + "&city=" + data.city + "&page_no=" + $scope.pageNumber;
+        url = 'api.txt';
         console.log("URL:  " + url);
         $scope.leads = "";
         $scope.hasMoreData = false;
@@ -40,7 +35,7 @@ app.controller('formCtrl', function ($scope, $http, $timeout) {
                 if($scope.retryCount > 0)
                 {
                     $scope.keepLoading = true;
-                    $timeout(function () { $scope.fetch(data) }, 4000);
+                    $timeout(function () { $scope.fetch(data) }, 5000);
                     $scope.retryCount--;
                 }
             }
@@ -57,7 +52,12 @@ app.controller('formCtrl', function ($scope, $http, $timeout) {
             }
             // console.log($scope.leads.data);
             console.log("Hello");
-        });
+        },
+        function myError(response) {
+            $scope.waiting = false;
+            $scope.error = true;
+            // $scope.dataFetched = true;
+          });
     };
 
     $scope.delayedFunction = function () {
@@ -85,7 +85,7 @@ app.controller('formCtrl', function ($scope, $http, $timeout) {
         $scope.filter = angular.copy($scope.master);
         $scope.pageNumber = 1;
         $scope.retryCount = 2;
-        // $scope.fetch($scope.master);
+        $scope.fetch($scope.master);
         $scope.leads = "";
         $scope.hasMoreData = false;
     };
@@ -94,6 +94,7 @@ app.controller('formCtrl', function ($scope, $http, $timeout) {
     $scope.submit = function () {
         $scope.init();
         $scope.waiting = true;
+        $scope.error = false;
         // $scope.pageNumber = 0;
         $scope.fetchNextBatch($scope.filter);
     };
