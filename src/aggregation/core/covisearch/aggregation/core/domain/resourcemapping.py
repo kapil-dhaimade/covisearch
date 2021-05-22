@@ -338,7 +338,7 @@ def datetime_format_to_str(datetime_format: covisearch.util.datetimeutil.Datetim
         covisearch.util.datetimeutil.DatetimeFormat.AGO: 'ago',
         covisearch.util.datetimeutil.DatetimeFormat.ISOFORMAT: 'isoformat',
         covisearch.util.datetimeutil.DatetimeFormat.SHORT_DATETIME_DD_MM:
-            'short-datetime-dd-mm'
+            'short_datetime_dd_mm'
     }
     return datetime_format_strings[datetime_format]
 
@@ -348,7 +348,7 @@ def datetime_format_from_str(datetime_format_str: str) -> \
     datetime_formats = {
         'ago': covisearch.util.datetimeutil.DatetimeFormat.AGO,
         'isoformat': covisearch.util.datetimeutil.DatetimeFormat.ISOFORMAT,
-        'short-datetime-dd-mm':
+        'short_datetime_dd_mm':
             covisearch.util.datetimeutil.DatetimeFormat.SHORT_DATETIME_DD_MM
     }
     return datetime_formats[datetime_format_str.lower()]
