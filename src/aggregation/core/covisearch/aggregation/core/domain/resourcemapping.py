@@ -257,7 +257,10 @@ def _sanitize_phone_no(phone_no: str):
     # NOTE: KAPIL: Intended format: '8888888888/9999999999'
     sanitized_phone_no = phone_no.strip()
     sanitized_phone_no = sanitized_phone_no.replace(' / ', '/')
+    sanitized_phone_no = sanitized_phone_no.replace(' , ', '/')
     sanitized_phone_no = sanitized_phone_no.replace(',', '/')
+    sanitized_phone_no = sanitized_phone_no.replace(' | ', '/')
+    sanitized_phone_no = sanitized_phone_no.replace('|', '/')
     sanitized_phone_no = sanitized_phone_no.replace('\n', '/')
     sanitized_phone_no = sanitized_phone_no.replace('\r', '')
     sanitized_phone_no = sanitized_phone_no.replace('\t', ' ')
