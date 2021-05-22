@@ -9,6 +9,7 @@ import base64
 import json
 import os
 from google.cloud import pubsub_v1
+import urllib.parse
 
 
 def fetch_resource_for_filter(request: Request):
@@ -19,8 +20,8 @@ def fetch_resource_for_filter(request: Request):
     if resource_type is None or city is None:
         raise abort(400)
     else:
-        city = city.lower()
-        resource_type = resource_type.lower()
+        city = urllib.parse.quote(city).lower()
+        resource_type = urllib.parse.quote(resource_type).lower()
     if page_no is None:
         page_no = 1
     else:
