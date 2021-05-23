@@ -72,7 +72,7 @@ app.controller('formCtrl', function ($scope, $http, $timeout) {
                 $scope.dataFetched = true;
             }
             // console.log($scope.leads.data);
-            console.log("Hello");
+            // console.log("Hello");
         },
             function myError(response) {
                 $scope.waiting = false;

@@ -18,48 +18,45 @@
   <script src="js/myScript.js"></script>
 </head>
 
-<body>
+<body ng-app="myApp" ng-controller="formCtrl">
 
-  <div id="bodyDiv" ng-app="myApp" ng-controller="formCtrl" class="container-fluid">
-    <div ng-include="'header.html'" class="text-center"></div>
-    
-    <div id="mainDiv">
-      <!-- <div ng-include="'filter.html'"></div> -->
-      <form name="filterForm" id="filter" class="text-center" ng-submit="MyForm.$valid">
-        <div class="form-inline justify-content-center">
+  <div ng-include="'header.html'" class="text-center"></div>
+  <div id="bodyDiv" class="container-fluid">
 
-          <div class="form-group custom-input">
-            <input name="filter.city" class="form-control form-input" list="city" ng-model="filter.city"
-              placeholder="Enter the City" required>
-            <datalist id="city">
-              <option ng-repeat="x in cityList" value={{x}}>{{x}}</option>
-            </datalist>
-          </div>
+    <!-- <div ng-include="'filter.html'"></div> -->
+    <form name="filterForm" id="filter" class="text-center" ng-submit="MyForm.$valid">
+      <div class="form-inline justify-content-center">
 
-          <div class="form-group custom-input">
-            <select class="form-control form-input" ng-model="filter.resource"
-              ng-options="x.displayName for x in resourceList" required>
-              <option value="" disabled selected>Select the Resource</option>
-            </select>
-          </div>
-
-          <div class="form-group custom-input">
-            <button ng-click="submit()" ng-disabled="filterForm.$invalid"
-              class="btn btn-outline-primary">SUBMIT</button>
-          </div>
+        <div class="form-group custom-input">
+          <input name="filter.city" class="form-control form-input" list="city" ng-model="filter.city"
+            placeholder="Enter the City" required>
+          <datalist id="city">
+            <option ng-repeat="x in cityList" value={{x}}>{{x}}</option>
+          </datalist>
         </div>
 
-      </form>
+        <div class="form-group custom-input">
+          <select class="form-control form-input" ng-model="filter.resource"
+            ng-options="x.displayName for x in resourceList" required>
+            <option value="" disabled selected>Select the Resource</option>
+          </select>
+        </div>
 
-      <!-- <button ng-click="reset()" class="btn btn-outline-primary">RESET</button> -->
-      <!-- <p>Currently showing data for {{filter.city}} and {{filter.resource}}</p> -->
+        <div class="form-group custom-input">
+          <button ng-click="submit()" ng-disabled="filterForm.$invalid" class="btn btn-outline-primary">SUBMIT</button>
+        </div>
+      </div>
 
-      <div ng-include="'card.html'"></div>
+    </form>
 
-    </div>
+    <!-- <button ng-click="reset()" class="btn btn-outline-primary">RESET</button> -->
+    <!-- <p>Currently showing data for {{filter.city}} and {{filter.resource}}</p> -->
+    <hr>
+    <!-- <div ng-include="'home.html'"></div> -->
+    <div ng-include="'card.html'"></div>
 
-    <div ng-include="'footer.html'" class="text-center"></div>
   </div>
+  <div ng-include="'footer.html'" class="text-center"></div>
 
 </body>
 
