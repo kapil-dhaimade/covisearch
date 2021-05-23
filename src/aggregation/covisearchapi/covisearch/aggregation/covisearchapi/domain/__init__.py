@@ -12,13 +12,37 @@ from google.cloud import pubsub_v1
 import urllib.parse
 
 
+# This is auto-initialized when main program loads
+db = firestore.Client()
+
+
 def fetch_resource_for_filter(request: Request):
+    # For more information about CORS and CORS preflight requests, see
+    # https://developer.mozilla.org/en-US/docs/Glossary/Preflight_request
+    # for more information.
+
+    # Set CORS headers for the preflight request
+    if request.method == 'OPTIONS':
+        headers = {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type',
+            'Access-Control-Max-Age': '3600'
+        }
+
+        return '', 204, headers
+
+    # Set CORS headers for the main request
+    headers = {
+        'Access-Control-Allow-Origin': '*'
+    }
+
     city = request.args["city"]
     resource_type = request.args["resource_type"]
     page_no = request.args["page_no"]
 
     if resource_type is None or city is None:
-        return "Invalid Input!!!" , 400
+        return "Invalid Input!!!" , 400, headers
     else:
         city = urllib.parse.quote(city).lower()
         resource_type = urllib.parse.quote(resource_type).lower()
@@ -26,10 +50,6 @@ def fetch_resource_for_filter(request: Request):
         page_no = 1
     else:
         page_no = int(page_no)
-
-
-    # This is auto-initialized when main program loads
-    db = firestore.Client()
 
     res_info_filter_id = "city=" + city + "&resource_type=" + resource_type
     update_stats(res_info_filter_id, db)
@@ -40,13 +60,13 @@ def fetch_resource_for_filter(request: Request):
 
     if not res_info_doc.exists:
         resync_invoke_schedule(res_info_filter_id)
-        return "Collecting data... Try again after few seconds" , 202
+        return "Collecting data... Try again after few seconds" , 202, headers
 
     resources = res_info_doc.get(db.field_path('resource_info_data'))
     page_size = 10
     if len(resources) < page_no * page_size:
         if len(resources) < (page_no - 1) * page_size:
-            return "Invalid Page no", 400
+            return "Invalid Page no", 400, headers
         else:
             more_data_available = False
             res_info_data = resources[(page_no - 1) * page_size:len(resources) - 1]
@@ -60,7 +80,7 @@ def fetch_resource_for_filter(request: Request):
         },
         "resource_info_data": res_info_data
     }
-    return json.dumps(response_dict, cls=DateTimeEncoder)
+    return json.dumps(response_dict, cls=DateTimeEncoder), 200, headers
 
 
 def update_stats(res_info_filter_id: str, db):
