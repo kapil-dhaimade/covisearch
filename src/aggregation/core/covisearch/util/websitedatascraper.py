@@ -129,7 +129,7 @@ class WebsiteDataSpider(scrapy.Spider):
 
         try:
             scraping_params = self._operation_ctx.get_scraping_params_for_url(response.url)
-            scraped_data = scrape_data_from_response(response.body, scraping_params)
+            scraped_data = scrape_data_from_response(response.text, scraping_params)
             self._operation_ctx.set_scraped_data_for_url(response.url, scraped_data)
         except Exception:
             print('Exception while parsing Scrapy response for url: \'' + response.url + '\'. ' +
@@ -231,10 +231,16 @@ class JSONSelectorParser(ContentTypeSelectorParser):
 
 class HTMLSelectorParser(ContentTypeSelectorParser):
     def __init__(self, content: str):
-        self._selector = scrapy.selector.Selector(content)
+        self._selector = scrapy.selector.Selector(text=content)
 
     def get_all_vals_matching_selector(self, selector: str) -> List[str]:
-        return [value for value in self._selector.xpath(selector).getall()]
+        html_selector_list = selector.split('||')
+        parent_node_selector = html_selector_list[0]
+        child_val_selector = html_selector_list[1]
+        parent_node_results = self._selector.xpath(parent_node_selector)
+        matching_vals = [parent_node_result.xpath(child_val_selector).get(default='')
+                                for parent_node_result in parent_node_results]
+        return matching_vals
 
 
 # NOTE: KAPIL: Uncomment while testing
