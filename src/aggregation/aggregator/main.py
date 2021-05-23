@@ -7,10 +7,14 @@ from covisearch.aggregation.core.domain import entities
 import covisearch.aggregation.core.domain as domain
 
 
+# Keep this global as global vars are not reinitialized if same Cloud Function instance
+# is re-used. And we need DB init only once. Plus it is time intensive.
+db = firestore.Client()
+
+
 # Starting point called by Google Cloud Function
 # Do init and call corresponding domain function
 def aggregate_covid_resources(event, context):
-    db = firestore.Client()
     aggregated_res_info_repo = infra.AggregatedResourceInfoRepoImpl(db)
     web_src_repo = infra.WebSourceRepoImpl(db)
     search_filter_str = base64.b64decode(event['data']).decode('utf-8')
