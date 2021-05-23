@@ -107,7 +107,7 @@
 -Data Syncer:
 	-Cloud Function:
 		-Deployment command and settings:
-			gcloud functions deploy resync_aggregated_data --runtime python37 --trigger-topic resync-schedule-topic --max-instances 1 --memory 128MB --region asia-south1
+			gcloud functions deploy resync_aggregated_data --runtime python37 --trigger-topic resync-schedule-topic --max-instances 1 --memory 256MB --region asia-south1
 	-Pub/Sub settings:
 		-Topic name: resync-schedule-topic
 	-Cloud Scheduler settings:
