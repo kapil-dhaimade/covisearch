@@ -229,6 +229,12 @@ class JSONSelectorParser(ContentTypeSelectorParser):
         return [parent_node.get(field_selector, '') for parent_node in parent_nodes]
 
 
+# NOTE: KAPIL: Format of selector: <parent_node_selector>||<child_val_selector>
+# Eg: descendant-or-self::div[@class and contains(concat(' ', normalize-space(@class), ' '),
+# ' detail-row ') and (@class and contains(concat(' ', normalize-space(@class), ' '), ' phone '))]/
+# descendant-or-self::*/a[@class and contains(concat(' ', normalize-space(@class), ' '), ' action-btn ')
+#  and (@class and contains(concat(' ', normalize-space(@class), ' '), ' gtm-phone-call '))]
+# ||substring-after(@href, 'tel:')
 class HTMLSelectorParser(ContentTypeSelectorParser):
     def __init__(self, content: str):
         self._selector = scrapy.selector.Selector(text=content)
