@@ -5,19 +5,13 @@ from covisearch.aggregation.covisearchapi.domain import fetch_resource_for_filte
 
 
 def covisearch_api_request_handler(request: Request):
-    """Responds to any HTTP request.
-    =========Request=========
-    {
-      "search_filter": {
-        "city": "mumbai",
-        "resource": "oxygen"
-      },
-      "page_no": 2
-    }
-
+    """
     =========Response========
     {
-      "res-info-data": [
+      "meta_info":{
+        "more_data_available":true|false
+      }
+      "resource-info-data": [
         {
             "contact_name":"Test"
             ....
