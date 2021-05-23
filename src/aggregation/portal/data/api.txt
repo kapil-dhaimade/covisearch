@@ -1,0 +1,117 @@
+{
+	"meta_info": {
+		"more_data_available": true
+	},
+	"resource_info_data": [
+		{
+			"last_verified_utc": "2021-05-22T05:43:43.675149+00:00",
+			"details": "",
+			"contact_name": "Avani",
+			"address": "",
+			"web_source_name": "Covid Citizens - Introbot",
+			"web_source_homepage": "https://covidcitizens.org/",
+			"litres": null,
+			"phone_no": "+919769452982",
+			"post_time": null
+		},
+		{
+			"details": "",
+			"last_verified_utc": "2021-05-21T11:43:43.675629+00:00",
+			"web_source_homepage": "https://covidcitizens.org/",
+			"web_source_name": "Covid Citizens - Introbot",
+			"phone_no": "+919766902022",
+			"litres": null,
+			"contact_name": "Yashoda Children's and General hospital",
+			"address": "",
+			"post_time": null
+		},
+		{
+			"litres": null,
+			"web_source_homepage": "https://covidcitizens.org/",
+			"post_time": null,
+			"details": "",
+			"address": "",
+			"web_source_name": "Covid Citizens - Introbot",
+			"phone_no": "+918451869785",
+			"last_verified_utc": "2021-05-21T11:43:43.675589+00:00",
+			"contact_name": "Zeeshan Siddique Office"
+		},
+		{
+			"details": "FREE OXYGEN FOR COVID PATIENTS, Address: Unity And Dignity Foundation, 43, Marve King Chs, Opposite Daulat School, Ali Talav, Kharodi, Marve Road, Malad West, Mumbai - 9892012132",
+			"address": "",
+			"phone_no": "9892012132",
+			"contact_name": "SHAHNAWAZ SHAIKH",
+			"last_verified_utc": "2021-05-20T12:53:56+00:00",
+			"post_time": "2021-05-11T16:53:50.899739+00:00",
+			"web_source_homepage": "https://covidwin.in/",
+			"web_source_name": "Covid Win",
+			"litres": null
+		},
+		{
+			"post_time": null,
+			"phone_no": "+919821093432",
+			"address": "",
+			"web_source_homepage": "https://covidcitizens.org/",
+			"details": "",
+			"last_verified_utc": "2021-05-20T11:43:43.675670+00:00",
+			"contact_name": "Medicus",
+			"web_source_name": "Covid Citizens - Introbot",
+			"litres": null
+		},
+		{
+			"web_source_homepage": "https://covidcitizens.org/",
+			"address": "",
+			"post_time": null,
+			"last_verified_utc": "2021-05-20T11:43:43.675651+00:00",
+			"details": "",
+			"contact_name": "Niswaarth hospital",
+			"web_source_name": "Covid Citizens - Introbot",
+			"phone_no": "+919892527038",
+			"litres": null
+		},
+		{
+			"contact_name": "Oxygen Concentrators - Mumbai",
+			"web_source_name": "Covid Win",
+			"details": "Tag @zeeshaniyc on Twitter or call on the given number",
+			"phone_no": "8451869785",
+			"last_verified_utc": "2021-05-19T14:16:00+00:00",
+			"post_time": "2021-05-10T08:00:33.800154+00:00",
+			"address": "",
+			"litres": null,
+			"web_source_homepage": "https://covidwin.in/"
+		},
+		{
+			"web_source_name": "Covid Citizens - Introbot",
+			"post_time": null,
+			"contact_name": "Wani hospital",
+			"address": "",
+			"last_verified_utc": "2021-05-19T11:43:43.675791+00:00",
+			"web_source_homepage": "https://covidcitizens.org/",
+			"details": "",
+			"litres": null,
+			"phone_no": "+917558626550"
+		},
+		{
+			"details": "",
+			"phone_no": "+917020553854",
+			"web_source_homepage": "https://covidcitizens.org/",
+			"litres": null,
+			"contact_name": "Star Hospital",
+			"last_verified_utc": "2021-05-19T11:43:43.675774+00:00",
+			"post_time": null,
+			"web_source_name": "Covid Citizens - Introbot",
+			"address": ""
+		},
+		{
+			"post_time": null,
+			"phone_no": "+919225807866",
+			"details": "",
+			"web_source_name": "Covid Citizens - Introbot",
+			"address": "",
+			"contact_name": "BADAR HOSPITAL",
+			"web_source_homepage": "https://covidcitizens.org/",
+			"last_verified_utc": "2021-05-19T11:43:43.675754+00:00",
+			"litres": null
+		}
+	]
+}

@@ -30,11 +30,6 @@
   text-align: center;
 } */
 
-.rightCard
-{
-  /* background-color: wheat; */
-}
-
 #phone
 {
   font-size: 1.2rem;
@@ -60,4 +55,9 @@
 .custom-input
 {
   padding: 1rem;
+}
+
+.font-larger
+{
+  font-size: 1.5rem;
 }

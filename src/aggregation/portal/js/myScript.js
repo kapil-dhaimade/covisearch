@@ -9,10 +9,10 @@ app.controller('formCtrl', function ($scope, $http, $timeout) {
     //     }
     // };
 
-    // $http.get('cities.txt').then(function (response) {
-    //     $scope.cityList = response.data;
-    // });
-    $scope.cityList = ["Mumbai", "Delhi"];
+    $http.get('../data/cities.txt').then(function (response) {
+        $scope.cityList = response.data;
+    });
+    // $scope.cityList = ["Mumbai", "Delhi"];
 
     $scope.init = function () {
         $scope.pageNumber = 0;
@@ -92,7 +92,6 @@ app.controller('formCtrl', function ($scope, $http, $timeout) {
     };
 
     $scope.getDate = function (date) {
-        console.log('in getDate')
         var date = moment(date);
         return date.format('YYYY-MM-DD') + ' at ' + date.format('HH:mm');
     };

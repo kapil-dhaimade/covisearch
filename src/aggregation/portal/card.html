@@ -1,3 +1,29 @@
+<div class="text-center">
+    <span ng-if="dataFetched == true">Currently showing data for <b>{{citySearched}}</b> and
+        <b>{{resourceSearched.displayName}}</b></span>
+</div>
+<hr>
+<div id="noDataFound" ng-if="dataFetched == true && leads.length <= 0 && waiting == false" class="text-center">
+    <h1>No Data found <span>&#9785;</span></h1>
+</div>
+
+<!-- <div id="errorBlock" ng-if="error == true" class="bg-danger text-center">
+    <span>ERROR OCCURED</span><br>
+    <span ng-if="errMessage">{{errMessage}}</span>
+  </div> -->
+<div id="errorBlock" ng-if="error == true" class="alert alert-danger text-center">
+    <strong>ERROR!</strong><span ng-if="errMessage"> {{errMessage}}</span>
+</div>
+
+<div id="loading" ng-if="waiting == true">
+    <div class="text-center">
+        <div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+</div>
+
+<!-- data from here  -->
 <div id="data" ng-if="leads.length > 0" class="row">
     <div class="col-sm-4" ng-repeat="x in leads" id="card-wrapper">
         <!-- <div id="data" ng-if="leads.length > 0" class=""> -->
@@ -18,9 +44,11 @@
             <div class="card-body" id="card-body-wrapper-outer">
                 <!-- <div class="" id="card-body-wrapper-inner" style="background-color: blueviolet;"> -->
                 <div id="data" class="w-100 clearfix">
-                    
-                    <div class="float-right rightCard" ng-repeat="y in x.phone_no.split('/')">
-                        <span id="phone"><span class="fa fa-phone"></span> <a href="tel:{{y}}">{{y}}</a></span><br>
+
+                    <div class="float-right">
+                        <div ng-repeat="y in x.phone_no.split('/')">
+                            <span id="phone"><span class="fa fa-phone"></span> <a href="tel:{{y}}"> {{y}}</a></span><br>
+                        </div>
                     </div>
 
                     <div class="float-left">
@@ -31,23 +59,28 @@
 
                 </div>
                 <div id="extraData">
-                    <span ng-if="x.post_time"><b>Updated On:</b><br ng-if="x.post_time"> {{x.post_time}}</a></span><br
-                        ng-if="x.post_time">
+                    <span ng-if="x.post_time"><b>Updated On:</b><br ng-if="x.post_time">
+                        {{getDate(x.post_time)}}</a></span><br ng-if="x.post_time">
                     </span>
                 </div>
                 <div id="knowMore" class="">
-                    <span class="pointer rounded-lg light-back px-1" data-toggle="collapse" data-target="#demo{{$index}}"><b>Know More ></b></span><br>
+                    <span class="pointer rounded-lg light-back px-1" data-toggle="collapse"
+                        data-target="#demo{{$index}}"><b>Know More ></b></span><br>
                     <div id="demo{{$index}}" class="collapse">
                         <span ng-if="x.address"><b>Address:</b> <br ng-if="x.address">{{x.address}}</span><br
                             ng-if="x.address">
                         <span ng-if="x.details"><b>Details:</b> <br ng-if="x.details">{{x.details}}</span><br
                             ng-if="x.details">
-                        <span ng-if="x.details == '' && x.address == ''" >No More Details </span><br
-                            ng-if="x.details">
+                        <span ng-if="x.details == '' && x.address == ''">No More Details </span><br ng-if="x.details">
                     </div>
                 </div>
             </div>
             <!-- </div> -->
         </div>
     </div>
+</div>
+
+<div class="text-center" ng-if="waiting == false">
+    <a class="font-larger" ng-click="fetchPreviousBatch()" ng-if="pageNumber > 1">Previous</a>
+    <a class="font-larger" ng-click="fetchNextBatch()" ng-if="hasMoreData == true">Next</a>
 </div>

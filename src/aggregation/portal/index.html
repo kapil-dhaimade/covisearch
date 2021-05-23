@@ -7,24 +7,24 @@
   <title>CoviSearch</title>
   <base href=".">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <link rel="stylesheet" href="myStyle.css">
+  <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+  <link rel="stylesheet" href="css/myStyle.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-  <script src="myScript.js"></script>
+  <script src="js/myScript.js"></script>
 </head>
 
 <body>
 
   <div id="bodyDiv" ng-app="myApp" ng-controller="formCtrl" class="container-fluid">
     <div ng-include="'header.html'" class="text-center"></div>
+    
     <div id="mainDiv">
-
-
+      <!-- <div ng-include="'filter.html'"></div> -->
       <form name="filterForm" id="filter" class="text-center" ng-submit="MyForm.$valid">
         <div class="form-inline justify-content-center">
 
@@ -37,115 +37,25 @@
           </div>
 
           <div class="form-group custom-input">
-            <select class="form-control form-input" ng-model="filter.resource" ng-options="x.displayName for x in resourceList" required>
+            <select class="form-control form-input" ng-model="filter.resource"
+              ng-options="x.displayName for x in resourceList" required>
               <option value="" disabled selected>Select the Resource</option>
             </select>
           </div>
 
           <div class="form-group custom-input">
-            <button ng-click="submit()" ng-disabled="filterForm.$invalid" class="btn btn-outline-primary">SUBMIT</button>
+            <button ng-click="submit()" ng-disabled="filterForm.$invalid"
+              class="btn btn-outline-primary">SUBMIT</button>
           </div>
         </div>
-        
+
       </form>
-      <!-- <div ng-include="'filter.html'"></div> -->
-      
-      <!-- <div class="text-center">
-        <button ng-click="fetchPreviousBatch()" class="btn btn-outline-primary" ng-if="pageNumber > 1">Previous</button>
-        <button ng-click="fetchNextBatch()" class="btn btn-outline-primary" ng-if="hasMoreData == true">Next</button>
-      </div> -->
-      
-      <!-- <p>form = {{filter}}</p > -->
-        <!-- <p>master = {{master}}</p> -->
-        <!-- <button ng-click="reset()" class="btn btn-outline-primary">RESET</button> -->
+
+      <!-- <button ng-click="reset()" class="btn btn-outline-primary">RESET</button> -->
       <!-- <p>Currently showing data for {{filter.city}} and {{filter.resource}}</p> -->
-      <div class="text-center">
-        <span ng-if="dataFetched == true">Currently showing data for <b>{{citySearched}}</b> and
-          <b>{{resourceSearched.displayName}}</b></span>
-      </div>
-      <hr>
-      <!-- <p>Looping data:</p> -->
-      <div id="noDataFound" ng-if="dataFetched == true && leads.length <= 0 && waiting == false" class="text-center">
-        <h1>No Data found <span>&#9785;</span></h1>
-      </div>
 
-      <!-- <div id="errorBlock" ng-if="error == true" class="bg-danger text-center">
-        <span>ERROR OCCURED</span><br>
-        <span ng-if="errMessage">{{errMessage}}</span>
-      </div> -->
-      <div id="errorBlock" ng-if="error == true" class="alert alert-danger text-center">
-        <strong>ERROR!</strong><span ng-if="errMessage"> {{errMessage}}</span>
-      </div>
+      <div ng-include="'card.html'"></div>
 
-      <div id="loading" ng-if="waiting == true">
-        <div class="text-center">
-          <div class="spinner-border" role="status">
-            <span class="sr-only">Loading...</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- data from here  -->
-      <div id="data" ng-if="leads.length > 0" class="row">
-        <div class="col-sm-4" ng-repeat="x in leads" id="card-wrapper">
-          <!-- <div id="data" ng-if="leads.length > 0" class=""> -->
-          <!-- <div class="" ng-repeat="x in leads" id="card-wrapper"> -->
-          <div class="card mx-auto">
-            <div class="card-header row">
-              <div class="float-left col text-left">
-                <span><b>{{x.contact_name}}</b></span>
-              </div>
-              <div class="float-rights">
-                <div class="float-right">
-                  <span>Verified: <span class="badge badge-info">{{getFromNowDate(x.last_verified_utc)}}</span></span>
-                </div>
-
-              </div>
-            </div>
-            <div class="card-body" id="card-body-wrapper-outer">
-              <!-- <div class="" id="card-body-wrapper-inner" style="background-color: blueviolet;"> -->
-              <div id="data" class="w-100 clearfix">
-
-                <div class="float-right rightCard" ng-repeat="y in x.phone_no.split('/')">
-                  <span id="phone"><span class="fa fa-phone"></span> <a href="tel:{{y}}">{{y}}</a></span><br>
-                </div>
-
-                <div class="float-left">
-                  <span ng-if="x.litres"><b>Litres Available:</b> <br ng-if="x.litres">{{x.litres}}</a></span><br
-                    ng-if="x.litres">
-                  <span><b>Source:</b><a href="{{x.web_source_homepage}}"><br>{{x.web_source_name}}</a></span><br>
-                </div>
-
-              </div>
-              <div id="extraData">
-                <span ng-if="x.post_time"><b>Updated On:</b><br ng-if="x.post_time">
-                  {{getDate(x.post_time)}}</a></span><br ng-if="x.post_time">
-                </span>
-              </div>
-              <div id="knowMore" class="">
-                <span class="pointer rounded-lg light-back px-1" data-toggle="collapse"
-                  data-target="#demo{{$index}}"><b>Know More ></b></span><br>
-                <div id="demo{{$index}}" class="collapse">
-                  <span ng-if="x.address"><b>Address:</b> <br ng-if="x.address">{{x.address}}</span><br
-                    ng-if="x.address">
-                  <span ng-if="x.details"><b>Details:</b> <br ng-if="x.details">{{x.details}}</span><br
-                    ng-if="x.details">
-                  <span ng-if="x.details == '' && x.address == ''">No More Details </span><br ng-if="x.details">
-                </div>
-              </div>
-            </div>
-            <!-- </div> -->
-          </div>
-        </div>
-      </div>
-      <!-- <div ng-include="'card.html'"></div> -->
-
-      <div class="text-center" ng-if="waiting == false">
-        <a ng-click="fetchPreviousBatch()" ng-if="pageNumber > 1">Previous</a>
-        <a ng-click="fetchNextBatch()" ng-if="hasMoreData == true">Next</a>
-        <!-- <button ng-click="fetchPreviousBatch()" class="btn btn-outline-primary" ng-if="pageNumber > 1">Previous</button>
-        <button ng-click="fetchNextBatch()" class="btn btn-outline-primary" ng-if="hasMoreData == true">Next</button> -->
-      </div>
     </div>
 
     <div ng-include="'footer.html'" class="text-center"></div>
