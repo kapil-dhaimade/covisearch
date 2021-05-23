@@ -216,7 +216,8 @@ def _map_contact_name(covisearch_res: Dict, res_mapping_desc: Dict[str, 'FieldMa
 
 def _map_availability_value(web_src_availability_value: str) -> bool:
     possible_available_values = ['available', 'yes', 'true', '1']
-    return web_src_availability_value.lower() in possible_available_values
+    sanitized_availability_str = _sanitize_availability_str(web_src_availability_value.lower())
+    return sanitized_availability_str in possible_available_values
 
 
 # TODO: KAPIL: Add proper details for specific res types later if websites give the info.
@@ -253,7 +254,7 @@ def _map_ambulance(web_src_res_info: Dict, res_mapping_desc: Dict[str, 'FieldMap
     pass
 
 
-def _sanitize_phone_no(phone_no: str):
+def _sanitize_phone_no(phone_no: str) -> str:
     # NOTE: KAPIL: Intended format: '8888888888/9999999999'
     sanitized_phone_no = phone_no.strip()
     sanitized_phone_no = sanitized_phone_no.replace(' / ', '/')
@@ -267,12 +268,16 @@ def _sanitize_phone_no(phone_no: str):
     return sanitized_phone_no
 
 
-def _sanitize_string_field(field_value: str):
+def _sanitize_string_field(field_value: str) -> str:
     sanitized_field = field_value.strip()
     sanitized_field = sanitized_field.replace('\n', ', ')
     sanitized_field = sanitized_field.replace('\r', '')
     sanitized_field = sanitized_field.replace('\t', ' ')
     return sanitized_field
+
+
+def _sanitize_availability_str(availability_str: str) -> str:
+    return availability_str.strip()
 
 
 # NOTE: KAPIL: Desc format:

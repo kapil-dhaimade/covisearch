@@ -129,7 +129,7 @@ class WebsiteDataSpider(scrapy.Spider):
 
         try:
             scraping_params = self._operation_ctx.get_scraping_params_for_url(response.url)
-            scraped_data = scrape_data_from_response(response.body, scraping_params)
+            scraped_data = scrape_data_from_response(response.text, scraping_params)
             self._operation_ctx.set_scraped_data_for_url(response.url, scraped_data)
         except Exception:
             print('Exception while parsing Scrapy response for url: \'' + response.url + '\'. ' +
@@ -229,12 +229,24 @@ class JSONSelectorParser(ContentTypeSelectorParser):
         return [parent_node.get(field_selector, '') for parent_node in parent_nodes]
 
 
+# NOTE: KAPIL: Format of selector: <parent_node_selector>||<child_val_selector>
+# Eg: descendant-or-self::div[@class and contains(concat(' ', normalize-space(@class), ' '),
+# ' detail-row ') and (@class and contains(concat(' ', normalize-space(@class), ' '), ' phone '))]/
+# descendant-or-self::*/a[@class and contains(concat(' ', normalize-space(@class), ' '), ' action-btn ')
+#  and (@class and contains(concat(' ', normalize-space(@class), ' '), ' gtm-phone-call '))]
+# ||substring-after(@href, 'tel:')
 class HTMLSelectorParser(ContentTypeSelectorParser):
     def __init__(self, content: str):
-        self._selector = scrapy.selector.Selector(content)
+        self._selector = scrapy.selector.Selector(text=content)
 
     def get_all_vals_matching_selector(self, selector: str) -> List[str]:
-        return [value for value in self._selector.xpath(selector).getall()]
+        html_selector_list = selector.split('||')
+        parent_node_selector = html_selector_list[0]
+        child_val_selector = html_selector_list[1]
+        parent_node_results = self._selector.xpath(parent_node_selector)
+        matching_vals = [parent_node_result.xpath(child_val_selector).get(default='')
+                                for parent_node_result in parent_node_results]
+        return matching_vals
 
 
 # NOTE: KAPIL: Uncomment while testing
