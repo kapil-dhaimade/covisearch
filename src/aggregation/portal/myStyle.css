@@ -16,10 +16,10 @@
   padding: 0.25rem 0.25rem !important;
 }
 
-.form-input
+/* .form-input
 {
   margin: 0rem 1rem 1rem 1rem;
-}
+} */
 /* 
 .footer {
   position: fixed;
@@ -55,4 +55,9 @@
 {
   /* background-color: rgba(0,0,0,.03); */
   background-color: rgb(223, 238, 195);
+}
+
+.custom-input
+{
+  padding: 1rem;
 }

@@ -1,12 +1,19 @@
 var app = angular.module('myApp', []);
 app.controller('formCtrl', function ($scope, $http, $timeout) {
     const api_base_url = "https://asia-south1-covisearch2.cloudfunctions.net/covisearchapi?";
-    $scope.master = { city: "Mumbai", resource: "Oxygen" };
-    
-    $http.get('cities.txt').then(function (response) {
-        $scope.cityList = response.data;
-    });
-    
+    // $scope.master = {
+    //     city: "Mumbai", 
+    //     resource: {
+    //         'displayName': 'Oxygen',
+    //         'value': 'oxygen'
+    //     }
+    // };
+
+    // $http.get('cities.txt').then(function (response) {
+    //     $scope.cityList = response.data;
+    // });
+    $scope.cityList = ["Mumbai", "Delhi"];
+
     $scope.init = function () {
         $scope.pageNumber = 0;
         $scope.retryCount = 3;
@@ -14,16 +21,31 @@ app.controller('formCtrl', function ($scope, $http, $timeout) {
     };
 
     $scope.resourceList = [
-        "ambulance",
-        "plasma",
-        "hospital_bed",
-        "hospital_bed_icu",
-        "oxygen"
+        {
+            'displayName': 'Ambulance',
+            'value': 'ambulance'
+        },
+        {
+            'displayName': 'Hospital Beds',
+            'value': 'hospital_bed'
+        },
+        {
+            'displayName': 'ICU Beds',
+            'value': 'hospital_bed_icu'
+        },
+        {
+            'displayName': 'Oxygen',
+            'value': 'oxygen'
+        },
+        {
+            'displayName': 'Plasma',
+            'value': 'plasma'
+        }
     ];
 
     $scope.fetch = function (data) {
-        // url = api_base_url + "resource_type=" + data.resource + "&city=" + data.city + "&page_no=" + $scope.pageNumber;
-        url = 'api.txt';
+        url = api_base_url + "resource_type=" + data.resource.value + "&city=" + data.city + "&page_no=" + $scope.pageNumber;
+        // url = 'api.txt';
         console.log("URL:  " + url);
         $scope.leads = "";
         $scope.hasMoreData = false;
@@ -32,14 +54,13 @@ app.controller('formCtrl', function ($scope, $http, $timeout) {
             $scope.citySearched = data.city;
             $scope.resourceSearched = data.resource;
             if (response.status == 202) {
-                if($scope.retryCount > 0)
-                {
+                if ($scope.retryCount > 0) {
                     $scope.keepLoading = true;
                     $timeout(function () { $scope.fetch(data) }, 5000);
                     $scope.retryCount--;
                 }
             }
-            else{
+            else {
                 $scope.leads = response.data.resource_info_data;
                 $scope.hasMoreData = response.data.meta_info.more_data_available;
                 $scope.dataFetched = true;
@@ -53,11 +74,12 @@ app.controller('formCtrl', function ($scope, $http, $timeout) {
             // console.log($scope.leads.data);
             console.log("Hello");
         },
-        function myError(response) {
-            $scope.waiting = false;
-            $scope.error = true;
-            // $scope.dataFetched = true;
-          });
+            function myError(response) {
+                $scope.waiting = false;
+                $scope.error = true;
+                $scope.errMessage = response.data;
+                // $scope.dataFetched = true;
+            });
     };
 
     $scope.delayedFunction = function () {
@@ -68,6 +90,13 @@ app.controller('formCtrl', function ($scope, $http, $timeout) {
         var now = moment(date).fromNow();
         return now;
     };
+
+    $scope.getDate = function (date) {
+        console.log('in getDate')
+        var date = moment(date);
+        return date.format('YYYY-MM-DD') + ' at ' + date.format('HH:mm');
+    };
+
 
     $scope.fetchNextBatch = function (data) {
         $scope.waiting = true;
@@ -85,7 +114,7 @@ app.controller('formCtrl', function ($scope, $http, $timeout) {
         $scope.filter = angular.copy($scope.master);
         $scope.pageNumber = 1;
         $scope.retryCount = 2;
-        $scope.fetch($scope.master);
+        // $scope.fetch($scope.master);
         $scope.leads = "";
         $scope.hasMoreData = false;
     };
