@@ -26,10 +26,14 @@ import covisearch.aggregation.core.infra as coreinfra
 #   https://cloud.google.com/functions/docs/writing/background
 
 
+# Keep this global as global vars are not reinitialized if same Cloud Function instance
+# is re-used. And we need DB init only once. Plus it is time intensive.
+db = firestore.Client()
+
+
 # Starting point called by Google Cloud Function
 # Do init and call corresponding domain function
 def resync_aggregated_data(event, context):
-    db = firestore.Client()
     filter_stats_firestore_repo = infra.FilterStatsRepoFirestoreImpl(db)
     resyncer_config_firestore = infra.get_resyncer_config_from_firestore(db)
 
@@ -40,6 +44,13 @@ def resync_aggregated_data(event, context):
                                   aggregated_res_info_repo, web_src_repo)
 
 
-# NOTE: KAPIL: Uncomment when testing on local machine
-if __name__ == '__main__':
-    resync_aggregated_data(None, None)
+# import traceback
+#
+#
+# # NOTE: KAPIL: Uncomment when testing on local machine
+# if __name__ == '__main__':
+#     try:
+#         resync_aggregated_data(None, None)
+#     except Exception:
+#         print(traceback.print_exc())
+#     print(9)
