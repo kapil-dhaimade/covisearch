@@ -49,6 +49,7 @@ app.controller('formCtrl', function ($scope, $http, $timeout) {
         console.log("URL:  " + url);
         $scope.leads = "";
         $scope.hasMoreData = false;
+        $scope.timeout = false;
         $http.get(url).then(function (response) {
             console.log(response.status);
             $scope.citySearched = data.city;
@@ -59,6 +60,11 @@ app.controller('formCtrl', function ($scope, $http, $timeout) {
                     $timeout(function () { $scope.fetch(data) }, 5000);
                     $scope.retryCount--;
                 }
+                else{
+                    $scope.waiting = false;
+                    $scope.timeout = true;
+                    $scope.dataFetched = true;
+                }
             }
             else {
                 $scope.leads = response.data.resource_info_data;
@@ -67,7 +73,7 @@ app.controller('formCtrl', function ($scope, $http, $timeout) {
                 console.log(response.data);
                 $scope.waiting = false;
             }
-            if ($scope.retryCount == 0) {
+            if ($scope.retryCount < 0) {
                 $scope.waiting = false;
                 $scope.dataFetched = true;
             }

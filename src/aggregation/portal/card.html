@@ -3,8 +3,15 @@
         <b>{{resourceSearched.displayName}}</b></span>
 </div>
 <hr>
-<div id="noDataFound" ng-if="dataFetched == true && leads.length <= 0 && waiting == false" class="text-center">
-    <h1>No Data found <span>&#9785;</span></h1>
+
+<div id="timeout" ng-if="dataFetched == true &&  timeout == true">
+    <div class="text-center">
+        <span class="">Sorry, it is taking longer than expected to collect all the resources. Please come back after some time</span>
+    </div>
+</div>
+
+<div id="noDataFound" ng-if="dataFetched == true && leads.length <= 0 && waiting == false && timeout == false" class="text-center">
+    <h1>Sorry, no resources were found for this query <span>&#9785;</span></h1>
 </div>
 
 <!-- <div id="errorBlock" ng-if="error == true" class="bg-danger text-center">
@@ -18,10 +25,17 @@
 <div id="loading" ng-if="waiting == true">
     <div class="text-center">
         <div class="spinner-border" role="status">
-            <span class="sr-only">Loading...</span>
         </div>
+        <br>
+        <span class="">Collecting information. Please wait for some time<span>&#129488;</span></span>
     </div>
 </div>
+
+<!-- <div id="timeout" ng-if="timeout == true">
+    <div class="text-center">
+        <span class="">Sorry, it is taking longer than expected to collect all the resources. Please come back after some time</span>
+    </div>
+</div> -->
 
 <!-- data from here  -->
 <div id="data" ng-if="leads.length > 0" class="row">
@@ -41,41 +55,56 @@
 
                 </div>
             </div>
+
             <div class="card-body" id="card-body-wrapper-outer">
-                <!-- <div class="" id="card-body-wrapper-inner" style="background-color: blueviolet;"> -->
                 <div id="data" class="w-100 clearfix">
 
                     <div class="float-right">
-                        <div ng-repeat="y in x.phone_no.split('/')">
-                            <span id="phone"><span class="fa fa-phone"></span> <a href="tel:{{y}}"> {{y}}</a></span><br>
+                        <div class="data">
+                            <div ng-repeat="y in x.phone_no.split('/')">
+                                <span id="phone"><span class="fa fa-phone"></span> <a href="tel:{{y}}">
+                                        {{y}}</a></span><br>
+                            </div>
                         </div>
                     </div>
 
                     <div class="float-left">
-                        <span ng-if="x.litres"><b>Litres Available:</b> <br ng-if="x.litres">{{x.litres}}</a></span><br
-                            ng-if="x.litres">
-                        <span><b>Source:</b><a href="{{x.web_source_homepage}}"><br>{{x.web_source_name}}</a></span><br>
+                        <div class="data">
+                            <span ng-if="x.litres"><b>Litres Available:</b> <br ng-if="x.litres">{{x.litres}}</a></span>
+                            <br ng-if="x.litres">
+                        </div>
+                        <div class="data">
+                            <span><b>Source:</b><a href="{{x.web_source_homepage}}"><br>{{x.web_source_name}}</a></span>
+                            <br>
+                        </div>
                     </div>
 
                 </div>
                 <div id="extraData">
-                    <span ng-if="x.post_time"><b>Updated On:</b><br ng-if="x.post_time">
-                        {{getDate(x.post_time)}}</a></span><br ng-if="x.post_time">
-                    </span>
+                    <div class="data">
+                        <span ng-if="x.post_time"><b>Updated On:</b><br ng-if="x.post_time">
+                            {{getDate(x.post_time)}}</a></span><br ng-if="x.post_time">
+                        </span>
+                    </div>
                 </div>
-                <div id="knowMore" class="">
+                <div id="knowMore" class="data">
                     <span class="pointer rounded-lg light-back px-1" data-toggle="collapse"
                         data-target="#demo{{$index}}"><b>Know More ></b></span><br>
                     <div id="demo{{$index}}" class="collapse">
-                        <span ng-if="x.address"><b>Address:</b> <br ng-if="x.address">{{x.address}}</span><br
-                            ng-if="x.address">
-                        <span ng-if="x.details"><b>Details:</b> <br ng-if="x.details">{{x.details}}</span><br
-                            ng-if="x.details">
-                        <span ng-if="x.details == '' && x.address == ''">No More Details </span><br ng-if="x.details">
+                        <div class="data">
+                            <span ng-if="x.address"><b>Address:</b> <br ng-if="x.address">{{x.address}}</span><br
+                                ng-if="x.address">
+                        </div>
+                        <div class="data">
+                            <span ng-if="x.details"><b>Details:</b> <br ng-if="x.details">{{x.details}}</span><br
+                                ng-if="x.details">
+                        </div>
+                        <div class="data">
+                            <span ng-if="x.details == '' && x.address == ''">No More Details </span><br ng-if="x.details">
+                        </div>
                     </div>
                 </div>
             </div>
-            <!-- </div> -->
         </div>
     </div>
 </div>
