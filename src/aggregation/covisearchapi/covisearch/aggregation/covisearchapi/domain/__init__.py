@@ -70,7 +70,7 @@ def fetch_resource_for_filter(request: Request):
             return "Invalid Page no", 400, headers
         else:
             more_data_available = False
-            res_info_data = resources[(page_no - 1) * page_size:len(resources) - 1]
+            res_info_data = resources[(page_no - 1) * page_size:len(resources)]
     else:
         more_data_available = True
         res_info_data = resources[(page_no - 1) * page_size:page_no * page_size]
