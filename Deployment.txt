@@ -117,9 +117,9 @@
 -Aggregator:
 	-Cloud Function:
 		-Deployment command and settings:
-			# Need 512MB for Aggregator as it runs faster and we need to be responsive 
+			# Need 1024MB for Aggregator as it runs faster and we need to be responsive 
 			# for returning results to user for a new filter.
-			gcloud functions deploy aggregate_covid_resources --runtime python37 --trigger-topic aggregate-topic --memory 512MB --region asia-south1
+			gcloud functions deploy aggregate_covid_resources --runtime python37 --trigger-topic aggregate-topic --memory 1024MB --region asia-south1
 	-Pub/Sub settings:
 		-Topic name: aggregate-topic
 		
