@@ -1,23 +1,22 @@
 var app = angular.module('myApp', []);
 app.controller('formCtrl', function ($scope, $http, $timeout) {
     const api_base_url = "https://asia-south1-covisearch2.cloudfunctions.net/covisearchapi?";
-    // $scope.master = {
-    //     city: "Mumbai", 
-    //     resource: {
-    //         'displayName': 'Oxygen',
-    //         'value': 'oxygen'
-    //     }
-    // };
-
+    $scope.master = {
+        city: "Mumbai", 
+        resource: {
+            'displayName': 'Oxygen',
+            'value': 'oxygen'
+        }
+    };
+    $scope.screenStatus='loading';
     $http.get('../data/cities.txt').then(function (response) {
         $scope.cityList = response.data;
     });
-    // $scope.cityList = ["Mumbai", "Delhi"];
 
     $scope.init = function () {
         $scope.pageNumber = 0;
         $scope.retryCount = 3;
-        $scope.dataFetched = false;
+        // $scope.screenStatus = 'home';
     };
 
     $scope.resourceList = [
@@ -45,51 +44,37 @@ app.controller('formCtrl', function ($scope, $http, $timeout) {
 
     $scope.fetch = function (data) {
         url = api_base_url + "resource_type=" + data.resource.value + "&city=" + data.city + "&page_no=" + $scope.pageNumber;
-        // url = 'api.txt';
         console.log("URL:  " + url);
         $scope.leads = "";
         $scope.hasMoreData = false;
-        $scope.timeout = false;
         $http.get(url).then(function (response) {
             console.log(response.status);
             $scope.citySearched = data.city;
             $scope.resourceSearched = data.resource;
             if (response.status == 202) {
                 if ($scope.retryCount > 0) {
-                    $scope.keepLoading = true;
                     $timeout(function () { $scope.fetch(data) }, 5000);
                     $scope.retryCount--;
+                    $scope.screenStatus = 'fetchingData';
+                    return;
                 }
                 else{
-                    $scope.waiting = false;
-                    $scope.timeout = true;
-                    $scope.dataFetched = true;
+                    $scope.screenStatus="timeout";
+                    return;
                 }
             }
             else {
                 $scope.leads = response.data.resource_info_data;
                 $scope.hasMoreData = response.data.meta_info.more_data_available;
-                $scope.dataFetched = true;
                 console.log(response.data);
-                $scope.waiting = false;
+                $scope.screenStatus='dataFetched';
+                return
             }
-            if ($scope.retryCount < 0) {
-                $scope.waiting = false;
-                $scope.dataFetched = true;
-            }
-            // console.log($scope.leads.data);
-            // console.log("Hello");
         },
             function myError(response) {
-                $scope.waiting = false;
-                $scope.error = true;
                 $scope.errMessage = response.data;
-                // $scope.dataFetched = true;
+                $scope.screenStatus='error';
             });
-    };
-
-    $scope.delayedFunction = function () {
-        console.log("Hi I am delayed fun");
     };
 
     $scope.getFromNowDate = function (date) {
@@ -99,39 +84,41 @@ app.controller('formCtrl', function ($scope, $http, $timeout) {
 
     $scope.getDate = function (date) {
         var date = moment(date);
-        return date.format('YYYY-MM-DD') + ' at ' + date.format('HH:mm');
+        return date.format('DD-MM-YYYY') + ' ' + date.format('HH:mm');
     };
 
 
     $scope.fetchNextBatch = function (data) {
-        $scope.waiting = true;
         $scope.pageNumber += 1;
-        $scope.fetch($scope.filter);
+        $scope.screenStatus='loading';
+        $scope.fetch($scope.master);
     };
 
     $scope.fetchPreviousBatch = function (data) {
-        $scope.waiting = true;
         $scope.pageNumber -= 1;
-        $scope.fetch($scope.filter);
+        $scope.screenStatus='loading';
+        $scope.fetch($scope.master);
     };
 
     $scope.reset = function () {
         $scope.filter = angular.copy($scope.master);
-        $scope.pageNumber = 1;
-        $scope.retryCount = 2;
+        // $scope.pageNumber = 1;
+        // $scope.retryCount = 2;
+        // $scope.screenStatus='loading';
         // $scope.fetch($scope.master);
-        $scope.leads = "";
-        $scope.hasMoreData = false;
+        // $scope.leads = "";
+        // $scope.hasMoreData = false;
     };
     $scope.reset();
 
     $scope.submit = function () {
         $scope.init();
-        $scope.waiting = true;
-        $scope.error = false;
+        $scope.screenStatus='loading';
         // $scope.pageNumber = 0;
-        $scope.fetchNextBatch($scope.filter);
+        $scope.master = angular.copy($scope.filter);
+        $scope.fetchNextBatch($scope.master);
     };
     $scope.init();
+    $scope.submit();
 });
 
