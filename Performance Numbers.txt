@@ -1,0 +1,385 @@
+----------Scrapy in same process------------
+
+-Reading 1:
+
+Measurement starts. Timestamp: 2021-05-25T01:00:24.028040
+Operation 'firestore DB init' starts.
+Operation 'firestore DB init' ends. Elapsed time: 1702.73ms
+Operation 'websources fetch' starts.
+Operation 'websources fetch' ends. Elapsed time: 545.697ms
+Operation 'data scraping' starts.
+Operation 'scrapy crawling' starts.
+2021-05-25 01:00:26 [scrapy.utils.log] INFO: Scrapy 2.5.0 started (bot: scrapybot)
+2021-05-25 01:00:26 [scrapy.utils.log] INFO: Versions: lxml 4.6.3.0, libxml2 2.9.5, cssselect 1.1.0, parsel 1.6.0, w3lib 1.22.0, Twisted 21.2.0, Python 3.7.1 (v3.7.1:260ec2c36a, Oct 20 2018, 14:05:16) [MSC v.1915 32 bit (Intel)], pyOpenSSL 20.0.1 (OpenSSL 1.1.1k  25 Mar 2021), cryptography 3.4.7, Platform Windows-10-10.0.19041-SP0
+2021-05-25 01:00:26 [scrapy.utils.log] DEBUG: Using reactor: twisted.internet.selectreactor.SelectReactor
+2021-05-25 01:00:26 [scrapy.crawler] INFO: Overridden settings:
+{}
+2021-05-25 01:00:26 [scrapy.extensions.telnet] INFO: Telnet Password: b2b005e6fa669f3e
+2021-05-25 01:00:26 [scrapy.middleware] INFO: Enabled extensions:
+['scrapy.extensions.corestats.CoreStats',
+ 'scrapy.extensions.telnet.TelnetConsole',
+ 'scrapy.extensions.logstats.LogStats']
+2021-05-25 01:00:26 [scrapy.middleware] INFO: Enabled downloader middlewares:
+['scrapy.downloadermiddlewares.httpauth.HttpAuthMiddleware',
+ 'scrapy.downloadermiddlewares.downloadtimeout.DownloadTimeoutMiddleware',
+ 'scrapy.downloadermiddlewares.defaultheaders.DefaultHeadersMiddleware',
+ 'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware',
+ 'scrapy.downloadermiddlewares.retry.RetryMiddleware',
+ 'scrapy.downloadermiddlewares.redirect.MetaRefreshMiddleware',
+ 'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware',
+ 'scrapy.downloadermiddlewares.redirect.RedirectMiddleware',
+ 'scrapy.downloadermiddlewares.cookies.CookiesMiddleware',
+ 'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware',
+ 'scrapy.downloadermiddlewares.stats.DownloaderStats']
+2021-05-25 01:00:26 [scrapy.middleware] INFO: Enabled spider middlewares:
+['scrapy.spidermiddlewares.httperror.HttpErrorMiddleware',
+ 'scrapy.spidermiddlewares.offsite.OffsiteMiddleware',
+ 'scrapy.spidermiddlewares.referer.RefererMiddleware',
+ 'scrapy.spidermiddlewares.urllength.UrlLengthMiddleware',
+ 'scrapy.spidermiddlewares.depth.DepthMiddleware']
+2021-05-25 01:00:26 [scrapy.middleware] INFO: Enabled item pipelines:
+[]
+2021-05-25 01:00:26 [scrapy.core.engine] INFO: Spider opened
+2021-05-25 01:00:26 [scrapy.extensions.logstats] INFO: Crawled 0 pages (at 0 pages/min), scraped 0 items (at 0 items/min)
+2021-05-25 01:00:26 [scrapy.extensions.telnet] INFO: Telnet console listening on 127.0.0.1:6023
+2021-05-25 01:00:26 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://api.covidcitizens.org/api/v1/leadbyquery?location=mumbai&category=oxygen> (referer: None)
+2021-05-25 01:00:26 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.covidfightclub.org/?search_key=mumbai&city_id=&medicine_id=4&type=1> (referer: None)
+Operation 'scrape_data_from_response for url: https://api.covidcitizens.org/api/v1/leadbyquery?location=mumbai&category=oxygen' starts.
+Operation 'parsing with selectors' starts.
+Operation 'parsing with selectors' ends. Elapsed time: 26.932000000000002ms
+Operation 'scrape_data_from_response for url: https://api.covidcitizens.org/api/v1/leadbyquery?location=mumbai&category=oxygen' ends. Elapsed time: 26.932000000000002ms
+Operation 'scrape_data_from_response for url: https://www.covidfightclub.org/?search_key=mumbai&city_id=&medicine_id=4&type=1' starts.
+Operation 'parsing with selectors' starts.
+Operation 'parsing with selectors' ends. Elapsed time: 29.923000000000002ms
+Operation 'scrape_data_from_response for url: https://www.covidfightclub.org/?search_key=mumbai&city_id=&medicine_id=4&type=1' ends. Elapsed time: 51.864ms
+2021-05-25 01:00:27 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://1platefood.com/portal/resources?page=1&type=oxygen&city=mumbai&sort=last_verified_at&availability=Available> (referer: None)
+Operation 'scrape_data_from_response for url: https://1platefood.com/portal/resources?page=1&type=oxygen&city=mumbai&sort=last_verified_at&availability=Available' starts.
+Operation 'parsing with selectors' starts.
+Operation 'parsing with selectors' ends. Elapsed time: 17.008ms
+2021-05-25 01:00:27 [scrapy.core.engine] INFO: Closing spider (finished)
+2021-05-25 01:00:27 [scrapy.statscollectors] INFO: Dumping Scrapy stats:
+Operation 'scrape_data_from_response for url: https://1platefood.com/portal/resources?page=1&type=oxygen&city=mumbai&sort=last_verified_at&availability=Available' ends. Elapsed time: 17.008ms
+{'downloader/request_bytes': 847,
+ 'downloader/request_count': 3,
+ 'downloader/request_method_count/GET': 3,
+ 'downloader/response_bytes': 69878,
+ 'downloader/response_count': 3,
+ 'downloader/response_status_count/200': 3,
+ 'elapsed_time_seconds': 1.109154,
+ 'finish_reason': 'finished',
+ 'finish_time': datetime.datetime(2021, 5, 24, 19, 30, 27, 548988),
+ 'httpcompression/response_bytes': 311382,
+ 'httpcompression/response_count': 1,
+ 'log_count/DEBUG': 3,
+ 'log_count/INFO': 10,
+ 'response_received_count': 3,
+ 'scheduler/dequeued': 3,
+ 'scheduler/dequeued/memory': 3,
+ 'scheduler/enqueued': 3,
+ 'scheduler/enqueued/memory': 3,
+ 'start_time': datetime.datetime(2021, 5, 24, 19, 30, 26, 439834)}
+2021-05-25 01:00:27 [scrapy.core.engine] INFO: Spider closed (finished)
+Operation 'scrapy crawling' ends. Elapsed time: 1491.425ms
+Operation 'data scraping' ends. Elapsed time: 1491.425ms
+Operation 'mapping data to covisearch' starts.
+Operation 'mapping data to covisearch' ends. Elapsed time: 213.946ms
+Operation 'removing duplicates' starts.
+Operation 'removing duplicates' ends. Elapsed time: 0.0ms
+Operation 'removing unavailable resources' starts.
+Operation 'removing unavailable resources' ends. Elapsed time: 0.0ms
+Operation 'removing redundant fields' starts.
+Operation 'removing redundant fields' ends. Elapsed time: 0.0ms
+Operation 'sorting covid resources' starts.
+Operation 'sorting covid resources' ends. Elapsed time: 0.0ms
+Operation 'writing resources to db' starts.
+Operation 'writing resources to db' ends. Elapsed time: 111.593ms
+Measurement stops. Total time: 4066.388ms
+
+
+
+-Reading 2:
+
+Measurement starts. Timestamp: 2021-05-25T01:01:46.888784
+Operation 'firestore DB init' starts.
+Operation 'firestore DB init' ends. Elapsed time: 1724.409ms
+Operation 'websources fetch' starts.
+Operation 'websources fetch' ends. Elapsed time: 578.743ms
+Operation 'data scraping' starts.
+Operation 'scrapy crawling' starts.
+2021-05-25 01:01:49 [scrapy.utils.log] INFO: Scrapy 2.5.0 started (bot: scrapybot)
+2021-05-25 01:01:49 [scrapy.utils.log] INFO: Versions: lxml 4.6.3.0, libxml2 2.9.5, cssselect 1.1.0, parsel 1.6.0, w3lib 1.22.0, Twisted 21.2.0, Python 3.7.1 (v3.7.1:260ec2c36a, Oct 20 2018, 14:05:16) [MSC v.1915 32 bit (Intel)], pyOpenSSL 20.0.1 (OpenSSL 1.1.1k  25 Mar 2021), cryptography 3.4.7, Platform Windows-10-10.0.19041-SP0
+2021-05-25 01:01:49 [scrapy.utils.log] DEBUG: Using reactor: twisted.internet.selectreactor.SelectReactor
+2021-05-25 01:01:49 [scrapy.crawler] INFO: Overridden settings:
+{}
+2021-05-25 01:01:49 [scrapy.extensions.telnet] INFO: Telnet Password: b3e470d17d16a3fc
+2021-05-25 01:01:49 [scrapy.middleware] INFO: Enabled extensions:
+['scrapy.extensions.corestats.CoreStats',
+ 'scrapy.extensions.telnet.TelnetConsole',
+ 'scrapy.extensions.logstats.LogStats']
+2021-05-25 01:01:49 [scrapy.middleware] INFO: Enabled downloader middlewares:
+['scrapy.downloadermiddlewares.httpauth.HttpAuthMiddleware',
+ 'scrapy.downloadermiddlewares.downloadtimeout.DownloadTimeoutMiddleware',
+ 'scrapy.downloadermiddlewares.defaultheaders.DefaultHeadersMiddleware',
+ 'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware',
+ 'scrapy.downloadermiddlewares.retry.RetryMiddleware',
+ 'scrapy.downloadermiddlewares.redirect.MetaRefreshMiddleware',
+ 'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware',
+ 'scrapy.downloadermiddlewares.redirect.RedirectMiddleware',
+ 'scrapy.downloadermiddlewares.cookies.CookiesMiddleware',
+ 'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware',
+ 'scrapy.downloadermiddlewares.stats.DownloaderStats']
+2021-05-25 01:01:49 [scrapy.middleware] INFO: Enabled spider middlewares:
+['scrapy.spidermiddlewares.httperror.HttpErrorMiddleware',
+ 'scrapy.spidermiddlewares.offsite.OffsiteMiddleware',
+ 'scrapy.spidermiddlewares.referer.RefererMiddleware',
+ 'scrapy.spidermiddlewares.urllength.UrlLengthMiddleware',
+ 'scrapy.spidermiddlewares.depth.DepthMiddleware']
+2021-05-25 01:01:49 [scrapy.middleware] INFO: Enabled item pipelines:
+[]
+2021-05-25 01:01:49 [scrapy.core.engine] INFO: Spider opened
+2021-05-25 01:01:49 [scrapy.extensions.logstats] INFO: Crawled 0 pages (at 0 pages/min), scraped 0 items (at 0 items/min)
+2021-05-25 01:01:49 [scrapy.extensions.telnet] INFO: Telnet console listening on 127.0.0.1:6023
+2021-05-25 01:01:49 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://api.covidcitizens.org/api/v1/leadbyquery?location=mumbai&category=oxygen> (referer: None)
+Operation 'scrape_data_from_response for url: https://api.covidcitizens.org/api/v1/leadbyquery?location=mumbai&category=oxygen' starts.
+Operation 'parsing with selectors' starts.
+Operation 'parsing with selectors' ends. Elapsed time: 25.985ms
+Operation 'scrape_data_from_response for url: https://api.covidcitizens.org/api/v1/leadbyquery?location=mumbai&category=oxygen' ends. Elapsed time: 26.982ms
+2021-05-25 01:01:49 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.covidfightclub.org/?search_key=mumbai&city_id=&medicine_id=4&type=1> (referer: None)
+Operation 'scrape_data_from_response for url: https://www.covidfightclub.org/?search_key=mumbai&city_id=&medicine_id=4&type=1' starts.
+Operation 'parsing with selectors' starts.
+Operation 'parsing with selectors' ends. Elapsed time: 26.925ms
+Operation 'scrape_data_from_response for url: https://www.covidfightclub.org/?search_key=mumbai&city_id=&medicine_id=4&type=1' ends. Elapsed time: 47.929ms
+2021-05-25 01:01:50 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://1platefood.com/portal/resources?page=1&type=oxygen&city=mumbai&sort=last_verified_at&availability=Available> (referer: None)
+Operation 'scrape_data_from_response for url: https://1platefood.com/portal/resources?page=1&type=oxygen&city=mumbai&sort=last_verified_at&availability=Available' starts.
+Operation 'parsing with selectors' starts.
+2021-05-25 01:01:50 [scrapy.core.engine] INFO: Closing spider (finished)
+Operation 'parsing with selectors' ends. Elapsed time: 17.012ms
+2021-05-25 01:01:50 [scrapy.statscollectors] INFO: Dumping Scrapy stats:
+Operation 'scrape_data_from_response for url: https://1platefood.com/portal/resources?page=1&type=oxygen&city=mumbai&sort=last_verified_at&availability=Available' ends. Elapsed time: 17.012ms
+{'downloader/request_bytes': 847,
+ 'downloader/request_count': 3,
+ 'downloader/request_method_count/GET': 3,
+ 'downloader/response_bytes': 69874,
+ 'downloader/response_count': 3,
+ 'downloader/response_status_count/200': 3,
+ 'elapsed_time_seconds': 1.225244,
+ 'finish_reason': 'finished',
+ 'finish_time': datetime.datetime(2021, 5, 24, 19, 31, 50, 581376),
+ 'httpcompression/response_bytes': 311382,
+ 'httpcompression/response_count': 1,
+ 'log_count/DEBUG': 3,
+ 'log_count/INFO': 10,
+ 'response_received_count': 3,
+ 'scheduler/dequeued': 3,
+ 'scheduler/dequeued/memory': 3,
+ 'scheduler/enqueued': 3,
+ 'scheduler/enqueued/memory': 3,
+ 'start_time': datetime.datetime(2021, 5, 24, 19, 31, 49, 356132)}
+2021-05-25 01:01:50 [scrapy.core.engine] INFO: Spider closed (finished)
+Operation 'scrapy crawling' ends. Elapsed time: 1613.1789999999999ms
+Operation 'data scraping' ends. Elapsed time: 1613.1789999999999ms
+Operation 'mapping data to covisearch' starts.
+Operation 'mapping data to covisearch' ends. Elapsed time: 207.113ms
+Operation 'removing duplicates' starts.
+Operation 'removing duplicates' ends. Elapsed time: 0.0ms
+Operation 'removing unavailable resources' starts.
+Operation 'removing unavailable resources' ends. Elapsed time: 0.0ms
+Operation 'removing redundant fields' starts.
+Operation 'removing redundant fields' ends. Elapsed time: 0.0ms
+Operation 'sorting covid resources' starts.
+Operation 'sorting covid resources' ends. Elapsed time: 0.0ms
+Operation 'writing resources to db' starts.
+Operation 'writing resources to db' ends. Elapsed time: 96.729ms
+Measurement stops. Total time: 4220.173ms
+
+
+-Reading 3:
+Measurement starts. Timestamp: 2021-05-25T01:07:18.032649
+Operation 'firestore DB init' starts.
+Operation 'firestore DB init' ends. Elapsed time: 1701.817ms
+Operation 'websources fetch' starts.
+Operation 'websources fetch' ends. Elapsed time: 580.8670000000001ms
+Operation 'data scraping' starts.
+Operation 'scrapy crawling' starts.
+2021-05-25 01:07:20 [scrapy.utils.log] INFO: Scrapy 2.5.0 started (bot: scrapybot)
+2021-05-25 01:07:20 [scrapy.utils.log] INFO: Versions: lxml 4.6.3.0, libxml2 2.9.5, cssselect 1.1.0, parsel 1.6.0, w3lib 1.22.0, Twisted 21.2.0, Python 3.7.1 (v3.7.1:260ec2c36a, Oct 20 2018, 14:05:16) [MSC v.1915 32 bit (Intel)], pyOpenSSL 20.0.1 (OpenSSL 1.1.1k  25 Mar 2021), cryptography 3.4.7, Platform Windows-10-10.0.19041-SP0
+2021-05-25 01:07:20 [scrapy.utils.log] DEBUG: Using reactor: twisted.internet.selectreactor.SelectReactor
+2021-05-25 01:07:20 [scrapy.crawler] INFO: Overridden settings:
+{}
+2021-05-25 01:07:20 [scrapy.extensions.telnet] INFO: Telnet Password: ee7b877e2a15aa1a
+2021-05-25 01:07:20 [scrapy.middleware] INFO: Enabled extensions:
+['scrapy.extensions.corestats.CoreStats',
+ 'scrapy.extensions.telnet.TelnetConsole',
+ 'scrapy.extensions.logstats.LogStats']
+2021-05-25 01:07:20 [scrapy.middleware] INFO: Enabled downloader middlewares:
+['scrapy.downloadermiddlewares.httpauth.HttpAuthMiddleware',
+ 'scrapy.downloadermiddlewares.downloadtimeout.DownloadTimeoutMiddleware',
+ 'scrapy.downloadermiddlewares.defaultheaders.DefaultHeadersMiddleware',
+ 'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware',
+ 'scrapy.downloadermiddlewares.retry.RetryMiddleware',
+ 'scrapy.downloadermiddlewares.redirect.MetaRefreshMiddleware',
+ 'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware',
+ 'scrapy.downloadermiddlewares.redirect.RedirectMiddleware',
+ 'scrapy.downloadermiddlewares.cookies.CookiesMiddleware',
+ 'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware',
+ 'scrapy.downloadermiddlewares.stats.DownloaderStats']
+2021-05-25 01:07:20 [scrapy.middleware] INFO: Enabled spider middlewares:
+['scrapy.spidermiddlewares.httperror.HttpErrorMiddleware',
+ 'scrapy.spidermiddlewares.offsite.OffsiteMiddleware',
+ 'scrapy.spidermiddlewares.referer.RefererMiddleware',
+ 'scrapy.spidermiddlewares.urllength.UrlLengthMiddleware',
+ 'scrapy.spidermiddlewares.depth.DepthMiddleware']
+2021-05-25 01:07:20 [scrapy.middleware] INFO: Enabled item pipelines:
+[]
+2021-05-25 01:07:20 [scrapy.core.engine] INFO: Spider opened
+2021-05-25 01:07:20 [scrapy.extensions.logstats] INFO: Crawled 0 pages (at 0 pages/min), scraped 0 items (at 0 items/min)
+2021-05-25 01:07:20 [scrapy.extensions.telnet] INFO: Telnet console listening on 127.0.0.1:6023
+2021-05-25 01:07:20 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://api.covidcitizens.org/api/v1/leadbyquery?location=mumbai&category=oxygen> (referer: None)
+2021-05-25 01:07:20 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.covidfightclub.org/?search_key=mumbai&city_id=&medicine_id=4&type=1> (referer: None)
+Operation 'scrape_data_from_response for url: https://api.covidcitizens.org/api/v1/leadbyquery?location=mumbai&category=oxygen' starts.
+Operation 'parsing with selectors' starts.
+Operation 'parsing with selectors' ends. Elapsed time: 26.918ms
+Operation 'scrape_data_from_response for url: https://api.covidcitizens.org/api/v1/leadbyquery?location=mumbai&category=oxygen' ends. Elapsed time: 27.657ms
+Operation 'scrape_data_from_response for url: https://www.covidfightclub.org/?search_key=mumbai&city_id=&medicine_id=4&type=1' starts.
+Operation 'parsing with selectors' starts.
+Operation 'parsing with selectors' ends. Elapsed time: 29.919999999999998ms
+Operation 'scrape_data_from_response for url: https://www.covidfightclub.org/?search_key=mumbai&city_id=&medicine_id=4&type=1' ends. Elapsed time: 50.866ms
+2021-05-25 01:07:21 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://1platefood.com/portal/resources?page=1&type=oxygen&city=mumbai&sort=last_verified_at&availability=Available> (referer: None)
+Operation 'scrape_data_from_response for url: https://1platefood.com/portal/resources?page=1&type=oxygen&city=mumbai&sort=last_verified_at&availability=Available' starts.
+Operation 'parsing with selectors' starts.
+2021-05-25 01:07:21 [scrapy.core.engine] INFO: Closing spider (finished)
+Operation 'parsing with selectors' ends. Elapsed time: 17.955ms
+2021-05-25 01:07:21 [scrapy.statscollectors] INFO: Dumping Scrapy stats:
+Operation 'scrape_data_from_response for url: https://1platefood.com/portal/resources?page=1&type=oxygen&city=mumbai&sort=last_verified_at&availability=Available' ends. Elapsed time: 17.955ms
+{'downloader/request_bytes': 847,
+ 'downloader/request_count': 3,
+ 'downloader/request_method_count/GET': 3,
+ 'downloader/response_bytes': 69877,
+ 'downloader/response_count': 3,
+ 'downloader/response_status_count/200': 3,
+ 'elapsed_time_seconds': 1.140992,
+ 'finish_reason': 'finished',
+ 'finish_time': datetime.datetime(2021, 5, 24, 19, 37, 21, 620615),
+ 'httpcompression/response_bytes': 311382,
+ 'httpcompression/response_count': 1,
+ 'log_count/DEBUG': 3,
+ 'log_count/INFO': 10,
+ 'response_received_count': 3,
+ 'scheduler/dequeued': 3,
+ 'scheduler/dequeued/memory': 3,
+ 'scheduler/enqueued': 3,
+ 'scheduler/enqueued/memory': 3,
+ 'start_time': datetime.datetime(2021, 5, 24, 19, 37, 20, 479623)}
+2021-05-25 01:07:21 [scrapy.core.engine] INFO: Spider closed (finished)
+Operation 'scrapy crawling' ends. Elapsed time: 1525.787ms
+Operation 'data scraping' ends. Elapsed time: 1525.787ms
+Operation 'mapping data to covisearch' starts.
+Operation 'mapping data to covisearch' ends. Elapsed time: 209.72ms
+Operation 'removing duplicates' starts.
+Operation 'removing duplicates' ends. Elapsed time: 0.0ms
+Operation 'removing unavailable resources' starts.
+Operation 'removing unavailable resources' ends. Elapsed time: 0.0ms
+Operation 'removing redundant fields' starts.
+Operation 'removing redundant fields' ends. Elapsed time: 0.0ms
+Operation 'sorting covid resources' starts.
+Operation 'sorting covid resources' ends. Elapsed time: 0.9970000000000001ms
+Operation 'writing resources to db' starts.
+Operation 'writing resources to db' ends. Elapsed time: 85.60900000000001ms
+Measurement stops. Total time: 4106.796ms
+
+
+
+----------Scrapy in child process------------
+
+-Reading 1:
+
+Measurement starts. Timestamp: 2021-05-25T01:03:13.431322
+Operation 'firestore DB init' starts.
+Operation 'firestore DB init' ends. Elapsed time: 1658.67ms
+Operation 'websources fetch' starts.
+Operation 'websources fetch' ends. Elapsed time: 555.932ms
+Operation 'data scraping' starts.
+Operation 'scrapy child process' starts.
+Operation 'scrapy child process' ends. Elapsed time: 3947.839ms
+Operation 'data scraping' ends. Elapsed time: 3954.7340000000004ms
+Operation 'mapping data to covisearch' starts.
+Operation 'mapping data to covisearch' ends. Elapsed time: 991.267ms
+Operation 'removing duplicates' starts.
+Operation 'removing duplicates' ends. Elapsed time: 0.0ms
+Operation 'removing unavailable resources' starts.
+Operation 'removing unavailable resources' ends. Elapsed time: 0.0ms
+Operation 'removing redundant fields' starts.
+Operation 'removing redundant fields' ends. Elapsed time: 0.0ms
+Operation 'sorting covid resources' starts.
+Operation 'sorting covid resources' ends. Elapsed time: 8.975999999999999ms
+Operation 'writing resources to db' starts.
+Operation 'writing resources to db' ends. Elapsed time: 190.526ms
+Measurement stops. Total time: 7360.105ms
+
+
+-Reading 2:
+
+Measurement starts. Timestamp: 2021-05-25T01:04:11.138941
+Operation 'firestore DB init' starts.
+Operation 'firestore DB init' ends. Elapsed time: 1661.673ms
+Operation 'websources fetch' starts.
+Operation 'websources fetch' ends. Elapsed time: 544.4369999999999ms
+Operation 'data scraping' starts.
+Operation 'scrapy child process' starts.
+Operation 'scrapy child process' ends. Elapsed time: 3653.6710000000003ms
+Operation 'data scraping' ends. Elapsed time: 3659.657ms
+Operation 'mapping data to covisearch' starts.
+Operation 'mapping data to covisearch' ends. Elapsed time: 972.34ms
+Operation 'removing duplicates' starts.
+Operation 'removing duplicates' ends. Elapsed time: 0.998ms
+Operation 'removing unavailable resources' starts.
+Operation 'removing unavailable resources' ends. Elapsed time: 0.0ms
+Operation 'removing redundant fields' starts.
+Operation 'removing redundant fields' ends. Elapsed time: 0.0ms
+Operation 'sorting covid resources' starts.
+Operation 'sorting covid resources' ends. Elapsed time: 7.978000000000001ms
+Operation 'writing resources to db' starts.
+Operation 'writing resources to db' ends. Elapsed time: 182.325ms
+Measurement stops. Total time: 7029.408ms
+
+
+-Reading 3:
+Measurement starts. Timestamp: 2021-05-25T01:05:24.224494
+Operation 'firestore DB init' starts.
+Operation 'firestore DB init' ends. Elapsed time: 1739.892ms
+Operation 'websources fetch' starts.
+Operation 'websources fetch' ends. Elapsed time: 593.973ms
+Operation 'data scraping' starts.
+Operation 'scrapy child process' starts.
+Operation 'scrapy child process' ends. Elapsed time: 3615.9370000000004ms
+Operation 'data scraping' ends. Elapsed time: 3622.897ms
+Operation 'mapping data to covisearch' starts.
+Operation 'mapping data to covisearch' ends. Elapsed time: 1008.0949999999999ms
+Operation 'removing duplicates' starts.
+Operation 'removing duplicates' ends. Elapsed time: 0.0ms
+Operation 'removing unavailable resources' starts.
+Operation 'removing unavailable resources' ends. Elapsed time: 0.0ms
+Operation 'removing redundant fields' starts.
+Operation 'removing redundant fields' ends. Elapsed time: 0.0ms
+Operation 'sorting covid resources' starts.
+Operation 'sorting covid resources' ends. Elapsed time: 8.975ms
+Operation 'writing resources to db' starts.
+Operation 'writing resources to db' ends. Elapsed time: 184.978ms
+Measurement stops. Total time: 7158.8099999999995ms
+
+
+-Observations(on Win 10 x64 Core i7 8th Gen CPU 4 cores, 8 logical processors, 8GB RAM):
+	-Initializing Firestore.Client() has same cost every time (~1.5sec)
+	-Launching Scrapy in child process is time consuming as spawning new process takes considerable time (~2sec)
+	-Parsing iso format datetime first time in process is slow (~250ms). But if this is not done at start of process, then the mapping of web src resources to covid resources takes much longer (~1sec) due to isoformat parsing in mapping.
+	-Fetching web sources from Firestore DB takes considerable time (~500ms)
+	-Sorting of covid resources list is fast, not a concern
+	-Processing of covid resources list like removing redundancies, etc. is not a concern
+	-Parsing scrapy response using HTML and JSON selectors is not a concern
+	
+-Performance improvement steps:
+	-Initialize Firestore Client once as global var to take advantage of re-use of Cloud Function instance.
+	-Launch Scrapy child process in advance, during init of Cloud fn, so process is created and ready by the time we send params to it for parsing. This takes IPC and 2 queues between processes. Bit tricky but possible.
+	-Parse a dummy isoformat date once in init of Cloud Function at globa level. So datetime parsing is fast for all subsequent cases.
+	-We could cache web sources in Cloud Function instance once fetched and use events to update when changes done to web source repo. But this time is not very high and perhaps will be faster when deployed on cloud. 
+	
