@@ -129,7 +129,7 @@ class CovidResourceInfo:
     @classmethod
     def _compare_datetime_field(cls, res_info_a: Dict, res_info_b: Dict,
                                 field_name: str) -> int:
-        return datetimeutil.compare_datetimes(res_info_a[field_name], res_info_b[field_name])
+        return datetimeutil.compare_datetimes_ascending(res_info_a[field_name], res_info_b[field_name])
 
 
 class BloodGroup(enum.Enum):
@@ -303,4 +303,8 @@ class AggregatedResourceInfoRepo(ABC):
     @abstractmethod
     def set_resources_for_filter(self,
                                  filtered_aggregated_resource_info: FilteredAggregatedResourceInfo):
+        raise NotImplementedError('FilteredAggregatedResourceInfoRepo is an interface')
+
+    @abstractmethod
+    def remove_resources_for_filter(self, search_filter: SearchFilter):
         raise NotImplementedError('FilteredAggregatedResourceInfoRepo is an interface')
