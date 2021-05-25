@@ -14,6 +14,9 @@ class FilterStatsRepoFirestoreImpl(entities.FilterStatsRepo):
         filter_stats_db_coll = self._db.collection('filter_stats').stream()
         return [firestore_to_filter_stats(x) for x in filter_stats_db_coll]
 
+    def remove_for_filter(self, search_filter: str):
+        self._db.collection('filter_stats').document(search_filter).delete()
+
 
 def get_resyncer_config_from_firestore(db: firestore.Client) -> entities.ResyncerConfig:
     resyncer_config_iter = itertools.islice(db.collection('resyncer_config').stream(), 0, None)

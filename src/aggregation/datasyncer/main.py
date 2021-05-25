@@ -30,6 +30,11 @@ import covisearch.aggregation.core.infra as coreinfra
 # is re-used. And we need DB init only once. Plus it is time intensive.
 db = firestore.Client()
 
+# NOTE: KAPIL: Parsing this dummy ISO format datetime during init improves performance of
+# subsequent datetime parsing operations and makes mapping websrc resources to covisearch faster!!
+dummy_datetime_for_performance = \
+    domain.resourcemapping._map_isoformat_timestamp_to_covisearch('2021-05-10T13:22:16.075259')
+
 
 # Starting point called by Google Cloud Function
 # Do init and call corresponding domain function

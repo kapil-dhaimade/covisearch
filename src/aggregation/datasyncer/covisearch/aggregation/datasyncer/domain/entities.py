@@ -38,11 +38,11 @@ class FilterStats:
         self._last_query_time_utc = last_query_time_utc
 
     @property
-    def search_filter(self):
+    def search_filter(self) -> str:
         return self._search_filter
 
     @property
-    def last_query_time_utc(self):
+    def last_query_time_utc(self) -> datetime.datetime:
         return self._last_query_time_utc
 
 
@@ -50,6 +50,10 @@ class FilterStatsRepo(ABC):
     # convert to return enumerator if performance concern
     @abstractmethod
     def get_all(self) -> List[FilterStats]:
+        raise NotImplementedError('FilterStatsRepo is an interface')
+
+    @abstractmethod
+    def remove_for_filter(self, search_filter: str):
         raise NotImplementedError('FilterStatsRepo is an interface')
 
 
