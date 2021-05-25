@@ -36,9 +36,9 @@
         </div>
 
         <div class="form-group custom-input">
-          <select class="form-control form-input" ng-model="filter.resource"
+          <select class="form-control form-input" ng-model="filter.resource" ng-init="filter.resource = resourceList[3]"
             ng-options="x.displayName for x in resourceList" required>
-            <option value="" disabled selected>Select the Resource</option>
+            <option value="" disabled>Select the Resource</option>
           </select>
         </div>
 
