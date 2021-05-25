@@ -3,6 +3,8 @@ import json
 from abc import ABC
 import traceback
 import multiprocessing
+import queue
+import time
 
 import scrapy
 from scrapy import crawler
@@ -11,6 +13,32 @@ import jsonpath_ng
 
 from covisearch.util.types import URL as URL
 from covisearch.util.types import ContentType as ContentType
+import covisearch.util.elapsedtime as elapsedtime
+
+
+scrapy_process: multiprocessing.Process = None
+scrapy_process_out_queue: multiprocessing.Queue = None
+scrapy_process_in_queue: multiprocessing.Queue = None
+
+
+# NOTE: KAPIL: Keeping fn to start scrapy child process in advance for performance
+# reasons. Spawning child process takes considerable time, so launching it early,
+# and passing params later through Queue.
+def start_scrapy_process_in_advance():
+    global scrapy_process
+    global scrapy_process_out_queue
+    global scrapy_process_in_queue
+    # NOTE: KAPIL: See scrapy_child_process_fn for explanation of child process being spawned here.
+    scrapy_process_out_queue = multiprocessing.Queue()
+    scrapy_process_in_queue = multiprocessing.Queue()
+    scrapy_process = multiprocessing.Process(
+        target=scrapy_child_process_fn, args=(scrapy_process_in_queue, scrapy_process_out_queue,))
+    scrapy_process.start()
+
+
+def stop_scrapy_process():
+    global scrapy_process_in_queue
+    scrapy_process_in_queue.put(None)
 
 
 def scrape_data_from_websites(
@@ -18,19 +46,37 @@ def scrape_data_from_websites(
 
     operation_ctxs_by_url = ScrapingOperationCtx(data_scraping_params)
 
-    # NOTE: KAPIL: See scrapy_child_process_fn for explanation of child process being spawned here.
-    scrapy_process_ret_queue = multiprocessing.Queue()
-    scrapy_process = multiprocessing.Process(
-        target=scrapy_child_process_fn, args=(scrapy_process_ret_queue, operation_ctxs_by_url))
-    scrapy_process.start()
+    # # NOTE: KAPIL: For performance comparison when scrapy in same process vs. child process.
+    # ctx_9 = elapsedtime.start_measuring_operation('scrapy crawling')
+    # process = crawler.CrawlerProcess()
+    # process.crawl(WebsiteDataSpider, operation_ctxs_by_url)
+    # process.start()
+    # elapsedtime.stop_measuring_operation(ctx_9)
+    # return operation_ctxs_by_url.get_all_scraped_data()
+
+    ctx = elapsedtime.start_measuring_operation('scrapy child process')
+
+    global scrapy_process
+    global scrapy_process_out_queue
+    while _is_scrapy_process_start_signalled() is False:
+        time.sleep(0.05)
+    scrapy_process_in_queue.put(operation_ctxs_by_url)
+    scrapy_process_result = scrapy_process_out_queue.get()
+
+    # NOTE:KAPIL: Process join should after fetching error/success data from process queue.
+    # Else program may hang on calling join().
+    # Sources:
+    #   -SO: Why are my processes not returning/finishing?
+    #       -https://stackoverflow.com/questions/42614256/python-multiprocessing-why-are-my-processes-are-not-returning-finishing
     scrapy_process.join()
 
-    scrapy_process_result = scrapy_process_ret_queue.get()
     if type(scrapy_process_result) is Exception:
+        elapsedtime.stop_measuring_operation(ctx)
         raise scrapy_process_result
     else:
         operation_ctxs_by_url = scrapy_process_result
 
+    elapsedtime.stop_measuring_operation(ctx)
     return operation_ctxs_by_url.get_all_scraped_data()
 
 
@@ -49,8 +95,14 @@ def scrape_data_from_websites(
 # Source:
 # Running a Scrapy spider in a GCP cloud function:
 #   -https://weautomate.org/articles/running-scrapy-spider-cloud-function/
-def scrapy_child_process_fn(queue, operation_ctxs_by_url):
+def scrapy_child_process_fn(in_queue: multiprocessing.Queue, out_queue: multiprocessing.Queue):
     try:
+        # NOTE: KAPIL: To indicate process start
+        out_queue.put(True)
+        operation_ctxs_by_url = in_queue.get()
+        if operation_ctxs_by_url is None:
+            return
+
         settings = get_project_settings()
         settings.setdict({
             'LOG_LEVEL': 'ERROR',
@@ -59,9 +111,18 @@ def scrapy_child_process_fn(queue, operation_ctxs_by_url):
         process = crawler.CrawlerProcess(settings)
         process.crawl(WebsiteDataSpider, operation_ctxs_by_url)
         process.start()
-        queue.put(operation_ctxs_by_url)
+        out_queue.put(operation_ctxs_by_url)
     except Exception as e:
-        queue.put(e)
+        out_queue.put(e)
+
+
+def _is_scrapy_process_start_signalled() -> bool:
+    try:
+        global scrapy_process_out_queue
+        scrapy_process_out_queue.get_nowait()
+        return True
+    except queue.Empty:
+        return False
 
 
 class DataScrapingParams:
@@ -131,6 +192,7 @@ class WebsiteDataSpider(scrapy.Spider):
             scraping_params = self._operation_ctx.get_scraping_params_for_url(response.url)
             scraped_data = scrape_data_from_response(response.text, scraping_params)
             self._operation_ctx.set_scraped_data_for_url(response.url, scraped_data)
+
         except Exception:
             print('Exception while parsing Scrapy response for url: \'' + response.url + '\'. ' +
                   'Ignoring error.')
@@ -235,6 +297,20 @@ class JSONSelectorParser(ContentTypeSelectorParser):
 # descendant-or-self::*/a[@class and contains(concat(' ', normalize-space(@class), ' '), ' action-btn ')
 #  and (@class and contains(concat(' ', normalize-space(@class), ' '), ' gtm-phone-call '))]
 # ||substring-after(@href, 'tel:')
+# REASONING:
+# 1. This is being done because we need to get empty string in case parent node is present and
+# actual target node is not present. However, the built-in Scrapy XPath parser does not support this.
+# It simply does not return that entry, hence will be a problem when we want to extract tables as
+# columns having missing values will have lesser entries than other columns.
+# 2. Another reason is that we need pre-processing on some values, like returning string after a
+# prefix. Full featured XPath parsers can do this in one selector. However, Scrapy's HTML parser
+# needs to perform this in 2 steps, first to get parent nodes, and second step to actually fetch
+# substring after the given prefix.
+# Sources:
+#   -SO: Returning a string per element using substring-after:
+#   https://stackoverflow.com/questions/42506393/returning-a-string-per-element-using-substring-after/42516851
+#   -SO: XPath get default value when node is empty or not present (note: This does not work in Scrapy):
+#   https://stackoverflow.com/questions/38178578/xpath-get-default-value-when-node-is-empty-or-not-present
 class HTMLSelectorParser(ContentTypeSelectorParser):
     def __init__(self, content: str):
         self._selector = scrapy.selector.Selector(text=content)

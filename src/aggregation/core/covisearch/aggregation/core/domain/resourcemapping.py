@@ -31,6 +31,7 @@ def map_res_info_to_covisearch(web_src_res_info: Dict, search_filter: SearchFilt
         CovidResourceInfo.WEB_SOURCE_NAME_LABEL: web_src.name,
         CovidResourceInfo.WEB_SOURCE_HOMEPAGE_LABEL: web_src.homepage_url
     }
+
     _map_common_res_info(web_src_res_info, web_src.resource_mapping_desc, covisearch_res_info)
     map_specific_res_info = _get_specific_res_info_mapper(search_filter.resource_type)
     map_specific_res_info(web_src_res_info, web_src.resource_mapping_desc, covisearch_res_info)
@@ -130,11 +131,17 @@ def _get_specific_res_info_mapper(res_type: CovidResourceType):
 def _map_common_res_info(web_src_res_info: Dict, res_mapping_desc: Dict[str, 'FieldMappingDesc'],
                          covisearch_res: Dict):
     _map_contact_name(covisearch_res, res_mapping_desc, web_src_res_info)
+
     _map_address(covisearch_res, res_mapping_desc, web_src_res_info)
+
     _map_phone(covisearch_res, res_mapping_desc, web_src_res_info)
+
     _map_details(covisearch_res, res_mapping_desc, web_src_res_info)
+
     _map_post_time(covisearch_res, res_mapping_desc, web_src_res_info)
+
     _map_last_verified_time(covisearch_res, res_mapping_desc, web_src_res_info)
+
     _map_availability(covisearch_res, res_mapping_desc, web_src_res_info)
 
 

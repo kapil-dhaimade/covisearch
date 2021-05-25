@@ -7,6 +7,7 @@ from covisearch.aggregation.core.domain.entities import \
     CovidResourceType
 import covisearch.aggregation.core.domain.resourcemapping as resourcemapping
 import covisearch.util.websitedatascraper as webdatascraper
+import covisearch.util.elapsedtime as elapsedtime
 
 
 def aggregate_covid_resources(
@@ -15,13 +16,18 @@ def aggregate_covid_resources(
 
     aggregated_resources = _aggregate_resources_from_covid_sources(search_filter, web_src_repo)
     filtered_data = FilteredAggregatedResourceInfo(search_filter, aggregated_resources)
+
+    ctx = elapsedtime.start_measuring_operation('writing resources to repo')
     resource_info_repo.set_resources_for_filter(filtered_data)
+    elapsedtime.stop_measuring_operation(ctx)
 
 
 def _aggregate_resources_from_covid_sources(
         search_filter: SearchFilter, web_src_repo: resourcemapping.WebSourceRepo) -> List[Dict]:
 
+    ctx = elapsedtime.start_measuring_operation('websources fetch')
     web_sources = web_src_repo.get_web_sources_for_filter(search_filter)
+    elapsedtime.stop_measuring_operation(ctx)
 
     if not web_sources:
         raise ValueError('No matching web source found for filter: ' +
@@ -30,14 +36,27 @@ def _aggregate_resources_from_covid_sources(
     scraped_data_list: List[webdatascraper.ScrapedData] = \
         _scrape_data_from_web_sources(web_sources)
 
+    ctx_2 = elapsedtime.start_measuring_operation('mapping data to covisearch')
     covisearch_resources = _map_scraped_data_to_covisearch_resources(
         scraped_data_list, search_filter, web_sources)
+    elapsedtime.stop_measuring_operation(ctx_2)
 
+    ctx_3 = elapsedtime.start_measuring_operation('removing duplicates')
     covisearch_resources = CovidResourceInfo.remove_duplicates(covisearch_resources)
+    elapsedtime.stop_measuring_operation(ctx_3)
+
+    ctx_4 = elapsedtime.start_measuring_operation('removing unavailable resources')
     covisearch_resources = CovidResourceInfo.remove_unavailable_resources(covisearch_resources)
+    elapsedtime.stop_measuring_operation(ctx_4)
+
+    ctx_5 = elapsedtime.start_measuring_operation('removing redundant fields')
     covisearch_resources = CovidResourceInfo.remove_redundant_fields(covisearch_resources)
+    elapsedtime.stop_measuring_operation(ctx_5)
+
+    ctx_6 = elapsedtime.start_measuring_operation('sorting covid resources')
     covisearch_resources.sort(key=functools.cmp_to_key(
         entities.get_res_info_comparator(search_filter.resource_type)))
+    elapsedtime.stop_measuring_operation(ctx_6)
 
     return covisearch_resources
 
@@ -53,30 +72,48 @@ def _map_scraped_data_to_covisearch_resources(
     ]
 
 
-def _scrape_data_from_web_sources(web_sources: Dict[str, resourcemapping.WebSource]):
+def _scrape_data_from_web_sources(web_sources: Dict[str, resourcemapping.WebSource]) -> \
+        List[webdatascraper.ScrapedData]:
+
     data_scraping_params = [
         webdatascraper.DataScrapingParams(
             web_src.web_resource_url, web_src.response_content_type,
             web_src.data_table_extract_selectors, {})
         for web_src in web_sources.values()
     ]
-    return webdatascraper.scrape_data_from_websites(data_scraping_params)
+
+    ctx = elapsedtime.start_measuring_operation('data scraping')
+    scraped_data_list = webdatascraper.scrape_data_from_websites(data_scraping_params)
+    elapsedtime.stop_measuring_operation(ctx)
+    return scraped_data_list
 
 
 # import covisearch.aggregation.core.infra as infra
 # import google.cloud.firestore as firestore
 # import sys
 # import traceback
+# import covisearch.util.websitedatascraper as websitedatascraper
+# import covisearch.aggregation.core.domain.resourcemapping as resourcemapping
 #
 #
 # if __name__ == '__main__':
 #     try:
+#         elapsedtime.start_measuring_total()
+#
+#         ctx = elapsedtime.start_measuring_operation('firestore DB init')
 #         db = firestore.Client()
+#         elapsedtime.stop_measuring_operation(ctx)
+#
+#         websitedatascraper.start_scrapy_process_in_advance()
+#
 #         aggregated_res_info_repo = infra.AggregatedResourceInfoRepoImpl(db)
 #         web_src_repo = infra.WebSourceRepoImpl(db)
 #         search_filter = SearchFilter('mumbai', entities.CovidResourceType.OXYGEN, None)
 #         aggregate_covid_resources(search_filter, aggregated_res_info_repo, web_src_repo)
+#
+#         elapsedtime.stop_measuring_total()
 #     except Exception as ex:
+#         websitedatascraper.stop_scrapy_process()
 #         # <class 'IndexError'>
 #         print(sys.exc_info()[0])
 #
