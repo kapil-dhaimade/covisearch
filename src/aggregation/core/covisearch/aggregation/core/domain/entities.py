@@ -304,3 +304,7 @@ class AggregatedResourceInfoRepo(ABC):
     def set_resources_for_filter(self,
                                  filtered_aggregated_resource_info: FilteredAggregatedResourceInfo):
         raise NotImplementedError('FilteredAggregatedResourceInfoRepo is an interface')
+
+    @abstractmethod
+    def remove_resources_for_filter(self, search_filter: SearchFilter):
+        raise NotImplementedError('FilteredAggregatedResourceInfoRepo is an interface')

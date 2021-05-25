@@ -35,6 +35,10 @@ class AggregatedResourceInfoRepoImpl(entities.AggregatedResourceInfoRepo):
             document(res_info_filter_id).set(
             {'resource_info_data': filtered_aggregated_resource_info.data})
 
+    def remove_resources_for_filter(self, search_filter: entities.SearchFilter):
+        self._db.collection('filtered_aggregated_resource_info').\
+            document(search_filter.to_url_query_string_fmt()).delete()
+
 
 class WebSourceRepoImpl(resourcemapping.WebSourceRepo):
     def __init__(self, db: firestore.Client):
