@@ -129,7 +129,7 @@ class CovidResourceInfo:
     @classmethod
     def _compare_datetime_field(cls, res_info_a: Dict, res_info_b: Dict,
                                 field_name: str) -> int:
-        return datetimeutil.compare_datetimes(res_info_a[field_name], res_info_b[field_name])
+        return datetimeutil.compare_datetimes_ascending(res_info_a[field_name], res_info_b[field_name])
 
 
 class BloodGroup(enum.Enum):

@@ -106,13 +106,14 @@ def is_timezone_aware(timestamp: datetime):
            timestamp.tzinfo.utcoffset(timestamp) is not None
 
 
-def compare_datetimes(datetime_a, datetime_b) -> int:
+# NOTE: KAPIL: Brings None datetime objects to start of list.
+def compare_datetimes_ascending(datetime_a, datetime_b) -> int:
     if datetime_a is None and datetime_b is None:
         return 0
     if datetime_a is not None and datetime_b is None:
-        return -1
-    if datetime_b is not None and datetime_a is None:
         return 1
+    if datetime_b is not None and datetime_a is None:
+        return -1
     if datetime_a < datetime_b:
         return -1
     if datetime_a > datetime_b:
