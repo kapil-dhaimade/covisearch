@@ -110,6 +110,8 @@ class CovidResourceInfo:
         last_verified_a = res_info_a[last_verified_label]
         last_verified_b = res_info_b[last_verified_label]
 
+        if last_verified_a is None and last_verified_b is None:
+            return last_verified_a
         if last_verified_a is None and last_verified_b is not None:
             return res_info_b
         if last_verified_b is None and last_verified_a is not None:
