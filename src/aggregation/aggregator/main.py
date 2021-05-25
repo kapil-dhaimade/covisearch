@@ -25,9 +25,19 @@ def aggregate_covid_resources(event, context):
     websitedatascraper.start_scrapy_process_in_advance()
     aggregated_res_info_repo = infra.AggregatedResourceInfoRepoImpl(db)
     web_src_repo = infra.WebSourceRepoImpl(db)
+
     search_filter_str = base64.b64decode(event['data']).decode('utf-8')
-    search_filter = entities.SearchFilter.create_from_url_query_string_fmt(search_filter_str)
-    domain.aggregate_covid_resources(search_filter, aggregated_res_info_repo, web_src_repo)
+
+    try:
+        print('Aggregating covid resources for filter \'' + search_filter_str + '\'...')
+
+        search_filter = entities.SearchFilter.create_from_url_query_string_fmt(search_filter_str)
+        domain.aggregate_covid_resources(search_filter, aggregated_res_info_repo, web_src_repo)
+
+        print('Aggregated covid resources successfully for filter \'' + search_filter_str + '\'')
+    except Exception:
+        print('Exception while aggregating covid resources for filter \'' + search_filter_str + '\'')
+        raise
 
 
 # if __name__=='__main__':
