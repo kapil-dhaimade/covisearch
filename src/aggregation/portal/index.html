@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>CoviSearch</title>
+  <title>Covisearch</title>
   <base href=".">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="images/favicon.ico">
@@ -29,7 +29,7 @@
 
         <div class="form-group custom-input">
           <input name="filter.city" class="form-control form-input" list="city" ng-model="filter.city"
-            placeholder="Enter the City" required>
+            placeholder="Enter the City" ng-keyup="filterFunction()" required>
           <datalist id="city">
             <option ng-repeat="x in cityList" value={{x}}>{{x}}</option>
           </datalist>

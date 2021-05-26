@@ -1,16 +1,18 @@
 var app = angular.module('myApp', []);
 app.controller('formCtrl', function ($scope, $http, $timeout) {
     const api_base_url = "https://asia-south1-covisearch2.cloudfunctions.net/covisearchapi?";
+    var list = null;
     $scope.master = {
-        city: "Mumbai", 
+        city: "Delhi",
         resource: {
             'displayName': 'Oxygen',
             'value': 'oxygen'
         }
     };
-    $scope.screenStatus='loading';
+    $scope.screenStatus = 'loading';
     $http.get('../data/cities.txt').then(function (response) {
-        $scope.cityList = response.data;
+        // $scope.cityList = response.data;
+        list = response.data;
     });
 
     $scope.init = function () {
@@ -58,8 +60,8 @@ app.controller('formCtrl', function ($scope, $http, $timeout) {
                     $scope.screenStatus = 'fetchingData';
                     return;
                 }
-                else{
-                    $scope.screenStatus="timeout";
+                else {
+                    $scope.screenStatus = "timeout";
                     return;
                 }
             }
@@ -67,13 +69,13 @@ app.controller('formCtrl', function ($scope, $http, $timeout) {
                 $scope.leads = response.data.resource_info_data;
                 $scope.hasMoreData = response.data.meta_info.more_data_available;
                 console.log(response.data);
-                $scope.screenStatus='dataFetched';
+                $scope.screenStatus = 'dataFetched';
                 return
             }
         },
             function myError(response) {
                 $scope.errMessage = response.data;
-                $scope.screenStatus='error';
+                $scope.screenStatus = 'error';
             });
     };
 
@@ -90,13 +92,13 @@ app.controller('formCtrl', function ($scope, $http, $timeout) {
 
     $scope.fetchNextBatch = function (data) {
         $scope.pageNumber += 1;
-        $scope.screenStatus='loading';
+        $scope.screenStatus = 'loading';
         $scope.fetch($scope.master);
     };
 
     $scope.fetchPreviousBatch = function (data) {
         $scope.pageNumber -= 1;
-        $scope.screenStatus='loading';
+        $scope.screenStatus = 'loading';
         $scope.fetch($scope.master);
     };
 
@@ -113,10 +115,18 @@ app.controller('formCtrl', function ($scope, $http, $timeout) {
 
     $scope.submit = function () {
         $scope.init();
-        $scope.screenStatus='loading';
-        // $scope.pageNumber = 0;
+        $scope.screenStatus = 'loading';
         $scope.master = angular.copy($scope.filter);
         $scope.fetchNextBatch($scope.master);
+    };
+
+    $scope.filterFunction = function () {
+        if($scope.filter.city)
+        {
+            var filter = $scope.filter.city.toLowerCase();
+            var filterList = list.filter((country) => country.startsWith(filter));
+            $scope.cityList = filterList.slice(0, 3);
+        }
     };
     $scope.init();
     $scope.submit();
