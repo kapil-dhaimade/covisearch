@@ -359,7 +359,8 @@ def _map_isoformat_timestamp_to_covisearch(isoformat_datetime_str: str) -> datet
 
 
 def _map_short_datetime_timestamp_to_covisearch(short_datetime_str) -> datetime:
-    return covisearch.util.datetimeutil.map_short_datetime_dd_mm_to_isoformat(short_datetime_str)
+    return covisearch.util.datetimeutil.map_short_datetime_dd_mm_to_isoformat(
+        short_datetime_str, tz.gettz('Asia/Kolkata'))
 
 
 def datetime_format_to_str(datetime_format: covisearch.util.datetimeutil.DatetimeFormat) -> str:
@@ -384,9 +385,8 @@ def datetime_format_from_str(datetime_format_str: str) -> \
 
 
 def _set_timezone_ist_if_not_present(timestamp: datetime) -> datetime:
-    if not covisearch.util.datetimeutil.is_timezone_aware(timestamp):
-        timestamp = timestamp.replace(tzinfo=tz.gettz('Asia/Kolkata'))
-    return timestamp
+    return covisearch.util.datetimeutil.set_timezone_if_not_present(
+        timestamp, tz.gettz('Asia/Kolkata'))
 
 
 # if __name__ == '__main__':

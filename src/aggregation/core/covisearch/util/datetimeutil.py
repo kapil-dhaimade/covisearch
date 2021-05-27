@@ -1,7 +1,8 @@
+import enum
 from datetime import datetime, timezone, timedelta
 from dateutil import relativedelta
+import dateutil.parser as dateutilparser
 import re
-import enum
 
 
 class DatetimeFormat(enum.Enum):
@@ -85,20 +86,24 @@ def map_ago_format_timestamp_to_isoformat(ago_format_datetime: str) -> datetime:
     return None
 
 
-def map_short_datetime_dd_mm_to_isoformat(short_datetime_str) -> datetime:
-    # TODO: KAPIL: Logic pending. See covidaidindia Spreadsheets of Delhi hospital for examples.
+def map_short_datetime_dd_mm_to_isoformat(short_datetime_str, time_zone) -> datetime:
     # NOTE: KAPIL: SO: https://stackoverflow.com/questions/15491894/regex-to-validate-date-format-dd-mm-yyyy
-    re_date_result = re.search('(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)'
-                             '(\/|-|\.)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)'
-                             '?\d{2})|(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?'
-                             '(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|'
-                             '[3579][26])00))))|(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:'
-                             '(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})',
-                             short_datetime_str, re.IGNORECASE)
+    # re_date_result = re.search('(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)'
+    #                          '(\/|-|\.)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)'
+    #                          '?\d{2})|(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?'
+    #                          '(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|'
+    #                          '[3579][26])00))))|(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:'
+    #                          '(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})',
+    #                          short_datetime_str, re.IGNORECASE)
     # NOTE: KAPIL: SO:
     # https://stackoverflow.com/questions/7536755/regular-expression-for-matching-hhmm-time-format/7536768
-    re_time_result = re.search('([0-1]?[0-9]|2[0-3]):[0-5][0-9]\s(pm|am)')
-    raise NotImplementedError('Impl pending')
+    # re_time_result = re.search('([0-1]?[0-9]|2[0-3]):[0-5][0-9]\s(pm|am)')
+
+    # NOTE:KAPIL: Giving preference to DD-MM-YY
+    isofmt_datetime = dateutilparser.parse(short_datetime_str,
+                                           parserinfo=dateutilparser.parserinfo(dayfirst=True))
+    isofmt_datetime = set_timezone_if_not_present(isofmt_datetime, time_zone)
+    return isofmt_datetime.astimezone(tz=timezone.utc)
 
 
 def is_timezone_aware(timestamp: datetime):
@@ -119,3 +124,14 @@ def compare_datetimes_ascending(datetime_a, datetime_b) -> int:
     if datetime_a > datetime_b:
         return 1
     return 0
+
+
+def set_timezone_if_not_present(timestamp: datetime, time_zone) -> datetime:
+    if not is_timezone_aware(timestamp):
+        timestamp = timestamp.replace(tzinfo=time_zone)
+    return timestamp
+
+
+# if __name__=='__main__':
+#     isofmt1 = map_short_datetime_dd_mm_to_isoformat('2021-05-27 10:19:49')
+#     print(9)

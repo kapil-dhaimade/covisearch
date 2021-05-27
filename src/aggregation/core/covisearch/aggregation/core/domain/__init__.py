@@ -94,10 +94,17 @@ def _scrape_data_from_web_sources(web_sources: Dict[str, resourcemapping.WebSour
 # import traceback
 # import covisearch.util.websitedatascraper as websitedatascraper
 # import covisearch.aggregation.core.domain.resourcemapping as resourcemapping
+# import covisearch.util.datetimeutil as datetimeutil
+# import datetime
 #
 #
 # if __name__ == '__main__':
 #     try:
+#         # isofmt1 = datetimeutil.map_short_datetime_dd_mm_to_isoformat(
+#         # '05-06-2021 10:19:49', datetime.timezone.utc)
+#
+#         # dt = resourcemapping._map_short_datetime_timestamp_to_covisearch('05-06-2021 10:19:49pm').isoformat()
+#
 #         elapsedtime.start_measuring_total()
 #
 #         ctx = elapsedtime.start_measuring_operation('firestore DB init')
