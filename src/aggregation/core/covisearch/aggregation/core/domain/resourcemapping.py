@@ -339,14 +339,18 @@ def get_datetime_format_mapper(datetime_fmt: covisearch.util.datetimeutil.Dateti
         covisearch.util.datetimeutil.DatetimeFormat.ISOFORMAT:
             _map_isoformat_timestamp_to_covisearch,
         covisearch.util.datetimeutil.DatetimeFormat.SHORT_DATETIME_DD_MM:
-            _map_short_datetime_timestamp_to_covisearch
+            _map_short_datetime_timestamp_to_covisearch,
+        covisearch.util.datetimeutil.DatetimeFormat.UNIX_TIMESTAMP_SEC:
+            _map_unix_timestamp_sec_to_covisearch,
+        covisearch.util.datetimeutil.DatetimeFormat.UNIX_TIMESTAMP_MILLISEC:
+            _map_unix_timestamp_millisec_to_covisearch
     }
     return datetime_fmt_mapper[datetime_fmt]
 
 
 def _map_ago_format_timestamp_to_covisearch(ago_format_datetime: str) -> datetime:
     return covisearch.util.datetimeutil.\
-        map_ago_format_timestamp_to_isoformat(ago_format_datetime)
+        map_ago_format_timestamp_to_utc_datetime(ago_format_datetime)
 
 
 def _map_isoformat_timestamp_to_covisearch(isoformat_datetime_str: str) -> datetime:
@@ -358,9 +362,19 @@ def _map_isoformat_timestamp_to_covisearch(isoformat_datetime_str: str) -> datet
     return covisearch_datetime
 
 
-def _map_short_datetime_timestamp_to_covisearch(short_datetime_str) -> datetime:
-    return covisearch.util.datetimeutil.map_short_datetime_dd_mm_to_isoformat(
+def _map_short_datetime_timestamp_to_covisearch(short_datetime_str: str) -> datetime:
+    return covisearch.util.datetimeutil.map_short_datetime_dd_mm_to_utc_datetime(
         short_datetime_str, tz.gettz('Asia/Kolkata'))
+
+
+def _map_unix_timestamp_sec_to_covisearch(unix_timestamp_sec_str: str) -> datetime:
+    return covisearch.util.datetimeutil.map_unix_timestamp_to_utc_datetime(
+        unix_timestamp_sec_str, False)
+
+
+def _map_unix_timestamp_millisec_to_covisearch(unix_timestamp_sec_str: str) -> datetime:
+    return covisearch.util.datetimeutil.map_unix_timestamp_to_utc_datetime(
+        unix_timestamp_sec_str, True)
 
 
 def datetime_format_to_str(datetime_format: covisearch.util.datetimeutil.DatetimeFormat) -> str:
@@ -368,7 +382,11 @@ def datetime_format_to_str(datetime_format: covisearch.util.datetimeutil.Datetim
         covisearch.util.datetimeutil.DatetimeFormat.AGO: 'ago',
         covisearch.util.datetimeutil.DatetimeFormat.ISOFORMAT: 'isoformat',
         covisearch.util.datetimeutil.DatetimeFormat.SHORT_DATETIME_DD_MM:
-            'short_datetime_dd_mm'
+            'short_datetime_dd_mm',
+        covisearch.util.datetimeutil.DatetimeFormat.UNIX_TIMESTAMP_SEC:
+            'unix_timestamp_sec',
+        covisearch.util.datetimeutil.DatetimeFormat.UNIX_TIMESTAMP_MILLISEC:
+            'unix_timestamp_millisec'
     }
     return datetime_format_strings[datetime_format]
 
@@ -379,7 +397,11 @@ def datetime_format_from_str(datetime_format_str: str) -> \
         'ago': covisearch.util.datetimeutil.DatetimeFormat.AGO,
         'isoformat': covisearch.util.datetimeutil.DatetimeFormat.ISOFORMAT,
         'short_datetime_dd_mm':
-            covisearch.util.datetimeutil.DatetimeFormat.SHORT_DATETIME_DD_MM
+            covisearch.util.datetimeutil.DatetimeFormat.SHORT_DATETIME_DD_MM,
+        'unix_timestamp_sec':
+            covisearch.util.datetimeutil.DatetimeFormat.UNIX_TIMESTAMP_SEC,
+        'unix_timestamp_millisec':
+            covisearch.util.datetimeutil.DatetimeFormat.UNIX_TIMESTAMP_MILLISEC
     }
     return datetime_formats[datetime_format_str.lower()]
 

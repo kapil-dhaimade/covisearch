@@ -11,7 +11,11 @@ class DatetimeFormat(enum.Enum):
     # 2021-05-16T21:06:17.000000+05:30
     ISOFORMAT = 2
     # 2/05 5:35 PM, 27/12 at 6:09 AM, etc.
-    SHORT_DATETIME_DD_MM = 3
+    SHORT_DATETIME_DD_MM = 3,
+    # eg: 1622140319 (number of seconds since January 1, 1970 (midnight UTC/GMT), not counting leap seconds)
+    UNIX_TIMESTAMP_SEC = 4,
+    # eg: 1622140319000 (number of millisecs since January 1, 1970 (midnight UTC/GMT), not counting leap seconds)
+    UNIX_TIMESTAMP_MILLISEC = 5
 
 
 # NOTE: KAPIL: Refer 'https://regexr.com/' to test out regex
@@ -23,7 +27,7 @@ re_months_ago_pattern = re.compile('(\d+|a)\s+months?\s+ago', re.IGNORECASE)
 re_yrs_ago_pattern = re.compile('(\d+|a)\s+years?\s+ago', re.IGNORECASE)
 
 
-def map_ago_format_timestamp_to_isoformat(ago_format_datetime: str) -> datetime:
+def map_ago_format_timestamp_to_utc_datetime(ago_format_datetime: str) -> datetime:
     # Minutes
     re_minutes_result = re_mins_ago_pattern.search(ago_format_datetime)
     if re_minutes_result is not None:
@@ -86,7 +90,7 @@ def map_ago_format_timestamp_to_isoformat(ago_format_datetime: str) -> datetime:
     return None
 
 
-def map_short_datetime_dd_mm_to_isoformat(short_datetime_str, time_zone) -> datetime:
+def map_short_datetime_dd_mm_to_utc_datetime(short_datetime_str: str, time_zone) -> datetime:
     # NOTE: KAPIL: SO: https://stackoverflow.com/questions/15491894/regex-to-validate-date-format-dd-mm-yyyy
     # re_date_result = re.search('(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)'
     #                          '(\/|-|\.)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)'
@@ -100,10 +104,19 @@ def map_short_datetime_dd_mm_to_isoformat(short_datetime_str, time_zone) -> date
     # re_time_result = re.search('([0-1]?[0-9]|2[0-3]):[0-5][0-9]\s(pm|am)')
 
     # NOTE:KAPIL: Giving preference to DD-MM-YY
-    isofmt_datetime = dateutilparser.parse(short_datetime_str,
-                                           parserinfo=dateutilparser.parserinfo(dayfirst=True))
-    isofmt_datetime = set_timezone_if_not_present(isofmt_datetime, time_zone)
-    return isofmt_datetime.astimezone(tz=timezone.utc)
+    utc_datetime = dateutilparser.parse(short_datetime_str,
+                                        parserinfo=dateutilparser.parserinfo(dayfirst=True))
+    utc_datetime = set_timezone_if_not_present(utc_datetime, time_zone)
+    return utc_datetime.astimezone(tz=timezone.utc)
+
+
+def map_unix_timestamp_to_utc_datetime(unix_timestamp_str: str, in_millisec: bool) -> datetime:
+    unix_timestamp = int(unix_timestamp_str)
+    if in_millisec:
+        unix_timestamp_sec = unix_timestamp / 1000
+    else:
+        unix_timestamp_sec = unix_timestamp
+    return datetime.utcfromtimestamp(unix_timestamp_sec).astimezone(tz=timezone.utc)
 
 
 def is_timezone_aware(timestamp: datetime):
@@ -133,5 +146,5 @@ def set_timezone_if_not_present(timestamp: datetime, time_zone) -> datetime:
 
 
 # if __name__=='__main__':
-#     isofmt1 = map_short_datetime_dd_mm_to_isoformat('2021-05-27 10:19:49')
+#     isofmt1 = map_short_datetime_dd_mm_to_utc_datetime('2021-05-27 10:19:49')
 #     print(9)
