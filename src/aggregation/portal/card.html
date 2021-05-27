@@ -4,30 +4,29 @@
 </div>
 <hr>
 
-<div id="timeout" ng-if="screenStatus == 'timeout'">
-    <div class="text-center">
-        <span class="">Sorry, it is taking longer than expected to collect all the resources. Please come back after some time</span>
-    </div>
-</div>
-
-<div id="noDataFound" ng-if="screenStatus == 'dataFetched' && leads.length <= 0" class="text-center">
-    <h1>Sorry, no resources were found for this query <span>&#9785;</span></h1>
-</div>
-
-<!-- <div id="errorBlock" ng-if="error == true" class="bg-danger text-center">
-    <span>ERROR OCCURED</span><br>
-    <span ng-if="errMessage">{{errMessage}}</span>
-  </div> -->
-<div id="errorBlock" ng-if="screenStatus == 'error'" class="alert alert-danger text-center">
-    <strong>ERROR!</strong><span ng-if="errMessage"> {{errMessage}}</span>
-</div>
-
-<div id="loading" ng-if="screenStatus == 'loading' || screenStatus =='fetchingData' ">
-    <div class="text-center">
-        <div class="spinner-border" role="status">
+<div id="messageBlock" class="my-5" ng-if="leads.length <= 0">
+    <div id="timeout" ng-if="screenStatus == 'timeout'">
+        <div class="text-center">
+            <span class="">Sorry, it is taking longer than expected to collect all the resources. Please come back after
+                some time</span>
         </div>
-        <br>
-        <span class="" ng-if="screenStatus =='fetchingData'">Collecting information. Please wait for some time<span>&#129488;</span></span>
+    </div>
+
+    <div id="noDataFound" ng-if="screenStatus == 'dataFetched' && leads.length <= 0" class="text-center">
+        <h1>Sorry, no resources were found for this query <span>&#9785;</span></h1>
+    </div>
+
+    <div id="errorBlock" ng-if="screenStatus == 'error'" class="alert alert-danger text-center">
+        <strong>ERROR!</strong><span ng-if="errMessage"> {{errMessage}}</span>
+    </div>
+
+    <div id="loading" ng-if="screenStatus == 'loading' || screenStatus =='fetchingData' ">
+        <div class="text-center">
+            <div class="spinner-border" role="status">
+            </div>
+            <br>
+            <span class="" ng-if="screenStatus =='fetchingData'">Give us a moment while we search over the internet<span>&#129488;</span></span>
+        </div>
     </div>
 </div>
 
@@ -100,7 +99,8 @@
                                 ng-if="x.details">
                         </div>
                         <div class="data">
-                            <span ng-if="x.details == '' && x.address == ''">No More Details </span><br ng-if="x.details">
+                            <span ng-if="x.details == '' && x.address == ''">No More Details </span><br
+                                ng-if="x.details">
                         </div>
                     </div>
                 </div>

@@ -86,7 +86,7 @@ app.controller('formCtrl', function ($scope, $http, $timeout) {
 
     $scope.getDate = function (date) {
         var date = moment(date);
-        return date.format('DD-MM-YYYY') + ' ' + date.format('HH:mm');
+        return date.format('DD-MM-YYYY') + ' ' + date.format('hh:mm A');
     };
 
 
