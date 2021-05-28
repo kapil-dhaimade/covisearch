@@ -1,6 +1,6 @@
 from datetime import datetime
 
-import covisearch.util.types as types
+import covisearch.util.mytypes as types
 
 
 def elapsed_days(date: datetime) -> int:

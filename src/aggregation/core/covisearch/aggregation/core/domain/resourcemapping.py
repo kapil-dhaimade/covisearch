@@ -6,7 +6,7 @@ from dateutil import tz
 from abc import ABC, abstractmethod
 import urllib.parse
 
-from covisearch.util.types import *
+from covisearch.util.mytypes import *
 import covisearch.aggregation.core.domain.entities as entities
 from covisearch.aggregation.core.domain.entities import \
     CovidResourceInfo, CovidResourceType, OxygenInfo, \

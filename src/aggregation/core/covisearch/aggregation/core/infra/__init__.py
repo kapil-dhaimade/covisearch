@@ -4,7 +4,7 @@ import google.cloud.firestore as firestore
 
 import covisearch.aggregation.core.domain.entities as entities
 import covisearch.aggregation.core.domain.resourcemapping as resourcemapping
-import covisearch.util.types as types
+import covisearch.util.mytypes as types
 import covisearch.util.geoutil as geoutil
 
 

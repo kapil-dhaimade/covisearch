@@ -11,8 +11,8 @@ from scrapy import crawler
 from scrapy.utils.project import get_project_settings
 import jsonpath_ng
 
-from covisearch.util.types import URL as URL
-from covisearch.util.types import ContentType as ContentType
+from covisearch.util.mytypes import URL as URL
+from covisearch.util.mytypes import ContentType as ContentType
 import covisearch.util.elapsedtime as elapsedtime
 
 
@@ -273,7 +273,7 @@ class ContentTypeSelectorParser(ABC):
 
 class JSONSelectorParser(ContentTypeSelectorParser):
     def __init__(self, content: str):
-        self._json_content = json.loads(content)
+        self._json_content = json.loads(self._extract_json_from_content(content))
         self._cached_parent_nodes = {}
 
     def get_all_vals_matching_selector(self, selector: str) -> List[str]:
@@ -289,6 +289,20 @@ class JSONSelectorParser(ContentTypeSelectorParser):
 
         field_selector = selector_tokens[1]
         return [parent_node.get(field_selector, '') for parent_node in parent_nodes]
+
+    # NOTE: KAPIL: Preprocessing for resources which return JSON in a JS variable.
+    # Eg: var data = { "abc": 2, "def": [ 2, 3 ] };
+    @classmethod
+    def _extract_json_from_content(cls, content: str) -> str:
+        json_dict_start_pos = content.find('{')
+        json_content = '{}'
+        if json_dict_start_pos is not -1:
+            json_content = content[json_dict_start_pos:content.rfind('}') + 1]
+        else:
+            json_array_start_pos = content.find('[')
+            if json_array_start_pos is not -1:
+                json_content = content[json_array_start_pos:content.rfind(']') + 1]
+        return json_content
 
 
 # NOTE: KAPIL: Format of selector: <parent_node_selector>||<child_val_selector>
@@ -321,12 +335,15 @@ class HTMLSelectorParser(ContentTypeSelectorParser):
         child_val_selector = html_selector_list[1]
         parent_node_results = self._selector.xpath(parent_node_selector)
         matching_vals = [parent_node_result.xpath(child_val_selector).get(default='')
-                                for parent_node_result in parent_node_results]
+                         for parent_node_result in parent_node_results]
         return matching_vals
 
 
-# NOTE: KAPIL: Uncomment while testing
+# # NOTE: KAPIL: Uncomment while testing
 # if __name__ == '__main__':
+#     json_selector = JSONSelectorParser('var global = { \"abc\": 1, \"def\": { \"x\": 2, \"y\": 3} };')
+#     vals = json_selector.get_all_vals_matching_selector('def[*].x')
+#
 #     data_scraping_params2 = [
 #         DataScrapingParams('https://1platefood.com/portal/resources?page=2&type=oxygen&'
 #                            'city=Mumbai&sort=last_verified_at&availability=Available',
