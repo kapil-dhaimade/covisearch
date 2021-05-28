@@ -15,21 +15,8 @@
 {
   padding: 0.25rem 0.25rem !important;
   margin-bottom: 1rem !important;
+  background-color: rgba(0,0,0,.03) !important;
 }
-
-/* .form-input
-{
-  margin: 0rem 1rem 1rem 1rem;
-} */
-/* 
-.footer {
-  position: fixed;
-  clear: both;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  text-align: center;
-} */
 
 #phone
 {
@@ -73,29 +60,7 @@ a{
   cursor: pointer;
 }
 
-#selCity {
-  height: calc(1.5em + .75rem + 2px);
-  padding: .375rem .75rem;
-  font-size: 1rem;
-  font-weight: 400;
-  line-height: 1.5;
-  color: #495057;
-  background-color: #fff;
-  background-clip: padding-box;
-  border: 1px solid #ced4da;
-  border-radius: .25rem;
-}
-
 .header-img
 {
   height: 3.5rem;
-  /* width: 10rem; */
-  /* margin-bottom: .5rem;
-  font-weight: 500;
-  margin; */
-  /* line-height: 1.2; */
-  /* display: block; */
-  /* font-size: 2em; */
-  /* margin-block-start: 0.67em; */
-  /* margin-block-end: 0.67em; */
 }
