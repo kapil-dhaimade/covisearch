@@ -7,7 +7,11 @@
   <title>Covisearch</title>
   <base href=".">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+  <!-- <link rel="icon" type="image/x-icon" href="images/favicon.png"> -->
+  <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
+  <link rel="manifest" href="images/site.webmanifest">
   <link rel="stylesheet" href="css/myStyle.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -19,47 +23,49 @@
 </head>
 
 <body ng-app="myApp" ng-controller="formCtrl">
-<div id="wrapper">
+  <div id="wrapper">
 
-  <div ng-include="'header.html'" class="text-center"></div>
-  <div id="bodyDiv" class="container-fluid">
+    <div ng-include="'header.html'" class="text-center"></div>
+    <div id="bodyDiv" class="container-fluid">
 
-    <!-- <div ng-include="'filter.html'"></div> -->
-    <form autocomplete="off" name="filterForm" id="filter" class="text-center" ng-submit="MyForm.$valid">
-      <div class="form-inline justify-content-center">
+      <!-- <div ng-include="'filter.html'"></div> -->
+      <form autocomplete="off" name="filterForm" id="filter" class="text-center" ng-submit="MyForm.$valid">
+        <div class="form-inline justify-content-center">
 
-        <div class="form-group custom-input">
-          <input name="filter.city" class="form-control form-input" list="city" ng-model="filter.city"
-            placeholder="Enter the City" ng-keyup="filterFunction()" required>
-          <datalist id="city">
-            <option ng-repeat="x in cityList" value={{x}}>{{x}}</option>
-          </datalist>
+          <div class="form-group custom-input">
+            <input name="filter.city" class="form-control form-input" list="city" ng-model="filter.city"
+              placeholder="Enter the City" ng-keyup="filterFunction()" required>
+            <datalist id="city">
+              <option ng-repeat="x in cityList" value={{x}}>{{x}}</option>
+            </datalist>
+          </div>
+
+          <div class="form-group custom-input">
+            <select class="form-control form-input" ng-model="filter.resource"
+              ng-init="filter.resource = resourceList[3]" ng-options="x.displayName for x in resourceList" required>
+              <option value="" disabled>Select the Resource</option>
+            </select>
+          </div>
+
+          <div class="form-group custom-input">
+            <button ng-click="submit()"
+              ng-disabled="filterForm.$invalid || screenStatus == 'loading' || screenStatus == 'fetchingData'"
+              class="btn btn-info">SUBMIT</button>
+          </div>
         </div>
 
-        <div class="form-group custom-input">
-          <select class="form-control form-input" ng-model="filter.resource" ng-init="filter.resource = resourceList[3]"
-            ng-options="x.displayName for x in resourceList" required>
-            <option value="" disabled>Select the Resource</option>
-          </select>
-        </div>
+      </form>
 
-        <div class="form-group custom-input">
-          <button ng-click="submit()" ng-disabled="filterForm.$invalid || screenStatus == 'loading' || screenStatus == 'fetchingData'" class="btn btn-info">SUBMIT</button>
-        </div>
-      </div>
+      <!-- <button ng-click="reset()" class="btn btn-outline-primary">RESET</button> -->
+      <!-- <p>Currently showing data for {{filter.city}} and {{filter.resource}}</p> -->
+      <hr>
+      <!-- <div ng-include="'home.html'"></div> -->
+      <div ng-include="'card.html'"></div>
 
-    </form>
-
-    <!-- <button ng-click="reset()" class="btn btn-outline-primary">RESET</button> -->
-    <!-- <p>Currently showing data for {{filter.city}} and {{filter.resource}}</p> -->
-    <hr>
-    <!-- <div ng-include="'home.html'"></div> -->
-    <div ng-include="'card.html'"></div>
-
+    </div>
   </div>
-</div>
-<div ng-include="'footer.html'" class="text-center"></div>
-<!-- <footer>hello</footer> -->
+  <div ng-include="'footer.html'" class="text-center"></div>
+  <!-- <footer>hello</footer> -->
 </body>
 
 </html>
