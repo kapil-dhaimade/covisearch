@@ -43,7 +43,7 @@
         </div>
 
         <div class="form-group custom-input">
-          <button ng-click="submit()" ng-disabled="filterForm.$invalid" class="btn btn-outline-primary">SUBMIT</button>
+          <button ng-click="submit()" ng-disabled="filterForm.$invalid || screenStatus == 'loading' || screenStatus == 'fetchingData'" class="btn btn-info">SUBMIT</button>
         </div>
       </div>
 

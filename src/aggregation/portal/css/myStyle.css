@@ -11,6 +11,16 @@
   max-width: 600px;
 }
 
+.card-body
+{
+  padding: 0rem 0.75rem 0.25rem 0.75rem !important;
+}
+#card-wrapper
+{
+  padding-right: 0.5rem !important;
+  padding-left: 0.5rem !important;
+}
+
 .jumbotron
 {
   padding: 0.25rem 0.25rem !important;
@@ -56,8 +66,12 @@
   padding: 0.25rem 0rem 0.25rem 0rem;
 }
 
-a{
+.page-item:hover{
   cursor: pointer;
+}
+.disabled
+{
+  cursor: default !important;
 }
 
 .header-img

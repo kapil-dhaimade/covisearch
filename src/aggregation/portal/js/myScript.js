@@ -17,7 +17,7 @@ app.controller('formCtrl', function ($scope, $http, $timeout) {
 
     $scope.init = function () {
         $scope.pageNumber = 0;
-        $scope.retryCount = 3;
+        $scope.retryCount = 5;
         // $scope.screenStatus = 'home';
     };
 
@@ -55,7 +55,7 @@ app.controller('formCtrl', function ($scope, $http, $timeout) {
             $scope.resourceSearched = data.resource;
             if (response.status == 202) {
                 if ($scope.retryCount > 0) {
-                    $timeout(function () { $scope.fetch(data) }, 5000);
+                    $timeout(function () { $scope.fetch(data) }, 2000);
                     $scope.retryCount--;
                     $scope.screenStatus = 'fetchingData';
                     return;
@@ -91,15 +91,19 @@ app.controller('formCtrl', function ($scope, $http, $timeout) {
 
 
     $scope.fetchNextBatch = function (data) {
-        $scope.pageNumber += 1;
-        $scope.screenStatus = 'loading';
-        $scope.fetch($scope.master);
+        if ($scope.hasMoreData == true || $scope.pageNumber == 0) {
+            $scope.pageNumber += 1;
+            $scope.screenStatus = 'loading';
+            $scope.fetch($scope.master);
+        }
     };
 
     $scope.fetchPreviousBatch = function (data) {
-        $scope.pageNumber -= 1;
-        $scope.screenStatus = 'loading';
-        $scope.fetch($scope.master);
+        if ($scope.pageNumber > 1) {
+            $scope.pageNumber -= 1;
+            $scope.screenStatus = 'loading';
+            $scope.fetch($scope.master);
+        }
     };
 
     $scope.reset = function () {
@@ -114,6 +118,7 @@ app.controller('formCtrl', function ($scope, $http, $timeout) {
     $scope.reset();
 
     $scope.submit = function () {
+
         $scope.init();
         $scope.screenStatus = 'loading';
         $scope.master = angular.copy($scope.filter);
@@ -121,8 +126,7 @@ app.controller('formCtrl', function ($scope, $http, $timeout) {
     };
 
     $scope.filterFunction = function () {
-        if($scope.filter.city)
-        {
+        if ($scope.filter.city) {
             var filter = $scope.filter.city.toLowerCase();
             var filterList = list.filter((country) => country.startsWith(filter));
             $scope.cityList = filterList.slice(0, 3);

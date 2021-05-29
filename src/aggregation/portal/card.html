@@ -7,8 +7,8 @@
 <div id="messageBlock" class="my-5" ng-if="leads.length <= 0">
     <div id="timeout" ng-if="screenStatus == 'timeout'">
         <div class="text-center">
-            <span class="">Sorry, it is taking longer than expected to collect all the resources. Please come back after
-                some time</span>
+            <h1 class="">Sorry, it is taking longer than expected to collect all the resources. Please come back after
+                some time.</h1>
         </div>
     </div>
 
@@ -25,7 +25,8 @@
             <div class="spinner-border" role="status">
             </div>
             <br>
-            <span class="" ng-if="screenStatus =='fetchingData'">Give us a moment while we search over the internet<span>&#129488;</span></span>
+            <span class="" ng-if="screenStatus =='fetchingData'">Give us a moment while we search over the
+                internet<span>&#129488;</span></span>
         </div>
     </div>
 </div>
@@ -86,7 +87,7 @@
                         </span>
                     </div>
                 </div>
-                <div id="knowMore" class="data">
+                <div id="knowMore" class="data" ng-if="x.address || x.details">
                     <span class="pointer rounded-lg light-back px-1" data-toggle="collapse"
                         data-target="#demo{{$index}}"><b>Know More ></b></span><br>
                     <div id="demo{{$index}}" class="collapse">
@@ -98,18 +99,28 @@
                             <span ng-if="x.details"><b>Details:</b> <br ng-if="x.details">{{x.details}}</span><br
                                 ng-if="x.details">
                         </div>
-                        <div class="data">
-                            <span ng-if="x.details == '' && x.address == ''">No More Details </span><br
-                                ng-if="x.details">
-                        </div>
                     </div>
+                </div>
+                <div class="data" ng-if="!(x.address || x.details)">
+                    <br>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<div class="text-center" ng-if="screenStatus == 'dataFetched'">
-    <a class="font-larger mr-4 ml-4" ng-click="fetchPreviousBatch()" ng-if="pageNumber > 1">Previous</a>
-    <a class="font-larger ml-4 ml-4" ng-click="fetchNextBatch()" ng-if="hasMoreData == true">Next</a>
+<div class="text-center py-1" ng-if="screenStatus == 'dataFetched'">
+    <!-- <a class="font-larger mr-4 ml-4" ng-click="fetchPreviousBatch()" ng-if="pageNumber > 1">Previous</a>
+    <a class="font-larger ml-4 ml-4" ng-click="fetchNextBatch()" ng-if="hasMoreData == true">Next</a> -->
+    <nav>
+        <ul class="pagination justify-content-center">
+            <li class="page-item" ng-class="{'disabled':pageNumber == 1}" ng-click="fetchPreviousBatch()">
+                <a class="page-link" href="#" tabindex="-1">&laquo; Previous</a>
+            </li>
+            <li class="page-item disabled"><span class="page-link">{{pageNumber}}</span></li>
+            <li class="page-item" ng-class="{'disabled':hasMoreData == false}" ng-click="fetchNextBatch()">
+                <span class="page-link">Next &raquo;</span>
+            </li>
+        </ul>
+    </nav>
 </div>
