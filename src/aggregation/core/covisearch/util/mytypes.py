@@ -12,3 +12,13 @@ URL = str
 class ContentType(enum.Enum):
     HTML = 1
     JSON = 2
+    FORMDATA = 3
+
+
+class LetterCaseType(enum.Enum):
+    # eg: new york
+    LOWERCASE = 1
+    # eg: NEW YORK
+    UPPERCASE = 2
+    # eg: New York
+    TITLECASE = 3

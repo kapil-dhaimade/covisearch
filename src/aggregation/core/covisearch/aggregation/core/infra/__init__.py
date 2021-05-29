@@ -61,7 +61,7 @@ def _possible_web_src_scopes_for_filter(search_filter: entities.SearchFilter):
     possible_web_scopes = [
         'pan_india_all_resources', 'pan_india_' + res_type_string,
         search_filter.city + '_all_resources',
-        search_filter.city + '_' + res_type_string,
+        search_filter.city + '_' + res_type_string
     ]
     possible_states_for_city = geoutil.get_state_for_city(search_filter.city)
     for state in possible_states_for_city:
@@ -78,14 +78,30 @@ def _firestore_to_web_src(
 
     web_src_dict = web_src_doc.to_dict()
     try:
+        if 'request_content_type' in web_src_dict:
+            request_content_type = _content_type_from_string(web_src_dict['request_content_type'])
+        else:
+            request_content_type = None
+
+        if 'request_body_template' in web_src_dict:
+            request_body_template = web_src_dict['request_body_template']
+        else:
+            request_body_template = None
+
+        if 'city_name_case_mapping' in web_src_dict:
+            city_name_case_mapping = _letter_case_from_string(web_src_dict['city_name_case_mapping'])
+        else:
+            city_name_case_mapping = None
+
         return resourcemapping.WebSource(
             web_src_dict['name'], web_src_dict['homepage_url'],
             web_src_dict['web_resource_url_template'],
-            _response_content_type_from_string(web_src_dict['response_content_type']),
+            request_content_type, request_body_template,
+            _content_type_from_string(web_src_dict['response_content_type']),
             web_src_dict['data_table_extract_selectors'],
             _get_resource_mapping_desc_model(web_src_dict['resource_mapping_desc']),
             web_src_dict['resource_type_label_mapping'],
-            search_filter)
+            city_name_case_mapping, search_filter)
 
     except resourcemapping.NoResourceTypeMappingError:
         return None
@@ -100,9 +116,19 @@ def _get_resource_mapping_desc_model(resource_mapping_desc_dict: Dict[str, str])
     }
 
 
-def _response_content_type_from_string(response_content_type_str: str) -> types.ContentType:
-    res_content_type_str_mapping = {
+def _content_type_from_string(content_type_str: str) -> types.ContentType:
+    content_type_str_mapping = {
         'json': types.ContentType.JSON,
-        'html': types.ContentType.HTML
+        'html': types.ContentType.HTML,
+        'formdata': types.ContentType.FORMDATA
     }
-    return res_content_type_str_mapping[response_content_type_str]
+    return content_type_str_mapping[content_type_str]
+
+
+def _letter_case_from_string(letter_case_str: str) -> types.LetterCaseType:
+    letter_case_str_mapping = {
+        'lowercase': types.LetterCaseType.LOWERCASE,
+        'uppercase': types.LetterCaseType.UPPERCASE,
+        'titlecase': types.LetterCaseType.TITLECASE
+    }
+    return letter_case_str_mapping[letter_case_str]

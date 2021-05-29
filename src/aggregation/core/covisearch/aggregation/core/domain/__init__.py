@@ -77,7 +77,8 @@ def _scrape_data_from_web_sources(web_sources: Dict[str, resourcemapping.WebSour
 
     data_scraping_params = [
         webdatascraper.DataScrapingParams(
-            web_src.web_resource_url, web_src.response_content_type,
+            web_src.web_resource_url, web_src.request_content_type, web_src.request_body,
+            web_src.response_content_type,
             web_src.data_table_extract_selectors, {})
         for web_src in web_sources.values()
     ]

@@ -126,10 +126,12 @@ def _is_scrapy_process_start_signalled() -> bool:
 
 
 class DataScrapingParams:
-    def __init__(self, url: URL, response_content_type: ContentType,
-                 table_column_selectors: Dict[str, str],
+    def __init__(self, url: URL, request_content_type: ContentType, request_body: str,
+                 response_content_type: ContentType, table_column_selectors: Dict[str, str],
                  fields_selectors: Dict[str, str]):
         self._url = url
+        self._request_content_type: ContentType = request_content_type
+        self._request_body: str = request_body
         self._response_content_type = response_content_type
         # NOTE: KAPIL: Selector may be XPath, JSONPath, etc. based on content type
         # Refer 'https://jsonpathfinder.com/' to get JSONPaths from JSON
@@ -140,6 +142,14 @@ class DataScrapingParams:
     @property
     def url(self) -> URL:
         return self._url
+
+    @property
+    def request_content_type(self) -> ContentType:
+        return self._request_content_type
+
+    @property
+    def request_body(self) -> str:
+        return self._request_body
 
     @property
     def response_content_type(self) -> ContentType:
@@ -180,7 +190,25 @@ class WebsiteDataSpider(scrapy.Spider):
     def __init__(self, operation_ctx: 'ScrapingOperationCtx'):
         super().__init__()
         self._operation_ctx: 'ScrapingOperationCtx' = operation_ctx
-        self.start_urls = self._operation_ctx.get_all_urls_for_scraping()
+        self.urls = self._operation_ctx.get_all_urls_for_scraping()
+
+    def start_requests(self):
+        for url in self.urls:
+            scraping_params = self._operation_ctx.get_scraping_params_for_url(url)
+
+            if scraping_params.request_body is None:
+                yield scrapy.Request(url=url, callback=self.parse, errback=self.errback)
+
+            if scraping_params.request_content_type is ContentType.JSON:
+                request_dict = json.loads(scraping_params.request_body)
+                yield scrapy.http.JsonRequest(
+                    url=url,
+                    data=request_dict,
+                    callback=self.parse, errback=self.errback)
+
+            if scraping_params.request_content_type is ContentType.FORMDATA:
+                yield scrapy.http.FormRequest(url=url, formdata=json.loads(scraping_params.request_body),
+                                              callback=self.parse, errback=self.errback)
 
     def parse(self, response: scrapy.http.Response, **kwargs):
         if response.status != 200:
@@ -197,6 +225,9 @@ class WebsiteDataSpider(scrapy.Spider):
             print('Exception while parsing Scrapy response for url: \'' + response.url + '\'. ' +
                   'Ignoring error.')
             print(traceback.print_exc())
+
+    def errback(self, failure):
+        print('Scrapy returned error: \'' + repr(failure) + '\' for url: \'' + failure.request.url + '\'.')
 
 
 class ScrapingOperationCtx:
@@ -288,7 +319,13 @@ class JSONSelectorParser(ContentTypeSelectorParser):
             self._cached_parent_nodes[selector_till_parent] = parent_nodes
 
         field_selector = selector_tokens[1]
-        return [parent_node.get(field_selector, '') for parent_node in parent_nodes]
+        return [self._get_str_val_of_field(field_selector, parent_node) for parent_node in parent_nodes]
+
+    def _get_str_val_of_field(self, field_selector, parent_node):
+        field_val = parent_node.get(field_selector, '')
+        if field_val is None:
+            return ''
+        return str(field_val)
 
     # NOTE: KAPIL: Preprocessing for resources which return JSON in a JS variable.
     # Eg: var data = { "abc": 2, "def": [ 2, 3 ] };
@@ -339,28 +376,30 @@ class HTMLSelectorParser(ContentTypeSelectorParser):
         return matching_vals
 
 
-# # NOTE: KAPIL: Uncomment while testing
+# NOTE: KAPIL: Uncomment while testing
 # if __name__ == '__main__':
 #     json_selector = JSONSelectorParser('var global = { \"abc\": 1, \"def\": { \"x\": 2, \"y\": 3} };')
 #     vals = json_selector.get_all_vals_matching_selector('def[*].x')
 #
+#     try:
+#         di = json.loads('{"variables": {},"query": "{\\n  workspace {\\n    tickets(city: \\"Mumbai\\") {\\n      edges {\\n        node {\\n          updatedAt\\n          resourceType\\n          subResourceType\\n          contactName\\n          contactNumber\\n          upvoteCount\\n          downvoteCount\\n          description\\n          city\\n          state\\n          pincode\\n          address\\n          leadId\\n          updateUrl\\n          __typename\\n        }\\n        __typename\\n      }\\n      __typename\\n    }\\n    __typename\\n  }\\n}\\n"}')
+#     except:
+#         print(traceback.print_exc())
+#
 #     data_scraping_params2 = [
-#         DataScrapingParams('https://1platefood.com/portal/resources?page=2&type=oxygen&'
-#                            'city=Mumbai&sort=last_verified_at&availability=Available',
-#                            ContentType.JSON,
-#                            [('name', 'data[*].name'), ('city', 'data[*].city'),
-#                             ('phone', 'data[*].phone'),
-#                             ('last_verified_at', 'data[*].last_verified_at')],
-#                            [('page_num', 'page'), ('total_pages', 'num_pages'),
-#                             ('page_size', 'page_size'), ('total_entries', 'total')]),
 #
 #         DataScrapingParams('https://api.covidcitizens.org/api/v1/leadbyquery?location=delhi&'
-#                            'category=plasma',
+#                            'category=plasma', None, None,
 #                            ContentType.JSON,
-#                            [('name', 'data[*].name'), ('city', 'data[*].location'),
-#                             ('phone', 'data[*].phone'),
-#                             ('last_verified', 'data[*].lastverified')],
-#                            [('total_entries', 'noOfLeads')])
+#                            {'name': 'data[*].name', 'city': 'data[*].location',
+#                             'phone': 'data[*].phone',
+#                             'last_verified': 'data[*].lastverified'},
+#                            {}),
+#         DataScrapingParams('https://e1xevguqtj.execute-api.ap-south-1.amazonaws.com/metabase/graphql',
+#                            ContentType.JSON, '{"variables": {},"query": "{\\n  workspace {\\n    tickets(city: \\"Mumbai\\", resourceType: \\"Blood\\") {\\n      edges {\\n        node {\\n          updatedAt\\n          resourceType\\n          subResourceType\\n          contactName\\n          contactNumber\\n          upvoteCount\\n          downvoteCount\\n          description\\n          city\\n          state\\n          pincode\\n          address\\n          leadId\\n          updateUrl\\n          __typename\\n        }\\n        __typename\\n      }\\n      __typename\\n    }\\n    __typename\\n  }\\n}\\n"}',
+#                            ContentType.JSON,
+#                            {},
+#                            {})
 #     ]
 #     scraped_data = scrape_data_from_websites(data_scraping_params2)
 #     print(9)

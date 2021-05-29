@@ -43,16 +43,22 @@ class WebSource:
     WEB_RES_URL_TEMPLATE_RESOURCE_TYPE_PLACEHOLDER = '{RESOURCE_TYPE}'
 
     def __init__(self, name: str, homepage_url: URL, web_resource_url_template: URL,
+                 request_content_type: ContentType, request_body_template: str,
                  response_content_type: ContentType,
                  data_table_extract_selectors: Dict[str, str],
                  resource_mapping_desc: Dict[str, 'FieldMappingDesc'],
-                 resource_type_label_mapping: Dict[str, str], search_filter: SearchFilter):
+                 resource_type_label_mapping: Dict[str, str],
+                 city_name_case_mapping: LetterCaseType, search_filter: SearchFilter):
         self._name = name
         self._homepage_url: URL = homepage_url
+        web_src_city = self._map_to_web_src_city_by_letter_case_mapping(search_filter.city, city_name_case_mapping)
         # NOTE: KAPIL: URL with place-holders for search filter params in {param} blocks
         # Eg: http://covidres.com/city={CITY}&resource={RESOURCE_TYPE}
         self._web_resource_url = self._web_resource_url_from_template(
-            web_resource_url_template, search_filter, resource_type_label_mapping)
+            web_resource_url_template, web_src_city, search_filter, resource_type_label_mapping)
+        self._request_content_type: ContentType = request_content_type
+        self._request_body: str = self._request_body_from_template(
+            request_body_template, web_src_city, search_filter, resource_type_label_mapping)
         self._response_content_type: ContentType = response_content_type
         self._data_table_extract_selectors: Dict[str, str] = \
             data_table_extract_selectors
@@ -71,6 +77,14 @@ class WebSource:
         return self._web_resource_url
 
     @property
+    def request_content_type(self) -> ContentType:
+        return self._request_content_type
+
+    @property
+    def request_body(self) -> str:
+        return self._request_body
+
+    @property
     def response_content_type(self) -> ContentType:
         return self._response_content_type
 
@@ -84,14 +98,14 @@ class WebSource:
 
     @classmethod
     def _web_resource_url_from_template(
-            cls, web_res_url_template: URL, search_filter: SearchFilter,
+            cls, web_res_url_template: URL, web_src_city: str, search_filter: SearchFilter,
             resource_type_label_mapping: Dict[str, str]) -> URL:
 
         web_resource_url = web_res_url_template
 
         web_resource_url = web_resource_url.replace(
             cls.WEB_RES_URL_TEMPLATE_CITY_PLACEHOLDER,
-            urllib.parse.quote(search_filter.city))
+            urllib.parse.quote(web_src_city))
 
         filter_res_type_str = CovidResourceType.to_string(search_filter.resource_type)
 
@@ -103,8 +117,41 @@ class WebSource:
             urllib.parse.quote(resource_type_label_mapping[filter_res_type_str]))
 
         # TODO: KAPIL: Blood group filter mapping
-
         return web_resource_url
+
+    @classmethod
+    def _request_body_from_template(cls, request_body_template: str, web_src_city: str, search_filter: SearchFilter,
+                                    resource_type_label_mapping: Dict[str, str]) -> str:
+        if request_body_template is None:
+            return None
+
+        request_body = request_body_template
+        request_body = request_body.replace(cls.WEB_RES_URL_TEMPLATE_CITY_PLACEHOLDER, web_src_city)
+
+        filter_res_type_str = CovidResourceType.to_string(search_filter.resource_type)
+
+        if filter_res_type_str not in resource_type_label_mapping:
+            raise NoResourceTypeMappingError()
+        request_body = request_body.replace(
+            cls.WEB_RES_URL_TEMPLATE_RESOURCE_TYPE_PLACEHOLDER,
+            resource_type_label_mapping[filter_res_type_str])
+
+        # TODO: KAPIL: Blood group filter mapping
+        return request_body
+
+    @classmethod
+    def _map_to_web_src_city_by_letter_case_mapping(cls, city: str, city_case_mapping: LetterCaseType) -> str:
+        if city_case_mapping is None:
+            return city
+
+        if city_case_mapping is LetterCaseType.LOWERCASE:
+            return city.lower()
+
+        if city_case_mapping is LetterCaseType.UPPERCASE:
+            return city.upper()
+
+        if city_case_mapping is LetterCaseType.TITLECASE:
+            return city.title()
 
 
 class NoResourceTypeMappingError(Exception):
