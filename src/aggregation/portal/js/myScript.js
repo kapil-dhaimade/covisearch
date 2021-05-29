@@ -1,5 +1,5 @@
 var app = angular.module('myApp', []);
-app.controller('formCtrl', function ($scope, $http, $timeout) {
+app.controller('formCtrl', function ($scope, $http, $timeout,$window) {
     const api_base_url = "https://asia-south1-covisearch2.cloudfunctions.net/covisearchapi?";
     var list = null;
     $scope.master = {
@@ -70,6 +70,7 @@ app.controller('formCtrl', function ($scope, $http, $timeout) {
                 $scope.hasMoreData = response.data.meta_info.more_data_available;
                 console.log(response.data);
                 $scope.screenStatus = 'dataFetched';
+                $window.scrollTo(0, 0);
                 return
             }
         },
