@@ -19,6 +19,7 @@
 </head>
 
 <body ng-app="myApp" ng-controller="formCtrl">
+<div id="wrapper">
 
   <div ng-include="'header.html'" class="text-center"></div>
   <div id="bodyDiv" class="container-fluid">
@@ -56,8 +57,9 @@
     <div ng-include="'card.html'"></div>
 
   </div>
-  <div ng-include="'footer.html'" class="text-center"></div>
-
+</div>
+<div ng-include="'footer.html'" class="text-center"></div>
+<!-- <footer>hello</footer> -->
 </body>
 
 </html>
