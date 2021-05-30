@@ -7,7 +7,6 @@
   <title>Covisearch</title>
   <base href=".">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- <link rel="icon" type="image/x-icon" href="images/favicon.png"> -->
   <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
@@ -28,7 +27,6 @@
     <div ng-include="'header.html'" class="text-center"></div>
     <div id="bodyDiv" class="container-fluid">
 
-      <!-- <div ng-include="'filter.html'"></div> -->
       <form autocomplete="off" name="filterForm" id="filter" class="text-center" ng-submit="MyForm.$valid">
         <div class="form-inline justify-content-center">
 
@@ -42,7 +40,7 @@
 
           <div class="form-group custom-input">
             <select class="form-control form-input" ng-model="filter.resource"
-              ng-init="filter.resource = resourceList[3]" ng-options="x.displayName for x in resourceList" required>
+              ng-options="x.displayName for x in resourceList" required>
               <option value="" disabled>Select the Resource</option>
             </select>
           </div>
@@ -56,16 +54,12 @@
 
       </form>
 
-      <!-- <button ng-click="reset()" class="btn btn-outline-primary">RESET</button> -->
-      <!-- <p>Currently showing data for {{filter.city}} and {{filter.resource}}</p> -->
       <hr>
-      <!-- <div ng-include="'home.html'"></div> -->
       <div ng-include="'card.html'"></div>
 
     </div>
   </div>
   <div ng-include="'footer.html'" class="text-center"></div>
-  <!-- <footer>hello</footer> -->
 </body>
 
 </html>

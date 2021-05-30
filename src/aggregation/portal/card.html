@@ -1,7 +1,8 @@
-<div class="text-center">
-    <span ng-if="screenStatus == 'dataFetched'">Currently showing data for <b>{{citySearched}}</b> and
-        <b>{{resourceSearched.displayName}}</b></span>
+<div class="text-center"  ng-if="screenStatus == 'dataFetched'">
+    <span>Currently showing data for <b>{{citySearched}}</b> and
+        <img id="resourceImg" ng-src="{{resourceSearched.image}}" ng-alt="{{resourceSearched.image}}"><b> {{resourceSearched.displayName}}</b></span>
 </div>
+
 <hr>
 
 <div id="messageBlock" class="my-5" ng-if="leads.length <= 0">
@@ -30,12 +31,6 @@
         </div>
     </div>
 </div>
-
-<!-- <div id="timeout" ng-if="timeout == true">
-    <div class="text-center">
-        <span class="">Sorry, it is taking longer than expected to collect all the resources. Please come back after some time</span>
-    </div>
-</div> -->
 
 <!-- data from here  -->
 <div id="data" ng-if="leads.length > 0" class="row">
@@ -74,7 +69,7 @@
                             <br ng-if="x.litres">
                         </div>
                         <div class="data">
-                            <span><b>Source:</b><a href="{{x.web_source_homepage}}"><br>{{x.web_source_name}}</a></span>
+                            <span><b>Source:</b><a href="{{x.card_source_url}}"><br>{{x.web_source_name}}</a></span>
                             <br>
                         </div>
                     </div>
@@ -110,8 +105,6 @@
 </div>
 
 <div class="text-center py-1" ng-if="screenStatus == 'dataFetched' && (hasMoreData == true || pageNumber >1) ">
-    <!-- <a class="font-larger mr-4 ml-4" ng-click="fetchPreviousBatch()" ng-if="pageNumber > 1">Previous</a>
-    <a class="font-larger ml-4 ml-4" ng-click="fetchNextBatch()" ng-if="hasMoreData == true">Next</a> -->
     <nav>
         <ul class="pagination justify-content-center">
             <li class="page-item" ng-class="{'disabled':pageNumber == 1}" ng-click="fetchPreviousBatch()">

@@ -10,7 +10,6 @@ body {
 #wrapper
 {
   flex: 1;
-  /* margin: 0 auto; */
 }
 .card-header
 {
@@ -60,7 +59,6 @@ body {
 
 .light-back
 {
-  /* background-color: rgba(0,0,0,.03); */
   background-color: rgb(223, 238, 195);
 }
 
@@ -93,10 +91,7 @@ body {
   height: 3.5rem;
 }
 
-/* #footer
+#resourceImg
 {
-  width: 100%;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-} */
+  height: 1rem;
+}

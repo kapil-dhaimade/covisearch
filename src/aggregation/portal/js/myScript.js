@@ -1,17 +1,17 @@
 var app = angular.module('myApp', []);
-app.controller('formCtrl', function ($scope, $http, $timeout,$window) {
+app.controller('formCtrl', function ($scope, $http, $timeout, $window) {
     const api_base_url = "https://asia-south1-covisearch2.cloudfunctions.net/covisearchapi?";
     var list = null;
     $scope.master = {
         city: "Delhi",
         resource: {
             'displayName': 'Oxygen',
-            'value': 'oxygen'
+            'value': 'oxygen',
+            'image': 'images/icons/oxygen.png'
         }
     };
     $scope.screenStatus = 'loading';
     $http.get('../data/cities.txt').then(function (response) {
-        // $scope.cityList = response.data;
         list = response.data;
     });
 
@@ -24,33 +24,36 @@ app.controller('formCtrl', function ($scope, $http, $timeout,$window) {
     $scope.resourceList = [
         {
             'displayName': 'Ambulance',
-            'value': 'ambulance'
+            'value': 'ambulance',
+            'image': 'images/icons/ambulance.png'
         },
         {
             'displayName': 'Hospital Beds',
-            'value': 'hospital_bed'
+            'value': 'hospital_bed',
+            'image': 'images/icons/hospital_bed.png'
         },
         {
             'displayName': 'ICU Beds',
-            'value': 'hospital_bed_icu'
+            'value': 'hospital_bed_icu',
+            'image': 'images/icons/icu.png'
         },
         {
             'displayName': 'Oxygen',
-            'value': 'oxygen'
+            'value': 'oxygen',
+            'image': 'images/icons/oxygen.png'
         },
         {
             'displayName': 'Plasma',
-            'value': 'plasma'
+            'value': 'plasma',
+            'image': 'images/icons/plasma.png'
         }
     ];
 
     $scope.fetch = function (data) {
         url = api_base_url + "resource_type=" + data.resource.value + "&city=" + data.city + "&page_no=" + $scope.pageNumber;
-        console.log("URL:  " + url);
         $scope.leads = "";
         $scope.hasMoreData = false;
         $http.get(url).then(function (response) {
-            console.log(response.status);
             $scope.citySearched = data.city;
             $scope.resourceSearched = data.resource;
             if (response.status == 202) {
@@ -68,7 +71,6 @@ app.controller('formCtrl', function ($scope, $http, $timeout,$window) {
             else {
                 $scope.leads = response.data.resource_info_data;
                 $scope.hasMoreData = response.data.meta_info.more_data_available;
-                console.log(response.data);
                 $scope.screenStatus = 'dataFetched';
                 $window.scrollTo(0, 0);
                 return
@@ -107,19 +109,7 @@ app.controller('formCtrl', function ($scope, $http, $timeout,$window) {
         }
     };
 
-    $scope.reset = function () {
-        $scope.filter = angular.copy($scope.master);
-        // $scope.pageNumber = 1;
-        // $scope.retryCount = 2;
-        // $scope.screenStatus='loading';
-        // $scope.fetch($scope.master);
-        // $scope.leads = "";
-        // $scope.hasMoreData = false;
-    };
-    $scope.reset();
-
     $scope.submit = function () {
-
         $scope.init();
         $scope.screenStatus = 'loading';
         $scope.master = angular.copy($scope.filter);
@@ -133,7 +123,14 @@ app.controller('formCtrl', function ($scope, $http, $timeout,$window) {
             $scope.cityList = filterList.slice(0, 3);
         }
     };
+
+    $scope.onPageLoad = function () {
+        $scope.init();
+        $scope.screenStatus = 'loading';
+        $scope.fetchNextBatch($scope.master);
+    }
+
     $scope.init();
-    $scope.submit();
+    $scope.onPageLoad();
 });
 
