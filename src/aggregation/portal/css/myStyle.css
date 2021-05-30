@@ -1,37 +1,19 @@
-html {
+html 
+{
   height: 100%;
 }
-body {
+
+body 
+{
   margin: 0;
   display: flex;
   flex-direction: column;
   height: 100%;
 }
+
 #wrapper
 {
   flex: 1;
-}
-.card-header
-{
-  margin-right: 0 !important;
-  margin-left: 0 !important;
-  padding: 0.5rem .25rem 0.5rem 0.25rem !important;
-}
-
-.card
-{
-  margin: 2% 1% 2% 1%;
-  max-width: 600px;
-}
-
-.card-body
-{
-  padding: 0rem 0.75rem 0.25rem 0.75rem !important;
-}
-#card-wrapper
-{
-  padding-right: 0.5rem !important;
-  padding-left: 0.5rem !important;
 }
 
 .jumbotron
@@ -41,14 +23,43 @@ body {
   background-color: rgba(0,0,0,.03) !important;
 }
 
+#card-wrapper
+{
+  padding-right: 0.5rem !important;
+  padding-left: 0.5rem !important;
+}
+
+.card
+{
+  margin: 2% 1% 2% 1%;
+  max-width: 600px;
+}
+
+.card-header
+{
+  margin-right: 0 !important;
+  margin-left: 0 !important;
+  padding: 0.5rem .75rem 0.5rem 0.75rem !important;
+}
+
+.card-body
+{
+  padding: 0rem 0.75rem 0.25rem 0.75rem !important;
+}
+
+#contactName
+{
+  padding: 0 !important;
+}
+
 #phone
 {
   font-size: 1.2rem;
 }
 
-.spacer
+#resourceImg
 {
-  clear: both;
+  height: 1rem;
 }
 
 .pointer
@@ -81,6 +92,7 @@ body {
 .page-item:hover{
   cursor: pointer;
 }
+
 .disabled
 {
   cursor: default !important;
@@ -89,9 +101,4 @@ body {
 .header-img
 {
   height: 3.5rem;
-}
-
-#resourceImg
-{
-  height: 1rem;
 }
