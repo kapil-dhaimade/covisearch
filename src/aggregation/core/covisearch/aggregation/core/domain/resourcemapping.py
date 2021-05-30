@@ -29,7 +29,7 @@ def map_res_info_to_covisearch(web_src_res_info: Dict, search_filter: SearchFilt
         #     CovidResourceType.to_string(search_filter.resource_type),
         # CovidResourceInfo.CITY_LABEL: search_filter.city,
         CovidResourceInfo.WEB_SOURCE_NAME_LABEL: web_src.name,
-        CovidResourceInfo.WEB_SOURCE_HOMEPAGE_LABEL: web_src.homepage_url
+        CovidResourceInfo.CARD_SOURCE_URL_LABEL: web_src.card_source_url
     }
 
     _map_common_res_info(web_src_res_info, web_src.resource_mapping_desc, covisearch_res_info)
@@ -43,6 +43,7 @@ class WebSource:
     WEB_RES_URL_TEMPLATE_RESOURCE_TYPE_PLACEHOLDER = '{RESOURCE_TYPE}'
 
     def __init__(self, name: str, homepage_url: URL, web_resource_url_template: URL,
+                 card_source_url_template: URL,
                  request_content_type: ContentType, request_body_template: str,
                  response_content_type: ContentType,
                  data_table_extract_selectors: Dict[str, str],
@@ -54,7 +55,7 @@ class WebSource:
         web_src_city = self._map_to_web_src_city_by_letter_case_mapping(search_filter.city, city_name_case_mapping)
         # NOTE: KAPIL: URL with place-holders for search filter params in {param} blocks
         # Eg: http://covidres.com/city={CITY}&resource={RESOURCE_TYPE}
-        self._web_resource_url = self._web_resource_url_from_template(
+        self._web_resource_url = self._url_from_template(
             web_resource_url_template, web_src_city, search_filter, resource_type_label_mapping)
         self._request_content_type: ContentType = request_content_type
         self._request_body: str = self._request_body_from_template(
@@ -63,6 +64,8 @@ class WebSource:
         self._data_table_extract_selectors: Dict[str, str] = \
             data_table_extract_selectors
         self._resource_mapping_desc: Dict[str, 'FieldMappingDesc'] = resource_mapping_desc
+        self._card_source_url: URL = self._url_from_template(
+            card_source_url_template, web_src_city, search_filter, resource_type_label_mapping)
 
     @property
     def name(self) -> str:
@@ -71,6 +74,10 @@ class WebSource:
     @property
     def homepage_url(self) -> URL:
         return self._homepage_url
+
+    @property
+    def card_source_url(self) -> URL:
+        return self._card_source_url
 
     @property
     def web_resource_url(self) -> URL:
@@ -97,13 +104,15 @@ class WebSource:
         return self._resource_mapping_desc
 
     @classmethod
-    def _web_resource_url_from_template(
-            cls, web_res_url_template: URL, web_src_city: str, search_filter: SearchFilter,
+    def _url_from_template(
+            cls, url_template: URL, web_src_city: str, search_filter: SearchFilter,
             resource_type_label_mapping: Dict[str, str]) -> URL:
+        if url_template is None:
+            return ''
 
-        web_resource_url = web_res_url_template
+        url = url_template
 
-        web_resource_url = web_resource_url.replace(
+        url = url.replace(
             cls.WEB_RES_URL_TEMPLATE_CITY_PLACEHOLDER,
             urllib.parse.quote(web_src_city))
 
@@ -112,12 +121,12 @@ class WebSource:
         if filter_res_type_str not in resource_type_label_mapping:
             raise NoResourceTypeMappingError()
 
-        web_resource_url = web_resource_url.replace(
+        url = url.replace(
             cls.WEB_RES_URL_TEMPLATE_RESOURCE_TYPE_PLACEHOLDER,
             urllib.parse.quote(resource_type_label_mapping[filter_res_type_str]))
 
         # TODO: KAPIL: Blood group filter mapping
-        return web_resource_url
+        return url
 
     @classmethod
     def _request_body_from_template(cls, request_body_template: str, web_src_city: str, search_filter: SearchFilter,
@@ -190,6 +199,8 @@ def _map_common_res_info(web_src_res_info: Dict, res_mapping_desc: Dict[str, 'Fi
     _map_last_verified_time(covisearch_res, res_mapping_desc, web_src_res_info)
 
     _map_availability(covisearch_res, res_mapping_desc, web_src_res_info)
+
+    _map_card_source_url(covisearch_res, res_mapping_desc, web_src_res_info)
 
 
 def _map_availability(covisearch_res, res_mapping_desc, web_src_res_info):
@@ -266,6 +277,25 @@ def _map_contact_name(covisearch_res: Dict, res_mapping_desc: Dict[str, 'FieldMa
     contact_name_label = CovidResourceInfo.CONTACT_NAME_LABEL
     name_mapping = res_mapping_desc[contact_name_label]
     covisearch_res[contact_name_label] = web_src_res_info[name_mapping.web_src_field_name]
+
+
+def _map_card_source_url(covisearch_res: Dict, res_mapping_desc: Dict[str, 'FieldMappingDesc'],
+                         web_src_res_info: Dict):
+    card_source_url_label = CovidResourceInfo.CARD_SOURCE_URL_LABEL
+    if card_source_url_label in res_mapping_desc:
+        card_source_url_mapping = res_mapping_desc[card_source_url_label]
+        # NOTE: KAPIL:
+        # -For cases where post link present in card is relative url, we're
+        # appending the relative link to existing card source url in covisearch which comes
+        # from DB. In this case the websites which have relative link in post must have
+        # card source url in DB as homepage URL so appending makes it full URL.
+        # Eg: Covid Fight Club has post link as relative URL. So we append it here and in
+        # WebSource of Covid Fight Club, its homepage is present.
+        # -If post link is not present, then we should keep proper search filter in card source url
+        # in web source.
+        # -If post link has absolute URL, then we may not make field for card source url in web source.
+        covisearch_res[card_source_url_label] = \
+            covisearch_res[card_source_url_label] + web_src_res_info[card_source_url_mapping.web_src_field_name]
 
 
 def _map_availability_value(web_src_availability_value: str) -> bool:

@@ -49,7 +49,7 @@ class CovidResourceInfo:
     AVAILABILITY_LABEL = 'availability'
     LAST_VERIFIED_UTC_LABEL = 'last_verified_utc'
     WEB_SOURCE_NAME_LABEL = 'web_source_name'
-    WEB_SOURCE_HOMEPAGE_LABEL = 'web_source_homepage'
+    CARD_SOURCE_URL_LABEL = 'card_source_url'
 
     @classmethod
     def score(cls, res_info: Dict) -> int:
