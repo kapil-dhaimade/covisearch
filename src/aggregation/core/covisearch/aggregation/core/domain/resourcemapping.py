@@ -10,7 +10,7 @@ from covisearch.util.mytypes import *
 import covisearch.aggregation.core.domain.entities as entities
 from covisearch.aggregation.core.domain.entities import \
     CovidResourceInfo, CovidResourceType, OxygenInfo, \
-    PlasmaInfo, HospitalBedsInfo, SearchFilter
+    PlasmaInfo, HospitalBedsInfo, SearchFilter, HospitalBedsICUInfo
 import covisearch.util.datetimeutil
 
 
@@ -169,7 +169,7 @@ def _get_specific_res_info_mapper(res_type: CovidResourceType):
         entities.CovidResourceType.PLASMA: _map_plasma,
         entities.CovidResourceType.OXYGEN: _map_oxygen,
         entities.CovidResourceType.HOSPITAL_BED: _map_hospital_bed,
-        entities.CovidResourceType.HOSPITAL_BED_ICU: _map_hospital_bed,
+        entities.CovidResourceType.HOSPITAL_BED_ICU: _map_hospital_bed_icu,
         entities.CovidResourceType.AMBULANCE: _map_ambulance
     }
     return _web_res_to_covisearch_res_mapper[res_type]
@@ -290,17 +290,35 @@ re_available_beds_pattern = re.compile('(\d+)', re.IGNORECASE)
 
 def _map_hospital_bed(web_src_res_info: Dict, res_mapping_desc: Dict[str, 'FieldMappingDesc'],
                       covisearch_res: Dict):
-    available_beds_label = HospitalBedsInfo.AVAILABLE_BEDS_LABEL
-    if available_beds_label in res_mapping_desc:
-        available_beds_mapping = res_mapping_desc[available_beds_label]
+    _map_bed_field(HospitalBedsInfo.AVAILABLE_COVID_BEDS_LABEL, covisearch_res,
+                   res_mapping_desc, web_src_res_info)
+    _map_bed_field(HospitalBedsInfo.AVAILABLE_COVID_BEDS_WITHOUT_OXYGEN_LABEL, covisearch_res,
+                   res_mapping_desc, web_src_res_info)
+    _map_bed_field(HospitalBedsInfo.AVAILABLE_COVID_BEDS_WITH_OXYGEN_LABEL, covisearch_res,
+                   res_mapping_desc, web_src_res_info)
+    HospitalBedsInfo.add_total_available_beds(covisearch_res)
+
+
+def _map_hospital_bed_icu(web_src_res_info: Dict, res_mapping_desc: Dict[str, 'FieldMappingDesc'],
+                      covisearch_res: Dict):
+    _map_bed_field(HospitalBedsICUInfo.AVAILABLE_ICU_BEDS_LABEL, covisearch_res,
+                   res_mapping_desc, web_src_res_info)
+    _map_bed_field(HospitalBedsICUInfo.AVAILABLE_ICU_BEDS_WITH_VENTILATOR_LABEL, covisearch_res,
+                   res_mapping_desc, web_src_res_info)
+    HospitalBedsICUInfo.add_total_available_beds(covisearch_res)
+
+
+def _map_bed_field(available_covid_beds_label, covisearch_res, res_mapping_desc, web_src_res_info):
+    if available_covid_beds_label in res_mapping_desc:
+        available_beds_mapping = res_mapping_desc[available_covid_beds_label]
         web_src_available_beds = web_src_res_info[available_beds_mapping.web_src_field_name]
         re_available_beds_result = re_available_beds_pattern.search(web_src_available_beds)
         if re_available_beds_result is not None:
-            covisearch_res[available_beds_label] = int(re_available_beds_result.group(1))
+            covisearch_res[available_covid_beds_label] = int(re_available_beds_result.group(1))
         else:
-            covisearch_res[available_beds_label] = None
+            covisearch_res[available_covid_beds_label] = None
     else:
-        covisearch_res[available_beds_label] = None
+        covisearch_res[available_covid_beds_label] = None
 
 
 def _map_ambulance(web_src_res_info: Dict, res_mapping_desc: Dict[str, 'FieldMappingDesc'],
