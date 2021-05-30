@@ -78,24 +78,22 @@ def _firestore_to_web_src(
 
     web_src_dict = web_src_doc.to_dict()
     try:
-        if 'request_content_type' in web_src_dict:
-            request_content_type = _content_type_from_string(web_src_dict['request_content_type'])
-        else:
-            request_content_type = None
+        request_content_type = _content_type_from_string(web_src_dict['request_content_type']) \
+            if 'request_content_type' in web_src_dict else None
 
-        if 'request_body_template' in web_src_dict:
-            request_body_template = web_src_dict['request_body_template']
-        else:
-            request_body_template = None
+        request_body_template = web_src_dict['request_body_template'] \
+            if 'request_body_template' in web_src_dict else None
 
-        if 'city_name_case_mapping' in web_src_dict:
-            city_name_case_mapping = _letter_case_from_string(web_src_dict['city_name_case_mapping'])
-        else:
-            city_name_case_mapping = None
+        city_name_case_mapping = _letter_case_from_string(web_src_dict['city_name_case_mapping']) \
+            if 'city_name_case_mapping' in web_src_dict else None
+
+        card_source_url_template = web_src_dict['card_source_url_template'] \
+            if 'card_source_url_template' in web_src_dict else None
 
         return resourcemapping.WebSource(
             web_src_dict['name'], web_src_dict['homepage_url'],
             web_src_dict['web_resource_url_template'],
+            card_source_url_template,
             request_content_type, request_body_template,
             _content_type_from_string(web_src_dict['response_content_type']),
             web_src_dict['data_table_extract_selectors'],
