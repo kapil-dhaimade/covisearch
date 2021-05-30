@@ -83,7 +83,15 @@ app.controller('formCtrl', function ($scope, $http, $timeout, $window) {
     };
 
     $scope.getFromNowDate = function (date) {
-        var now = moment(date).fromNow();
+        var now;
+        if(date.trim())
+        {
+            now = moment(date).fromNow();
+        }
+        else
+        {
+            now = "Not Specified"
+        }
         return now;
     };
 

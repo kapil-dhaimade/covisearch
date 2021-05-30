@@ -1,11 +1,14 @@
-<div class="text-center"  ng-if="screenStatus == 'dataFetched'">
+<!-- Current Data info -->
+<div class="text-center" ng-if="screenStatus == 'dataFetched'">
     <span>Currently showing data for <b>{{citySearched}}</b> and
-        <img id="resourceImg" ng-src="{{resourceSearched.image}}" ng-alt="{{resourceSearched.image}}"><b> {{resourceSearched.displayName}}</b></span>
+        <img id="resourceImg" ng-src="{{resourceSearched.image}}" ng-alt="{{resourceSearched.image}}"><b>
+            {{resourceSearched.displayName}}</b></span>
 </div>
 
 <hr>
 
 <div id="messageBlock" class="my-5" ng-if="leads.length <= 0">
+    <!-- TIMEOUT -->
     <div id="timeout" ng-if="screenStatus == 'timeout'">
         <div class="text-center">
             <h1 class="">Sorry, it is taking longer than expected to collect all the resources. Please come back after
@@ -13,14 +16,17 @@
         </div>
     </div>
 
+    <!-- NO DATA FOUND -->
     <div id="noDataFound" ng-if="screenStatus == 'dataFetched' && leads.length <= 0" class="text-center">
         <h1>Sorry, no resources were found for this query <span>&#9785;</span></h1>
     </div>
 
+    <!-- ERROR -->
     <div id="errorBlock" ng-if="screenStatus == 'error'" class="alert alert-danger text-center">
         <strong>ERROR!</strong><span ng-if="errMessage"> {{errMessage}}</span>
     </div>
 
+    <!-- LOADING -->
     <div id="loading" ng-if="screenStatus == 'loading' || screenStatus =='fetchingData' ">
         <div class="text-center">
             <div class="spinner-border" role="status">
@@ -39,65 +45,104 @@
         <!-- <div class="" ng-repeat="x in leads" id="card-wrapper"> -->
         <div class="card mx-auto">
             <div class="card-header row">
+                <!-- Name -->
                 <div class="float-left col text-left">
-                    <span><b>{{x.contact_name}}</b></span>
+                    <span ng-if="x.contact_name.trim()"><b>{{x.contact_name}}</b></span>
+                    <span ng-if="!x.contact_name.trim()"><b>No Name Provided</b></span>
                 </div>
+                <!-- Last Verified -->
                 <div class="float-rights">
                     <div class="float-right">
                         <span>Verified: <span
                                 class="badge badge-info">{{getFromNowDate(x.last_verified_utc)}}</span></span>
                     </div>
-
                 </div>
             </div>
 
             <div class="card-body" id="card-body-wrapper-outer">
                 <div id="data" class="w-100 clearfix">
-
+                    <!-- Phone Number -->
                     <div class="float-right">
                         <div class="data">
                             <div ng-repeat="y in x.phone_no.split('/')">
                                 <span ng-if="y.trim()" id="phone"><span class="fa fa-phone"></span> <a href="tel:{{y}}">
-                                        {{y}}</a></span><br ng-if="y.trim()">
+                                        {{y}}</a><br></span>
                             </div>
                         </div>
                     </div>
 
                     <div class="float-left">
-                        <div class="data">
-                            <span ng-if="x.litres"><b>Litres Available:</b> <br ng-if="x.litres">{{x.litres}}</a></span>
-                            <br ng-if="x.litres">
+                        <!-- Liters -->
+                        <div class="data" ng-if="x.litres">
+                            <span><b>Litres Available:</b> <br>{{x.litres}}</span>
+                            <br>
+                        </div>
+                        <!-- Covid Beds -->
+                        <div class="data" ng-if="x.available_covid_beds">
+                            <span><b>Covid Beds Available:</b> <br>{{x.available_covid_beds}}</a></span>
+                            <br>
+                        </div>
+                        <!-- Covid Beds With Oxy -->
+                        <div class="data" ng-if="x.available_covid_beds_with_oxygen">
+                            <span><b>Covid Beds with Oxygen Available:</b>
+                                <br>{{x.available_covid_beds_with_oxygen}}</a></span>
+                            <br>
+                        </div>
+                        <!-- Covid Beds Without Oxy -->
+                        <div class="data" ng-if="x.available_covid_beds_without_oxygen">
+                            <span><b>Covid Beds without Oxygen Available:</b>
+                                <br>{{x.available_covid_beds_without_oxygen}}</a></span>
+                            <br>
+                        </div>
+                        <!-- ICU beds -->
+                        <div class="data" ng-if="x.available_icu_beds">
+                            <span><b>ICU Beds Available:</b> <br>{{x.available_icu_beds}}</a></span>
+                            <br>
+                        </div>
+                        <!-- ICU with ventilator -->
+                        <div class="data" ng-if="x.available_icu_beds_with_ventilator">
+                            <span><b>ICU Beds with Ventilator Available:</b>
+                                <br>{{x.available_icu_beds_with_ventilator}}</a></span>
+                            <br>
+                        </div>
+                        <!-- Total Beds -->
+                        <div class="data" ng-if="x.total_available_beds">
+                            <span><b>Total Beds Available:</b> <br>{{x.total_available_beds}}</a></span>
+                            <br>
                         </div>
                         <div class="data">
                             <span><b>Source:</b><a href="{{x.card_source_url}}"><br>{{x.web_source_name}}</a></span>
                             <br>
                         </div>
                     </div>
-
                 </div>
+
                 <div id="extraData">
-                    <div class="data">
-                        <span ng-if="x.post_time"><b>Updated On:</b><br ng-if="x.post_time">
-                            {{getDate(x.post_time)}}</a></span><br ng-if="x.post_time">
+                    <!-- Posted Time -->
+                    <div class="data" ng-if="x.post_time">
+                        <span><b>Updated On:</b><br>
+                            {{getDate(x.post_time)}}</a></span><br>
                         </span>
                     </div>
-                </div>
-                <div id="knowMore" class="data" ng-if="x.address || x.details">
-                    <span class="pointer rounded-lg light-back px-1" data-toggle="collapse"
-                        data-target="#demo{{$index}}"><b>Know More ></b></span><br>
-                    <div id="demo{{$index}}" class="collapse">
-                        <div class="data">
-                            <span ng-if="x.address"><b>Address:</b> <br ng-if="x.address">{{x.address}}</span><br
-                                ng-if="x.address">
-                        </div>
-                        <div class="data">
-                            <span ng-if="x.details"><b>Details:</b> <br ng-if="x.details">{{x.details}}</span><br
-                                ng-if="x.details">
+
+                    <!-- Know More link -->
+                    <div id="knowMore" class="data" ng-if="x.address || x.details">
+                        <span class="pointer rounded-lg light-back px-1" data-toggle="collapse"
+                            data-target="#details{{$index}}"><b>Know More ></b></span><br>
+                        <div id="details{{$index}}" class="collapse">
+                            <!-- Address -->
+                            <div class="data" ng-if="x.address">
+                                <span><b>Address:</b> <br>{{x.address}}</span><br>
+                            </div>
+                            <!-- Details -->
+                            <div class="data" ng-if="x.details">
+                                <span><b>Details:</b> <br>{{x.details}}</span><br>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="data" ng-if="!(x.address || x.details)">
-                    <br>
+                    <div class="data" ng-if="!(x.address || x.details)">
+                        <br>
+                    </div>
                 </div>
             </div>
         </div>
