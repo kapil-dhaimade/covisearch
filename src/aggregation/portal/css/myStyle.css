@@ -59,7 +59,8 @@ body
 
 #resourceImg
 {
-  height: 1rem;
+  height: 2rem;
+  vertical-align: sub;
 }
 
 .pointer
