@@ -62,8 +62,8 @@
                     <div class="float-right">
                         <div class="data">
                             <div ng-repeat="y in x.phone_no.split('/')">
-                                <span ng-if="y" id="phone"><span class="fa fa-phone"></span> <a href="tel:{{y}}">
-                                        {{y}}</a></span><br ng-if="y">
+                                <span ng-if="y.trim()" id="phone"><span class="fa fa-phone"></span> <a href="tel:{{y}}">
+                                        {{y}}</a></span><br ng-if="y.trim()">
                             </div>
                         </div>
                     </div>
