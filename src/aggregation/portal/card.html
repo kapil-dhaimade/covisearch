@@ -74,44 +74,41 @@
                     <div class="float-left">
                         <!-- Liters -->
                         <div class="data" ng-if="x.litres">
-                            <span><b>Litres Available:</b> <br>{{x.litres}}</span>
+                            <span><b>Litres Available:</b> {{x.litres}}</span>
                             <br>
                         </div>
                         <!-- Covid Beds -->
                         <div class="data" ng-if="x.available_covid_beds">
-                            <span><b>Covid Beds Available:</b> <br>{{x.available_covid_beds}}</a></span>
+                            <span><b>Covid Beds Available:</b> {{x.available_covid_beds}}</a></span>
                             <br>
                         </div>
                         <!-- Covid Beds With Oxy -->
                         <div class="data" ng-if="x.available_covid_beds_with_oxygen">
-                            <span><b>Covid Beds with Oxygen Available:</b>
-                                <br>{{x.available_covid_beds_with_oxygen}}</a></span>
+                            <span><b>Covid Beds with Oxygen Available:</b> {{x.available_covid_beds_with_oxygen}}</a></span>
                             <br>
                         </div>
                         <!-- Covid Beds Without Oxy -->
                         <div class="data" ng-if="x.available_covid_beds_without_oxygen">
-                            <span><b>Covid Beds without Oxygen Available:</b>
-                                <br>{{x.available_covid_beds_without_oxygen}}</a></span>
+                            <span><b>Covid Beds without Oxygen Available:</b> {{x.available_covid_beds_without_oxygen}}</a></span>
                             <br>
                         </div>
                         <!-- ICU beds -->
                         <div class="data" ng-if="x.available_icu_beds">
-                            <span><b>ICU Beds Available:</b> <br>{{x.available_icu_beds}}</a></span>
+                            <span><b>ICU Beds Available:</b> {{x.available_icu_beds}}</a></span>
                             <br>
                         </div>
                         <!-- ICU with ventilator -->
                         <div class="data" ng-if="x.available_icu_beds_with_ventilator">
-                            <span><b>ICU Beds with Ventilator Available:</b>
-                                <br>{{x.available_icu_beds_with_ventilator}}</a></span>
+                            <span><b>ICU Beds with Ventilator Available:</b> {{x.available_icu_beds_with_ventilator}}</a></span>
                             <br>
                         </div>
                         <!-- Total Beds -->
                         <div class="data" ng-if="x.total_available_beds">
-                            <span><b>Total Beds Available:</b> <br>{{x.total_available_beds}}</a></span>
+                            <span><b>Total Beds Available:</b> {{x.total_available_beds}}</a></span>
                             <br>
                         </div>
                         <div class="data">
-                            <span><b>Source:</b><a href="{{x.card_source_url}}"><br>{{x.web_source_name}}</a></span>
+                            <span><span class="fa fa-search"></span> <b>Source:</b><a href="{{x.card_source_url}}"><br>{{x.web_source_name}}</a></span>
                             <br>
                         </div>
                     </div>
@@ -120,7 +117,7 @@
                 <div id="extraData">
                     <!-- Posted Time -->
                     <div class="data" ng-if="x.post_time">
-                        <span><b>Updated On:</b><br>
+                        <span><span class="fa fa-clock-o"></span> <b>Updated:</b>
                             {{getDate(x.post_time)}}</a></span><br>
                         </span>
                     </div>
@@ -132,11 +129,11 @@
                         <div id="details{{$index}}" class="collapse">
                             <!-- Address -->
                             <div class="data" ng-if="x.address">
-                                <span><b>Address:</b> <br>{{x.address}}</span><br>
+                                <span><span class="fa fa-map-marker"></span> <b>Address:</b> <br>{{x.address}}</span><br>
                             </div>
                             <!-- Details -->
                             <div class="data" ng-if="x.details">
-                                <span><b>Details:</b> <br>{{x.details}}</span><br>
+                                <span><span class="fa fa-info-circle"></span> <b>Details:</b> <br>{{x.details}}</span><br>
                             </div>
                         </div>
                     </div>
