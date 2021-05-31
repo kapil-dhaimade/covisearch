@@ -46,37 +46,43 @@ class WebSourceRepoImpl(resourcemapping.WebSourceRepo):
 
     def get_web_sources_for_filter(self, search_filter: entities.SearchFilter) -> \
             Dict[str, resourcemapping.WebSource]:
-        web_src_doc_collection = self._db.collection('web_sources').where(
-            'scope', 'in', _possible_web_src_scopes_for_filter(search_filter)).stream()
+        web_src_doc_collection = self._db.collection('web_sources').stream()
+        web_src_dicts = [x.to_dict() for x in web_src_doc_collection]
         web_srcs_for_filter = [_firestore_to_web_src(x, search_filter)
-                               for x in web_src_doc_collection]
+                               for x in web_src_dicts if _web_src_scope_matches_filter(x, search_filter)]
         return {web_src.web_resource_url: web_src
                 for web_src in web_srcs_for_filter if web_src is not None}
 
 
-# NOTE: KAPIL: Take care of state-wide sources and subset of resources later.
-# Eg. values: pan_india_all_resources, maharashtra_plasma, bengaluru_hospital_bed,
-def _possible_web_src_scopes_for_filter(search_filter: entities.SearchFilter):
-    res_type_string = entities.CovidResourceType.to_string(search_filter.resource_type)
-    possible_web_scopes = [
-        'pan_india_all_resources', 'pan_india_' + res_type_string,
-        search_filter.city + '_all_resources',
-        search_filter.city + '_' + res_type_string
-    ]
-    possible_states_for_city = geoutil.get_state_for_city(search_filter.city)
-    for state in possible_states_for_city:
-        possible_web_scopes.extend(
-            [
-                state + '_all_resources', state + '_' + res_type_string
-            ])
-    return possible_web_scopes
+# Eg: location_scope=maharashtra AND resource_type_label_mapping has oxygen,plasma,ambulance
+# Eg: location_scope=pan_india AND resource_type_label_mapping has
+#     oxygen,hospital_bed,hospital_bed_icu,ambulance,plasma
+# Eg: location_scope=delhi,maharashtra,andhra pradesh AND resource_type_label_mapping has hospital_bed
+def _web_src_scope_matches_filter(web_src_dict: Dict,
+                                  search_filter: entities.SearchFilter) -> bool:
+    location_scope: str = web_src_dict['location_scope']
+    location_match = False
+    if location_scope == 'pan_india':
+        location_match = True
+    supported_locations = location_scope.split(',')
+    supported_locations = [x.lower() for x in supported_locations]
+    if search_filter.city in supported_locations:
+        location_match = True
+    possible_states_for_city_filter = geoutil.get_state_for_city(search_filter.city)
+    if set(possible_states_for_city_filter).intersection(supported_locations):
+        location_match = True
+
+    resource_type_label_mapping_dict: Dict[str, str] = web_src_dict['resource_type_label_mapping']
+    resource_type_str = entities.CovidResourceType.to_string(search_filter.resource_type)
+    resource_type_match = True if resource_type_str in resource_type_label_mapping_dict else False
+
+    return location_match and resource_type_match
 
 
 def _firestore_to_web_src(
-        web_src_doc: firestore.DocumentSnapshot,
+        web_src_dict: Dict,
         search_filter: entities.SearchFilter) -> resourcemapping.WebSource:
 
-    web_src_dict = web_src_doc.to_dict()
     try:
         request_content_type = _content_type_from_string(web_src_dict['request_content_type']) \
             if 'request_content_type' in web_src_dict else None

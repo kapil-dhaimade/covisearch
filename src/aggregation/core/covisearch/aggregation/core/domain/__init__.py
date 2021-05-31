@@ -108,6 +108,7 @@ def _scrape_data_from_web_sources(web_sources: Dict[str, resourcemapping.WebSour
 #         # dt_mapper = resourcemapping.get_datetime_format_mapper(datetimeutil.DatetimeFormat.UNIX_TIMESTAMP_MILLISEC)
 #         # dt2 = dt_mapper('1621189375010').isoformat()
 #
+#
 #         elapsedtime.start_measuring_total()
 #
 #         ctx = elapsedtime.start_measuring_operation('firestore DB init')
@@ -118,7 +119,7 @@ def _scrape_data_from_web_sources(web_sources: Dict[str, resourcemapping.WebSour
 #
 #         aggregated_res_info_repo = infra.AggregatedResourceInfoRepoImpl(db)
 #         web_src_repo = infra.WebSourceRepoImpl(db)
-#         search_filter = SearchFilter('mumbai', entities.CovidResourceType.OXYGEN, None)
+#         search_filter = SearchFilter('mumbai', entities.CovidResourceType.PLASMA, None)
 #         aggregate_covid_resources(search_filter, aggregated_res_info_repo, web_src_repo)
 #
 #         elapsedtime.stop_measuring_total()
