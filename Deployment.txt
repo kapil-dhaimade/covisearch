@@ -102,6 +102,29 @@
 		-Google Cloud Docs: 'gcloud functions deploy' command:
 		https://cloud.google.com/sdk/gcloud/reference/functions/deploy
 		
+-Portal:
+	-Cloud Hosting of Static Pages using Cloud Storage:
+		-Use this page for static hosting over HTTP:
+		https://cloud.google.com/storage/docs/hosting-static-website-http
+	-HTTPS Hosting using Cloud Storage: 
+		-After following most of above steps, do the following.
+		-Need to create HTTPS LB on Google Cloud Network Service Load Balancer section and give our Cloud Storage bucket as backend for the same. 
+		-On front-end we need to give HTTPS protocol, create and use a reserved static IP, and create an SSL cert managed by Google and give our URLs www.covisearch.in and covisearch.in in the SSL cert. 
+		-On our domain name registrar, we need to add 2 A records, one for www, one for '@', to point to our static IP.
+		-Google takes upto 60mins to provision cert and validate our domain in SSL cert. 
+		-NOTE: Don't need to do the 
+	-HTTP to HTTPS traffic redirection:
+		-Create new HTTP LB on Google Cloud Network Service Load Balancer section.
+		-Don't specify any backend.
+		-In frontend, give HTTP protocol, select same static IP as used in above HTTPS load balancer.
+		-Go to the HTTPS LB again -> Go to backend -> Edit -> Go to advanced settings -> Add custom response header here:
+			-header name: Strict-Transport-Security
+			-header value: max-age=31536000; includeSubDomains; preload
+		-The custom header is so that next time browsers redirect automatically instead of HTTP LB sending 301.
+	-Sources:
+		-HTTPS Static Hosting on Google Cloud with Cloud Storage: https://cloud.google.com/storage/docs/hosting-static-website
+		-HTTP to HTTPS traffic redirection: https://cloud.google.com/load-balancing/docs/https/setting-up-http-https-redirect
+		
 	
 ----Deployment settings for Covisearch components----
 -Data Syncer:
@@ -125,7 +148,15 @@
 		
 -Portal:
 	-Cloud Hosting Static Page:
-		-Cloud Storage
+		-Set up Cloud Storage
+			-Bucket name: www.covisearch.in
+		-Set up HTTPS LB
+			-Set backend bucket as above bucket name.
+			-Reserve static IP, HTTPS
+			-SSL cert
+			-2 A records in our domain name registrar to point to static IP
+		-Set up HTTP to HTTPS redirection:
+			-Custom header 'Strict-Transport-Security' in HTTPS LB for browsers to redirect automatically
 	
 	
 ----Additional Sources----
