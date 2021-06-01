@@ -12,6 +12,7 @@ from covisearch.aggregation.core.domain.entities import \
     CovidResourceInfo, CovidResourceType, OxygenInfo, \
     PlasmaInfo, HospitalBedsInfo, SearchFilter, HospitalBedsICUInfo
 import covisearch.util.datetimeutil
+import covisearch.util.geoutil as geoutil
 
 
 # NOTE: KAPIL: Python Dict convertible to JSON provided data types are
@@ -39,33 +40,42 @@ def map_res_info_to_covisearch(web_src_res_info: Dict, search_filter: SearchFilt
 
 
 class WebSource:
-    WEB_RES_URL_TEMPLATE_CITY_PLACEHOLDER = '{CITY}'
-    WEB_RES_URL_TEMPLATE_RESOURCE_TYPE_PLACEHOLDER = '{RESOURCE_TYPE}'
+    WEB_SRC_CITY_PLACEHOLDER = '{CITY}'
+    WEB_SRC_RESOURCE_TYPE_PLACEHOLDER = '{RESOURCE_TYPE}'
+    WEB_SRC_STATE_PLACEHOLDER = '{STATE}'
 
     def __init__(self, name: str, homepage_url: URL, web_resource_url_template: URL,
                  card_source_url_template: URL,
                  request_content_type: ContentType, request_body_template: str,
                  response_content_type: ContentType,
                  data_table_extract_selectors: Dict[str, str],
+                 data_table_filter_templates: Dict[str, str],
                  resource_mapping_desc: Dict[str, 'FieldMappingDesc'],
                  resource_type_label_mapping: Dict[str, str],
                  city_name_case_mapping: LetterCaseType, search_filter: SearchFilter):
+
         self._name = name
         self._homepage_url: URL = homepage_url
-        web_src_city = self._map_to_web_src_city_by_letter_case_mapping(search_filter.city, city_name_case_mapping)
+        web_src_city = self._map_to_web_src_city_by_letter_case_mapping(
+            search_filter.city, city_name_case_mapping)
         # NOTE: KAPIL: URL with place-holders for search filter params in {param} blocks
         # Eg: http://covidres.com/city={CITY}&resource={RESOURCE_TYPE}
         self._web_resource_url = self._url_from_template(
             web_resource_url_template, web_src_city, search_filter, resource_type_label_mapping)
+        self._card_source_url: URL = self._url_from_template(
+            card_source_url_template, web_src_city, search_filter, resource_type_label_mapping)
+
         self._request_content_type: ContentType = request_content_type
         self._request_body: str = self._request_body_from_template(
             request_body_template, web_src_city, search_filter, resource_type_label_mapping)
         self._response_content_type: ContentType = response_content_type
+
         self._data_table_extract_selectors: Dict[str, str] = \
             data_table_extract_selectors
+        self._data_table_filters: Dict[str, str] = self._data_table_filters_from_templates(
+            data_table_filter_templates, web_src_city, search_filter, resource_type_label_mapping)
+
         self._resource_mapping_desc: Dict[str, 'FieldMappingDesc'] = resource_mapping_desc
-        self._card_source_url: URL = self._url_from_template(
-            card_source_url_template, web_src_city, search_filter, resource_type_label_mapping)
 
     @property
     def name(self) -> str:
@@ -100,6 +110,10 @@ class WebSource:
         return self._data_table_extract_selectors
 
     @property
+    def data_table_filters(self) -> Dict[str, str]:
+        return self._data_table_filters
+
+    @property
     def resource_mapping_desc(self) -> Dict[str, 'FieldMappingDesc']:
         return self._resource_mapping_desc
 
@@ -113,8 +127,12 @@ class WebSource:
         url = url_template
 
         url = url.replace(
-            cls.WEB_RES_URL_TEMPLATE_CITY_PLACEHOLDER,
+            cls.WEB_SRC_CITY_PLACEHOLDER,
             urllib.parse.quote(web_src_city))
+
+        possible_states = geoutil.get_states_for_city(search_filter.city)
+        if possible_states:
+            url = url.replace(cls.WEB_SRC_STATE_PLACEHOLDER, possible_states[0])
 
         filter_res_type_str = CovidResourceType.to_string(search_filter.resource_type)
 
@@ -122,7 +140,7 @@ class WebSource:
             raise NoResourceTypeMappingError()
 
         url = url.replace(
-            cls.WEB_RES_URL_TEMPLATE_RESOURCE_TYPE_PLACEHOLDER,
+            cls.WEB_SRC_RESOURCE_TYPE_PLACEHOLDER,
             urllib.parse.quote(resource_type_label_mapping[filter_res_type_str]))
 
         # TODO: KAPIL: Blood group filter mapping
@@ -135,14 +153,19 @@ class WebSource:
             return None
 
         request_body = request_body_template
-        request_body = request_body.replace(cls.WEB_RES_URL_TEMPLATE_CITY_PLACEHOLDER, web_src_city)
+        request_body = request_body.replace(cls.WEB_SRC_CITY_PLACEHOLDER, web_src_city)
+
+        possible_states = geoutil.get_states_for_city(search_filter.city)
+        if possible_states:
+            request_body = request_body.replace(
+                cls.WEB_SRC_STATE_PLACEHOLDER, possible_states[0])
 
         filter_res_type_str = CovidResourceType.to_string(search_filter.resource_type)
 
         if filter_res_type_str not in resource_type_label_mapping:
             raise NoResourceTypeMappingError()
         request_body = request_body.replace(
-            cls.WEB_RES_URL_TEMPLATE_RESOURCE_TYPE_PLACEHOLDER,
+            cls.WEB_SRC_RESOURCE_TYPE_PLACEHOLDER,
             resource_type_label_mapping[filter_res_type_str])
 
         # TODO: KAPIL: Blood group filter mapping
@@ -161,6 +184,35 @@ class WebSource:
 
         if city_case_mapping is LetterCaseType.TITLECASE:
             return city.title()
+
+    @classmethod
+    def _data_table_filters_from_templates(cls, data_table_filters: Dict[str, str],
+                                           web_src_city: str, search_filter: SearchFilter,
+                                           resource_type_label_mapping: Dict[str, str]) -> Dict[str, str]:
+        if data_table_filters is None:
+            return {}
+        return {key: cls._data_table_filter_from_template(filter_template, web_src_city, search_filter,
+                                                          resource_type_label_mapping)
+                for (key, filter_template) in data_table_filters.items()}
+
+    @classmethod
+    def _data_table_filter_from_template(cls, data_table_filter_template: str, web_src_city: str,
+                                         search_filter: SearchFilter,
+                                         resource_type_label_mapping: Dict[str, str]) -> str:
+        data_table_filter = data_table_filter_template
+        data_table_filter = data_table_filter.replace(cls.WEB_SRC_CITY_PLACEHOLDER, web_src_city)
+
+        possible_states = geoutil.get_states_for_city(search_filter.city)
+        if possible_states:
+            data_table_filter = data_table_filter.replace(cls.WEB_SRC_STATE_PLACEHOLDER, possible_states[0])
+
+        filter_res_type_str = CovidResourceType.to_string(search_filter.resource_type)
+
+        if filter_res_type_str not in resource_type_label_mapping:
+            raise NoResourceTypeMappingError()
+        data_table_filter = data_table_filter.replace(cls.WEB_SRC_RESOURCE_TYPE_PLACEHOLDER,
+                                                      resource_type_label_mapping[filter_res_type_str])
+        return data_table_filter
 
 
 class NoResourceTypeMappingError(Exception):
@@ -361,6 +413,7 @@ def _sanitize_phone_no(phone_no: str) -> str:
     sanitized_phone_no = phone_no.strip()
     sanitized_phone_no = sanitized_phone_no.replace(' / ', '/')
     sanitized_phone_no = sanitized_phone_no.replace(' , ', '/')
+    sanitized_phone_no = sanitized_phone_no.replace(', ', '/')
     sanitized_phone_no = sanitized_phone_no.replace(',', '/')
     sanitized_phone_no = sanitized_phone_no.replace(' | ', '/')
     sanitized_phone_no = sanitized_phone_no.replace('|', '/')

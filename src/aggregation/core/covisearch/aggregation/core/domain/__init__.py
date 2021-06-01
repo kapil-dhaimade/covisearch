@@ -78,8 +78,8 @@ def _scrape_data_from_web_sources(web_sources: Dict[str, resourcemapping.WebSour
     data_scraping_params = [
         webdatascraper.DataScrapingParams(
             web_src.web_resource_url, web_src.request_content_type, web_src.request_body,
-            web_src.response_content_type,
-            web_src.data_table_extract_selectors, {})
+            web_src.response_content_type, web_src.data_table_extract_selectors,
+            web_src.data_table_filters, {})
         for web_src in web_sources.values()
     ]
 
@@ -119,7 +119,7 @@ def _scrape_data_from_web_sources(web_sources: Dict[str, resourcemapping.WebSour
 #
 #         aggregated_res_info_repo = infra.AggregatedResourceInfoRepoImpl(db)
 #         web_src_repo = infra.WebSourceRepoImpl(db)
-#         search_filter = SearchFilter('mumbai', entities.CovidResourceType.PLASMA, None)
+#         search_filter = SearchFilter('mumbai', entities.CovidResourceType.OXYGEN, None)
 #         aggregate_covid_resources(search_filter, aggregated_res_info_repo, web_src_repo)
 #
 #         elapsedtime.stop_measuring_total()

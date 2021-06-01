@@ -70,7 +70,7 @@ def _web_src_scope_matches_filter(web_src_dict: Dict,
         if search_filter.city in supported_locations:
             location_match = True
         else:
-            possible_states_for_city_filter = geoutil.get_state_for_city(search_filter.city)
+            possible_states_for_city_filter = geoutil.get_states_for_city(search_filter.city)
             if set(possible_states_for_city_filter).intersection(supported_locations):
                 location_match = True
 
@@ -98,6 +98,9 @@ def _firestore_to_web_src(
         card_source_url_template = web_src_dict['card_source_url_template'] \
             if 'card_source_url_template' in web_src_dict else None
 
+        data_table_filter_templates = web_src_dict['data_table_filter_templates'] \
+            if 'data_table_filter_templates' in web_src_dict else None
+
         return resourcemapping.WebSource(
             web_src_dict['name'], web_src_dict['homepage_url'],
             web_src_dict['web_resource_url_template'],
@@ -105,6 +108,7 @@ def _firestore_to_web_src(
             request_content_type, request_body_template,
             _content_type_from_string(web_src_dict['response_content_type']),
             web_src_dict['data_table_extract_selectors'],
+            data_table_filter_templates,
             _get_resource_mapping_desc_model(web_src_dict['resource_mapping_desc']),
             web_src_dict['resource_type_label_mapping'],
             city_name_case_mapping, search_filter)

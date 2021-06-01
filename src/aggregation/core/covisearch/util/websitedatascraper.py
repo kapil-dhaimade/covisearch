@@ -5,6 +5,7 @@ import traceback
 import multiprocessing
 import queue
 import time
+import re
 
 import scrapy
 from scrapy import crawler
@@ -128,6 +129,7 @@ def _is_scrapy_process_start_signalled() -> bool:
 class DataScrapingParams:
     def __init__(self, url: URL, request_content_type: ContentType, request_body: str,
                  response_content_type: ContentType, table_column_selectors: Dict[str, str],
+                 table_row_regex_filters: Dict[str, str],
                  fields_selectors: Dict[str, str]):
         self._url = url
         self._request_content_type: ContentType = request_content_type
@@ -137,6 +139,7 @@ class DataScrapingParams:
         # Refer 'https://jsonpathfinder.com/' to get JSONPaths from JSON
         # Refer 'http://videlibri.sourceforge.net/cgi-bin/xidelcgi' to get XPath from XML/HTML
         self._table_column_selectors = table_column_selectors
+        self._table_row_regex_filters = table_row_regex_filters
         self._fields_selectors = fields_selectors
 
     @property
@@ -158,6 +161,10 @@ class DataScrapingParams:
     @property
     def table_column_selectors(self) -> Dict[str, str]:
         return self._table_column_selectors
+
+    @property
+    def table_row_regex_filters(self) -> Dict[str, str]:
+        return self._table_row_regex_filters
 
     @property
     def fields_selectors(self) -> Dict[str, str]:
@@ -294,7 +301,20 @@ def scrape_table_from_response(
     column_names = [col_selector_pair[0] for col_selector_pair in table_column_selectors]
     table_rows = [{col: row_col_val for col, row_col_val in zip(column_names, row_vals)}
                   for row_vals in zip(*table_vals_by_column)]
+    table_rows = _filter_table_rows(table_rows, scraping_params.table_row_regex_filters)
     return table_rows
+
+
+def _filter_table_rows(table_rows: List[Dict[str, str]], row_regex_filters: Dict[str, str]) -> \
+        List[Dict[str, str]]:
+    return [row for row in table_rows if _row_matches_filters(row, row_regex_filters)]
+
+
+def _row_matches_filters(table_row: Dict[str, str], row_regex_filters: Dict[str, str]) -> bool:
+    for col_name, regex_filter in row_regex_filters.items():
+        if not re.search(regex_filter, table_row[col_name], re.IGNORECASE):
+            return False
+    return True
 
 
 class ContentTypeSelectorParser(ABC):

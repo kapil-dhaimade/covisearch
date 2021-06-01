@@ -159,6 +159,10 @@ def set_timezone_if_not_present(timestamp: datetime, time_zone) -> datetime:
 #
 #
 # if __name__=='__main__':
+#     verified_pat = re.compile('mumbai$', re.IGNORECASE)
+#     res1 = verified_pat.search('available mumbai verifimumbaied')
+#     res2 = verified_pat.search('mUmbai')
+#     res3 = verified_pat.search('Not verified')
 #     # dateutil is handling this datetime string format successfully!
 #     isofmt1 = map_short_datetime_dd_mm_to_utc_datetime('Mon May 31 21:27:42 +0000 2021', tz.gettz('Asia/Kolkata'))
 #     isofmt2 = map_short_datetime_dd_mm_to_utc_datetime('29/4 20:03', tz.gettz('Asia/Kolkata'))
