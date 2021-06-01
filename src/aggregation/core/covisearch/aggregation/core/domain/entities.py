@@ -46,7 +46,6 @@ class CovidResourceInfo:
     POST_TIME_LABEL = 'post_time'
     RESOURCE_TYPE_LABEL = 'resource_type'
     CITY_LABEL = 'city'
-    AVAILABILITY_LABEL = 'availability'
     LAST_VERIFIED_UTC_LABEL = 'last_verified_utc'
     WEB_SOURCE_NAME_LABEL = 'web_source_name'
     CARD_SOURCE_URL_LABEL = 'card_source_url'
@@ -82,12 +81,7 @@ class CovidResourceInfo:
         return list(covisearch_res_by_phone.values())
 
     @classmethod
-    def remove_unavailable_resources(cls, covisearch_resources: List[Dict]) -> List[Dict]:
-        return [x for x in covisearch_resources if x[cls.AVAILABILITY_LABEL] is True]
-
-    @classmethod
     def remove_redundant_fields(cls, covisearch_resources: List[Dict]) -> List[Dict]:
-        cls._remove_availability_field(covisearch_resources)
         return covisearch_resources
 
     @classmethod
@@ -120,11 +114,6 @@ class CovidResourceInfo:
             return res_info_a
         else:
             return res_info_b
-
-    @classmethod
-    def _remove_availability_field(cls, covisearch_resources: List[Dict]):
-        for res_info in covisearch_resources:
-            res_info.pop(cls.AVAILABILITY_LABEL, None)
 
     @classmethod
     def _compare_datetime_field(cls, res_info_a: Dict, res_info_b: Dict,

@@ -250,19 +250,7 @@ def _map_common_res_info(web_src_res_info: Dict, res_mapping_desc: Dict[str, 'Fi
 
     _map_last_verified_time(covisearch_res, res_mapping_desc, web_src_res_info)
 
-    _map_availability(covisearch_res, res_mapping_desc, web_src_res_info)
-
     _map_card_source_url(covisearch_res, res_mapping_desc, web_src_res_info)
-
-
-def _map_availability(covisearch_res, res_mapping_desc, web_src_res_info):
-    availability_label = CovidResourceInfo.AVAILABILITY_LABEL
-    if availability_label in res_mapping_desc:
-        availability_mapping = res_mapping_desc[availability_label]
-        web_src_availability = web_src_res_info[availability_mapping.web_src_field_name]
-        covisearch_res[availability_label] = _map_availability_value(web_src_availability)
-    else:
-        covisearch_res[availability_label] = True
 
 
 def _map_last_verified_time(covisearch_res, res_mapping_desc, web_src_res_info):
@@ -350,12 +338,6 @@ def _map_card_source_url(covisearch_res: Dict, res_mapping_desc: Dict[str, 'Fiel
             covisearch_res[card_source_url_label] + web_src_res_info[card_source_url_mapping.web_src_field_name]
 
 
-def _map_availability_value(web_src_availability_value: str) -> bool:
-    possible_available_values = ['available', 'yes', 'true', '1']
-    sanitized_availability_str = _sanitize_availability_str(web_src_availability_value.lower())
-    return sanitized_availability_str in possible_available_values
-
-
 # TODO: KAPIL: Add proper details for specific res types later if websites give the info.
 def _map_plasma(web_src_res_info: Dict, res_mapping_desc: Dict[str, 'FieldMappingDesc'],
                 covisearch_res: Dict):
@@ -429,10 +411,6 @@ def _sanitize_string_field(field_value: str) -> str:
     sanitized_field = sanitized_field.replace('\r', '')
     sanitized_field = sanitized_field.replace('\t', ' ')
     return sanitized_field
-
-
-def _sanitize_availability_str(availability_str: str) -> str:
-    return availability_str.strip()
 
 
 # NOTE: KAPIL: Desc format:

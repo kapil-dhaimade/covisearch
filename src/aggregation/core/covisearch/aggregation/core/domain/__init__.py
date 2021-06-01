@@ -45,10 +45,6 @@ def _aggregate_resources_from_covid_sources(
     covisearch_resources = CovidResourceInfo.remove_duplicates(covisearch_resources)
     elapsedtime.stop_measuring_operation(ctx_3)
 
-    ctx_4 = elapsedtime.start_measuring_operation('removing unavailable resources')
-    covisearch_resources = CovidResourceInfo.remove_unavailable_resources(covisearch_resources)
-    elapsedtime.stop_measuring_operation(ctx_4)
-
     ctx_5 = elapsedtime.start_measuring_operation('removing redundant fields')
     covisearch_resources = CovidResourceInfo.remove_redundant_fields(covisearch_resources)
     elapsedtime.stop_measuring_operation(ctx_5)
@@ -119,7 +115,7 @@ def _scrape_data_from_web_sources(web_sources: Dict[str, resourcemapping.WebSour
 #
 #         aggregated_res_info_repo = infra.AggregatedResourceInfoRepoImpl(db)
 #         web_src_repo = infra.WebSourceRepoImpl(db)
-#         search_filter = SearchFilter('mumbai', entities.CovidResourceType.OXYGEN, None)
+#         search_filter = SearchFilter('panvel', entities.CovidResourceType.PLASMA, None)
 #         aggregate_covid_resources(search_filter, aggregated_res_info_repo, web_src_repo)
 #
 #         elapsedtime.stop_measuring_total()
