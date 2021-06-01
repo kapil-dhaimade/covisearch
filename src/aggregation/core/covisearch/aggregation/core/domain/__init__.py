@@ -104,7 +104,7 @@ def _scrape_data_from_web_sources(web_sources: Dict[str, resourcemapping.WebSour
 #         # isofmt1 = datetimeutil.map_short_datetime_dd_mm_to_utc_datetime(
 #         # '05-06-2021 10:19:49', datetime.timezone.utc)
 #
-#         # dt = resourcemapping._map_short_datetime_timestamp_to_covisearch('05-06-2021 10:19:49pm').isoformat()
+#         # dt = resourcemapping._map_short_datetime_dd_mm_time_to_covisearch('05-06-2021 10:19:49pm').isoformat()
 #         # dt_mapper = resourcemapping.get_datetime_format_mapper(datetimeutil.DatetimeFormat.UNIX_TIMESTAMP_MILLISEC)
 #         # dt2 = dt_mapper('1621189375010').isoformat()
 #

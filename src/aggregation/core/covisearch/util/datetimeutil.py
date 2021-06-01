@@ -10,12 +10,14 @@ class DatetimeFormat(enum.Enum):
     AGO = 1
     # 2021-05-16T21:06:17.000000+05:30
     ISOFORMAT = 2
-    # 2/05 5:35 PM, 27/12 at 6:09 AM, etc.
-    SHORT_DATETIME_DD_MM = 3,
+    # 2/05 5:35 PM (2-May), 27/12 at 6:09 AM, etc.
+    SHORT_DATETIME_DD_MM = 3
+    # 2/05 5:35 PM (5-Feb), 12/27 at 6:09 AM, etc.
+    SHORT_DATETIME_MM_DD = 4
     # eg: 1622140319 (number of seconds since January 1, 1970 (midnight UTC/GMT), not counting leap seconds)
-    UNIX_TIMESTAMP_SEC = 4,
+    UNIX_TIMESTAMP_SEC = 5
     # eg: 1622140319000 (number of millisecs since January 1, 1970 (midnight UTC/GMT), not counting leap seconds)
-    UNIX_TIMESTAMP_MILLISEC = 5
+    UNIX_TIMESTAMP_MILLISEC = 6
 
 
 # NOTE: KAPIL: Refer 'https://regexr.com/' to test out regex
@@ -110,6 +112,14 @@ def map_short_datetime_dd_mm_to_utc_datetime(short_datetime_str: str, time_zone)
     return utc_datetime.astimezone(tz=timezone.utc)
 
 
+def map_short_datetime_mm_dd_to_utc_datetime(short_datetime_str: str, time_zone) -> datetime:
+    # NOTE:KAPIL: Giving preference to MM-DD-YY
+    utc_datetime = dateutilparser.parse(short_datetime_str,
+                                        parserinfo=dateutilparser.parserinfo(dayfirst=False))
+    utc_datetime = set_timezone_if_not_present(utc_datetime, time_zone)
+    return utc_datetime.astimezone(tz=timezone.utc)
+
+
 def map_unix_timestamp_to_utc_datetime(unix_timestamp_str: str, in_millisec: bool) -> datetime:
     unix_timestamp = int(unix_timestamp_str)
     if in_millisec:
@@ -145,6 +155,10 @@ def set_timezone_if_not_present(timestamp: datetime, time_zone) -> datetime:
     return timestamp
 
 
+# from dateutil import tz
+#
+#
 # if __name__=='__main__':
-#     isofmt1 = map_short_datetime_dd_mm_to_utc_datetime('2021-05-27 10:19:49')
+#     # dateutil is handling this datetime string format successfully!
+#     isofmt1 = map_short_datetime_dd_mm_to_utc_datetime('Mon May 31 21:27:42 +0000 2021', tz.gettz('Asia/Kolkata'))
 #     print(9)

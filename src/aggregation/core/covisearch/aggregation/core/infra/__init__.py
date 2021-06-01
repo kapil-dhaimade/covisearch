@@ -64,13 +64,15 @@ def _web_src_scope_matches_filter(web_src_dict: Dict,
     location_match = False
     if location_scope == 'pan_india':
         location_match = True
-    supported_locations = location_scope.split(',')
-    supported_locations = [x.lower() for x in supported_locations]
-    if search_filter.city in supported_locations:
-        location_match = True
-    possible_states_for_city_filter = geoutil.get_state_for_city(search_filter.city)
-    if set(possible_states_for_city_filter).intersection(supported_locations):
-        location_match = True
+    else:
+        supported_locations = location_scope.split(',')
+        supported_locations = [x.lower() for x in supported_locations]
+        if search_filter.city in supported_locations:
+            location_match = True
+        else:
+            possible_states_for_city_filter = geoutil.get_state_for_city(search_filter.city)
+            if set(possible_states_for_city_filter).intersection(supported_locations):
+                location_match = True
 
     resource_type_label_mapping_dict: Dict[str, str] = web_src_dict['resource_type_label_mapping']
     resource_type_str = entities.CovidResourceType.to_string(search_filter.resource_type)
