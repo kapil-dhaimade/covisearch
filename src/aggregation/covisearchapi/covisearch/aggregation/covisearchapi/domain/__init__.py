@@ -40,7 +40,7 @@ def fetch_resource_for_filter(request: Request):
     city = request.args["city"]
     resource_type = request.args["resource_type"]
     page_no = request.args["page_no"]
-    supported_resource_type = ["oxygen", "ambulance", "hospital_bed", "hospital_bed_icu", "plasma"]
+    supported_resource_type = ["oxygen", "ambulance", "hospital_bed", "hospital_bed_icu", "plasma", "ecmo", "food", "testing", "medicine", "ventilator"]
 
     if resource_type is None or city is None or resource_type.lower() not in supported_resource_type:
         return "Invalid Input!!!", 400, headers

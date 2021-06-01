@@ -14,6 +14,11 @@ class CovidResourceType(enum.Enum):
     HOSPITAL_BED = 3
     HOSPITAL_BED_ICU = 4
     AMBULANCE = 5
+    ECMO = 6
+    FOOD = 7
+    TESTING = 8
+    MEDICINE = 9
+    VENTILATOR = 10
 
     @staticmethod
     def to_string(resource_type: 'CovidResourceType') -> str:
@@ -23,6 +28,11 @@ class CovidResourceType(enum.Enum):
             CovidResourceType.HOSPITAL_BED: 'hospital_bed',
             CovidResourceType.OXYGEN: 'oxygen',
             CovidResourceType.AMBULANCE: 'ambulance',
+            CovidResourceType.ECMO: 'ecmo',
+            CovidResourceType.FOOD: 'food',
+            CovidResourceType.TESTING: 'testing',
+            CovidResourceType.MEDICINE: 'medicine',
+            CovidResourceType.VENTILATOR: 'ventilator'
         }
         return res_type_strings[resource_type]
 
@@ -33,7 +43,12 @@ class CovidResourceType(enum.Enum):
             'hospital_bed_icu': CovidResourceType.HOSPITAL_BED_ICU,
             'hospital_bed': CovidResourceType.HOSPITAL_BED,
             'oxygen': CovidResourceType.OXYGEN,
-            'ambulance': CovidResourceType.AMBULANCE
+            'ambulance': CovidResourceType.AMBULANCE,
+            'ecmo': CovidResourceType.ECMO,
+            'food': CovidResourceType.FOOD,
+            'testing': CovidResourceType.TESTING,
+            'medicine': CovidResourceType.MEDICINE,
+            'ventilator': CovidResourceType.VENTILATOR
         }
         return res_types[resource_type_str.lower()]
 
@@ -352,13 +367,48 @@ class AmbulanceInfo(CovidResourceInfo):
         return super().compare(res_info_a, res_info_b)
 
 
+class EcmoInfo(CovidResourceInfo):
+    @classmethod
+    def compare(cls, res_info_a: Dict, res_info_b: Dict) -> int:
+        return super().compare(res_info_a, res_info_b)
+
+
+class FoodInfo(CovidResourceInfo):
+    @classmethod
+    def compare(cls, res_info_a: Dict, res_info_b: Dict) -> int:
+        return super().compare(res_info_a, res_info_b)
+
+
+class TestingInfo(CovidResourceInfo):
+    @classmethod
+    def compare(cls, res_info_a: Dict, res_info_b: Dict) -> int:
+        return super().compare(res_info_a, res_info_b)
+
+
+class MedicineInfo(CovidResourceInfo):
+    @classmethod
+    def compare(cls, res_info_a: Dict, res_info_b: Dict) -> int:
+        return super().compare(res_info_a, res_info_b)
+
+
+class VentilatorInfo(CovidResourceInfo):
+    @classmethod
+    def compare(cls, res_info_a: Dict, res_info_b: Dict) -> int:
+        return super().compare(res_info_a, res_info_b)
+
+
 def get_res_info_comparator(resource_type: CovidResourceType):
     res_type_classes = {
         CovidResourceType.PLASMA: PlasmaInfo,
         CovidResourceType.OXYGEN: OxygenInfo,
         CovidResourceType.HOSPITAL_BED: HospitalBedsInfo,
         CovidResourceType.HOSPITAL_BED_ICU: HospitalBedsICUInfo,
-        CovidResourceType.AMBULANCE: AmbulanceInfo
+        CovidResourceType.AMBULANCE: AmbulanceInfo,
+        CovidResourceType.ECMO: EcmoInfo,
+        CovidResourceType.FOOD: FoodInfo,
+        CovidResourceType.TESTING: TestingInfo,
+        CovidResourceType.MEDICINE: MedicineInfo,
+        CovidResourceType.VENTILATOR: VentilatorInfo
     }
     return res_type_classes[resource_type].compare
 

@@ -231,7 +231,13 @@ def _get_specific_res_info_mapper(res_type: CovidResourceType):
         entities.CovidResourceType.OXYGEN: _map_oxygen,
         entities.CovidResourceType.HOSPITAL_BED: _map_hospital_bed,
         entities.CovidResourceType.HOSPITAL_BED_ICU: _map_hospital_bed_icu,
-        entities.CovidResourceType.AMBULANCE: _map_ambulance
+        entities.CovidResourceType.AMBULANCE: _map_ambulance,
+        entities.CovidResourceType.ECMO: _map_ecmo,
+        entities.CovidResourceType.FOOD: _map_food,
+        entities.CovidResourceType.TESTING: _map_testing,
+        entities.CovidResourceType.MEDICINE: _map_medicine,
+        entities.CovidResourceType.VENTILATOR: _map_ventilator
+
     }
     return _web_res_to_covisearch_res_mapper[res_type]
 
@@ -386,6 +392,31 @@ def _map_bed_field(available_covid_beds_label, covisearch_res, res_mapping_desc,
 
 
 def _map_ambulance(web_src_res_info: Dict, res_mapping_desc: Dict[str, 'FieldMappingDesc'],
+                   covisearch_res: Dict):
+    pass
+
+
+def _map_ecmo(web_src_res_info: Dict, res_mapping_desc: Dict[str, 'FieldMappingDesc'],
+                   covisearch_res: Dict):
+    pass
+
+
+def _map_food(web_src_res_info: Dict, res_mapping_desc: Dict[str, 'FieldMappingDesc'],
+                   covisearch_res: Dict):
+    pass
+
+
+def _map_testing(web_src_res_info: Dict, res_mapping_desc: Dict[str, 'FieldMappingDesc'],
+                   covisearch_res: Dict):
+    pass
+
+
+def _map_medicine(web_src_res_info: Dict, res_mapping_desc: Dict[str, 'FieldMappingDesc'],
+                   covisearch_res: Dict):
+    pass
+
+
+def _map_ventilator(web_src_res_info: Dict, res_mapping_desc: Dict[str, 'FieldMappingDesc'],
                    covisearch_res: Dict):
     pass
 
