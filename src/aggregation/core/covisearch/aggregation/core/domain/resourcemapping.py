@@ -3,8 +3,11 @@ from typing import List, Dict, Tuple
 import re
 from datetime import datetime, timezone
 from dateutil import tz
+import dateutil.parser as dateutilparser
 from abc import ABC, abstractmethod
 import urllib.parse
+
+from phonenumbers import PhoneNumberMatcher, format_number, PhoneNumberFormat
 
 from covisearch.util.mytypes import *
 import covisearch.aggregation.core.domain.entities as entities
@@ -33,7 +36,7 @@ def map_res_info_to_covisearch(web_src_res_info: Dict, search_filter: SearchFilt
         CovidResourceInfo.CARD_SOURCE_URL_LABEL: web_src.card_source_url
     }
 
-    _map_common_res_info(web_src_res_info, web_src.resource_mapping_desc, covisearch_res_info)
+    _map_common_res_info(web_src_res_info, web_src.resource_mapping_desc, covisearch_res_info, search_filter)
     map_specific_res_info = _get_specific_res_info_mapper(search_filter.resource_type)
     map_specific_res_info(web_src_res_info, web_src.resource_mapping_desc, covisearch_res_info)
     return covisearch_res_info
@@ -236,19 +239,19 @@ def _get_specific_res_info_mapper(res_type: CovidResourceType):
         entities.CovidResourceType.FOOD: _map_food,
         entities.CovidResourceType.TESTING: _map_testing,
         entities.CovidResourceType.MEDICINE: _map_medicine,
-        entities.CovidResourceType.VENTILATOR: _map_ventilator
-
+        entities.CovidResourceType.VENTILATOR: _map_ventilator,
+        entities.CovidResourceType.HELPLINE: _map_helpline
     }
     return _web_res_to_covisearch_res_mapper[res_type]
 
 
 def _map_common_res_info(web_src_res_info: Dict, res_mapping_desc: Dict[str, 'FieldMappingDesc'],
-                         covisearch_res: Dict):
+                         covisearch_res: Dict, search_filter: SearchFilter):
     _map_contact_name(covisearch_res, res_mapping_desc, web_src_res_info)
 
     _map_address(covisearch_res, res_mapping_desc, web_src_res_info)
 
-    _map_phone(covisearch_res, res_mapping_desc, web_src_res_info)
+    _map_phones(covisearch_res, res_mapping_desc, web_src_res_info, search_filter)
 
     _map_details(covisearch_res, res_mapping_desc, web_src_res_info)
 
@@ -301,11 +304,17 @@ def _map_details(covisearch_res, res_mapping_desc, web_src_res_info):
         covisearch_res[details_label] = ''
 
 
-def _map_phone(covisearch_res, res_mapping_desc, web_src_res_info):
+def _map_phones(covisearch_res, res_mapping_desc, web_src_res_info, search_filter: SearchFilter):
     phone_label = CovidResourceInfo.PHONE_NO_LABEL
     phone_mapping = res_mapping_desc[phone_label]
     web_src_phone_no = web_src_res_info[phone_mapping.web_src_field_name]
-    covisearch_res[phone_label] = _sanitize_phone_no(web_src_phone_no)
+    non_uniform_format_phones = _sanitize_phone_no(web_src_phone_no)
+    covisearch_res[phone_label] = non_uniform_format_phones
+
+    # NOTE: KAPIL: [AS ON 01-Jun-2021] The new field for keeping phone numbers as uniformized list.
+    # Should replace old slash separated string later.
+    covisearch_res[CovidResourceInfo.PHONES_LABEL] = \
+        _extract_and_uniformized_phones(non_uniform_format_phones, search_filter.city)
 
 
 def _map_address(covisearch_res, res_mapping_desc, web_src_res_info):
@@ -412,13 +421,47 @@ def _map_testing(web_src_res_info: Dict, res_mapping_desc: Dict[str, 'FieldMappi
 
 
 def _map_medicine(web_src_res_info: Dict, res_mapping_desc: Dict[str, 'FieldMappingDesc'],
-                   covisearch_res: Dict):
+                  covisearch_res: Dict):
     pass
 
 
 def _map_ventilator(web_src_res_info: Dict, res_mapping_desc: Dict[str, 'FieldMappingDesc'],
-                   covisearch_res: Dict):
+                    covisearch_res: Dict):
     pass
+
+
+def _map_helpline(web_src_res_info: Dict, res_mapping_desc: Dict[str, 'FieldMappingDesc'],
+                  covisearch_res: Dict):
+    pass
+
+
+# NOTE: KAPIL: Converts all phones to E.164 phone number format for accurate matching. Eg: +918080867676
+def _extract_and_uniformized_phones(non_uniform_phones: str, city: str) -> List[str]:
+    non_uniform_phone_list = non_uniform_phones.split('/')
+    return [uniformized_phone for non_uniform_phone_str in non_uniform_phone_list
+            for uniformized_phone in _extract_and_uniformize_one_phone_str(non_uniform_phone_str, city)]
+
+
+# NOTE: KAPIL: Returns list because one phone number string may end up having more than
+# one phone number
+def _extract_and_uniformize_one_phone_str(non_uniform_phone: str, city: str) -> List[str]:
+    # NOTE: KAPIL: Country code is only IN as we operate in India only.
+    phone_no_matcher: PhoneNumberMatcher = PhoneNumberMatcher(non_uniform_phone, 'IN')
+    if phone_no_matcher.has_next():
+        return [format_number(match.number, PhoneNumberFormat.E164) for match in phone_no_matcher]
+    else:
+        uniformized_phone = _retry_uniformize_phone_by_adding_area_code(non_uniform_phone, city)
+        return uniformized_phone if uniformized_phone else [non_uniform_phone]
+
+
+def _retry_uniformize_phone_by_adding_area_code(non_uniform_phone: str, city: str) -> List[str]:
+    area_code = geoutil.get_phone_area_code_for_city(city)
+    phone_with_area_code = area_code + non_uniform_phone
+    phone_no_matcher: PhoneNumberMatcher = PhoneNumberMatcher(phone_with_area_code, 'IN')
+    if phone_no_matcher.has_next():
+        return [format_number(match.number, PhoneNumberFormat.E164) for match in phone_no_matcher]
+    else:
+        return []
 
 
 def _sanitize_phone_no(phone_no: str) -> str:
@@ -426,6 +469,8 @@ def _sanitize_phone_no(phone_no: str) -> str:
     sanitized_phone_no = phone_no.strip()
     sanitized_phone_no = sanitized_phone_no.replace(' / ', '/')
     sanitized_phone_no = sanitized_phone_no.replace(' , ', '/')
+    sanitized_phone_no = sanitized_phone_no.replace(',\n', '/')
+    sanitized_phone_no = sanitized_phone_no.replace(', \n', '/')
     sanitized_phone_no = sanitized_phone_no.replace(', ', '/')
     sanitized_phone_no = sanitized_phone_no.replace(',', '/')
     sanitized_phone_no = sanitized_phone_no.replace(' | ', '/')
@@ -513,7 +558,9 @@ def _map_ago_format_timestamp_to_covisearch(ago_format_datetime: str) -> datetim
 
 
 def _map_isoformat_timestamp_to_covisearch(isoformat_datetime_str: str) -> datetime:
-    covisearch_datetime = datetime.fromisoformat(isoformat_datetime_str)
+    # NOTE: KAPIL: Not using datetime.fromisoformat() here as it does not parse
+    # timestamps with 'Z' suffix. It's supposed to be only inverse of isoformat().
+    covisearch_datetime = dateutilparser.parse(isoformat_datetime_str)
     # NOTE: KAPIL: Since we operate in IST, setting default to IST.
     # Need to change if region changes or becomes multi-region.
     covisearch_datetime = _set_timezone_ist_if_not_present(covisearch_datetime)

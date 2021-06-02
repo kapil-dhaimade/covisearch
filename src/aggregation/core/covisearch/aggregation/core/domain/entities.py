@@ -19,6 +19,7 @@ class CovidResourceType(enum.Enum):
     TESTING = 8
     MEDICINE = 9
     VENTILATOR = 10
+    HELPLINE = 11
 
     @staticmethod
     def to_string(resource_type: 'CovidResourceType') -> str:
@@ -32,7 +33,8 @@ class CovidResourceType(enum.Enum):
             CovidResourceType.FOOD: 'food',
             CovidResourceType.TESTING: 'testing',
             CovidResourceType.MEDICINE: 'medicine',
-            CovidResourceType.VENTILATOR: 'ventilator'
+            CovidResourceType.VENTILATOR: 'ventilator',
+            CovidResourceType.HELPLINE: 'helpline'
         }
         return res_type_strings[resource_type]
 
@@ -48,7 +50,8 @@ class CovidResourceType(enum.Enum):
             'food': CovidResourceType.FOOD,
             'testing': CovidResourceType.TESTING,
             'medicine': CovidResourceType.MEDICINE,
-            'ventilator': CovidResourceType.VENTILATOR
+            'ventilator': CovidResourceType.VENTILATOR,
+            'helpline': CovidResourceType.HELPLINE
         }
         return res_types[resource_type_str.lower()]
 
@@ -58,6 +61,7 @@ class CovidResourceInfo:
     ADDRESS_LABEL = 'address'
     DETAILS_LABEL = 'details'
     PHONE_NO_LABEL = 'phone_no'
+    PHONES_LABEL = 'phones'
     POST_TIME_LABEL = 'post_time'
     RESOURCE_TYPE_LABEL = 'resource_type'
     CITY_LABEL = 'city'
@@ -66,34 +70,42 @@ class CovidResourceInfo:
     CARD_SOURCE_URL_LABEL = 'card_source_url'
 
     @classmethod
-    def score(cls, res_info: Dict) -> int:
-        score = 0
-        last_verified_time = res_info[cls.LAST_VERIFIED_UTC_LABEL]
-        if last_verified_time is not None:
-            verified_ago = util.elapsed_days(last_verified_time)
-            if verified_ago < 5:
-                score += 5 - verified_ago
+    def remove_duplicates(cls, covisearch_resources: List[Dict]) -> List[Dict]:
+        covisearch_res_by_phone: Dict[str, Dict] = {}
+        phones_label = cls.PHONES_LABEL
+        for covisearch_res_info in covisearch_resources:
+            phones: List[str] = covisearch_res_info[phones_label]
+            for phone in phones:
+                if phone in covisearch_res_by_phone:
+                    covisearch_res_by_phone[phone] = \
+                        cls._get_more_recently_verified_res_info(
+                            covisearch_res_info, covisearch_res_by_phone[phone])
+                else:
+                    covisearch_res_by_phone[phone] = covisearch_res_info
 
-        post_time = res_info[cls.POST_TIME_LABEL]
-        if post_time is not None:
-            posted_ago = util.elapsed_days(post_time)
-            if posted_ago < 1:
-                score += 1 - posted_ago
-        return score
+        return cls._merge_entries_with_multiple_phones(covisearch_res_by_phone)
 
     @classmethod
-    def remove_duplicates(cls, covisearch_resources: List[Dict]) -> List[Dict]:
-        covisearch_res_by_phone = {}
-        phone_label = cls.PHONE_NO_LABEL
-        for covisearch_res_info in covisearch_resources:
-            phone_no = covisearch_res_info[phone_label]
-            if covisearch_res_info[phone_label] in covisearch_res_by_phone:
-                covisearch_res_by_phone[phone_no] = \
-                    cls._get_more_recently_verified_res_info(covisearch_res_info,
-                                                             covisearch_res_by_phone[phone_no])
-            else:
-                covisearch_res_by_phone[phone_no] = covisearch_res_info
-        return list(covisearch_res_by_phone.values())
+    def _merge_entries_with_multiple_phones(cls, covisearch_res_by_phone) -> List[Dict]:
+        duplicates_removed_resources = list(covisearch_res_by_phone.values())
+        merged_resources = []
+        for resource_info in duplicates_removed_resources:
+            if not cls._is_resource_info_in_merged_resources_list(resource_info, merged_resources):
+                merged_resources.append(resource_info)
+        return merged_resources
+
+    @classmethod
+    def _is_resource_info_in_merged_resources_list(cls, resource_info: Dict,
+                                                   merged_resources: List[Dict]) -> bool:
+        for merged_resource_item in merged_resources:
+            # NOTE: KAPIL: This specifically checks if dict reference is present in list
+            # or not. This is not dict value or hash check. Hence, we need to use 'is' and
+            # not 'if resource_info in merged_resources' as 'in' returns true if values of
+            # dicts are matching even though they're different objects.
+            if resource_info is merged_resource_item:
+                return True
+        return False
+
 
     @classmethod
     def remove_redundant_fields(cls, covisearch_resources: List[Dict]) -> List[Dict]:
@@ -397,6 +409,12 @@ class VentilatorInfo(CovidResourceInfo):
         return super().compare(res_info_a, res_info_b)
 
 
+class HelplineInfo(CovidResourceInfo):
+    @classmethod
+    def compare(cls, res_info_a: Dict, res_info_b: Dict) -> int:
+        return super().compare(res_info_a, res_info_b)
+
+
 def get_res_info_comparator(resource_type: CovidResourceType):
     res_type_classes = {
         CovidResourceType.PLASMA: PlasmaInfo,
@@ -408,7 +426,8 @@ def get_res_info_comparator(resource_type: CovidResourceType):
         CovidResourceType.FOOD: FoodInfo,
         CovidResourceType.TESTING: TestingInfo,
         CovidResourceType.MEDICINE: MedicineInfo,
-        CovidResourceType.VENTILATOR: VentilatorInfo
+        CovidResourceType.VENTILATOR: VentilatorInfo,
+        CovidResourceType.HELPLINE: HelplineInfo
     }
     return res_type_classes[resource_type].compare
 

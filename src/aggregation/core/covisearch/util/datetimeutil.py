@@ -156,9 +156,40 @@ def set_timezone_if_not_present(timestamp: datetime, time_zone) -> datetime:
 
 
 # from dateutil import tz
+# import dateutil
+# import phonenumbers
+# import re
+# import jsonpath_ng
+# import json
 #
 #
 # if __name__=='__main__':
+#     res1 = {'a': 1}
+#     res2 = {'a': 1}
+#     listt = [res2, res1, res1]
+#     for item in listt:
+#         if res1 is item:
+#             print(9)
+#
+#     in1 = phonenumbers.parse('8805 989 3 06', 'US')
+#     e_164_1 = phonenumbers.format_number(in1, phonenumbers.PhoneNumberFormat.E164)
+#     is_valid1 = phonenumbers.is_valid_number(in1)
+#     in2 = phonenumbers.parse('222228756832', 'IN')
+#     is_possible = phonenumbers.is_possible_number(in2)
+#     is_valid = phonenumbers.is_valid_number(in2)
+#     e_164_2 = phonenumbers.format_number(in2, phonenumbers.PhoneNumberFormat.E164)
+#
+#     for match in phonenumbers.PhoneNumberMatcher('5226692000 (for 2 week days 25-12-2021)', 'IN'):
+#         qw: phonenumbers.PhoneNumber = match.number
+#         e = phonenumbers.format_number(qw, phonenumbers.PhoneNumberFormat.E164)
+#         i = 9
+#
+#     in3 = phonenumbers.parse('020660099701', 'IN')
+#     print(in3)
+#     is_valid2 = phonenumbers.is_valid_number(in3)
+#     e_164_3 = phonenumbers.format_number(in3, phonenumbers.PhoneNumberFormat.E164)
+#
+#
 #     verified_pat = re.compile('mumbai$', re.IGNORECASE)
 #     res1 = verified_pat.search('available mumbai verifimumbaied')
 #     res2 = verified_pat.search('mUmbai')
