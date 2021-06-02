@@ -46,6 +46,41 @@ app.controller('formCtrl', function ($scope, $http, $timeout, $window) {
             'displayName': 'Plasma',
             'value': 'plasma',
             'image': 'images/icons/plasma.png'
+        },
+        {
+            'displayName': 'ECMO',
+            'value': 'ecmo',
+            'image': ''
+        },
+        {
+            'displayName': 'Food',
+            'value': 'food',
+            'image': ''
+        },
+        {
+            'displayName': 'Testing',
+            'value': 'testing',
+            'image': ''
+        },
+        {
+            'displayName': 'Medicine',
+            'value': 'medicine',
+            'image': ''
+        },
+        {
+            'displayName': 'Ventilator',
+            'value': 'ventilator',
+            'image': ''
+        },
+        {
+            'displayName': 'Helpline',
+            'value': 'helpline',
+            'image': ''
+        },
+        {
+            'displayName': 'Blood',
+            'value': 'blood',
+            'image': 'images/icons/plasma.png'
         }
     ];
 
