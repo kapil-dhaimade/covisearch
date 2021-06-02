@@ -20,6 +20,7 @@ class CovidResourceType(enum.Enum):
     MEDICINE = 9
     VENTILATOR = 10
     HELPLINE = 11
+    BLOOD = 12
 
     @staticmethod
     def to_string(resource_type: 'CovidResourceType') -> str:
@@ -34,7 +35,8 @@ class CovidResourceType(enum.Enum):
             CovidResourceType.TESTING: 'testing',
             CovidResourceType.MEDICINE: 'medicine',
             CovidResourceType.VENTILATOR: 'ventilator',
-            CovidResourceType.HELPLINE: 'helpline'
+            CovidResourceType.HELPLINE: 'helpline',
+            CovidResourceType.BLOOD: 'blood'
         }
         return res_type_strings[resource_type]
 
@@ -51,7 +53,8 @@ class CovidResourceType(enum.Enum):
             'testing': CovidResourceType.TESTING,
             'medicine': CovidResourceType.MEDICINE,
             'ventilator': CovidResourceType.VENTILATOR,
-            'helpline': CovidResourceType.HELPLINE
+            'helpline': CovidResourceType.HELPLINE,
+            'blood': CovidResourceType.BLOOD
         }
         return res_types[resource_type_str.lower()]
 
@@ -191,6 +194,14 @@ class BloodGroup(enum.Enum):
 
 
 class PlasmaInfo(CovidResourceInfo):
+    BLOOD_GROUP_LABEL = 'blood_group'
+
+    @classmethod
+    def compare(cls, res_info_a: Dict, res_info_b: Dict) -> int:
+        return super().compare(res_info_a, res_info_b)
+
+
+class BloodInfo(CovidResourceInfo):
     BLOOD_GROUP_LABEL = 'blood_group'
 
     @classmethod
@@ -427,7 +438,8 @@ def get_res_info_comparator(resource_type: CovidResourceType):
         CovidResourceType.TESTING: TestingInfo,
         CovidResourceType.MEDICINE: MedicineInfo,
         CovidResourceType.VENTILATOR: VentilatorInfo,
-        CovidResourceType.HELPLINE: HelplineInfo
+        CovidResourceType.HELPLINE: HelplineInfo,
+        CovidResourceType.BLOOD: BloodInfo
     }
     return res_type_classes[resource_type].compare
 

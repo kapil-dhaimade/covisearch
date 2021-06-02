@@ -12,7 +12,7 @@ from phonenumbers import PhoneNumberMatcher, format_number, PhoneNumberFormat
 from covisearch.util.mytypes import *
 import covisearch.aggregation.core.domain.entities as entities
 from covisearch.aggregation.core.domain.entities import \
-    CovidResourceInfo, CovidResourceType, OxygenInfo, \
+    CovidResourceInfo, CovidResourceType, OxygenInfo, BloodInfo, \
     PlasmaInfo, HospitalBedsInfo, SearchFilter, HospitalBedsICUInfo
 import covisearch.util.datetimeutil
 import covisearch.util.geoutil as geoutil
@@ -240,7 +240,8 @@ def _get_specific_res_info_mapper(res_type: CovidResourceType):
         entities.CovidResourceType.TESTING: _map_testing,
         entities.CovidResourceType.MEDICINE: _map_medicine,
         entities.CovidResourceType.VENTILATOR: _map_ventilator,
-        entities.CovidResourceType.HELPLINE: _map_helpline
+        entities.CovidResourceType.HELPLINE: _map_helpline,
+        entities.CovidResourceType.BLOOD: _map_blood
     }
     return _web_res_to_covisearch_res_mapper[res_type]
 
@@ -357,6 +358,11 @@ def _map_card_source_url(covisearch_res: Dict, res_mapping_desc: Dict[str, 'Fiel
 def _map_plasma(web_src_res_info: Dict, res_mapping_desc: Dict[str, 'FieldMappingDesc'],
                 covisearch_res: Dict):
     covisearch_res[PlasmaInfo.BLOOD_GROUP_LABEL] = None
+
+
+def _map_blood(web_src_res_info: Dict, res_mapping_desc: Dict[str, 'FieldMappingDesc'],
+               covisearch_res: Dict):
+    covisearch_res[BloodInfo.BLOOD_GROUP_LABEL] = None
 
 
 def _map_oxygen(web_src_res_info: Dict, res_mapping_desc: Dict[str, 'FieldMappingDesc'],
