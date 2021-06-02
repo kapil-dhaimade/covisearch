@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Covisearch</title>
+  <base href=".">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
+  <link rel="manifest" href="images/site.webmanifest">
+  <link rel="stylesheet" href="css/myStyle.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+
+<body ng-app="">
+
+  <div id="wrapper">
+
+    <div ng-include="'header.html'" class="text-center"></div>
+    <div style="text-align: center;">
+      <div style="display: inline-block; text-align: left;">
+
+        <h2>List of sites where we search the data from </h2>
+        <ul>
+          <li><a href="https://covidcitizens.org">https://covidcitizens.org</a></li>
+          <li><a href="https://www.covidfightclub.org">https://www.covidfightclub.org</a></li>
+          <li><a href="https://www.covidindiaresources.com">https://www.covidindiaresources.com</a></li>
+          <li><a href="https://covidwin.in">https://covidwin.in</a></li>
+          <li><a href="https://liferesources.in">https://liferesources.in</a></li>
+          <li><a href="https://www.volunteerscovihelp.org">https://www.volunteerscovihelp.org</a></li>
+          <li>And adding more...</li>
+        </ul>
+
+      </div>
+    </div>
+  </div>
+  <div ng-include="'footer.html'" class="text-center"></div>
+</body>
+
+</html>
