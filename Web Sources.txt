@@ -1,0 +1,28 @@
+https://www.covidindiaresources.com/
+-Last verified time is Unix timestamp
+-Query returns JSON
+-Filter data is sent in request body and not in URL params or headers
+-Has button to partner with them to share data
+-City name in filter is case-sensitive!!
+
+https://coronabeds.jantasamvad.org/all-covid-icu-beds.html
+-Delhi Govt Hospital site
+-Separate sections for oxygen beds, icu with ventilator beds, normal beds
+-Data received in 2 separate responses and needs to be merged. Some fields present in both
+-Data received as a JS variable the value of which is JSON so will need to remove the variable name and semicolon first
+
+https://covidtools.in/
+-Pan India
+-I am clueless how this website is getting its data, no hints of JSON, no proper HTML webpage seen in network requests!
+
+https://stopcorona.tn.gov.in/beds.php
+-Tamil Nadu hospital beds
+-All Tamil Nadu district entries in single HTML, all filtering done on front-end
+
+https://mumgis.mcgm.gov.in/Resources/COVIDBeds/bedTracker.html
+-Mumbai bed tracker
+-Website not working
+
+Hospital Bed Availability List of cities/states in India:
+https://www.mysmartprice.com/gear/hospital-bed-availability-online-covid/
+https://www.digit.in/news/general/online-covid-19-resources-hospital-beds-medicines-oxygen-supply-59297.html
