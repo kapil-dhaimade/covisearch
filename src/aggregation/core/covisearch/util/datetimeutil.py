@@ -164,17 +164,22 @@ def set_timezone_if_not_present(timestamp: datetime, time_zone) -> datetime:
 #
 #
 # if __name__=='__main__':
+#
+#
 #     res1 = {'a': 1}
-#     res2 = {'a': 1}
-#     listt = [res2, res1, res1]
-#     for item in listt:
-#         if res1 is item:
-#             print(9)
+#     res2 = None
+#     listt = []
+#     # for item in listt:
+#     #     if res1 is item:
+#     #         print(9)
+#
+#     if not res2:
+#         print(89)
 #
 #     in1 = phonenumbers.parse('8805 989 3 06', 'US')
 #     e_164_1 = phonenumbers.format_number(in1, phonenumbers.PhoneNumberFormat.E164)
 #     is_valid1 = phonenumbers.is_valid_number(in1)
-#     in2 = phonenumbers.parse('222228756832', 'IN')
+#     in2 = phonenumbers.parse('2228756832', 'IN')
 #     is_possible = phonenumbers.is_possible_number(in2)
 #     is_valid = phonenumbers.is_valid_number(in2)
 #     e_164_2 = phonenumbers.format_number(in2, phonenumbers.PhoneNumberFormat.E164)
@@ -184,10 +189,21 @@ def set_timezone_if_not_present(timestamp: datetime, time_zone) -> datetime:
 #         e = phonenumbers.format_number(qw, phonenumbers.PhoneNumberFormat.E164)
 #         i = 9
 #
-#     in3 = phonenumbers.parse('020660099701', 'IN')
+#     in3 = phonenumbers.parse('228756832', 'IN')
 #     print(in3)
 #     is_valid2 = phonenumbers.is_valid_number(in3)
 #     e_164_3 = phonenumbers.format_number(in3, phonenumbers.PhoneNumberFormat.E164)
+#     national = phonenumbers.format_number(in3, phonenumbers.PhoneNumberFormat.NATIONAL)
+#     international = phonenumbers.format_number(in3, phonenumbers.PhoneNumberFormat.INTERNATIONAL)
+#     rfc_3966 = phonenumbers.format_number(in3, phonenumbers.PhoneNumberFormat.RFC3966)
+#
+#     in4 = phonenumbers.parse('989132901', 'IN')
+#     is_possible10 = phonenumbers.is_possible_number(in4)
+#     is_valid10 = phonenumbers.is_valid_number(in4)
+#     e_164_3_2 = phonenumbers.format_number(in4, phonenumbers.PhoneNumberFormat.E164)
+#     national_2 = phonenumbers.format_number(in4, phonenumbers.PhoneNumberFormat.NATIONAL)
+#     international_2 = phonenumbers.format_number(in4, phonenumbers.PhoneNumberFormat.INTERNATIONAL)
+#     rfc_3966_2 = phonenumbers.format_number(in4, phonenumbers.PhoneNumberFormat.RFC3966)
 #
 #
 #     verified_pat = re.compile('mumbai$', re.IGNORECASE)

@@ -66,23 +66,34 @@ class CovidResourceInfo:
     PHONE_NO_LABEL = 'phone_no'
     PHONES_LABEL = 'phones'
     POST_TIME_LABEL = 'post_time'
-    RESOURCE_TYPE_LABEL = 'resource_type'
-    CITY_LABEL = 'city'
     LAST_VERIFIED_UTC_LABEL = 'last_verified_utc'
     WEB_SOURCE_NAME_LABEL = 'web_source_name'
     CARD_SOURCE_URL_LABEL = 'card_source_url'
+    SOURCES_LABEL = 'sources'
+    SOURCE_URL_LABEL = 'url'
+    SOURCE_NAME_LABEL = 'name'
+
+    RESOURCE_TYPE_LABEL = 'resource_type'
+    CITY_LABEL = 'city'
 
     @classmethod
-    def remove_duplicates(cls, covisearch_resources: List[Dict]) -> List[Dict]:
+    def merge_duplicates(cls, covisearch_resources: List[Dict]) -> List[Dict]:
         covisearch_res_by_phone: Dict[str, Dict] = {}
         phones_label = cls.PHONES_LABEL
         for covisearch_res_info in covisearch_resources:
             phones: List[str] = covisearch_res_info[phones_label]
             for phone in phones:
                 if phone in covisearch_res_by_phone:
+                    old_covisearch_res_for_phone = covisearch_res_by_phone[phone]
                     covisearch_res_by_phone[phone] = \
                         cls._get_more_recently_verified_res_info(
                             covisearch_res_info, covisearch_res_by_phone[phone])
+
+                    newer_resource_info = covisearch_res_by_phone[phone]
+                    older_resource_info = old_covisearch_res_for_phone \
+                        if newer_resource_info is covisearch_res_info else covisearch_res_info
+                    cls._merge_older_with_newer(older_resource_info, newer_resource_info)
+
                 else:
                     covisearch_res_by_phone[phone] = covisearch_res_info
 
@@ -96,6 +107,37 @@ class CovidResourceInfo:
             if not cls._is_resource_info_in_merged_resources_list(resource_info, merged_resources):
                 merged_resources.append(resource_info)
         return merged_resources
+
+    @classmethod
+    def _merge_older_with_newer(cls, older_resource_info: Dict, newer_resource_info: Dict):
+        cls._merge_field_if_absent(cls.CONTACT_NAME_LABEL, older_resource_info, newer_resource_info)
+        cls._merge_field_if_absent(cls.PHONES_LABEL, older_resource_info, newer_resource_info)
+        cls._merge_field_if_absent(cls.DETAILS_LABEL, older_resource_info, newer_resource_info)
+        cls._merge_field_if_absent(cls.ADDRESS_LABEL, older_resource_info, newer_resource_info)
+        cls._merge_field_if_absent(cls.POST_TIME_LABEL, older_resource_info, newer_resource_info)
+        cls._merge_sources_field(older_resource_info, newer_resource_info)
+
+    @classmethod
+    def _merge_field_if_absent(cls, field_label: str, older_resource_info: Dict, newer_resource_info: Dict):
+        if not newer_resource_info[field_label]:
+            newer_resource_info[field_label] = older_resource_info[field_label]
+
+    @classmethod
+    def _merge_sources_field(cls, older_resource_info: Dict, newer_resource_info: Dict):
+        sources_label = cls.SOURCES_LABEL
+        for older_resource_info_source in older_resource_info[sources_label]:
+            if not cls._is_source_already_present_in_newer_resource_info(
+                    older_resource_info_source, newer_resource_info):
+                newer_resource_info[sources_label].append(older_resource_info_source)
+
+    @classmethod
+    def _is_source_already_present_in_newer_resource_info(cls, source: Dict,
+                                                          newer_resource_info: Dict) -> bool:
+        src_name_label = cls.SOURCE_NAME_LABEL
+        for newer_resource_info_source in newer_resource_info[cls.SOURCES_LABEL]:
+            if newer_resource_info_source[src_name_label] == source[src_name_label]:
+                return True
+        return False
 
     @classmethod
     def _is_resource_info_in_merged_resources_list(cls, resource_info: Dict,
@@ -200,6 +242,11 @@ class PlasmaInfo(CovidResourceInfo):
     def compare(cls, res_info_a: Dict, res_info_b: Dict) -> int:
         return super().compare(res_info_a, res_info_b)
 
+    @classmethod
+    def _merge_older_with_newer(cls, older_resource_info: Dict, newer_resource_info: Dict):
+        super()._merge_older_with_newer(older_resource_info, newer_resource_info)
+        cls._merge_field_if_absent(cls.BLOOD_GROUP_LABEL, older_resource_info, newer_resource_info)
+
 
 class BloodInfo(CovidResourceInfo):
     BLOOD_GROUP_LABEL = 'blood_group'
@@ -207,6 +254,11 @@ class BloodInfo(CovidResourceInfo):
     @classmethod
     def compare(cls, res_info_a: Dict, res_info_b: Dict) -> int:
         return super().compare(res_info_a, res_info_b)
+
+    @classmethod
+    def _merge_older_with_newer(cls, older_resource_info: Dict, newer_resource_info: Dict):
+        super()._merge_older_with_newer(older_resource_info, newer_resource_info)
+        cls._merge_field_if_absent(cls.BLOOD_GROUP_LABEL, older_resource_info, newer_resource_info)
 
 
 class OxygenInfo(CovidResourceInfo):
@@ -216,6 +268,11 @@ class OxygenInfo(CovidResourceInfo):
     @classmethod
     def compare(cls, res_info_a: Dict, res_info_b: Dict) -> int:
         return super().compare(res_info_a, res_info_b)
+
+    @classmethod
+    def _merge_older_with_newer(cls, older_resource_info: Dict, newer_resource_info: Dict):
+        super()._merge_older_with_newer(older_resource_info, newer_resource_info)
+        cls._merge_field_if_absent(cls.LITRES_LABEL, older_resource_info, newer_resource_info)
 
 
 class HospitalBedsInfo(CovidResourceInfo):
@@ -258,6 +315,17 @@ class HospitalBedsInfo(CovidResourceInfo):
             return -1
         else:
             return 1
+
+    @classmethod
+    def _merge_older_with_newer(cls, older_resource_info: Dict, newer_resource_info: Dict):
+        super()._merge_older_with_newer(older_resource_info, newer_resource_info)
+        cls._merge_field_if_absent(cls.AVAILABLE_COVID_BEDS_LABEL, older_resource_info, newer_resource_info)
+        cls._merge_field_if_absent(cls.AVAILABLE_COVID_BEDS_WITHOUT_OXYGEN_LABEL,
+                                   older_resource_info, newer_resource_info)
+        cls._merge_field_if_absent(cls.AVAILABLE_COVID_BEDS_WITH_OXYGEN_LABEL,
+                                   older_resource_info, newer_resource_info)
+        cls._merge_field_if_absent(cls.TOTAL_AVAILABLE_BEDS_LABEL, older_resource_info, newer_resource_info)
+
 
     @classmethod
     def _get_winner_of_last_verified_vs_total_beds_compare(cls, res_info_a: Dict, res_info_b: Dict) -> Dict:
@@ -383,11 +451,23 @@ class HospitalBedsICUInfo(HospitalBedsInfo):
     def compare(cls, res_info_a: Dict, res_info_b: Dict) -> int:
         return super().compare(res_info_a, res_info_b)
 
+    @classmethod
+    def _merge_older_with_newer(cls, older_resource_info: Dict, newer_resource_info: Dict):
+        super()._merge_older_with_newer(older_resource_info, newer_resource_info)
+        cls._merge_field_if_absent(cls.AVAILABLE_ICU_BEDS_LABEL, older_resource_info, newer_resource_info)
+        cls._merge_field_if_absent(cls.AVAILABLE_ICU_BEDS_WITH_VENTILATOR_LABEL,
+                                   older_resource_info, newer_resource_info)
+        cls._merge_field_if_absent(cls.TOTAL_AVAILABLE_BEDS_LABEL, older_resource_info, newer_resource_info)
+
 
 class AmbulanceInfo(CovidResourceInfo):
     @classmethod
     def compare(cls, res_info_a: Dict, res_info_b: Dict) -> int:
         return super().compare(res_info_a, res_info_b)
+
+    @classmethod
+    def _merge_older_with_newer(cls, older_resource_info: Dict, newer_resource_info: Dict):
+        super()._merge_older_with_newer(older_resource_info, newer_resource_info)
 
 
 class EcmoInfo(CovidResourceInfo):
@@ -395,11 +475,19 @@ class EcmoInfo(CovidResourceInfo):
     def compare(cls, res_info_a: Dict, res_info_b: Dict) -> int:
         return super().compare(res_info_a, res_info_b)
 
+    @classmethod
+    def _merge_older_with_newer(cls, older_resource_info: Dict, newer_resource_info: Dict):
+        super()._merge_older_with_newer(older_resource_info, newer_resource_info)
+
 
 class FoodInfo(CovidResourceInfo):
     @classmethod
     def compare(cls, res_info_a: Dict, res_info_b: Dict) -> int:
         return super().compare(res_info_a, res_info_b)
+
+    @classmethod
+    def _merge_older_with_newer(cls, older_resource_info: Dict, newer_resource_info: Dict):
+        super()._merge_older_with_newer(older_resource_info, newer_resource_info)
 
 
 class TestingInfo(CovidResourceInfo):
@@ -407,11 +495,19 @@ class TestingInfo(CovidResourceInfo):
     def compare(cls, res_info_a: Dict, res_info_b: Dict) -> int:
         return super().compare(res_info_a, res_info_b)
 
+    @classmethod
+    def _merge_older_with_newer(cls, older_resource_info: Dict, newer_resource_info: Dict):
+        super()._merge_older_with_newer(older_resource_info, newer_resource_info)
+
 
 class MedicineInfo(CovidResourceInfo):
     @classmethod
     def compare(cls, res_info_a: Dict, res_info_b: Dict) -> int:
         return super().compare(res_info_a, res_info_b)
+
+    @classmethod
+    def _merge_older_with_newer(cls, older_resource_info: Dict, newer_resource_info: Dict):
+        super()._merge_older_with_newer(older_resource_info, newer_resource_info)
 
 
 class VentilatorInfo(CovidResourceInfo):
@@ -419,14 +515,26 @@ class VentilatorInfo(CovidResourceInfo):
     def compare(cls, res_info_a: Dict, res_info_b: Dict) -> int:
         return super().compare(res_info_a, res_info_b)
 
+    @classmethod
+    def _merge_older_with_newer(cls, older_resource_info: Dict, newer_resource_info: Dict):
+        super()._merge_older_with_newer(older_resource_info, newer_resource_info)
+
 
 class HelplineInfo(CovidResourceInfo):
     @classmethod
     def compare(cls, res_info_a: Dict, res_info_b: Dict) -> int:
         return super().compare(res_info_a, res_info_b)
 
+    @classmethod
+    def _merge_older_with_newer(cls, older_resource_info: Dict, newer_resource_info: Dict):
+        super()._merge_older_with_newer(older_resource_info, newer_resource_info)
+
 
 def get_res_info_comparator(resource_type: CovidResourceType):
+    return get_resource_info_class(resource_type).compare
+
+
+def get_resource_info_class(resource_type: CovidResourceType):
     res_type_classes = {
         CovidResourceType.PLASMA: PlasmaInfo,
         CovidResourceType.OXYGEN: OxygenInfo,
@@ -441,7 +549,7 @@ def get_res_info_comparator(resource_type: CovidResourceType):
         CovidResourceType.HELPLINE: HelplineInfo,
         CovidResourceType.BLOOD: BloodInfo
     }
-    return res_type_classes[resource_type].compare
+    return res_type_classes[resource_type]
 
 
 class SearchFilter:

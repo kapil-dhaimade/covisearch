@@ -33,7 +33,13 @@ def map_res_info_to_covisearch(web_src_res_info: Dict, search_filter: SearchFilt
         #     CovidResourceType.to_string(search_filter.resource_type),
         # CovidResourceInfo.CITY_LABEL: search_filter.city,
         CovidResourceInfo.WEB_SOURCE_NAME_LABEL: web_src.name,
-        CovidResourceInfo.CARD_SOURCE_URL_LABEL: web_src.card_source_url
+        CovidResourceInfo.CARD_SOURCE_URL_LABEL: web_src.card_source_url,
+        CovidResourceInfo.SOURCES_LABEL: [
+            {
+                CovidResourceInfo.SOURCE_NAME_LABEL: web_src.name,
+                CovidResourceInfo.SOURCE_URL_LABEL: web_src.card_source_url
+            }
+        ]
     }
 
     _map_common_res_info(web_src_res_info, web_src.resource_mapping_desc, covisearch_res_info, search_filter)
@@ -441,7 +447,8 @@ def _map_helpline(web_src_res_info: Dict, res_mapping_desc: Dict[str, 'FieldMapp
     pass
 
 
-# NOTE: KAPIL: Converts all phones to E.164 phone number format for accurate matching. Eg: +918080867676
+# NOTE: KAPIL: Converts all phones to National phone number format for accurate matching.
+# Eg: 08080867676, 02228763461
 def _extract_and_uniformized_phones(non_uniform_phones: str, city: str) -> List[str]:
     non_uniform_phone_list = non_uniform_phones.split('/')
     return [uniformized_phone for non_uniform_phone_str in non_uniform_phone_list
@@ -454,7 +461,8 @@ def _extract_and_uniformize_one_phone_str(non_uniform_phone: str, city: str) -> 
     # NOTE: KAPIL: Country code is only IN as we operate in India only.
     phone_no_matcher: PhoneNumberMatcher = PhoneNumberMatcher(non_uniform_phone, 'IN')
     if phone_no_matcher.has_next():
-        return [format_number(match.number, PhoneNumberFormat.E164) for match in phone_no_matcher]
+        return [format_number(match.number, PhoneNumberFormat.NATIONAL).replace(' ', '')
+                for match in phone_no_matcher]
     else:
         uniformized_phone = _retry_uniformize_phone_by_adding_area_code(non_uniform_phone, city)
         return uniformized_phone if uniformized_phone else [non_uniform_phone]
@@ -465,7 +473,8 @@ def _retry_uniformize_phone_by_adding_area_code(non_uniform_phone: str, city: st
     phone_with_area_code = area_code + non_uniform_phone
     phone_no_matcher: PhoneNumberMatcher = PhoneNumberMatcher(phone_with_area_code, 'IN')
     if phone_no_matcher.has_next():
-        return [format_number(match.number, PhoneNumberFormat.E164) for match in phone_no_matcher]
+        return [format_number(match.number, PhoneNumberFormat.NATIONAL).replace(' ', '')
+                for match in phone_no_matcher]
     else:
         return []
 

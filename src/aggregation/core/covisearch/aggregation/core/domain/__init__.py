@@ -41,8 +41,9 @@ def _aggregate_resources_from_covid_sources(
         scraped_data_list, search_filter, web_sources)
     elapsedtime.stop_measuring_operation(ctx_2)
 
-    ctx_3 = elapsedtime.start_measuring_operation('removing duplicates')
-    covisearch_resources = CovidResourceInfo.remove_duplicates(covisearch_resources)
+    ctx_3 = elapsedtime.start_measuring_operation('merging duplicates')
+    resource_info_class = entities.get_resource_info_class(search_filter.resource_type)
+    covisearch_resources = resource_info_class.merge_duplicates(covisearch_resources)
     elapsedtime.stop_measuring_operation(ctx_3)
 
     ctx_5 = elapsedtime.start_measuring_operation('removing redundant fields')
@@ -115,7 +116,7 @@ def _scrape_data_from_web_sources(web_sources: Dict[str, resourcemapping.WebSour
 #
 #         aggregated_res_info_repo = infra.AggregatedResourceInfoRepoImpl(db)
 #         web_src_repo = infra.WebSourceRepoImpl(db)
-#         search_filter = SearchFilter('lucknow', entities.CovidResourceType.HOSPITAL_BED, None)
+#         search_filter = SearchFilter('delhi', entities.CovidResourceType.MEDICINE, None)
 #         aggregate_covid_resources(search_filter, aggregated_res_info_repo, web_src_repo)
 #
 #         elapsedtime.stop_measuring_total()
