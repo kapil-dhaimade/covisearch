@@ -64,9 +64,9 @@
                     <!-- Phone Number -->
                     <div class="float-right">
                         <div class="data">
-                            <div ng-repeat="y in x.phone_no.split('/')">
-                                <span ng-if="y.trim()" id="phone"><span class="fa fa-phone"></span> <a href="tel:{{y}}">
-                                        {{y}}</a><br></span>
+                            <div ng-repeat="num in x.phones">
+                                <span ng-if="num" id="phone"><span class="fa fa-phone"></span> <a href="tel:{{num}}">
+                                        {{num}}</a><br></span>
                             </div>
                         </div>
                     </div>
@@ -108,7 +108,12 @@
                             <br>
                         </div>
                         <div class="data">
-                            <span><span class="fa fa-globe"></span> <b>Source:</b><a href="{{x.card_source_url}}"><br>{{x.web_source_name}}</a></span>
+                            <span>
+                                <span class="fa fa-globe"></span> <b>Sources</b>
+                                <ul>
+                                <li ng-repeat="src in x.sources"><a href="{{src.url}}">{{src.name}}</a></li>
+                                </ul>
+                            </span>
                             <br>
                         </div>
                     </div>
@@ -129,11 +134,11 @@
                         <div id="details{{$index}}" class="collapse">
                             <!-- Address -->
                             <div class="data" ng-if="x.address">
-                                <span><span class="fa fa-map-marker"></span> <b>Address:</b> <br>{{x.address}}</span><br>
+                                <span><span class="fa fa-map-marker"></span> <b>Address</b> <br>{{x.address}}</span><br>
                             </div>
                             <!-- Details -->
                             <div class="data" ng-if="x.details">
-                                <span><span class="fa fa-info-circle"></span> <b>Details:</b> <br>{{x.details}}</span><br>
+                                <span><span class="fa fa-info-circle"></span> <b>Details</b> <br>{{x.details}}</span><br>
                             </div>
                         </div>
                     </div>

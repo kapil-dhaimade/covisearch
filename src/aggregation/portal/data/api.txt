@@ -8,7 +8,7 @@
 			"post_time": null,
 			"total_available_beds": null,
 			"phone_no": "+9999390291/347325648736",
-			"last_verified_utc": "",
+			"last_verified_utc": null,
 			"available_covid_beds_with_oxygen": null,
 			"available_covid_beds": null,
 			"web_source_name": "Covid Citizens",

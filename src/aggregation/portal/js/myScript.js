@@ -28,6 +28,11 @@ app.controller('formCtrl', function ($scope, $http, $timeout, $window) {
             'image': 'images/icons/ambulance.png'
         },
         {
+            'displayName': 'Oxygen',
+            'value': 'oxygen',
+            'image': 'images/icons/oxygen.png'
+        },
+        {
             'displayName': 'Hospital Beds',
             'value': 'hospital_bed',
             'image': 'images/icons/hospital_bed.png'
@@ -38,48 +43,43 @@ app.controller('formCtrl', function ($scope, $http, $timeout, $window) {
             'image': 'images/icons/icu.png'
         },
         {
-            'displayName': 'Oxygen',
-            'value': 'oxygen',
-            'image': 'images/icons/oxygen.png'
-        },
-        {
-            'displayName': 'Plasma',
-            'value': 'plasma',
-            'image': 'images/icons/plasma.png'
-        },
-        {
             'displayName': 'ECMO',
             'value': 'ecmo',
-            'image': ''
-        },
-        {
-            'displayName': 'Food',
-            'value': 'food',
-            'image': ''
-        },
-        {
-            'displayName': 'Testing',
-            'value': 'testing',
-            'image': ''
-        },
-        {
-            'displayName': 'Medicine',
-            'value': 'medicine',
-            'image': ''
-        },
-        {
-            'displayName': 'Ventilator',
-            'value': 'ventilator',
-            'image': ''
-        },
-        {
-            'displayName': 'Helpline',
-            'value': 'helpline',
-            'image': ''
+            'image': 'images/icons/ecmo.png'
         },
         {
             'displayName': 'Blood',
             'value': 'blood',
+            'image': 'images/icons/plasma.png'
+        },
+        {
+            'displayName': 'Food',
+            'value': 'food',
+            'image': 'images/icons/food.png'
+        },
+        {
+            'displayName': 'Testing',
+            'value': 'testing',
+            'image': 'images/icons/testing.png'
+        },
+        {
+            'displayName': 'Medicine',
+            'value': 'medicine',
+            'image': 'images/icons/medicine.png'
+        },
+        {
+            'displayName': 'Ventilator',
+            'value': 'ventilator',
+            'image': 'images/icons/ventilator.png'
+        },
+        {
+            'displayName': 'Helpline',
+            'value': 'helpline',
+            'image': 'images/icons/helpline.png'
+        },
+        {
+            'displayName': 'Plasma',
+            'value': 'plasma',
             'image': 'images/icons/plasma.png'
         }
     ];
@@ -119,7 +119,7 @@ app.controller('formCtrl', function ($scope, $http, $timeout, $window) {
 
     $scope.getFromNowDate = function (date) {
         var now;
-        if(date.trim())
+        if(date && date.trim())
         {
             now = moment(date).fromNow();
         }
