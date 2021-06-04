@@ -23,6 +23,12 @@ body
   background-color: rgba(0,0,0,.03) !important;
 }
 
+#card-container
+{
+  max-width: 1200px;
+  margin: auto;
+}
+
 #card-wrapper
 {
   padding-right: 0.5rem !important;
