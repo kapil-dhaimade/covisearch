@@ -405,6 +405,8 @@ def _map_hospital_bed_icu(web_src_res_info: Dict, res_mapping_desc: Dict[str, 'F
                    res_mapping_desc, web_src_res_info)
     _map_bed_field(HospitalBedsICUInfo.TOTAL_AVAILABLE_BEDS_LABEL, covisearch_res,
                    res_mapping_desc, web_src_res_info)
+    _map_bed_field(HospitalBedsICUInfo.AVAILABLE_VENTILATORS_LABEL, covisearch_res,
+                   res_mapping_desc, web_src_res_info)
     HospitalBedsICUInfo.fill_remaining_bed_fields(covisearch_res)
 
 

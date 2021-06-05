@@ -117,7 +117,7 @@ class CovidResourceInfo:
 
     @classmethod
     def _merge_field_if_absent(cls, field_label: str, older_resource_info: Dict, newer_resource_info: Dict):
-        if not newer_resource_info[field_label]:
+        if newer_resource_info[field_label] is None:
             newer_resource_info[field_label] = older_resource_info[field_label]
 
     @classmethod
@@ -279,6 +279,7 @@ class HospitalBedsInfo(CovidResourceInfo):
     AVAILABLE_OXYGEN_BEDS_LABEL = 'available_oxygen_beds'
     TOTAL_AVAILABLE_BEDS_LABEL = 'total_available_beds'
     HOSPITAL_TYPE_LABEL = 'hospital_type'
+
     TOTAL_BEDS_WEIGHTAGE_THRESHOLD = 10
 
     @classmethod
@@ -364,6 +365,7 @@ class HospitalBedsInfo(CovidResourceInfo):
         cls._merge_field_if_absent(cls.AVAILABLE_OXYGEN_BEDS_LABEL,
                                    older_resource_info, newer_resource_info)
         cls._merge_field_if_absent(cls.TOTAL_AVAILABLE_BEDS_LABEL, older_resource_info, newer_resource_info)
+        cls._merge_field_if_absent(cls.HOSPITAL_TYPE_LABEL, older_resource_info, newer_resource_info)
 
     @classmethod
     def _get_winner_of_last_verified_vs_total_beds_compare(cls, res_info_a: Dict, res_info_b: Dict) -> Dict:
@@ -471,8 +473,12 @@ class HospitalBedsICUInfo(CovidResourceInfo):
     AVAILABLE_VENTILATOR_BEDS_LABEL = 'available_ventilator_beds'
     TOTAL_AVAILABLE_BEDS_LABEL = 'total_available_icu_beds'
     HOSPITAL_TYPE_LABEL = 'hospital_type'
+    # NOTE: KAPIL: Difference between 'AVAILABLE_VENTILATORS_LABEL' and 'AVAILABLE_VENTILATOR_BEDS_LABEL'
+    # is that some hospitals have column for available ventilator devices and another column for ICU beds,
+    # while some hospitals have split up of available beds with and without ventilators.
+    AVAILABLE_VENTILATORS_LABEL = 'available_ventilators'
 
-    TOTAL_BEDS_WEIGHTAGE_THRESHOLD = 10
+    TOTAL_BEDS_WEIGHTAGE_THRESHOLD = 2
 
     @classmethod
     def fill_remaining_bed_fields(cls, resource_info: Dict):
@@ -541,6 +547,8 @@ class HospitalBedsICUInfo(CovidResourceInfo):
         cls._merge_field_if_absent(cls.AVAILABLE_VENTILATOR_BEDS_LABEL,
                                    older_resource_info, newer_resource_info)
         cls._merge_field_if_absent(cls.TOTAL_AVAILABLE_BEDS_LABEL, older_resource_info, newer_resource_info)
+        cls._merge_field_if_absent(cls.HOSPITAL_TYPE_LABEL, older_resource_info, newer_resource_info)
+        cls._merge_field_if_absent(cls.AVAILABLE_VENTILATORS_LABEL, older_resource_info, newer_resource_info)
 
     @classmethod
     def get_total_available_bed_compare_result(cls, res_info_a: Dict, res_info_b: Dict) -> int:
