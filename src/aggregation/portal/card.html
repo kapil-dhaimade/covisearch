@@ -2,7 +2,8 @@
 <div class="text-center" ng-if="screenStatus == 'dataFetched'">
     <span>Currently showing data for <b>{{citySearched}}</b> and
         <b>
-            {{resourceSearched.displayName}} </b><img id="resourceImg" ng-src="{{resourceSearched.image}}" ng-alt="{{resourceSearched.image}}"></span>
+            {{resourceSearched.displayName}} </b><img id="resourceImg" ng-src="{{resourceSearched.image}}"
+            ng-alt="{{resourceSearched.image}}"></span>
 </div>
 
 <hr>
@@ -77,41 +78,89 @@
                             <span><b>Litres Available:</b> {{x.litres}}</span>
                             <br>
                         </div>
-                        <!-- Covid Beds -->
-                        <div class="data" ng-if="x.available_covid_beds">
-                            <span><b>Covid Beds Available:</b> {{x.available_covid_beds}}</a></span>
-                            <br>
+                        <!-- Table of beds -->
+                        <div ng-if="checkIfHospitalBedICU(x)">
+                            <span><span class="fa fa-bed"></span> <b>ICU Beds Available:</b></span>
+                            <table id="beds" class="">
+                                <tr>
+                                    <td>
+                                        Without Ventilator:
+                                    </td>
+                                    <td>
+                                        <span>{{getNumbers(x.available_no_ventilator_beds)}}</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        With Ventilator:
+                                    </td>
+                                    <td>
+                                        <span>{{getNumbers(x.available_ventilator_beds)}}</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Total:
+                                    </td>
+                                    <td>
+                                        <span>{{getNumbers(x.total_available_icu_beds)}}</span>
+                                    </td>
+                                </tr>
+                            </table>
                         </div>
-                        <!-- Covid Beds With Oxy -->
-                        <div class="data" ng-if="x.available_covid_beds_with_oxygen">
-                            <span><b>Covid Beds with Oxygen Available:</b> {{x.available_covid_beds_with_oxygen}}</a></span>
-                            <br>
+                        <div ng-if="checkIfHospitalBed(x)">
+                            <span><span class="fa fa-bed"></span> <b>Beds Available:</b></span>
+                            <table id="beds" class="">
+                                <tr>
+                                    <td>
+                                        Without Oxygen:
+                                    </td>
+                                    <td>
+                                        <span>{{getNumbers(x.available_no_oxygen_beds)}}</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        With Oxygen:
+                                    </td>
+                                    <td>
+                                        <span>{{getNumbers(x.available_oxygen_beds)}}</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Covid:
+                                    </td>
+                                    <td>
+                                        <span>{{getNumbers(x.available_covid_beds)}}</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Total:
+                                    </td>
+                                    <td>
+                                        <span>{{getNumbers(x.total_available_beds)}}</span>
+                                    </td>
+                                </tr>
+                            </table>
                         </div>
-                        <!-- Covid Beds Without Oxy -->
-                        <div class="data" ng-if="x.available_covid_beds_without_oxygen">
-                            <span><b>Covid Beds without Oxygen Available:</b> {{x.available_covid_beds_without_oxygen}}</a></span>
-                            <br>
+
+                        <div class="data" ng-if="x.hospital_type">
+                            <span>
+                                <span class="fas fa-hospital"></span> <b>Type:</b>
+                                <ul>
+                                    <li ng-repeat="src in x.hospital_type">{{src.hospital_type}}</li>
+                                </ul>
+                            </span>
                         </div>
-                        <!-- ICU beds -->
-                        <div class="data" ng-if="x.available_icu_beds">
-                            <span><b>ICU Beds Available:</b> {{x.available_icu_beds}}</a></span>
-                            <br>
-                        </div>
-                        <!-- ICU with ventilator -->
-                        <div class="data" ng-if="x.available_icu_beds_with_ventilator">
-                            <span><b>ICU Beds with Ventilator Available:</b> {{x.available_icu_beds_with_ventilator}}</a></span>
-                            <br>
-                        </div>
-                        <!-- Total Beds -->
-                        <div class="data" ng-if="x.total_available_beds">
-                            <span><b>Total Beds Available:</b> {{x.total_available_beds}}</a></span>
-                            <br>
-                        </div>
+                        
                         <div class="data">
                             <span>
                                 <span class="fa fa-globe"></span> <b>Sources</b>
                                 <ul>
-                                <li ng-repeat="src in x.sources"><a href="{{src.url}}">{{src.name}}</a></li>
+                                    <li ng-repeat="src in x.sources"><a href="{{src.url}}"
+                                            target="_blank">{{src.name}}</a></li>
                                 </ul>
                             </span>
                         </div>
@@ -137,7 +186,8 @@
                             </div>
                             <!-- Details -->
                             <div class="data" ng-if="x.details">
-                                <span><span class="fa fa-info-circle"></span> <b>Details</b> <br>{{x.details}}</span><br>
+                                <span><span class="fa fa-info-circle"></span> <b>Details</b>
+                                    <br>{{x.details}}</span><br>
                             </div>
                         </div>
                     </div>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Covisearch</title>
+    <base href=".">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
+    <link rel="manifest" href="images/site.webmanifest">
+    <link rel="stylesheet" href="css/myStyle.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+
+<body ng-app="">
+
+    <div id="wrapper">
+
+        <div ng-include="'header.html'" class="text-center"></div>
+        <div id="accordion">
+            <div id="qNa" class="card">
+                <div class="card-header">
+                    <a class="collapsed card-link" data-toggle="collapse" href="#collapseOne">
+                        What does Covisearch do?
+                    </a>
+                </div>
+                <div id="collapseOne" class="collapse" data-parent="#accordion">
+                    <div class="card-body">
+                        Covisearch is a search engine, sort of like Google, but specially for Covid resources. 
+                        It searches multiple Covid help and resource websites on the internet and shows combined results, sorted by relevance. 
+                        Typically, this means that the most recently verified resources across multiple websites appear on Covisearch.
+                    </div>
+                </div>
+            </div>
+            <div id="qNa" class="card">
+                <div class="card-header">
+                    <a class="collapsed card-link" data-toggle="collapse" href="#collapseTwo">
+                        There are already many helpful websites and help groups for Covid resources. How does Covisearch help?
+                    </a>
+                </div>
+                <div id="collapseTwo" class="collapse" data-parent="#accordion">
+                    <div class="card-body">
+                        There is lot of information online, but it is scattered across many websites. 
+                        Then there is the problem of duplicate information on multiple websites. 
+                        This makes the jobs of volunteers tedious at best. 
+                        We hope to fix this by showing all relevant data in one place so volunteers and people can save crucial time.
+                    </div>
+                </div>
+            </div>
+            <div id="qNa" class="card">
+                <div class="card-header">
+                    <a class="collapsed card-link" data-toggle="collapse" href="#collapseThree">
+                        Who are you?
+                    </a>
+                </div>
+                <div id="collapseThree" class="collapse" data-parent="#accordion">
+                    <div class="card-body">
+                        We’re just a bunch of software developers with a regular day job, 
+                        combined with the zeal to do something for the people in this hour of need. 
+                    </div>
+                </div>
+            </div>
+            <div id="qNa" class="card">
+                <div class="card-header">
+                    <a class="collapsed card-link" data-toggle="collapse" href="#collapseFour">
+                        How does it work?
+                    </a>
+                </div>
+                <div id="collapseFour" class="collapse" data-parent="#accordion">
+                    <div class="card-body">
+                        Like a search engine. When you search for a resource, say Oxygen, in a city, say Mumbai, 
+                        our service automatically visits all the Covid help websites in our list, gathers all the information together, 
+                        removes duplicates, sorts the list by relevance (like most recently verified entries first), and shows it to you. 
+                        It also saves those entries on our servers. Once searched for the first time, we refresh entries for that filter 
+                        (Eg: Oxygen in Mumbai) periodically to keep the data updated on our end. So the next time you search for the same filter, 
+                        you get information straight from our servers. 
+                    </div>
+                </div>
+            </div>
+            <div id="qNa" class="card">
+                <div class="card-header">
+                    <a class="collapsed card-link" data-toggle="collapse" href="#collapseFive">
+                        How often do you refresh the entries?
+                    </a>
+                </div>
+                <div id="collapseFive" class="collapse" data-parent="#accordion">
+                    <div class="card-body">
+                        Every few hours. 
+                    </div>
+                </div>
+            </div>
+            <div id="qNa" class="card">
+                <div class="card-header">
+                    <a class="collapsed card-link" data-toggle="collapse" href="#collapseSix">
+                        Which websites do you search on?
+                    </a>
+                </div>
+                <div id="collapseSix" class="collapse" data-parent="#accordion">
+                    <div class="card-body">
+                        We search on all the significant pan-india websites which came up during the second wave of Covid in India. 
+                        For a complete list, click here. 
+                    </div>
+                </div>
+            </div>
+            <div id="qNa" class="card">
+                <div class="card-header">
+                    <a class="collapsed card-link" data-toggle="collapse" href="#collapseSeven">
+                        Aren’t you stealing data of other websites and showing it as your own?
+                    </a>
+                </div>
+                <div id="collapseSeven" class="collapse" data-parent="#accordion">
+                    <div class="card-body">
+                        We don’t lay any claim over the data we show. 
+                        Our goal is only to make it easier for people to reach these scattered resources quicker. 
+                        We deeply appreciate the work Covid help and resource websites are doing, and we salute the volunteers who tirelessly verify resources every day. 
+                        That is why we provide links to the original sources on the resource information shown on our website. 
+                        These links take you to the websites where we found the data.
+                    </div>
+                </div>
+            </div>
+            <div id="qNa" class="card">
+                <div class="card-header">
+                    <a class="collapsed card-link" data-toggle="collapse" href="#collapseEight">
+                        Do you partner with any websites for the data?
+                    </a>
+                </div>
+                <div id="collapseEight" class="collapse" data-parent="#accordion">
+                    <div class="card-body">
+                        We don’t have direct partnership with any of these websites yet. 
+                        However, some groups have been kind enough to grant us access to use their backend APIs to directly fetch their data. 
+                        Also, we’re open to any partnerships which may benefit everyone. See the ‘How do I reach out to you?’ to contact us.
+                    </div>
+                </div>
+            </div>
+            <div id="qNa" class="card">
+                <div class="card-header">
+                    <a class="collapsed card-link" data-toggle="collapse" href="#collapseNine">
+                        Do you have your own volunteers for verification or help with finding resources?
+                    </a>
+                </div>
+                <div id="collapseNine" class="collapse" data-parent="#accordion">
+                    <div class="card-body">
+                        No. 
+                        We’re not a group with our own volunteers who can help find and verify resources. 
+                        We are only trying to ease the task of finding resources easy for other volunteer groups and families.
+                    </div>
+                </div>
+            </div>
+            <div id="qNa" class="card">
+                <div class="card-header">
+                    <a class="collapsed card-link" data-toggle="collapse" href="#collapseTen">
+                        Can I get access to your data? Is there an API?
+                    </a>
+                </div>
+                <div id="collapseTen" class="collapse" data-parent="#accordion">
+                    <div class="card-body">
+                        We are glad to share our searched data with everyone. 
+                        We do have an API which we use from our website too. 
+                        The API documentation is still in progress. However, feel free to reach out to us if you need access to our API. 
+                        See the next question.
+                    </div>
+                </div>
+            </div>
+            <div id="qNa" class="card">
+                <div class="card-header">
+                    <a class="collapsed card-link" data-toggle="collapse" href="#collapseEleven">
+                        How do I reach out to you?
+                    </a>
+                </div>
+                <div id="collapseEleven" class="collapse" data-parent="#accordion">
+                    <div class="card-body">
+                        If you have any feedback for us, or need to discuss API sharing or partnership, please write to us at covisearch@gmail.com. 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div ng-include="'footer.html'" class="text-center"></div>
+</body>
+
+</html>

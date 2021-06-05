@@ -113,3 +113,17 @@ ul{
   padding-inline-start: 20px !important;
   margin-bottom: 10px !important;
 }
+
+#qNa
+{
+  margin-inline: auto;
+}
+
+.no-decoration {
+  text-decoration: none;
+  color: inherit;
+}
+
+#beds td{
+  padding-inline: .5rem;
+}

@@ -1,175 +1,179 @@
 {
-	"meta_info": {
-		"more_data_available": false
-	},
-	"resource_info_data": [
-		{
-			"contact_name": "",
-			"post_time": null,
-			"total_available_beds": null,
-			"phone_no": "+9999390291/347325648736",
-			"last_verified_utc": null,
-			"available_covid_beds_with_oxygen": null,
-			"available_covid_beds": null,
-			"web_source_name": "Covid Citizens",
-			"details": "",
-			"available_covid_beds_without_oxygen": null,
-			"address": "",
-			"card_source_url": "https://covidcitizens.org/delhi/bed"
-		},
-		{
-			"available_covid_beds_without_oxygen": null,
-			"phone_no": "+9717611842",
-			"available_covid_beds": null,
-			"address": "",
-			"web_source_name": "Covid Citizens",
-			"post_time": null,
-			"details": "",
-			"card_source_url": "https://covidcitizens.org/delhi/bed",
-			"contact_name": "   ",
-			"last_verified_utc": "2021-05-30T09:10:37.817307+00:00",
-			"total_available_beds": null,
-			"available_covid_beds_with_oxygen": null
-		},
-		{
-			"web_source_name": "Covid Citizens",
-			"total_available_beds": 21,
-			"last_verified_utc": "2021-05-30T09:10:37.816307+00:00",
-			"available_covid_beds_with_oxygen": 2,
-			"available_covid_beds": 3,
-			"available_covid_beds_without_oxygen": 5,
-			"phone_no": "+1122152197",
-			"card_source_url": "https://covidcitizens.org/delhi/bed",
-			"contact_name": "ESIC Hospital Jhilmil",
-			"address": "Khasra No. 155/3, Phirni Road, Puth Khurd Village, Delhi.",
-            "post_time": "2021-05-28T11:10:56.916937+00:00",
-            "details": "Oxygen Refilling only., Operational Timings: 10pm - 1am., Doesn't provide equipment., Adhaar card required., Rs.500 for small refill. 27/5/21"
-		},
-		{
-			"web_source_name": "Covid Citizens",
-			"details": "",
-			"card_source_url": "https://covidcitizens.org/delhi/bed",
-			"available_covid_beds_with_oxygen": null,
-			"contact_name": "SINGHAL HOSPITAL",
-			"available_covid_beds": null,
-			"phone_no": "+7834979991",
-			"total_available_beds": null,
-			"last_verified_utc": "2021-05-30T09:10:37.816307+00:00",
-			"available_covid_beds_without_oxygen": null,
-			"address": "",
-			"post_time": null
-		},
-		{
-			"details": "",
-			"available_covid_beds_without_oxygen": null,
-			"post_time": null,
-			"last_verified_utc": "2021-05-30T09:10:37.815310+00:00",
-			"available_covid_beds_with_oxygen": null,
-			"phone_no": "+9266728292",
-			"address": "",
-			"available_covid_beds": null,
-			"contact_name": " Hardik Hospital",
-			"card_source_url": "https://covidcitizens.org/delhi/bed",
-			"total_available_beds": null,
-			"web_source_name": "Covid Citizens"
-		},
-		{
-			"last_verified_utc": "2021-05-30T09:10:37.815310+00:00",
-			"available_covid_beds_without_oxygen": null,
-			"web_source_name": "Covid Citizens",
-			"post_time": null,
-			"contact_name": "Kosmos Super Specialty Hospital, Vikas Marg Extn.",
-			"address": "",
-			"details": "",
-			"available_covid_beds": null,
-			"card_source_url": "https://covidcitizens.org/delhi/bed",
-			"phone_no": "+8447696223",
-			"available_covid_beds_with_oxygen": null,
-			"total_available_beds": null
-		},
-		{
-			"contact_name": "Sir Ganga Ram City Hospital",
-			"available_covid_beds_without_oxygen": null,
-			"available_covid_beds": null,
-			"address": "",
-			"post_time": null,
-			"phone_no": "+1142255555",
-			"total_available_beds": null,
-			"web_source_name": "Covid Citizens",
-			"details": "",
-			"available_covid_beds_with_oxygen": null,
-			"last_verified_utc": "2021-05-30T09:10:37.814310+00:00",
-			"card_source_url": "https://covidcitizens.org/delhi/bed"
-		},
-		{
-			"web_source_name": "Covid Citizens",
-			"phone_no": "+1141718460",
-			"available_covid_beds_without_oxygen": null,
-			"address": "",
-			"contact_name": "Sant Soham Hospital",
-			"post_time": null,
-			"available_covid_beds_with_oxygen": null,
-			"card_source_url": "https://covidcitizens.org/delhi/bed",
-			"last_verified_utc": "2021-05-30T09:10:37.814310+00:00",
-			"total_available_beds": null,
-			"available_covid_beds": null,
-			"details": ""
-		},
-		{
-			"available_covid_beds": null,
-			"post_time": null,
-			"contact_name": " Jain Hospital, Vikas Marg Extn.",
-			"available_covid_beds_with_oxygen": null,
-			"address": "",
-			"last_verified_utc": "2021-05-30T09:10:37.813314+00:00",
-			"total_available_beds": null,
-			"available_covid_beds_without_oxygen": null,
-			"phone_no": "+9015111222",
-			"details": "",
-			"web_source_name": "Covid Citizens",
-			"card_source_url": "https://covidcitizens.org/delhi/bed"
-		},
-		{
-			"phone_no": "+8046820570",
-			"available_covid_beds_with_oxygen": null,
-			"post_time": null,
-			"contact_name": "Lok Nayak Hospital",
-			"total_available_beds": null,
-			"available_covid_beds": null,
-			"address": "",
-			"details": "",
-			"available_covid_beds_without_oxygen": null,
-			"last_verified_utc": "2021-05-30T09:10:37.812315+00:00",
-			"web_source_name": "Covid Citizens",
-			"card_source_url": "https://covidcitizens.org/delhi/bed"
-		},
-		{
-			"details": "",
-			"post_time": null,
-			"available_covid_beds": null,
-			"last_verified_utc": "2021-05-30T09:10:37.812315+00:00",
-			"address": "",
-			"available_covid_beds_without_oxygen": null,
-			"contact_name": "Garg Hospital, Karkardooma",
-			"total_available_beds": null,
-			"card_source_url": "https://covidcitizens.org/delhi/bed",
-			"available_covid_beds_with_oxygen": null,
-			"phone_no": "+1143274444",
-			"web_source_name": "Covid Citizens"
-		},
-		{
-			"available_covid_beds_with_oxygen": null,
-			"details": "",
-			"available_covid_beds_without_oxygen": null,
-			"last_verified_utc": "2021-05-30T09:10:37.811274+00:00",
-			"phone_no": "+8929121749",
-			"web_source_name": "Covid Citizens",
-			"card_source_url": "https://covidcitizens.org/delhi/bed",
-			"address": "",
-			"available_covid_beds": null,
-			"total_available_beds": null,
-			"contact_name": "\"Deep Chand Bandhu\"",
-			"post_time": null
-		}
-	]
+    "meta_info": {
+        "more_data_available": true
+    },
+    "resource_info_data": [
+        {
+            "post_time": null,
+            "available_ventilator_beds": null,
+            "available_no_ventilator_beds": null,
+            "sources": [
+                {
+                    "name": "Covid Citizens",
+                    "url": "https://covidcitizens.org/erode/icu%20bed"
+                }
+            ],
+            "hospital_type": null,
+            "contact_name": "Sathyamangalam Covid care_null",
+            "phones": [
+                "07010261734"
+            ],
+            "last_verified_utc": "2021-05-23T10:59:06.467345+00:00",
+            "details": "",
+            "address": "",
+            "total_available_icu_beds": null
+        },
+        {
+            "contact_name": "Maaruthi Hospital_numbers",
+            "hospital_type": null,
+            "available_no_ventilator_beds": 2,
+            "last_verified_utc": "2021-05-12T12:36:59+00:00",
+            "available_ventilator_beds": 1,
+            "post_time": null,
+            "total_available_icu_beds": 3,
+            "phones": [
+                "08525861540"
+            ],
+            "details": "nilL",
+            "address": "",
+            "sources": [
+                {
+                    "name": "Tamil Nadu Beds Availability Portal",
+                    "url": "https://stopcorona.tn.gov.in/beds.php"
+                }
+            ]
+        },
+        {
+            "hospital_type": null,
+            "total_available_icu_beds": 0,
+            "details": "",
+            "address": "",
+            "contact_name": "Erode Medical_negative",
+            "phones": [
+                "07373097188"
+            ],
+            "last_verified_utc": "2021-05-12T11:39:21+00:00",
+            "sources": [
+                {
+                    "url": "https://stopcorona.tn.gov.in/beds.php",
+                    "name": "Tamil Nadu Beds Availability Portal"
+                }
+            ],
+            "post_time": null,
+            "available_no_ventilator_beds": -2,
+            "available_ventilator_beds": 2
+        },
+        {
+            "total_available_icu_beds": 0,
+            "hospital_type": null,
+            "phones": [
+                "09095662211"
+            ],
+            "contact_name": "Sudha Hospital_zero",
+            "address": "",
+            "details": "nil",
+            "last_verified_utc": "2021-05-12T11:17:05+00:00",
+            "post_time": null,
+            "available_no_ventilator_beds": 0,
+            "sources": [
+                {
+                    "name": "Tamil Nadu Beds Availability Portal",
+                    "url": "https://stopcorona.tn.gov.in/beds.php"
+                }
+            ],
+            "available_ventilator_beds": 0
+        },
+        {
+            "last_verified_utc": "2021-05-29T10:49:06.053012+00:00",
+            "contact_name": "Veena Hospital_zero",
+            "sources": [
+                {
+                    "name": "Covid Fight Club",
+                    "url": "https://www.covidfightclub.org/posts/hospital-all-beds-/veena-hospital/4774"
+                },
+                {
+                    "name": "Tamil Nadu Beds Availability Portal",
+                    "url": "https://stopcorona.tn.gov.in/beds.php"
+                }
+            ],
+            "phones": [
+                "09952493428"
+            ],
+            "address": "",
+            "hospital_type": null,
+            "post_time": "2021-05-29T10:49:06.052998+00:00",
+            "total_available_beds": 0,
+            "available_covid_beds": 0,
+            "available_no_oxygen_beds": 0,
+            "available_oxygen_beds": 0,
+            "details": "Verified on 22nd May at 9.22 pm, No beds available."
+        },
+        {
+            "hospital_type": null,
+            "address": "",
+            "available_oxygen_beds": null,
+            "details": "Verified on 22nd May at 9.30 pm, No beds available.",
+            "last_verified_utc": "2021-05-29T10:49:06.052770+00:00",
+            "post_time": "2021-05-29T10:49:06.052756+00:00",
+            "available_no_oxygen_beds": null,
+            "total_available_beds": null,
+            "sources": [
+                {
+                    "url": "https://www.covidfightclub.org/posts/hospital-all-beds-/maruthi-medical-center/4775",
+                    "name": "Covid Fight Club"
+                },
+                {
+                    "name": "LifeResources",
+                    "url": "https://liferesources.in/tamil_nadu/erode/hospital#5aeaf659-24ee-4f0a-a71e-6945963801fe"
+                }
+            ],
+            "contact_name": "Maruthi Medical_null",
+            "phones": [
+                "09965764830"
+            ],
+            "available_covid_beds": null
+        },
+        {
+            "total_available_beds": 46,
+            "details": "nil",
+            "last_verified_utc": "2021-05-12T10:38:39+00:00",
+            "address": "",
+            "sources": [
+                {
+                    "name": "Tamil Nadu Beds Availability Portal",
+                    "url": "https://stopcorona.tn.gov.in/beds.php"
+                }
+            ],
+            "available_covid_beds": 23,
+            "post_time": null,
+            "available_no_oxygen_beds": 23,
+            "phones": [
+                "09585285053"
+            ],
+            "available_oxygen_beds": 0,
+            "contact_name": "Kalyani _number_part",
+            "hospital_type": null
+        },
+        {
+            "sources": [
+                {
+                    "url": "https://stopcorona.tn.gov.in/beds.php",
+                    "name": "Tamil Nadu Beds Availability Portal"
+                }
+            ],
+            "last_verified_utc": "2021-05-12T12:36:59+00:00",
+            "total_available_beds": 17,
+            "phones": [
+                "08525861540"
+            ],
+            "hospital_type": null,
+            "contact_name": "Maaruthi _numbers",
+            "available_covid_beds": 10,
+            "available_no_oxygen_beds": 3,
+            "available_oxygen_beds": 4,
+            "post_time": null,
+            "address": "",
+            "details": "nilL"
+        }
+    ]
 }

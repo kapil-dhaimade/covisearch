@@ -86,6 +86,7 @@ app.controller('formCtrl', function ($scope, $http, $timeout, $window) {
 
     $scope.fetch = function (data) {
         url = api_base_url + "resource_type=" + data.resource.value + "&city=" + data.city + "&page_no=" + $scope.pageNumber;
+        // url = '../data/api.txt'
         $scope.leads = "";
         $scope.hasMoreData = false;
         $http.get(url).then(function (response) {
@@ -119,12 +120,10 @@ app.controller('formCtrl', function ($scope, $http, $timeout, $window) {
 
     $scope.getFromNowDate = function (date) {
         var now;
-        if(date && date.trim())
-        {
+        if (date && date.trim()) {
             now = moment(date).fromNow();
         }
-        else
-        {
+        else {
             now = "Not Specified"
         }
         return now;
@@ -135,6 +134,35 @@ app.controller('formCtrl', function ($scope, $http, $timeout, $window) {
         return date.format('DD-MM-YYYY');
     };
 
+    $scope.getNumbers = function (number) {
+        var contvertedNum;
+        if (number != null && number >= 0) {
+            contvertedNum = number;
+        }
+        else {
+            contvertedNum = "N.A."
+        }
+        return contvertedNum;
+    }
+
+    $scope.checkIfHospitalBedICU = function (x) {
+        if (x.available_no_ventilator_beds != null
+            || x.available_ventilator_beds != null
+            || x.total_available_icu_beds != null) {
+                return true;
+        }
+        return false;
+    }
+
+    $scope.checkIfHospitalBed = function (x) {
+        if (x.available_no_oxygen_beds != null
+            || x.available_oxygen_beds != null
+            || x.total_available_beds != null
+            || x.available_covid_beds != null) {
+                return true;
+        }
+        return false;
+    }
 
     $scope.fetchNextBatch = function (data) {
         if ($scope.hasMoreData == true || $scope.pageNumber == 0) {
