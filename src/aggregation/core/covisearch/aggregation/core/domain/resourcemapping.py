@@ -32,8 +32,6 @@ def map_res_info_to_covisearch(web_src_res_info: Dict, search_filter: SearchFilt
         # CovidResourceInfo.RESOURCE_TYPE_LABEL:
         #     CovidResourceType.to_string(search_filter.resource_type),
         # CovidResourceInfo.CITY_LABEL: search_filter.city,
-        CovidResourceInfo.WEB_SOURCE_NAME_LABEL: web_src.name,
-        CovidResourceInfo.CARD_SOURCE_URL_LABEL: web_src.card_source_url,
         CovidResourceInfo.SOURCES_LABEL: [
             {
                 CovidResourceInfo.SOURCE_NAME_LABEL: web_src.name,
@@ -312,16 +310,14 @@ def _map_details(covisearch_res, res_mapping_desc, web_src_res_info):
 
 
 def _map_phones(covisearch_res, res_mapping_desc, web_src_res_info, search_filter: SearchFilter):
-    phone_label = CovidResourceInfo.PHONE_NO_LABEL
+    phone_label = CovidResourceInfo.PHONES_LABEL
     phone_mapping = res_mapping_desc[phone_label]
     web_src_phone_no = web_src_res_info[phone_mapping.web_src_field_name]
-    non_uniform_format_phones = _sanitize_phone_no(web_src_phone_no)
-    covisearch_res[phone_label] = non_uniform_format_phones
 
     # NOTE: KAPIL: [AS ON 01-Jun-2021] The new field for keeping phone numbers as uniformized list.
     # Should replace old slash separated string later.
     covisearch_res[CovidResourceInfo.PHONES_LABEL] = \
-        _extract_and_uniformized_phones(non_uniform_format_phones, search_filter.city)
+        _extract_and_uniformized_phones(web_src_phone_no, search_filter.city)
 
 
 def _map_address(covisearch_res, res_mapping_desc, web_src_res_info):
@@ -344,6 +340,8 @@ def _map_contact_name(covisearch_res: Dict, res_mapping_desc: Dict[str, 'FieldMa
 def _map_card_source_url(covisearch_res: Dict, res_mapping_desc: Dict[str, 'FieldMappingDesc'],
                          web_src_res_info: Dict):
     card_source_url_label = CovidResourceInfo.CARD_SOURCE_URL_LABEL
+    sources_label = CovidResourceInfo.SOURCES_LABEL
+    source_url_label = CovidResourceInfo.SOURCE_URL_LABEL
     if card_source_url_label in res_mapping_desc:
         card_source_url_mapping = res_mapping_desc[card_source_url_label]
         # NOTE: KAPIL:
@@ -356,8 +354,9 @@ def _map_card_source_url(covisearch_res: Dict, res_mapping_desc: Dict[str, 'Fiel
         # -If post link is not present, then we should keep proper search filter in card source url
         # in web source.
         # -If post link has absolute URL, then we may not make field for card source url in web source.
-        covisearch_res[card_source_url_label] = \
-            covisearch_res[card_source_url_label] + web_src_res_info[card_source_url_mapping.web_src_field_name]
+        covisearch_res[sources_label][0][source_url_label] = \
+            covisearch_res[sources_label][0][source_url_label] + \
+            web_src_res_info[card_source_url_mapping.web_src_field_name]
 
 
 # TODO: KAPIL: Add proper details for specific res types later if websites give the info.
@@ -381,34 +380,53 @@ re_available_beds_pattern = re.compile('(\d+)', re.IGNORECASE)
 
 def _map_hospital_bed(web_src_res_info: Dict, res_mapping_desc: Dict[str, 'FieldMappingDesc'],
                       covisearch_res: Dict):
+    hospital_type_label = HospitalBedsInfo.HOSPITAL_TYPE_LABEL
+    _map_hospital_type(covisearch_res, hospital_type_label, res_mapping_desc, web_src_res_info)
+
     _map_bed_field(HospitalBedsInfo.AVAILABLE_COVID_BEDS_LABEL, covisearch_res,
                    res_mapping_desc, web_src_res_info)
-    _map_bed_field(HospitalBedsInfo.AVAILABLE_COVID_BEDS_WITHOUT_OXYGEN_LABEL, covisearch_res,
+    _map_bed_field(HospitalBedsInfo.AVAILABLE_NO_OXYGEN_BEDS_LABEL, covisearch_res,
                    res_mapping_desc, web_src_res_info)
-    _map_bed_field(HospitalBedsInfo.AVAILABLE_COVID_BEDS_WITH_OXYGEN_LABEL, covisearch_res,
+    _map_bed_field(HospitalBedsInfo.AVAILABLE_OXYGEN_BEDS_LABEL, covisearch_res,
                    res_mapping_desc, web_src_res_info)
-    HospitalBedsInfo.add_total_available_beds(covisearch_res)
+    _map_bed_field(HospitalBedsInfo.TOTAL_AVAILABLE_BEDS_LABEL, covisearch_res,
+                   res_mapping_desc, web_src_res_info)
+    HospitalBedsInfo.fill_remaining_bed_fields(covisearch_res)
 
 
 def _map_hospital_bed_icu(web_src_res_info: Dict, res_mapping_desc: Dict[str, 'FieldMappingDesc'],
-                      covisearch_res: Dict):
-    _map_bed_field(HospitalBedsICUInfo.AVAILABLE_ICU_BEDS_LABEL, covisearch_res,
+                          covisearch_res: Dict):
+    hospital_type_label = HospitalBedsICUInfo.HOSPITAL_TYPE_LABEL
+    _map_hospital_type(covisearch_res, hospital_type_label, res_mapping_desc, web_src_res_info)
+
+    _map_bed_field(HospitalBedsICUInfo.AVAILABLE_NO_VENTILATOR_BEDS_LABEL, covisearch_res,
                    res_mapping_desc, web_src_res_info)
-    _map_bed_field(HospitalBedsICUInfo.AVAILABLE_ICU_BEDS_WITH_VENTILATOR_LABEL, covisearch_res,
+    _map_bed_field(HospitalBedsICUInfo.AVAILABLE_VENTILATOR_BEDS_LABEL, covisearch_res,
                    res_mapping_desc, web_src_res_info)
+    _map_bed_field(HospitalBedsICUInfo.TOTAL_AVAILABLE_BEDS_LABEL, covisearch_res,
+                   res_mapping_desc, web_src_res_info)
+    HospitalBedsICUInfo.fill_remaining_bed_fields(covisearch_res)
 
 
-def _map_bed_field(available_covid_beds_label, covisearch_res, res_mapping_desc, web_src_res_info):
-    if available_covid_beds_label in res_mapping_desc:
-        available_beds_mapping = res_mapping_desc[available_covid_beds_label]
-        web_src_available_beds = web_src_res_info[available_beds_mapping.web_src_field_name]
-        re_available_beds_result = re_available_beds_pattern.search(web_src_available_beds)
-        if re_available_beds_result is not None:
-            covisearch_res[available_covid_beds_label] = int(re_available_beds_result.group(1))
-        else:
-            covisearch_res[available_covid_beds_label] = None
+def _map_hospital_type(covisearch_res, hospital_type_label, res_mapping_desc, web_src_res_info):
+    if hospital_type_label in res_mapping_desc:
+        hospital_type_mapping = res_mapping_desc[hospital_type_label]
+        covisearch_res[hospital_type_label] = web_src_res_info[hospital_type_mapping.web_src_field_name]
     else:
-        covisearch_res[available_covid_beds_label] = None
+        covisearch_res[hospital_type_label] = None
+
+
+def _map_bed_field(bed_field_label, covisearch_res, res_mapping_desc, web_src_res_info):
+    if bed_field_label in res_mapping_desc:
+        bed_field_mapping = res_mapping_desc[bed_field_label]
+        web_src_bed_field_val = web_src_res_info[bed_field_mapping.web_src_field_name]
+        re_bed_field_result = re_available_beds_pattern.search(web_src_bed_field_val)
+        if re_bed_field_result is not None:
+            covisearch_res[bed_field_label] = int(re_bed_field_result.group(1))
+        else:
+            covisearch_res[bed_field_label] = None
+    else:
+        covisearch_res[bed_field_label] = None
 
 
 def _map_ambulance(web_src_res_info: Dict, res_mapping_desc: Dict[str, 'FieldMappingDesc'],
@@ -476,23 +494,6 @@ def _retry_uniformize_phone_by_adding_area_code(non_uniform_phone: str, city: st
                 for match in phone_no_matcher]
     else:
         return []
-
-
-def _sanitize_phone_no(phone_no: str) -> str:
-    # NOTE: KAPIL: Intended format: '8888888888/9999999999'
-    sanitized_phone_no = phone_no.strip()
-    sanitized_phone_no = sanitized_phone_no.replace(' / ', '/')
-    sanitized_phone_no = sanitized_phone_no.replace(' , ', '/')
-    sanitized_phone_no = sanitized_phone_no.replace(',\n', '/')
-    sanitized_phone_no = sanitized_phone_no.replace(', \n', '/')
-    sanitized_phone_no = sanitized_phone_no.replace(', ', '/')
-    sanitized_phone_no = sanitized_phone_no.replace(',', '/')
-    sanitized_phone_no = sanitized_phone_no.replace(' | ', '/')
-    sanitized_phone_no = sanitized_phone_no.replace('|', '/')
-    sanitized_phone_no = sanitized_phone_no.replace('\n', '/')
-    sanitized_phone_no = sanitized_phone_no.replace('\r', '')
-    sanitized_phone_no = sanitized_phone_no.replace('\t', ' ')
-    return sanitized_phone_no
 
 
 def _sanitize_string_field(field_value: str) -> str:

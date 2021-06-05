@@ -63,11 +63,9 @@ class CovidResourceInfo:
     CONTACT_NAME_LABEL = 'contact_name'
     ADDRESS_LABEL = 'address'
     DETAILS_LABEL = 'details'
-    PHONE_NO_LABEL = 'phone_no'
     PHONES_LABEL = 'phones'
     POST_TIME_LABEL = 'post_time'
     LAST_VERIFIED_UTC_LABEL = 'last_verified_utc'
-    WEB_SOURCE_NAME_LABEL = 'web_source_name'
     CARD_SOURCE_URL_LABEL = 'card_source_url'
     SOURCES_LABEL = 'sources'
     SOURCE_URL_LABEL = 'url'
@@ -277,27 +275,68 @@ class OxygenInfo(CovidResourceInfo):
 
 class HospitalBedsInfo(CovidResourceInfo):
     AVAILABLE_COVID_BEDS_LABEL = 'available_covid_beds'
-    AVAILABLE_COVID_BEDS_WITHOUT_OXYGEN_LABEL = 'available_covid_beds_without_oxygen'
-    AVAILABLE_COVID_BEDS_WITH_OXYGEN_LABEL = 'available_covid_beds_with_oxygen'
+    AVAILABLE_NO_OXYGEN_BEDS_LABEL = 'available_no_oxygen_beds'
+    AVAILABLE_OXYGEN_BEDS_LABEL = 'available_oxygen_beds'
     TOTAL_AVAILABLE_BEDS_LABEL = 'total_available_beds'
+    HOSPITAL_TYPE_LABEL = 'hospital_type'
     TOTAL_BEDS_WEIGHTAGE_THRESHOLD = 10
 
     @classmethod
-    def add_total_available_beds(cls, resource_info: Dict):
-        if resource_info[cls.AVAILABLE_COVID_BEDS_LABEL] is None and \
-                resource_info[cls.AVAILABLE_COVID_BEDS_WITH_OXYGEN_LABEL] is None and \
-                resource_info[cls.AVAILABLE_COVID_BEDS_WITHOUT_OXYGEN_LABEL] is None:
-            resource_info[cls.TOTAL_AVAILABLE_BEDS_LABEL] = None
+    def fill_remaining_bed_fields(cls, resource_info: Dict):
+        available_beds_label = cls.AVAILABLE_COVID_BEDS_LABEL
+        no_oxygen_beds_label = cls.AVAILABLE_NO_OXYGEN_BEDS_LABEL
+        oxygen_beds_label = cls.AVAILABLE_OXYGEN_BEDS_LABEL
+        total_beds_label = cls.TOTAL_AVAILABLE_BEDS_LABEL
+
+        if total_beds_label not in resource_info:
+            resource_info[total_beds_label] = None
+
+        if resource_info[available_beds_label] is None and \
+                resource_info[oxygen_beds_label] is None and \
+                resource_info[no_oxygen_beds_label] is None:
             return
 
-        total_available_beds = 0
-        if resource_info[cls.AVAILABLE_COVID_BEDS_LABEL] is not None:
-            total_available_beds = total_available_beds + resource_info[cls.AVAILABLE_COVID_BEDS_LABEL]
-        if resource_info[cls.AVAILABLE_COVID_BEDS_WITH_OXYGEN_LABEL] is not None:
-            total_available_beds = total_available_beds + resource_info[cls.AVAILABLE_COVID_BEDS_WITH_OXYGEN_LABEL]
-        if resource_info[cls.AVAILABLE_COVID_BEDS_WITHOUT_OXYGEN_LABEL] is not None:
-            total_available_beds = total_available_beds + resource_info[cls.AVAILABLE_COVID_BEDS_WITHOUT_OXYGEN_LABEL]
-        resource_info[cls.TOTAL_AVAILABLE_BEDS_LABEL] = total_available_beds
+        cls._fill_missing_field_if_others_are_present(
+            available_beds_label, oxygen_beds_label, no_oxygen_beds_label, resource_info)
+
+        cls._fill_missing_field_if_others_are_present(
+            oxygen_beds_label, available_beds_label, no_oxygen_beds_label, resource_info)
+
+        cls._fill_missing_field_if_others_are_present(
+            no_oxygen_beds_label, available_beds_label, oxygen_beds_label, resource_info)
+
+        cls._fill_total_field_if_missing(resource_info)
+
+    @classmethod
+    def _fill_missing_field_if_others_are_present(
+            cls, missing_field_label, other_field_1_label, other_field_2_label, resource_info):
+
+        total_beds_label = cls.TOTAL_AVAILABLE_BEDS_LABEL
+
+        if resource_info[missing_field_label] is None and \
+                resource_info[other_field_2_label] is not None and \
+                resource_info[other_field_1_label] is not None and \
+                resource_info[total_beds_label] is not None:
+
+            resource_info[missing_field_label] = \
+                resource_info[total_beds_label] - resource_info[other_field_1_label] - \
+                resource_info[other_field_2_label]
+
+    @classmethod
+    def _fill_total_field_if_missing(cls, resource_info):
+        if resource_info[cls.TOTAL_AVAILABLE_BEDS_LABEL] is None:
+            total_available_beds = 0
+
+            if resource_info[cls.AVAILABLE_COVID_BEDS_LABEL] is not None:
+                total_available_beds = total_available_beds + resource_info[cls.AVAILABLE_COVID_BEDS_LABEL]
+
+            if resource_info[cls.AVAILABLE_OXYGEN_BEDS_LABEL] is not None:
+                total_available_beds = total_available_beds + resource_info[cls.AVAILABLE_OXYGEN_BEDS_LABEL]
+
+            if resource_info[cls.AVAILABLE_NO_OXYGEN_BEDS_LABEL] is not None:
+                total_available_beds = total_available_beds + resource_info[cls.AVAILABLE_NO_OXYGEN_BEDS_LABEL]
+
+            resource_info[cls.TOTAL_AVAILABLE_BEDS_LABEL] = total_available_beds
 
     @classmethod
     def compare(cls, res_info_a: Dict, res_info_b: Dict) -> int:
@@ -320,9 +359,9 @@ class HospitalBedsInfo(CovidResourceInfo):
     def _merge_older_with_newer(cls, older_resource_info: Dict, newer_resource_info: Dict):
         super()._merge_older_with_newer(older_resource_info, newer_resource_info)
         cls._merge_field_if_absent(cls.AVAILABLE_COVID_BEDS_LABEL, older_resource_info, newer_resource_info)
-        cls._merge_field_if_absent(cls.AVAILABLE_COVID_BEDS_WITHOUT_OXYGEN_LABEL,
+        cls._merge_field_if_absent(cls.AVAILABLE_NO_OXYGEN_BEDS_LABEL,
                                    older_resource_info, newer_resource_info)
-        cls._merge_field_if_absent(cls.AVAILABLE_COVID_BEDS_WITH_OXYGEN_LABEL,
+        cls._merge_field_if_absent(cls.AVAILABLE_OXYGEN_BEDS_LABEL,
                                    older_resource_info, newer_resource_info)
         cls._merge_field_if_absent(cls.TOTAL_AVAILABLE_BEDS_LABEL, older_resource_info, newer_resource_info)
 
@@ -428,10 +467,55 @@ class HospitalBedsInfo(CovidResourceInfo):
 
 
 class HospitalBedsICUInfo(CovidResourceInfo):
-    AVAILABLE_ICU_BEDS_LABEL = 'available_icu_beds'
-    AVAILABLE_ICU_BEDS_WITH_VENTILATOR_LABEL = 'available_icu_beds_with_ventilator'
+    AVAILABLE_NO_VENTILATOR_BEDS_LABEL = 'available_no_ventilator_beds'
+    AVAILABLE_VENTILATOR_BEDS_LABEL = 'available_ventilator_beds'
+    TOTAL_AVAILABLE_BEDS_LABEL = 'total_available_icu_beds'
+    HOSPITAL_TYPE_LABEL = 'hospital_type'
 
     TOTAL_BEDS_WEIGHTAGE_THRESHOLD = 10
+
+    @classmethod
+    def fill_remaining_bed_fields(cls, resource_info: Dict):
+        no_ventilator_beds_label = cls.AVAILABLE_NO_VENTILATOR_BEDS_LABEL
+        ventilator_beds_label = cls.AVAILABLE_VENTILATOR_BEDS_LABEL
+
+        if resource_info[ventilator_beds_label] is None and \
+                resource_info[no_ventilator_beds_label] is None:
+            return
+
+        cls._fill_missing_field_if_others_are_present(
+            no_ventilator_beds_label, ventilator_beds_label, resource_info)
+
+        cls._fill_missing_field_if_others_are_present(
+            ventilator_beds_label, no_ventilator_beds_label, resource_info)
+
+        cls._fill_total_field_if_missing(resource_info)
+
+    @classmethod
+    def _fill_missing_field_if_others_are_present(
+            cls, missing_field_label, other_field_label, resource_info):
+
+        total_beds_label = cls.TOTAL_AVAILABLE_BEDS_LABEL
+
+        if resource_info[missing_field_label] is None and \
+                resource_info[other_field_label] is not None and \
+                resource_info[total_beds_label] is not None:
+
+            resource_info[missing_field_label] = \
+                resource_info[total_beds_label] - resource_info[other_field_label]
+
+    @classmethod
+    def _fill_total_field_if_missing(cls, resource_info):
+        if resource_info[cls.TOTAL_AVAILABLE_BEDS_LABEL] is None:
+            total_available_beds = 0
+
+            if resource_info[cls.AVAILABLE_NO_VENTILATOR_BEDS_LABEL] is not None:
+                total_available_beds = total_available_beds + resource_info[cls.AVAILABLE_NO_VENTILATOR_BEDS_LABEL]
+
+            if resource_info[cls.AVAILABLE_VENTILATOR_BEDS_LABEL] is not None:
+                total_available_beds = total_available_beds + resource_info[cls.AVAILABLE_VENTILATOR_BEDS_LABEL]
+
+            resource_info[cls.TOTAL_AVAILABLE_BEDS_LABEL] = total_available_beds
 
     @classmethod
     def compare(cls, res_info_a: Dict, res_info_b: Dict) -> int:
@@ -453,14 +537,15 @@ class HospitalBedsICUInfo(CovidResourceInfo):
     @classmethod
     def _merge_older_with_newer(cls, older_resource_info: Dict, newer_resource_info: Dict):
         super()._merge_older_with_newer(older_resource_info, newer_resource_info)
-        cls._merge_field_if_absent(cls.AVAILABLE_ICU_BEDS_LABEL, older_resource_info, newer_resource_info)
-        cls._merge_field_if_absent(cls.AVAILABLE_ICU_BEDS_WITH_VENTILATOR_LABEL,
+        cls._merge_field_if_absent(cls.AVAILABLE_NO_VENTILATOR_BEDS_LABEL, older_resource_info, newer_resource_info)
+        cls._merge_field_if_absent(cls.AVAILABLE_VENTILATOR_BEDS_LABEL,
                                    older_resource_info, newer_resource_info)
+        cls._merge_field_if_absent(cls.TOTAL_AVAILABLE_BEDS_LABEL, older_resource_info, newer_resource_info)
 
     @classmethod
     def get_total_available_bed_compare_result(cls, res_info_a: Dict, res_info_b: Dict) -> int:
-        total_available_beds_a = res_info_a[cls.AVAILABLE_ICU_BEDS_LABEL]
-        total_available_beds_b = res_info_b[cls.AVAILABLE_ICU_BEDS_LABEL]
+        total_available_beds_a = res_info_a[cls.AVAILABLE_NO_VENTILATOR_BEDS_LABEL]
+        total_available_beds_b = res_info_b[cls.AVAILABLE_NO_VENTILATOR_BEDS_LABEL]
         if total_available_beds_a is not None and total_available_beds_b is None:
             return -1
         if total_available_beds_b is not None and total_available_beds_a is None:
@@ -502,9 +587,9 @@ class HospitalBedsICUInfo(CovidResourceInfo):
             return True
         if not res_info_b[cls.LAST_VERIFIED_UTC_LABEL]:
             return True
-        if not res_info_a[cls.AVAILABLE_ICU_BEDS_LABEL]:
+        if not res_info_a[cls.AVAILABLE_NO_VENTILATOR_BEDS_LABEL]:
             return True
-        if not res_info_b[cls.AVAILABLE_ICU_BEDS_LABEL]:
+        if not res_info_b[cls.AVAILABLE_NO_VENTILATOR_BEDS_LABEL]:
             return True
         return False
 
@@ -512,7 +597,7 @@ class HospitalBedsICUInfo(CovidResourceInfo):
     def _is_any_of_last_verified_and_total_beds_fields_equal(cls, res_info_a: Dict, res_info_b: Dict) -> bool:
         if res_info_a[cls.LAST_VERIFIED_UTC_LABEL] == res_info_b[cls.LAST_VERIFIED_UTC_LABEL]:
             return True
-        if res_info_a[cls.AVAILABLE_ICU_BEDS_LABEL] == res_info_b[cls.AVAILABLE_ICU_BEDS_LABEL]:
+        if res_info_a[cls.AVAILABLE_NO_VENTILATOR_BEDS_LABEL] == res_info_b[cls.AVAILABLE_NO_VENTILATOR_BEDS_LABEL]:
             return True
         return False
 
@@ -546,7 +631,7 @@ class HospitalBedsICUInfo(CovidResourceInfo):
         last_verified_older: datetime = older_verified_res_info[last_verified_label]
         days_between_verification_of_recent_and_earlier = (last_verified_recent - last_verified_older).days
 
-        total_available_beds_label = cls.AVAILABLE_ICU_BEDS_LABEL
+        total_available_beds_label = cls.AVAILABLE_NO_VENTILATOR_BEDS_LABEL
         total_beds_of_recent_res_info: int = recently_verified_res_info[total_available_beds_label]
         total_beds_of_older_res_info: int = older_verified_res_info[total_available_beds_label]
         diff_between_total_beds_of_older_and_recent = total_beds_of_older_res_info - total_beds_of_recent_res_info
