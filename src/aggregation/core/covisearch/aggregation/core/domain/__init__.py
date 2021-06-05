@@ -105,7 +105,6 @@ def _scrape_data_from_web_sources(web_sources: Dict[str, resourcemapping.WebSour
 #         # dt_mapper = resourcemapping.get_datetime_format_mapper(datetimeutil.DatetimeFormat.UNIX_TIMESTAMP_MILLISEC)
 #         # dt2 = dt_mapper('1621189375010').isoformat()
 #
-#
 #         elapsedtime.start_measuring_total()
 #
 #         ctx = elapsedtime.start_measuring_operation('firestore DB init')

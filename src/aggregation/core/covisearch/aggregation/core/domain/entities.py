@@ -397,7 +397,7 @@ class HospitalBedsInfo(CovidResourceInfo):
         diff_between_total_beds_of_older_and_recent = total_beds_of_older_res_info - total_beds_of_recent_res_info
 
         if diff_between_total_beds_of_older_and_recent > \
-                (days_between_verification_of_recent_and_earlier * cls.TOTAL_BEDS_WEIGHTAGE_THRESHOLD):
+                ((days_between_verification_of_recent_and_earlier + 1) * cls.TOTAL_BEDS_WEIGHTAGE_THRESHOLD):
             return True
         else:
             return False
@@ -459,9 +459,9 @@ class HospitalBedsInfo(CovidResourceInfo):
             return True
         if not res_info_b[cls.LAST_VERIFIED_UTC_LABEL]:
             return True
-        if not res_info_a[cls.TOTAL_AVAILABLE_BEDS_LABEL]:
+        if res_info_a[cls.TOTAL_AVAILABLE_BEDS_LABEL] is None:
             return True
-        if not res_info_b[cls.TOTAL_AVAILABLE_BEDS_LABEL]:
+        if res_info_b[cls.TOTAL_AVAILABLE_BEDS_LABEL] is None:
             return True
         return False
 
@@ -544,8 +544,8 @@ class HospitalBedsICUInfo(CovidResourceInfo):
 
     @classmethod
     def get_total_available_bed_compare_result(cls, res_info_a: Dict, res_info_b: Dict) -> int:
-        total_available_beds_a = res_info_a[cls.AVAILABLE_NO_VENTILATOR_BEDS_LABEL]
-        total_available_beds_b = res_info_b[cls.AVAILABLE_NO_VENTILATOR_BEDS_LABEL]
+        total_available_beds_a = res_info_a[cls.TOTAL_AVAILABLE_BEDS_LABEL]
+        total_available_beds_b = res_info_b[cls.TOTAL_AVAILABLE_BEDS_LABEL]
         if total_available_beds_a is not None and total_available_beds_b is None:
             return -1
         if total_available_beds_b is not None and total_available_beds_a is None:
@@ -587,9 +587,9 @@ class HospitalBedsICUInfo(CovidResourceInfo):
             return True
         if not res_info_b[cls.LAST_VERIFIED_UTC_LABEL]:
             return True
-        if not res_info_a[cls.AVAILABLE_NO_VENTILATOR_BEDS_LABEL]:
+        if res_info_a[cls.TOTAL_AVAILABLE_BEDS_LABEL] is None:
             return True
-        if not res_info_b[cls.AVAILABLE_NO_VENTILATOR_BEDS_LABEL]:
+        if res_info_b[cls.TOTAL_AVAILABLE_BEDS_LABEL] is None:
             return True
         return False
 
@@ -597,7 +597,7 @@ class HospitalBedsICUInfo(CovidResourceInfo):
     def _is_any_of_last_verified_and_total_beds_fields_equal(cls, res_info_a: Dict, res_info_b: Dict) -> bool:
         if res_info_a[cls.LAST_VERIFIED_UTC_LABEL] == res_info_b[cls.LAST_VERIFIED_UTC_LABEL]:
             return True
-        if res_info_a[cls.AVAILABLE_NO_VENTILATOR_BEDS_LABEL] == res_info_b[cls.AVAILABLE_NO_VENTILATOR_BEDS_LABEL]:
+        if res_info_a[cls.TOTAL_AVAILABLE_BEDS_LABEL] == res_info_b[cls.TOTAL_AVAILABLE_BEDS_LABEL]:
             return True
         return False
 
@@ -631,13 +631,13 @@ class HospitalBedsICUInfo(CovidResourceInfo):
         last_verified_older: datetime = older_verified_res_info[last_verified_label]
         days_between_verification_of_recent_and_earlier = (last_verified_recent - last_verified_older).days
 
-        total_available_beds_label = cls.AVAILABLE_NO_VENTILATOR_BEDS_LABEL
+        total_available_beds_label = cls.TOTAL_AVAILABLE_BEDS_LABEL
         total_beds_of_recent_res_info: int = recently_verified_res_info[total_available_beds_label]
         total_beds_of_older_res_info: int = older_verified_res_info[total_available_beds_label]
         diff_between_total_beds_of_older_and_recent = total_beds_of_older_res_info - total_beds_of_recent_res_info
 
         if diff_between_total_beds_of_older_and_recent > \
-                (days_between_verification_of_recent_and_earlier * cls.TOTAL_BEDS_WEIGHTAGE_THRESHOLD):
+                ((days_between_verification_of_recent_and_earlier + 1) * cls.TOTAL_BEDS_WEIGHTAGE_THRESHOLD):
             return True
         else:
             return False
