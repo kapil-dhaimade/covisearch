@@ -65,7 +65,7 @@ def fetch_resource_for_filter(request: Request):
 
     resources = res_info_doc.get(db.field_path('resource_info_data'))
     page_size = 12
-    if len(resources) < page_no * page_size:
+    if len(resources) <= page_no * page_size:
         if len(resources) < (page_no - 1) * page_size:
             return "Invalid Page no", 400, headers
         else:
