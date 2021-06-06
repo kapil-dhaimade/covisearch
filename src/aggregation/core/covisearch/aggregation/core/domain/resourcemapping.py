@@ -245,7 +245,12 @@ def _get_specific_res_info_mapper(res_type: CovidResourceType):
         entities.CovidResourceType.MEDICINE: _map_medicine,
         entities.CovidResourceType.VENTILATOR: _map_ventilator,
         entities.CovidResourceType.HELPLINE: _map_helpline,
-        entities.CovidResourceType.BLOOD: _map_blood
+        entities.CovidResourceType.BLOOD: _map_blood,
+        entities.CovidResourceType.MED_AMPHOTERICIN_B: _map_medicine,
+        entities.CovidResourceType.MED_CRESEMBA: _map_medicine,
+        entities.CovidResourceType.MED_TOCILIZUMAB: _map_medicine,
+        entities.CovidResourceType.MED_OSELTAMIVIR: _map_medicine,
+        entities.CovidResourceType.MED_AMPHOLYN: _map_medicine,
     }
     return _web_res_to_covisearch_res_mapper[res_type]
 

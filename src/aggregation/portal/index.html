@@ -49,7 +49,7 @@
 
           <div class="form-group custom-input">
             <select class="form-control form-input" ng-model="filter.resource"
-              ng-options="x.displayName for x in resourceList" required>
+              ng-options="x.displayName group by x.category for x in resourceList" required>
               <option value="" disabled>Select the Resource</option>
             </select>
           </div>

@@ -21,6 +21,11 @@ class CovidResourceType(enum.Enum):
     VENTILATOR = 10
     HELPLINE = 11
     BLOOD = 12
+    MED_AMPHOTERICIN_B = 13
+    MED_CRESEMBA = 14
+    MED_TOCILIZUMAB = 15
+    MED_OSELTAMIVIR = 16
+    MED_AMPHOLYN = 17
 
     @staticmethod
     def to_string(resource_type: 'CovidResourceType') -> str:
@@ -36,7 +41,12 @@ class CovidResourceType(enum.Enum):
             CovidResourceType.MEDICINE: 'medicine',
             CovidResourceType.VENTILATOR: 'ventilator',
             CovidResourceType.HELPLINE: 'helpline',
-            CovidResourceType.BLOOD: 'blood'
+            CovidResourceType.BLOOD: 'blood',
+            CovidResourceType.MED_AMPHOTERICIN_B: 'med_amphotericin',
+            CovidResourceType.MED_CRESEMBA: 'med_cresemba',
+            CovidResourceType.MED_TOCILIZUMAB: 'med_tocilizumab',
+            CovidResourceType.MED_OSELTAMIVIR: 'med_oseltamivir',
+            CovidResourceType.MED_AMPHOLYN: 'med_ampholyn'
         }
         return res_type_strings[resource_type]
 
@@ -54,7 +64,12 @@ class CovidResourceType(enum.Enum):
             'medicine': CovidResourceType.MEDICINE,
             'ventilator': CovidResourceType.VENTILATOR,
             'helpline': CovidResourceType.HELPLINE,
-            'blood': CovidResourceType.BLOOD
+            'blood': CovidResourceType.BLOOD,
+            'med_amphotericin' : CovidResourceType.MED_AMPHOTERICIN_B,
+            'med_cresemba' : CovidResourceType.MED_CRESEMBA,
+            'med_tocilizumab' : CovidResourceType.MED_TOCILIZUMAB,
+            'med_oseltamivir' :	CovidResourceType.MED_OSELTAMIVIR,
+            'med_ampholyn' : CovidResourceType.MED_AMPHOLYN
         }
         return res_types[resource_type_str.lower()]
 
@@ -738,7 +753,12 @@ def get_resource_info_class(resource_type: CovidResourceType):
         CovidResourceType.MEDICINE: MedicineInfo,
         CovidResourceType.VENTILATOR: VentilatorInfo,
         CovidResourceType.HELPLINE: HelplineInfo,
-        CovidResourceType.BLOOD: BloodInfo
+        CovidResourceType.BLOOD: BloodInfo,
+        CovidResourceType.MED_AMPHOTERICIN_B: MedicineInfo,
+        CovidResourceType.MED_AMPHOLYN: MedicineInfo,
+        CovidResourceType.MED_CRESEMBA: MedicineInfo,
+        CovidResourceType.MED_OSELTAMIVIR: MedicineInfo,
+        CovidResourceType.MED_TOCILIZUMAB: MedicineInfo
     }
     return res_type_classes[resource_type]
 

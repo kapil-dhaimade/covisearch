@@ -63,9 +63,39 @@ app.controller('formCtrl', function ($scope, $http, $timeout, $window) {
             'image': 'images/icons/testing.png'
         },
         {
-            'displayName': 'Medicine',
+            'displayName': 'All Medicines',
             'value': 'medicine',
             'image': 'images/icons/medicine.png'
+        },
+        {
+            'displayName': 'Amphotericin B',
+            'value': 'med_amphotericin',
+            'image': 'images/icons/medicine.png',
+            'category': 'Medicine'
+        },
+        {
+            'displayName': 'Cresemba',
+            'value': 'med_cresemba',
+            'image': 'images/icons/medicine.png',
+            'category': 'Medicine'
+        },
+        {
+            'displayName': 'Tocilizumab',
+            'value': 'med_tocilizumab',
+            'image': 'images/icons/medicine.png',
+            'category': 'Medicine'
+        },
+        {
+            'displayName': 'Oseltamivir',
+            'value': 'med_oseltamivir',
+            'image': 'images/icons/medicine.png',
+            'category': 'Medicine'
+        },
+        {
+            'displayName': 'Ampholyn',
+            'value': 'med_ampholyn',
+            'image': 'images/icons/medicine.png',
+            'category': 'Medicine'
         },
         {
             'displayName': 'Ventilator',
