@@ -101,6 +101,8 @@ def _firestore_to_web_src(
         data_table_filter_templates = web_src_dict['data_table_filter_templates'] \
             if 'data_table_filter_templates' in web_src_dict else None
 
+        city_mapping = web_src_dict['city_mapping'] if 'city_mapping' in web_src_dict else None
+
         return resourcemapping.WebSource(
             web_src_dict['name'], web_src_dict['homepage_url'],
             web_src_dict['web_resource_url_template'],
@@ -111,7 +113,7 @@ def _firestore_to_web_src(
             data_table_filter_templates,
             _get_resource_mapping_desc_model(web_src_dict['resource_mapping_desc']),
             web_src_dict['resource_type_label_mapping'],
-            city_name_case_mapping, search_filter)
+            city_name_case_mapping, city_mapping, search_filter)
 
     except resourcemapping.NoResourceTypeMappingError:
         return None

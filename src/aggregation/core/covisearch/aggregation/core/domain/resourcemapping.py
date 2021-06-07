@@ -59,12 +59,13 @@ class WebSource:
                  data_table_filter_templates: Dict[str, str],
                  resource_mapping_desc: Dict[str, 'FieldMappingDesc'],
                  resource_type_label_mapping: Dict[str, str],
-                 city_name_case_mapping: LetterCaseType, search_filter: SearchFilter):
+                 city_name_case_mapping: LetterCaseType, city_mapping: Dict[str, str],
+                 search_filter: SearchFilter):
 
         self._name = name
         self._homepage_url: URL = homepage_url
-        web_src_city = self._map_to_web_src_city_by_letter_case_mapping(
-            search_filter.city, city_name_case_mapping)
+        web_src_city = self._map_to_web_src_city(
+            search_filter.city, city_name_case_mapping, city_mapping)
         # NOTE: KAPIL: URL with place-holders for search filter params in {param} blocks
         # Eg: http://covidres.com/city={CITY}&resource={RESOURCE_TYPE}
         self._web_resource_url = self._url_from_template(
@@ -179,7 +180,17 @@ class WebSource:
         return request_body
 
     @classmethod
-    def _map_to_web_src_city_by_letter_case_mapping(cls, city: str, city_case_mapping: LetterCaseType) -> str:
+    def _map_to_web_src_city(cls, city: str, city_case_mapping: LetterCaseType,
+                             city_mapping: Dict[str, str]) -> str:
+        if city_mapping is not None:
+            if city.lower() in city_mapping:
+                return city_mapping[city.lower()]
+
+        return cls._map_to_web_src_city_with_lettercase_mapping(city, city_case_mapping)
+
+    @classmethod
+    def _map_to_web_src_city_with_lettercase_mapping(
+            cls, city: str, city_case_mapping: LetterCaseType) -> str:
         if city_case_mapping is None:
             return city
 
@@ -251,6 +262,7 @@ def _get_specific_res_info_mapper(res_type: CovidResourceType):
         entities.CovidResourceType.MED_TOCILIZUMAB: _map_medicine,
         entities.CovidResourceType.MED_OSELTAMIVIR: _map_medicine,
         entities.CovidResourceType.MED_AMPHOLYN: _map_medicine,
+        entities.CovidResourceType.MED_POSACONAZOLE: _map_medicine
     }
     return _web_res_to_covisearch_res_mapper[res_type]
 
@@ -299,7 +311,7 @@ def _map_post_time(covisearch_res, res_mapping_desc, web_src_res_info):
             covisearch_res[post_time_label] = \
                 map_web_src_datetime_to_covisearch(web_src_post_time)
         except:
-            covisearch_res[post_time_mapping] = None
+            covisearch_res[post_time_label] = None
     else:
         covisearch_res[post_time_label] = None
 

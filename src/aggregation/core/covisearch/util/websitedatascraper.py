@@ -342,6 +342,10 @@ class JSONSelectorParser(ContentTypeSelectorParser):
         return [self._get_str_val_of_field(field_selector, parent_node) for parent_node in parent_nodes]
 
     def _get_str_val_of_field(self, field_selector, parent_node):
+        # NOTE: KAPIL: In some cases parent node of JSON is 'null'. In such cases,
+        # node returned by JSONPath for that parent node is None.
+        if parent_node is None:
+            return ''
         field_val = parent_node.get(field_selector, '')
         if field_val is None:
             return ''

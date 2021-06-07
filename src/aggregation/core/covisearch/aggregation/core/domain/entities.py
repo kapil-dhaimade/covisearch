@@ -26,6 +26,7 @@ class CovidResourceType(enum.Enum):
     MED_TOCILIZUMAB = 15
     MED_OSELTAMIVIR = 16
     MED_AMPHOLYN = 17
+    MED_POSACONAZOLE = 18
 
     @staticmethod
     def to_string(resource_type: 'CovidResourceType') -> str:
@@ -46,7 +47,8 @@ class CovidResourceType(enum.Enum):
             CovidResourceType.MED_CRESEMBA: 'med_cresemba',
             CovidResourceType.MED_TOCILIZUMAB: 'med_tocilizumab',
             CovidResourceType.MED_OSELTAMIVIR: 'med_oseltamivir',
-            CovidResourceType.MED_AMPHOLYN: 'med_ampholyn'
+            CovidResourceType.MED_AMPHOLYN: 'med_ampholyn',
+            CovidResourceType.MED_POSACONAZOLE: 'med_posaconazole'
         }
         return res_type_strings[resource_type]
 
@@ -65,11 +67,12 @@ class CovidResourceType(enum.Enum):
             'ventilator': CovidResourceType.VENTILATOR,
             'helpline': CovidResourceType.HELPLINE,
             'blood': CovidResourceType.BLOOD,
-            'med_amphotericin' : CovidResourceType.MED_AMPHOTERICIN_B,
-            'med_cresemba' : CovidResourceType.MED_CRESEMBA,
-            'med_tocilizumab' : CovidResourceType.MED_TOCILIZUMAB,
-            'med_oseltamivir' :	CovidResourceType.MED_OSELTAMIVIR,
-            'med_ampholyn' : CovidResourceType.MED_AMPHOLYN
+            'med_amphotericin': CovidResourceType.MED_AMPHOTERICIN_B,
+            'med_cresemba': CovidResourceType.MED_CRESEMBA,
+            'med_tocilizumab': CovidResourceType.MED_TOCILIZUMAB,
+            'med_oseltamivir':	CovidResourceType.MED_OSELTAMIVIR,
+            'med_ampholyn': CovidResourceType.MED_AMPHOLYN,
+            'med_posaconazole': CovidResourceType.MED_POSACONAZOLE
         }
         return res_types[resource_type_str.lower()]
 
@@ -758,7 +761,8 @@ def get_resource_info_class(resource_type: CovidResourceType):
         CovidResourceType.MED_AMPHOLYN: MedicineInfo,
         CovidResourceType.MED_CRESEMBA: MedicineInfo,
         CovidResourceType.MED_OSELTAMIVIR: MedicineInfo,
-        CovidResourceType.MED_TOCILIZUMAB: MedicineInfo
+        CovidResourceType.MED_TOCILIZUMAB: MedicineInfo,
+        CovidResourceType.MED_POSACONAZOLE: MedicineInfo
     }
     return res_type_classes[resource_type]
 

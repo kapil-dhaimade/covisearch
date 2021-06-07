@@ -184,7 +184,9 @@ def set_timezone_if_not_present(timestamp: datetime, time_zone) -> datetime:
 #     is_valid = phonenumbers.is_valid_number(in2)
 #     e_164_2 = phonenumbers.format_number(in2, phonenumbers.PhoneNumberFormat.E164)
 #
-#     for match in phonenumbers.PhoneNumberMatcher('5226692000 (for 2 week days 25-12-2021)', 'IN'):
+#     dtttt = map_short_datetime_dd_mm_to_utc_datetime('04/06/2021 15:43:29', tz.gettz('Asia/Kolkata'))
+#
+#     for match in phonenumbers.PhoneNumberMatcher('Aundh - baner DCH Address: Near post 91 hotel, adjacent SBI bank, baner rd Number: 020-29525922 / Last Updated Date:05/06/2021 09:48:16', 'IN'):
 #         qw: phonenumbers.PhoneNumber = match.number
 #         e = phonenumbers.format_number(qw, phonenumbers.PhoneNumberFormat.E164)
 #         i = 9
