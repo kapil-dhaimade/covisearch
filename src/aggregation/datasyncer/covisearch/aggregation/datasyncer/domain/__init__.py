@@ -5,7 +5,6 @@ import covisearch.aggregation.datasyncer.domain.entities as entities
 import covisearch.aggregation.core.domain.entities as coreentities
 import covisearch.aggregation.core.domain.resourcemapping as resourcemapping
 import covisearch.aggregation.core.domain as coredomain
-import covisearch.util.websitedatascraper as websitedatascraper
 
 
 def resync_aggregated_data(filter_stats_repo: entities.FilterStatsRepo,
@@ -49,9 +48,6 @@ def _resync_resources_for_filter(filter_stats_to_resync: List[entities.FilterSta
     for filter_stats_item in filter_stats_to_resync:
         try:
             print('Resyncing resources for filter \'' + filter_stats_item.search_filter + '\'...')
-
-            # NOTE: KAPIL: For performance reasons, spawn scrapy child process instantly on init.
-            websitedatascraper.start_scrapy_process_in_advance()
 
             coredomain.aggregate_covid_resources(
                 coreentities.SearchFilter.create_from_url_query_string_fmt(
