@@ -5,7 +5,6 @@ import google.cloud.firestore as firestore
 import covisearch.aggregation.core.infra as infra
 from covisearch.aggregation.core.domain import entities
 import covisearch.aggregation.core.domain as domain
-import covisearch.util.websitedatascraper as websitedatascraper
 
 
 # Keep this global as global vars are not reinitialized if same Cloud Function instance
@@ -21,8 +20,6 @@ dummy_datetime_for_performance = \
 # Starting point called by Google Cloud Function
 # Do init and call corresponding domain function
 def aggregate_covid_resources(event, context):
-    # NOTE: KAPIL: For performance reasons, spawn scrapy child process instantly on init.
-    websitedatascraper.start_scrapy_process_in_advance()
     aggregated_res_info_repo = infra.AggregatedResourceInfoRepoImpl(db)
     web_src_repo = infra.WebSourceRepoImpl(db)
 
