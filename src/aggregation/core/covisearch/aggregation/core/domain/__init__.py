@@ -90,7 +90,6 @@ def _scrape_data_from_web_sources(web_sources: Dict[str, resourcemapping.WebSour
 # import google.cloud.firestore as firestore
 # import sys
 # import traceback
-# import covisearch.util.websitedatascraper as websitedatascraper
 # import covisearch.aggregation.core.domain.resourcemapping as resourcemapping
 # import covisearch.util.datetimeutil as datetimeutil
 # import datetime
@@ -111,16 +110,13 @@ def _scrape_data_from_web_sources(web_sources: Dict[str, resourcemapping.WebSour
 #         db = firestore.Client()
 #         elapsedtime.stop_measuring_operation(ctx)
 #
-#         websitedatascraper.start_scrapy_process_in_advance()
-#
 #         aggregated_res_info_repo = infra.AggregatedResourceInfoRepoImpl(db)
 #         web_src_repo = infra.WebSourceRepoImpl(db)
-#         search_filter = SearchFilter('pune', entities.CovidResourceType.HOSPITAL_BED_ICU, None)
+#         search_filter = SearchFilter('nagercoil', entities.CovidResourceType.AMBULANCE, None)
 #         aggregate_covid_resources(search_filter, aggregated_res_info_repo, web_src_repo)
 #
 #         elapsedtime.stop_measuring_total()
 #     except Exception as ex:
-#         # websitedatascraper.stop_scrapy_process()
 #         # <class 'IndexError'>
 #         print(sys.exc_info()[0])
 #
