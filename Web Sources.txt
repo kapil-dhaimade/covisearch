@@ -26,3 +26,15 @@ https://mumgis.mcgm.gov.in/Resources/COVIDBeds/bedTracker.html
 Hospital Bed Availability List of cities/states in India:
 https://www.mysmartprice.com/gear/hospital-bed-availability-online-covid/
 https://www.digit.in/news/general/online-covid-19-resources-hospital-beds-medicines-oxygen-supply-59297.html
+
+-CovidKhoj
+https://covidkhoj.in/seeker
+
+-CovidRelief Glide App: Shows twitter feeds
+https://covidrelief.glideapp.io/
+
+-Coveri: Shows Twitter feed:
+https://coveri.ga/
+
+-Palghar District Hospital Bed Availability:
+https://palghar.gov.in/covid-19-information/
