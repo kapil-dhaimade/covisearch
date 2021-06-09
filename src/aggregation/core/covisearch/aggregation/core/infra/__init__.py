@@ -92,6 +92,9 @@ def _firestore_to_web_src(
         request_body_template = web_src_dict['request_body_template'] \
             if 'request_body_template' in web_src_dict else None
 
+        additional_http_headers = web_src_dict['additional_http_headers'] \
+            if 'additional_http_headers' in web_src_dict else {}
+
         city_name_case_mapping = _letter_case_from_string(web_src_dict['city_name_case_mapping']) \
             if 'city_name_case_mapping' in web_src_dict else None
 
@@ -108,6 +111,7 @@ def _firestore_to_web_src(
             web_src_dict['web_resource_url_template'],
             card_source_url_template,
             request_content_type, request_body_template,
+            additional_http_headers,
             _content_type_from_string(web_src_dict['response_content_type']),
             web_src_dict['data_table_extract_selectors'],
             data_table_filter_templates,

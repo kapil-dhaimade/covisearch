@@ -29,12 +29,14 @@ def scrape_data_from_websites(
 
 class DataScrapingParams:
     def __init__(self, url: URL, request_content_type: ContentType, request_body: str,
+                 additional_http_headers: Dict[str, str],
                  response_content_type: ContentType, table_column_selectors: Dict[str, str],
                  table_row_regex_filters: Dict[str, str],
                  fields_selectors: Dict[str, str]):
         self._url = url
         self._request_content_type: ContentType = request_content_type
         self._request_body: str = request_body
+        self._additional_http_headers: Dict[str, str] = additional_http_headers
         self._response_content_type = response_content_type
         # NOTE: KAPIL: Selector may be XPath, JSONPath, etc. based on content type
         # Refer 'https://jsonpathfinder.com/' to get JSONPaths from JSON
@@ -54,6 +56,10 @@ class DataScrapingParams:
     @property
     def request_body(self) -> str:
         return self._request_body
+
+    @property
+    def additional_http_headers(self) -> Dict[str, str]:
+        return self._additional_http_headers
 
     @property
     def response_content_type(self) -> ContentType:
@@ -134,14 +140,10 @@ class WebsiteDataSpider:
         # NOTE: KAPIL: Using Postman's user-agent string because JustDial returned
         # HTTP 403 Access Denied for python requests lib's user-agent 'python-requests/2.25.1'.
         headers = {
-            'User-Agent': 'PostmanRuntime/7.28.0'
+            'User-Agent': 'PostmanRuntime/7.28.0',
         }
-
-        # NOTE: KAPIL: Hack for Justdial. Justdial returns HTTP 504 (timeout) in Google Cloud
-        # if Session Id cookie is not sent. And don't want to add full config in DB just for
-        # this case, so hard-coding the same.
-        if scraping_params.url.startswith('https://www.justdial.com'):
-            headers['Cookie'] = 'PHPSESSID=730e16c297847a368790ade8c8f11c73'
+        for header_name, header_value in scraping_params.additional_http_headers.items():
+            headers[header_name] = header_value
 
         # Example grequests code for GET, POST JSON and Form Data requests. Similar for requests:
         # https://www.programcreek.com/python/example/103991/grequests.post

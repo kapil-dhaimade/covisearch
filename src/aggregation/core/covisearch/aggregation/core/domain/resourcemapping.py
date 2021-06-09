@@ -54,6 +54,7 @@ class WebSource:
     def __init__(self, name: str, homepage_url: URL, web_resource_url_template: URL,
                  card_source_url_template: URL,
                  request_content_type: ContentType, request_body_template: str,
+                 additional_http_headers: Dict[str, str],
                  response_content_type: ContentType,
                  data_table_extract_selectors: Dict[str, str],
                  data_table_filter_templates: Dict[str, str],
@@ -77,6 +78,7 @@ class WebSource:
         self._request_body: str = self._request_body_from_template(
             request_body_template, web_src_city, search_filter, resource_type_label_mapping)
         self._response_content_type: ContentType = response_content_type
+        self._additional_http_headers: Dict[str, str] = additional_http_headers
 
         self._data_table_extract_selectors: Dict[str, str] = \
             data_table_extract_selectors
@@ -108,6 +110,10 @@ class WebSource:
     @property
     def request_body(self) -> str:
         return self._request_body
+
+    @property
+    def additional_http_headers(self) -> Dict[str, str]:
+        return self._additional_http_headers
 
     @property
     def response_content_type(self) -> ContentType:
