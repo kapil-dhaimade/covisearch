@@ -137,6 +137,12 @@ class WebsiteDataSpider:
             'User-Agent': 'PostmanRuntime/7.28.0'
         }
 
+        # NOTE: KAPIL: Hack for Justdial. Justdial returns HTTP 504 (timeout) in Google Cloud
+        # if Session Id cookie is not sent. And don't want to add full config in DB just for
+        # this case, so hard-coding the same.
+        if scraping_params.url.startswith('https://www.justdial.com'):
+            headers['Cookie'] = 'PHPSESSID=730e16c297847a368790ade8c8f11c73'
+
         # Example grequests code for GET, POST JSON and Form Data requests. Similar for requests:
         # https://www.programcreek.com/python/example/103991/grequests.post
         if scraping_params.request_content_type is ContentType.JSON:

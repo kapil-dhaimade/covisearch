@@ -95,11 +95,14 @@ class CovidResourceInfo:
     @classmethod
     def merge_duplicates(cls, covisearch_resources: List[Dict]) -> List[Dict]:
         covisearch_res_by_phone: Dict[str, Dict] = {}
+        covisearch_res_without_phone: List[Dict] = []
         phones_label = cls.PHONES_LABEL
         for covisearch_res_info in covisearch_resources:
             phones: List[str] = covisearch_res_info[phones_label]
             for phone in phones:
-                if phone in covisearch_res_by_phone:
+                if phone == '':
+                    covisearch_res_without_phone.append(covisearch_res_info)
+                elif phone in covisearch_res_by_phone:
                     old_covisearch_res_for_phone = covisearch_res_by_phone[phone]
                     covisearch_res_by_phone[phone] = \
                         cls._get_more_recently_verified_res_info(
@@ -113,15 +116,21 @@ class CovidResourceInfo:
                 else:
                     covisearch_res_by_phone[phone] = covisearch_res_info
 
-        return cls._merge_entries_with_multiple_phones(covisearch_res_by_phone)
+        return cls._merge_entries_with_multiple_phones(covisearch_res_by_phone, covisearch_res_without_phone)
 
     @classmethod
-    def _merge_entries_with_multiple_phones(cls, covisearch_res_by_phone) -> List[Dict]:
+    def _merge_entries_with_multiple_phones(cls, covisearch_res_by_phone, covisearch_res_without_phone) -> List[Dict]:
         duplicates_removed_resources = list(covisearch_res_by_phone.values())
         merged_resources = []
+
         for resource_info in duplicates_removed_resources:
             if not cls._is_resource_info_in_merged_resources_list(resource_info, merged_resources):
                 merged_resources.append(resource_info)
+
+        for resource_info in covisearch_res_without_phone:
+            if not cls._is_resource_info_in_merged_resources_list(resource_info, merged_resources):
+                merged_resources.append(resource_info)
+
         return merged_resources
 
     @classmethod
