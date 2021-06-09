@@ -2,14 +2,11 @@ from typing import List, Dict
 import json
 from abc import ABC
 import traceback
-import multiprocessing
-import queue
-import time
 import re
+import concurrent.futures
 
+import requests
 import scrapy
-from scrapy import crawler
-from scrapy.utils.project import get_project_settings
 import jsonpath_ng
 
 from covisearch.util.mytypes import URL as URL
@@ -17,123 +14,29 @@ from covisearch.util.mytypes import ContentType as ContentType
 import covisearch.util.elapsedtime as elapsedtime
 
 
-scrapy_process: multiprocessing.Process = None
-scrapy_process_out_queue: multiprocessing.Queue = None
-scrapy_process_in_queue: multiprocessing.Queue = None
-
-
-# NOTE: KAPIL: Keeping fn to start scrapy child process in advance for performance
-# reasons. Spawning child process takes considerable time, so launching it early,
-# and passing params later through Queue.
-def start_scrapy_process_in_advance():
-    global scrapy_process
-    global scrapy_process_out_queue
-    global scrapy_process_in_queue
-    # NOTE: KAPIL: See scrapy_child_process_fn for explanation of child process being spawned here.
-    scrapy_process_out_queue = multiprocessing.Queue()
-    scrapy_process_in_queue = multiprocessing.Queue()
-    scrapy_process = multiprocessing.Process(
-        target=scrapy_child_process_fn, args=(scrapy_process_in_queue, scrapy_process_out_queue,))
-    scrapy_process.start()
-
-
-def stop_scrapy_process():
-    global scrapy_process_in_queue
-    scrapy_process_in_queue.put(None)
-
-
 def scrape_data_from_websites(
         data_scraping_params: List['DataScrapingParams']) -> List['ScrapedData']:
 
     operation_ctxs_by_url = ScrapingOperationCtx(data_scraping_params)
 
-    # # NOTE: KAPIL: For performance comparison when scrapy in same process vs. child process.
-    # ctx_9 = elapsedtime.start_measuring_operation('scrapy crawling')
-    # process = crawler.CrawlerProcess()
-    # process.crawl(WebsiteDataSpider, operation_ctxs_by_url)
-    # process.start()
-    # elapsedtime.stop_measuring_operation(ctx_9)
-    # return operation_ctxs_by_url.get_all_scraped_data()
+    ctx = elapsedtime.start_measuring_operation('scraping data from websites')
 
-    ctx = elapsedtime.start_measuring_operation('scrapy child process')
-
-    global scrapy_process
-    global scrapy_process_out_queue
-    while _is_scrapy_process_start_signalled() is False:
-        time.sleep(0.05)
-    scrapy_process_in_queue.put(operation_ctxs_by_url)
-    scrapy_process_result = scrapy_process_out_queue.get()
-
-    # NOTE:KAPIL: Process join should after fetching error/success data from process queue.
-    # Else program may hang on calling join().
-    # Sources:
-    #   -SO: Why are my processes not returning/finishing?
-    #       -https://stackoverflow.com/questions/42614256/python-multiprocessing-why-are-my-processes-are-not-returning-finishing
-    scrapy_process.join()
-
-    if type(scrapy_process_result) is Exception:
-        elapsedtime.stop_measuring_operation(ctx)
-        raise scrapy_process_result
-    else:
-        operation_ctxs_by_url = scrapy_process_result
+    WebsiteDataSpider(operation_ctxs_by_url).scrape()
 
     elapsedtime.stop_measuring_operation(ctx)
     return operation_ctxs_by_url.get_all_scraped_data()
 
 
-# NOTE: KAPIL: Scrapy uses Twisted and it's not idempotent. Meaning if we launch Scrapy
-# CrawlerProcess twice in same process, it does not work as it uses many global objects.
-# As a result, if our Cloud Function instance is reused, Scrapy fails. To fix this, we
-# need to use 'multiprocessing' of Python to launch child process every time to run
-# Scrapy crawler. Please note that param sent to this child process if not by reference
-# and output data set by child process is lost. Hence, have to send data back from
-# child process using its queue and collect in parent process in case of success. This
-# queue is also used to throw exception from child process.
-# We also encountered another problem when child process was not used. Cloud Function
-# failed with error saying Scrapy process should be called in main thread only. Maybe
-# Cloud function environment was calling it in worker thread. But that issue also got
-# fixed by using this child process to run Scrapy.
-# Source:
-# Running a Scrapy spider in a GCP cloud function:
-#   -https://weautomate.org/articles/running-scrapy-spider-cloud-function/
-def scrapy_child_process_fn(in_queue: multiprocessing.Queue, out_queue: multiprocessing.Queue):
-    try:
-        # NOTE: KAPIL: To indicate process start
-        out_queue.put(True)
-        operation_ctxs_by_url = in_queue.get()
-        if operation_ctxs_by_url is None:
-            return
-
-        settings = get_project_settings()
-        settings.setdict({
-            'LOG_LEVEL': 'ERROR',
-            'LOG_ENABLED': True
-        })
-        process = crawler.CrawlerProcess(settings)
-        process.crawl(WebsiteDataSpider, operation_ctxs_by_url)
-        process.start()
-        out_queue.put(operation_ctxs_by_url)
-    except Exception as e:
-        out_queue.put(e)
-
-
-def _is_scrapy_process_start_signalled() -> bool:
-    try:
-        global scrapy_process_out_queue
-        scrapy_process_out_queue.get_nowait()
-        return True
-    except queue.Empty:
-        return False
-
-
 class DataScrapingParams:
     def __init__(self, url: URL, request_content_type: ContentType, request_body: str,
+                 additional_http_headers: Dict[str, str],
                  response_content_type: ContentType, table_column_selectors: Dict[str, str],
                  table_row_regex_filters: Dict[str, str],
                  fields_selectors: Dict[str, str]):
         self._url = url
         self._request_content_type: ContentType = request_content_type
         self._request_body: str = request_body
+        self._additional_http_headers: Dict[str, str] = additional_http_headers
         self._response_content_type = response_content_type
         # NOTE: KAPIL: Selector may be XPath, JSONPath, etc. based on content type
         # Refer 'https://jsonpathfinder.com/' to get JSONPaths from JSON
@@ -153,6 +56,10 @@ class DataScrapingParams:
     @property
     def request_body(self) -> str:
         return self._request_body
+
+    @property
+    def additional_http_headers(self) -> Dict[str, str]:
+        return self._additional_http_headers
 
     @property
     def response_content_type(self) -> ContentType:
@@ -191,50 +98,64 @@ class ScrapedData:
         return self._fields
 
 
-class WebsiteDataSpider(scrapy.Spider):
-    name = 'websitedataspider'
-
+class WebsiteDataSpider:
     def __init__(self, operation_ctx: 'ScrapingOperationCtx'):
         super().__init__()
         self._operation_ctx: 'ScrapingOperationCtx' = operation_ctx
-        self.urls = self._operation_ctx.get_all_urls_for_scraping()
 
-    def start_requests(self):
-        for url in self.urls:
-            scraping_params = self._operation_ctx.get_scraping_params_for_url(url)
+    def scrape(self):
+        # From https://stackoverflow.com/questions/9110593/asynchronous-requests-with-python-requests
+        with concurrent.futures.ThreadPoolExecutor(max_workers=20) as executor:
+            response_futures = {
+                executor.submit(WebsiteDataSpider._send_request,
+                                self._operation_ctx.get_scraping_params_for_url(url)): url
+                for url in self._operation_ctx.get_all_urls_for_scraping()
+            }
+            for response_future in concurrent.futures.as_completed(response_futures):
+                try:
+                    response = response_future.result()
+                    if response.status_code != 200:
+                        print('Requests returned HTTP code: \'' + str(response.status_code) + '\' for url: \'' +
+                              response.url + '\'')
+                        continue
 
-            if scraping_params.request_body is None:
-                yield scrapy.Request(url=url, callback=self.parse, errback=self.errback)
+                    try:
+                        scraping_params = self._operation_ctx.get_scraping_params_for_url(response.url)
+                        scraped_data = scrape_data_from_response(response.text, scraping_params)
+                        self._operation_ctx.set_scraped_data_for_url(response.url, scraped_data)
 
-            if scraping_params.request_content_type is ContentType.JSON:
-                request_dict = json.loads(scraping_params.request_body)
-                yield scrapy.http.JsonRequest(
-                    url=url,
-                    data=request_dict,
-                    callback=self.parse, errback=self.errback)
+                    except Exception:
+                        print('Exception while parsing Grequests response for url: \'' + response.url + '\'. ' +
+                              'Ignoring error.')
+                        print(traceback.print_exc())
 
-            if scraping_params.request_content_type is ContentType.FORMDATA:
-                yield scrapy.http.FormRequest(url=url, formdata=json.loads(scraping_params.request_body),
-                                              callback=self.parse, errback=self.errback)
+                except Exception:
+                    print('Exception while crawling with Requests for url: \'' +
+                          response_futures[response_future] + '\'.')
+                    print(traceback.print_exc())
 
-    def parse(self, response: scrapy.http.Response, **kwargs):
-        if response.status != 200:
-            print('Scrapy returned HTTP code: \'' + str(response.status) + '\' for url: \'' +
-                  response.url + '\'')
-            return
+    @staticmethod
+    def _send_request(scraping_params: DataScrapingParams):
 
-        try:
-            scraping_params = self._operation_ctx.get_scraping_params_for_url(response.url)
-            scraped_data = scrape_data_from_response(response.text, scraping_params)
-            self._operation_ctx.set_scraped_data_for_url(response.url, scraped_data)
+        # NOTE: KAPIL: Using Postman's user-agent string because JustDial returned
+        # HTTP 403 Access Denied for python requests lib's user-agent 'python-requests/2.25.1'.
+        headers = {
+            'User-Agent': 'PostmanRuntime/7.28.0',
+        }
+        for header_name, header_value in scraping_params.additional_http_headers.items():
+            headers[header_name] = header_value
 
-        except Exception:
-            print('Exception while parsing Scrapy response for url: \'' + response.url + '\'. ' +
-                  'Ignoring error.')
-            print(traceback.print_exc())
+        # Example grequests code for GET, POST JSON and Form Data requests. Similar for requests:
+        # https://www.programcreek.com/python/example/103991/grequests.post
+        if scraping_params.request_content_type is ContentType.JSON:
+            request_dict = json.loads(scraping_params.request_body)
+            return requests.post(scraping_params.url, json=request_dict, headers=headers)
 
-    def errback(self, failure):
-        print('Scrapy returned error: \'' + repr(failure) + '\' for url: \'' + failure.request.url + '\'.')
+        if scraping_params.request_content_type is ContentType.FORMDATA:
+            form_data_dict = json.loads(scraping_params.request_body)
+            return requests.post(scraping_params.url, data=form_data_dict, headers=headers)
+
+        return requests.get(scraping_params.url, headers=headers)
 
 
 class ScrapingOperationCtx:
@@ -346,7 +267,15 @@ class JSONSelectorParser(ContentTypeSelectorParser):
         # node returned by JSONPath for that parent node is None.
         if parent_node is None:
             return ''
-        field_val = parent_node.get(field_selector, '')
+
+        # NOTE: KAPIL: JSONPath node can be dict as well list. If JSON has list node
+        # inside list node, then it will be list.
+        if type(parent_node) is list:
+            field_selector_idx = int(field_selector)
+            field_val = parent_node[field_selector_idx] if len(parent_node) > field_selector_idx else ''
+        else:
+            field_val = parent_node.get(field_selector, '')
+
         if field_val is None:
             return ''
         return str(field_val)

@@ -30,6 +30,7 @@ import covisearch.aggregation.core.infra as coreinfra
 # is re-used. And we need DB init only once. Plus it is time intensive.
 db = firestore.Client()
 
+
 # NOTE: KAPIL: Parsing this dummy ISO format datetime during init improves performance of
 # subsequent datetime parsing operations and makes mapping websrc resources to covisearch faster!!
 dummy_datetime_for_performance = \
@@ -50,12 +51,18 @@ def resync_aggregated_data(event, context):
 
 
 # import traceback
+# import time
+# from datetime import datetime
 #
 #
 # # NOTE: KAPIL: Uncomment when testing on local machine
 # if __name__ == '__main__':
 #     try:
-#         resync_aggregated_data(None, None)
+#         while True:
+#             print('resync schedule triggered at ' + datetime.now().isoformat())
+#             resync_aggregated_data(None, None)
+#             print('resync completed at ' + datetime.now().isoformat() + '. waiting for next schedule...')
+#             time.sleep(3600 * 1)
 #     except Exception:
 #         print(traceback.print_exc())
 #     print(9)

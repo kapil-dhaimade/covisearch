@@ -54,6 +54,7 @@ class WebSource:
     def __init__(self, name: str, homepage_url: URL, web_resource_url_template: URL,
                  card_source_url_template: URL,
                  request_content_type: ContentType, request_body_template: str,
+                 additional_http_headers: Dict[str, str],
                  response_content_type: ContentType,
                  data_table_extract_selectors: Dict[str, str],
                  data_table_filter_templates: Dict[str, str],
@@ -77,6 +78,7 @@ class WebSource:
         self._request_body: str = self._request_body_from_template(
             request_body_template, web_src_city, search_filter, resource_type_label_mapping)
         self._response_content_type: ContentType = response_content_type
+        self._additional_http_headers: Dict[str, str] = additional_http_headers
 
         self._data_table_extract_selectors: Dict[str, str] = \
             data_table_extract_selectors
@@ -108,6 +110,10 @@ class WebSource:
     @property
     def request_body(self) -> str:
         return self._request_body
+
+    @property
+    def additional_http_headers(self) -> Dict[str, str]:
+        return self._additional_http_headers
 
     @property
     def response_content_type(self) -> ContentType:
@@ -288,7 +294,7 @@ def _map_last_verified_time(covisearch_res, res_mapping_desc, web_src_res_info):
     last_verified_label = CovidResourceInfo.LAST_VERIFIED_UTC_LABEL
     if last_verified_label in res_mapping_desc:
         last_verified_mapping = res_mapping_desc[last_verified_label]
-        web_src_last_verified_time = web_src_res_info[last_verified_mapping.web_src_field_name]
+        web_src_last_verified_time = web_src_res_info[last_verified_mapping.first_web_src_field_name]
         map_web_src_datetime_to_covisearch = \
             get_datetime_format_mapper(last_verified_mapping.datetime_fmt)
         try:
@@ -304,7 +310,7 @@ def _map_post_time(covisearch_res, res_mapping_desc, web_src_res_info):
     post_time_label = CovidResourceInfo.POST_TIME_LABEL
     if post_time_label in res_mapping_desc:
         post_time_mapping = res_mapping_desc[post_time_label]
-        web_src_post_time = web_src_res_info[post_time_mapping.web_src_field_name]
+        web_src_post_time = web_src_res_info[post_time_mapping.first_web_src_field_name]
         map_web_src_datetime_to_covisearch = \
             get_datetime_format_mapper(post_time_mapping.datetime_fmt)
         try:
@@ -321,15 +327,25 @@ def _map_details(covisearch_res, res_mapping_desc, web_src_res_info):
     if details_label in res_mapping_desc:
         details_mapping = res_mapping_desc[details_label]
         covisearch_res[details_label] = \
-            _sanitize_string_field(web_src_res_info[details_mapping.web_src_field_name])
+            _sanitize_string_field(_stitch_all_web_src_detail_fields(details_mapping, web_src_res_info))
     else:
         covisearch_res[details_label] = ''
+
+
+def _stitch_all_web_src_detail_fields(details_mapping, web_src_res_info):
+    web_src_details_vals = ''
+    for details_field_name in details_mapping.web_src_field_names:
+        if web_src_res_info[details_field_name]:
+            web_src_details_vals = web_src_details_vals + web_src_res_info[details_field_name] + '. '
+    if web_src_details_vals:
+        web_src_details_vals = web_src_details_vals[:-1]
+    return web_src_details_vals
 
 
 def _map_phones(covisearch_res, res_mapping_desc, web_src_res_info, search_filter: SearchFilter):
     phone_label = CovidResourceInfo.PHONES_LABEL
     phone_mapping = res_mapping_desc[phone_label]
-    web_src_phone_no = web_src_res_info[phone_mapping.web_src_field_name]
+    web_src_phone_no = _stitch_all_web_src_phone_vals(phone_mapping, web_src_res_info)
 
     # NOTE: KAPIL: [AS ON 01-Jun-2021] The new field for keeping phone numbers as uniformized list.
     # Should replace old slash separated string later.
@@ -337,21 +353,41 @@ def _map_phones(covisearch_res, res_mapping_desc, web_src_res_info, search_filte
         _extract_and_uniformized_phones(web_src_phone_no, search_filter.city)
 
 
+def _stitch_all_web_src_phone_vals(phone_mapping: 'FieldMappingDesc', web_src_res_info) -> str:
+    web_src_phone_vals: str = ''
+    for phone_field_name in phone_mapping.web_src_field_names:
+        if web_src_res_info[phone_field_name]:
+            web_src_phone_vals = web_src_phone_vals + web_src_res_info[phone_field_name] + '/'
+    if web_src_phone_vals:
+        web_src_phone_vals = web_src_phone_vals[:-1]
+    return web_src_phone_vals
+
+
 def _map_address(covisearch_res, res_mapping_desc, web_src_res_info):
     address_label = CovidResourceInfo.ADDRESS_LABEL
     if address_label in res_mapping_desc:
         address_mapping = res_mapping_desc[address_label]
         covisearch_res[address_label] = \
-            _sanitize_string_field(web_src_res_info[address_mapping.web_src_field_name])
+            _sanitize_string_field(_stitch_address_fields(address_mapping, web_src_res_info))
     else:
         covisearch_res[address_label] = ''
+
+
+def _stitch_address_fields(address_mapping, web_src_res_info):
+    web_src_address = ''
+    for phone_field_name in address_mapping.web_src_field_names:
+        if web_src_res_info[phone_field_name]:
+            web_src_address = web_src_address + web_src_res_info[phone_field_name] + ', '
+    if web_src_address:
+        web_src_address = web_src_address[:-2]
+    return web_src_address
 
 
 def _map_contact_name(covisearch_res: Dict, res_mapping_desc: Dict[str, 'FieldMappingDesc'],
                       web_src_res_info: Dict):
     contact_name_label = CovidResourceInfo.CONTACT_NAME_LABEL
     name_mapping = res_mapping_desc[contact_name_label]
-    covisearch_res[contact_name_label] = web_src_res_info[name_mapping.web_src_field_name]
+    covisearch_res[contact_name_label] = web_src_res_info[name_mapping.first_web_src_field_name]
 
 
 def _map_card_source_url(covisearch_res: Dict, res_mapping_desc: Dict[str, 'FieldMappingDesc'],
@@ -373,7 +409,7 @@ def _map_card_source_url(covisearch_res: Dict, res_mapping_desc: Dict[str, 'Fiel
         # -If post link has absolute URL, then we may not make field for card source url in web source.
         covisearch_res[sources_label][0][source_url_label] = \
             covisearch_res[sources_label][0][source_url_label] + \
-            web_src_res_info[card_source_url_mapping.web_src_field_name]
+            web_src_res_info[card_source_url_mapping.first_web_src_field_name]
 
 
 # TODO: KAPIL: Add proper details for specific res types later if websites give the info.
@@ -430,7 +466,7 @@ def _map_hospital_bed_icu(web_src_res_info: Dict, res_mapping_desc: Dict[str, 'F
 def _map_hospital_type(covisearch_res, hospital_type_label, res_mapping_desc, web_src_res_info):
     if hospital_type_label in res_mapping_desc:
         hospital_type_mapping = res_mapping_desc[hospital_type_label]
-        covisearch_res[hospital_type_label] = web_src_res_info[hospital_type_mapping.web_src_field_name]
+        covisearch_res[hospital_type_label] = web_src_res_info[hospital_type_mapping.first_web_src_field_name]
     else:
         covisearch_res[hospital_type_label] = None
 
@@ -438,7 +474,7 @@ def _map_hospital_type(covisearch_res, hospital_type_label, res_mapping_desc, we
 def _map_bed_field(bed_field_label, covisearch_res, res_mapping_desc, web_src_res_info):
     if bed_field_label in res_mapping_desc:
         bed_field_mapping = res_mapping_desc[bed_field_label]
-        web_src_bed_field_val = web_src_res_info[bed_field_mapping.web_src_field_name]
+        web_src_bed_field_val = web_src_res_info[bed_field_mapping.first_web_src_field_name]
         re_bed_field_result = re_available_beds_pattern.search(web_src_bed_field_val)
         if re_bed_field_result is not None:
             covisearch_res[bed_field_label] = int(re_bed_field_result.group(1))
@@ -525,9 +561,11 @@ def _sanitize_string_field(field_value: str) -> str:
 
 # NOTE: KAPIL: Desc format:
 # -Tuple['covisearch_res_field_name',
-#        'datetimeformat(ago/isoformat/short-datetime-dd-mm),<web_src_field_name>']
+#        'datetimeformat(ago/isoformat/short-datetime-dd-mm),<web_src_field_name_1>+<web_src_field_name_2>+...']
 # Eg: last verified, web src res format is 'hours/days ago', convert to UTC
 #       -('last_verified_utc', 'datetimeformat(ago),lastVerified')
+# Usage for clubbing multiple fields:
+# Eg: -('phones', 'phone_1+phone_2') where phone_1 and phone_2 are web src fields.
 class FieldMappingDesc:
     DATETIMEFORMAT_TOKEN = 'datetimeformat'
     re_datetime_fmt_str_pattern = re.compile('\((.*)\)')
@@ -535,17 +573,27 @@ class FieldMappingDesc:
     def __init__(self, field_mapping_desc: Tuple[str, str]):
         self._covisearch_field_name: str = field_mapping_desc[0]
         mapping_desc_tokens = self._split_mapping_desc_csv(field_mapping_desc[1])
-        self._web_src_field_name: str = mapping_desc_tokens.pop()
+        self._web_src_field_names: List[str] = self._get_web_src_field_names(mapping_desc_tokens)
+        mapping_desc_tokens.pop()
         self._datetime_fmt: covisearch.util.datetimeutil.DatetimeFormat = \
             self._get_datetime_fmt_if_specified(mapping_desc_tokens)
+
+    @staticmethod
+    def _get_web_src_field_names(mapping_desc_tokens) -> List[str]:
+        web_src_field_names_mapping: str = mapping_desc_tokens[-1]
+        return web_src_field_names_mapping.split('+')
 
     @property
     def covisearch_field_name(self) -> str:
         return self._covisearch_field_name
 
     @property
-    def web_src_field_name(self) -> str:
-        return self._web_src_field_name
+    def first_web_src_field_name(self) -> str:
+        return self._web_src_field_names[0]
+
+    @property
+    def web_src_field_names(self) -> List[str]:
+        return self._web_src_field_names
 
     @property
     def datetime_fmt(self) -> covisearch.util.datetimeutil.DatetimeFormat:

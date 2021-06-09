@@ -75,6 +75,7 @@ def _scrape_data_from_web_sources(web_sources: Dict[str, resourcemapping.WebSour
     data_scraping_params = [
         webdatascraper.DataScrapingParams(
             web_src.web_resource_url, web_src.request_content_type, web_src.request_body,
+            web_src.additional_http_headers,
             web_src.response_content_type, web_src.data_table_extract_selectors,
             web_src.data_table_filters, {})
         for web_src in web_sources.values()
@@ -90,7 +91,6 @@ def _scrape_data_from_web_sources(web_sources: Dict[str, resourcemapping.WebSour
 # import google.cloud.firestore as firestore
 # import sys
 # import traceback
-# import covisearch.util.websitedatascraper as websitedatascraper
 # import covisearch.aggregation.core.domain.resourcemapping as resourcemapping
 # import covisearch.util.datetimeutil as datetimeutil
 # import datetime
@@ -111,16 +111,13 @@ def _scrape_data_from_web_sources(web_sources: Dict[str, resourcemapping.WebSour
 #         db = firestore.Client()
 #         elapsedtime.stop_measuring_operation(ctx)
 #
-#         websitedatascraper.start_scrapy_process_in_advance()
-#
 #         aggregated_res_info_repo = infra.AggregatedResourceInfoRepoImpl(db)
 #         web_src_repo = infra.WebSourceRepoImpl(db)
-#         search_filter = SearchFilter('pune', entities.CovidResourceType.HOSPITAL_BED_ICU, None)
+#         search_filter = SearchFilter('nagercoil', entities.CovidResourceType.AMBULANCE, None)
 #         aggregate_covid_resources(search_filter, aggregated_res_info_repo, web_src_repo)
 #
 #         elapsedtime.stop_measuring_total()
 #     except Exception as ex:
-#         # websitedatascraper.stop_scrapy_process()
 #         # <class 'IndexError'>
 #         print(sys.exc_info()[0])
 #
