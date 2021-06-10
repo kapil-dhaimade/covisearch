@@ -127,3 +127,8 @@ ul{
 #beds td{
   padding-inline: .5rem;
 }
+
+#share
+{
+  font-size: 1.25rem;
+}

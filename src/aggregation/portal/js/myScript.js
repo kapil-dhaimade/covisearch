@@ -179,7 +179,7 @@ app.controller('formCtrl', function ($scope, $http, $timeout, $window) {
         if (x.available_no_ventilator_beds != null
             || x.available_ventilator_beds != null
             || x.total_available_icu_beds != null) {
-                return true;
+            return true;
         }
         return false;
     }
@@ -189,7 +189,7 @@ app.controller('formCtrl', function ($scope, $http, $timeout, $window) {
             || x.available_oxygen_beds != null
             || x.total_available_beds != null
             || x.available_covid_beds != null) {
-                return true;
+            return true;
         }
         return false;
     }
@@ -230,6 +230,68 @@ app.controller('formCtrl', function ($scope, $http, $timeout, $window) {
         $scope.screenStatus = 'loading';
         $scope.fetchNextBatch($scope.master);
     }
+
+    $scope.sharingData = function (x) {
+        str = "";
+        if (x.contact_name) {
+            str = str + "Name: " + x.contact_name;
+        }
+        else {
+            str = str + "Name: " + "Not Provided";
+        }
+        if (x.phones) {
+            str = str + "\nNumber: " + x.phones.join();
+        }
+        if (x.litres) {
+            str = str + "\nLiters of Oxygen: " + x.liters;
+        }
+        if (x.available_no_ventilator_beds != undefined) {
+            str = str + "\nICU Beds without Ventilators: " + (x.available_no_ventilator_beds >= 0 ? x.available_no_ventilator_beds : "N.A");
+        }
+        if (x.available_ventilator_beds != undefined) {
+            str = str + "\nICU Beds with Ventilators: " + (x.available_ventilator_beds >= 0 ? x.available_ventilator_beds : "N.A.");
+        }
+        if (x.total_available_icu_beds != undefined) {
+            str = str + "\nTotal ICU beds: " + (x.total_available_icu_beds >= 0 ? x.total_available_icu_beds : "N.A.");
+        }
+        if (x.available_no_oxygen_beds != undefined) {
+            str = str + "\nBeds without Oxygen: " + (x.available_no_oxygen_beds >= 0 ? x.available_no_oxygen_beds : "N.A");
+        }
+        if (x.available_oxygen_beds != undefined) {
+            str = str + "\nBeds with Oxygen: " + (x.available_oxygen_beds >= 0 ? x.available_oxygen_beds : "N.A.");
+        }
+        if (x.available_covid_beds != undefined) {
+            str = str + "\nBeds for Covid: " + (x.available_covid_beds >= 0 ? x.available_covid_beds : "N.A.");
+        }
+        if (x.total_available_beds != undefined) {
+            str = str + "\nTotal Beds: " + (x.total_available_beds >= 0 ? x.total_available_beds : "N.A.");
+        }
+        if (x.address) {
+            str = str + "\nAddress: " + x.address;
+        }
+        if (x.details) {
+            str = str + "\nDetails: " + x.details;
+        }
+        if (x.sources) {
+            str += "\nSource: " + x.sources[0].url;
+        }
+        return str;
+    }
+    $scope.copy = function (x) {
+        const el = document.createElement('textarea');
+        var str = $scope.sharingData(x);
+        el.value = str;
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
+    };
+
+    $scope.share = function (x) {
+        var str = $scope.sharingData(x);
+
+        window.location.href = "whatsapp://send?text=" + encodeURIComponent(str);
+    };
 
     $scope.init();
     $scope.onPageLoad();
