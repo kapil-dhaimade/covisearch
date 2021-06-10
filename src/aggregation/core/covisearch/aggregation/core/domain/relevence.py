@@ -5,8 +5,7 @@ from datetime import datetime
 from fuzzywuzzy import fuzz
 
 from covisearch.aggregation.core.domain.entities import CovidResourceInfo, \
-    HospitalBedsICUInfo, HospitalBedsInfo, MedicineInfo, CovidResourceType, SearchFilter
-from covisearch.aggregation.core.domain.resourcemapping import WebSource
+    HospitalBedsICUInfo, HospitalBedsInfo, MedicineInfo, CovidResourceType, SearchFilter, OxygenInfo
 import covisearch.util.datetimeutil as datetimeutil
 
 
@@ -305,68 +304,92 @@ class HospitalBedsICUInfoComparator(CovidResourceInfoComparator):
             return False
 
 
-class MedicineInfoComparator(CovidResourceInfoComparator):
-    THRESHOLD_FOR_STRING_COMPARISION = 77
-    THRESHOLD_FOR_VERIFICATION_DAYS = 15
-    MAX_DAYS_DIFF = 100000
-
+class MedicineSubtypeInfoComparator(CovidResourceInfoComparator):
     def __init__(self, search_filter: SearchFilter):
         super().__init__(search_filter)
-        # NOTE: KAPIL: Resource info Id vs. med name match val True/False
-        self._med_match_cache: Dict[int, bool] = {}
+        med_name_to_match = MedicineInfo.get_med_name(self._search_filter.resource_type)
+        self._resource_subtype_comparator = ResourceSubtypeInfoComparator(
+            search_filter, med_name_to_match)
 
     def compare(self, res_info_a: Dict, res_info_b: Dict) -> int:
-        med_name_str = MedicineInfo.get_med_name(self._search_filter.resource_type)
-        res_info_a_details_has_med = self._is_med_name_present_in_resource_fields(med_name_str, res_info_a)
-        res_info_b_details_has_med = self._is_med_name_present_in_resource_fields(med_name_str, res_info_b)
+        return self._resource_subtype_comparator.compare(res_info_a, res_info_b)
 
-        return self.compare_basedon_relevence(res_info_a, res_info_a_details_has_med,
-                                              res_info_b, res_info_b_details_has_med)
 
-    def _is_med_name_present_in_resource_fields(self, medicine_name, res_info: Dict) -> bool:
-        res_info_id = res_info[MedicineInfo.ID_LABEL]
+class OxygenSubtypeInfoComparator(CovidResourceInfoComparator):
+    def __init__(self, search_filter: SearchFilter):
+        super().__init__(search_filter)
+        oxy_subtype_name_to_match = OxygenInfo.get_oxy_subtype_name(self._search_filter.resource_type)
+        self._resource_subtype_comparator = ResourceSubtypeInfoComparator(
+            search_filter, oxy_subtype_name_to_match)
 
-        if res_info_id in self._med_match_cache:
-            return self._med_match_cache[res_info_id]
+    def compare(self, res_info_a: Dict, res_info_b: Dict) -> int:
+        return self._resource_subtype_comparator.compare(res_info_a, res_info_b)
+
+
+class ResourceSubtypeInfoComparator(CovidResourceInfoComparator):
+    THRESHOLD_FOR_STRING_COMPARISION = 77
+    THRESHOLD_FOR_VERIFICATION_DAYS = 30
+    MAX_DAYS_DIFF = 100000
+
+    def __init__(self, search_filter: SearchFilter, resource_name_to_match: str):
+        super().__init__(search_filter)
+        # NOTE: KAPIL: Resource info Id vs. resource string match val True/False
+        self._resource_match_cache: Dict[int, bool] = {}
+        self._resource_name_to_match = resource_name_to_match
+
+    def compare(self, res_info_a: Dict, res_info_b: Dict) -> int:
+        res_info_a_details_has_match = self._is_res_name_present_in_resource_fields(res_info_a)
+        res_info_b_details_has_match = self._is_res_name_present_in_resource_fields(res_info_b)
+
+        return self.compare_basedon_relevence(res_info_a, res_info_a_details_has_match,
+                                              res_info_b, res_info_b_details_has_match)
+
+    def _is_res_name_present_in_resource_fields(self, res_info: Dict) -> bool:
+        res_info_id = res_info[CovidResourceInfo.ID_LABEL]
+
+        if res_info_id in self._resource_match_cache:
+            return self._resource_match_cache[res_info_id]
 
         if not self._is_smart_match_needed_for_resource(res_info):
-            self._med_match_cache[res_info_id] = True
+            self._resource_match_cache[res_info_id] = True
             return True
 
-        med_match_ratio_in_res_subtype = _get_ratio(medicine_name, res_info[MedicineInfo.RESOURCE_SUBTYPE_LABEL])
-        if med_match_ratio_in_res_subtype >= self.THRESHOLD_FOR_STRING_COMPARISION:
-            self._med_match_cache[res_info_id] = True
+        res_match_ratio_in_res_subtype = _get_ratio(self._resource_name_to_match,
+                                                    res_info[CovidResourceInfo.RESOURCE_SUBTYPE_LABEL])
+        if res_match_ratio_in_res_subtype >= self.THRESHOLD_FOR_STRING_COMPARISION:
+            self._resource_match_cache[res_info_id] = True
             return True
 
-        med_match_ratio_in_details = _get_ratio(medicine_name, res_info[MedicineInfo.DETAILS_LABEL])
-        res_info_details_has_med = True if med_match_ratio_in_details >= self.THRESHOLD_FOR_STRING_COMPARISION \
+        res_match_ratio_in_details = _get_ratio(self._resource_name_to_match,
+                                                res_info[CovidResourceInfo.DETAILS_LABEL])
+        res_info_details_has_match = True if res_match_ratio_in_details >= self.THRESHOLD_FOR_STRING_COMPARISION \
             else False
-        self._med_match_cache[res_info_id] = res_info_details_has_med
-        return res_info_details_has_med
+        self._resource_match_cache[res_info_id] = res_info_details_has_match
+        return res_info_details_has_match
 
     @staticmethod
     def _is_smart_match_needed_for_resource(res_info: Dict) -> bool:
-        first_src_for_resource = res_info[MedicineInfo.SOURCES_LABEL][0]
-        return first_src_for_resource[MedicineInfo.SOURCE_NEEDS_SMART_MATCH]
+        first_src_for_resource = res_info[CovidResourceInfo.SOURCES_LABEL][0]
+        return first_src_for_resource[CovidResourceInfo.SOURCE_NEEDS_SMART_MATCH]
 
     @classmethod
-    def _check_if_med_value_present_or_absent_in_both(cls, res_info_a_details_has_med,
-                                                      res_info_b_details_has_med) -> bool:
-        if res_info_a_details_has_med is True and res_info_b_details_has_med is True:
+    def _check_if_res_value_present_or_absent_in_both(cls, res_info_a_details_has_match,
+                                                      res_info_b_details_has_match) -> bool:
+        if res_info_a_details_has_match is True and res_info_b_details_has_match is True:
             return True
-        if res_info_a_details_has_med is False and res_info_b_details_has_med is False:
+        if res_info_a_details_has_match is False and res_info_b_details_has_match is False:
             return True
         return False
 
-    def compare_basedon_relevence(self, res_info_a, res_info_a_details_has_med,
-                                  res_info_b, res_info_b_details_has_med):
+    def compare_basedon_relevence(self, res_info_a, res_info_a_details_has_match,
+                                  res_info_b, res_info_b_details_has_match):
 
-        if self._check_if_med_value_present_or_absent_in_both(res_info_a_details_has_med,
-                                                             res_info_b_details_has_med):
+        if self._check_if_res_value_present_or_absent_in_both(res_info_a_details_has_match,
+                                                              res_info_b_details_has_match):
             return super().compare(res_info_a, res_info_b)
 
         relevent_res_info = self._get_most_relevent_res_info(
-            res_info_a, res_info_a_details_has_med, res_info_b, res_info_b_details_has_med)
+            res_info_a, res_info_a_details_has_match, res_info_b, res_info_b_details_has_match)
 
         if relevent_res_info is res_info_a:
             return -1
@@ -374,21 +397,22 @@ class MedicineInfoComparator(CovidResourceInfoComparator):
             return 1
 
     @classmethod
-    def _get_most_relevent_res_info(cls, res_info_a, res_info_a_details_has_med, res_info_b,
-                                    res_info_b_details_has_med):
+    def _get_most_relevent_res_info(cls, res_info_a, res_info_a_details_has_match, res_info_b,
+                                    res_info_b_details_has_match):
         recent_verified_res_info = cls._get_more_recently_verified_res_info(res_info_a, res_info_b)
         old_verified_res_info = res_info_a if recent_verified_res_info is res_info_b else res_info_b
 
-        if res_info_a_details_has_med is True and recent_verified_res_info is res_info_a:
+        if res_info_a_details_has_match is True and recent_verified_res_info is res_info_a:
             return res_info_a
-        if res_info_b_details_has_med is True and recent_verified_res_info is res_info_b:
+        if res_info_b_details_has_match is True and recent_verified_res_info is res_info_b:
             return res_info_b
 
-        last_verified_label = MedicineInfo.LAST_VERIFIED_UTC_LABEL
+        last_verified_label = CovidResourceInfo.LAST_VERIFIED_UTC_LABEL
         last_verified_recent: datetime = recent_verified_res_info[last_verified_label]
         last_verified_older: datetime = old_verified_res_info[last_verified_label]
-        days_between_verification_of_recent_and_earlier = cls._get_days_between_recent_and_earlier(
-            last_verified_older, last_verified_recent)
+        days_between_verification_of_recent_and_earlier = \
+            cls._get_days_between_recent_and_earlier_for_threshold_check(
+                last_verified_older, last_verified_recent)
 
         if days_between_verification_of_recent_and_earlier > cls.THRESHOLD_FOR_VERIFICATION_DAYS:
             return recent_verified_res_info
@@ -396,9 +420,9 @@ class MedicineInfoComparator(CovidResourceInfoComparator):
             return old_verified_res_info
 
     @classmethod
-    def _get_days_between_recent_and_earlier(cls, last_verified_older, last_verified_recent):
+    def _get_days_between_recent_and_earlier_for_threshold_check(cls, last_verified_older, last_verified_recent):
         if not last_verified_older and not last_verified_recent:
-            return cls.MAX_DAYS_DIFF
+            return 0
 
         if not last_verified_older and last_verified_recent:
             return cls.MAX_DAYS_DIFF
@@ -417,11 +441,15 @@ def _get_resource_info_comparator_class(resource_type: CovidResourceType):
     res_type_comparator_classes = {
         CovidResourceType.HOSPITAL_BED: HospitalBedsInfoComparator,
         CovidResourceType.HOSPITAL_BED_ICU: HospitalBedsICUInfoComparator,
-        CovidResourceType.MED_AMPHOTERICIN_B: MedicineInfoComparator,
-        CovidResourceType.MED_AMPHOLYN: MedicineInfoComparator,
-        CovidResourceType.MED_CRESEMBA: MedicineInfoComparator,
-        CovidResourceType.MED_OSELTAMIVIR: MedicineInfoComparator,
-        CovidResourceType.MED_TOCILIZUMAB: MedicineInfoComparator,
-        CovidResourceType.MED_POSACONAZOLE: MedicineInfoComparator
+        CovidResourceType.MED_AMPHOTERICIN_B: MedicineSubtypeInfoComparator,
+        CovidResourceType.MED_AMPHOLYN: MedicineSubtypeInfoComparator,
+        CovidResourceType.MED_CRESEMBA: MedicineSubtypeInfoComparator,
+        CovidResourceType.MED_OSELTAMIVIR: MedicineSubtypeInfoComparator,
+        CovidResourceType.MED_TOCILIZUMAB: MedicineSubtypeInfoComparator,
+        CovidResourceType.MED_POSACONAZOLE: MedicineSubtypeInfoComparator,
+        CovidResourceType.OXY_CONCENTRATOR: OxygenSubtypeInfoComparator,
+        CovidResourceType.OXY_REGULATOR: OxygenSubtypeInfoComparator,
+        CovidResourceType.OXY_REFILL: OxygenSubtypeInfoComparator,
+        CovidResourceType.OXY_CYLINDER: OxygenSubtypeInfoComparator
     }
     return res_type_comparator_classes.get(resource_type, CovidResourceInfoComparator)

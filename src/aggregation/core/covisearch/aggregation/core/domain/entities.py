@@ -23,6 +23,10 @@ class CovidResourceType(enum.Enum):
     MED_OSELTAMIVIR = 16
     MED_AMPHOLYN = 17
     MED_POSACONAZOLE = 18
+    OXY_CYLINDER = 19
+    OXY_CONCENTRATOR = 20
+    OXY_REFILL = 21
+    OXY_REGULATOR = 22
 
     @staticmethod
     def to_string(resource_type: 'CovidResourceType') -> str:
@@ -44,7 +48,11 @@ class CovidResourceType(enum.Enum):
             CovidResourceType.MED_TOCILIZUMAB: 'med_tocilizumab',
             CovidResourceType.MED_OSELTAMIVIR: 'med_oseltamivir',
             CovidResourceType.MED_AMPHOLYN: 'med_ampholyn',
-            CovidResourceType.MED_POSACONAZOLE: 'med_posaconazole'
+            CovidResourceType.MED_POSACONAZOLE: 'med_posaconazole',
+            CovidResourceType.OXY_CONCENTRATOR: 'oxy_concentrator',
+            CovidResourceType.OXY_CYLINDER: 'oxy_cylinder',
+            CovidResourceType.OXY_REFILL: 'oxy_refill',
+            CovidResourceType.OXY_REGULATOR: 'oxy_regulator'
         }
         return res_type_strings[resource_type]
 
@@ -68,7 +76,11 @@ class CovidResourceType(enum.Enum):
             'med_tocilizumab': CovidResourceType.MED_TOCILIZUMAB,
             'med_oseltamivir':	CovidResourceType.MED_OSELTAMIVIR,
             'med_ampholyn': CovidResourceType.MED_AMPHOLYN,
-            'med_posaconazole': CovidResourceType.MED_POSACONAZOLE
+            'med_posaconazole': CovidResourceType.MED_POSACONAZOLE,
+            'oxy_concentrator': CovidResourceType.OXY_CONCENTRATOR,
+            'oxy_regulator': CovidResourceType.OXY_REGULATOR,
+            'oxy_refill': CovidResourceType.OXY_REFILL,
+            'oxy_cylinder': CovidResourceType.OXY_CYLINDER,
         }
         return res_types[resource_type_str.lower()]
 
@@ -275,6 +287,16 @@ class OxygenInfo(CovidResourceInfo):
         super()._merge_older_with_newer(older_resource_info, newer_resource_info)
         cls._merge_field_if_absent(cls.LITRES_LABEL, older_resource_info, newer_resource_info)
 
+    @classmethod
+    def get_oxy_subtype_name(cls, med_resource_type: CovidResourceType):
+        med_type_vs_name = {
+            CovidResourceType.OXY_CYLINDER: 'cylinder',
+            CovidResourceType.OXY_REFILL: 'refill',
+            CovidResourceType.OXY_REGULATOR: 'regulator',
+            CovidResourceType.OXY_CONCENTRATOR: 'concentrator'
+        }
+        return med_type_vs_name[med_resource_type]
+
 
 class HospitalBedsInfo(CovidResourceInfo):
     AVAILABLE_COVID_BEDS_LABEL = 'available_covid_beds'
@@ -457,7 +479,7 @@ class MedicineInfo(CovidResourceInfo):
             CovidResourceType.MED_AMPHOTERICIN_B: 'amphotericin b',
             CovidResourceType.MED_CRESEMBA: 'cresemba',
             CovidResourceType.MED_OSELTAMIVIR: 'oseltamivir',
-            CovidResourceType.MED_TOCILIZUMAB: 'tocilizumab',
+            CovidResourceType.MED_TOCILIZUMAB: 'tocilizumab'
         }
         return med_type_vs_name[med_resource_type]
 
@@ -493,7 +515,11 @@ def get_resource_info_class(resource_type: CovidResourceType):
         CovidResourceType.MED_CRESEMBA: MedicineInfo,
         CovidResourceType.MED_OSELTAMIVIR: MedicineInfo,
         CovidResourceType.MED_TOCILIZUMAB: MedicineInfo,
-        CovidResourceType.MED_POSACONAZOLE: MedicineInfo
+        CovidResourceType.MED_POSACONAZOLE: MedicineInfo,
+        CovidResourceType.OXY_CYLINDER: OxygenInfo,
+        CovidResourceType.OXY_REFILL: OxygenInfo,
+        CovidResourceType.OXY_REGULATOR: OxygenInfo,
+        CovidResourceType.OXY_CONCENTRATOR: OxygenInfo
     }
     return res_type_classes[resource_type]
 
