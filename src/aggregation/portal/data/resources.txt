@@ -1,0 +1,138 @@
+[
+        {
+            'displayName': 'Ambulance',
+            'value': 'ambulance',
+            'image': 'images/icons/ambulance.png'
+        },
+        {
+            'displayName': 'Oxygen',
+            'value': 'oxygen',
+            'image': 'images/icons/oxygen.png',
+            'children': [
+                {
+                    'displayName': 'All equipments',
+                    'value': 'oxygen',
+                    'image': 'images/icons/oxygen.png',
+                    'category': 'Oxygen Equipment'
+                },
+                {
+                    'displayName': 'Oxygen Concentrator',
+                    'value': 'oxy_concentrator',
+                    'image': 'images/icons/oxygen.png',
+                    'category': 'Oxygen Equipment'
+                },
+                {
+                    'displayName': 'Oxygen Cylinder',
+                    'value': 'oxy_cylinder',
+                    'image': 'images/icons/oxygen.png',
+                    'category': 'Oxygen Equipment'
+                },
+                {
+                    'displayName': 'Oxygen refill',
+                    'value': 'oxy_refill',
+                    'image': 'images/icons/oxygen.png',
+                    'category': 'Oxygen Equipment'
+                },
+                {
+                    'displayName': 'Oxygen Regulator',
+                    'value': 'oxy_regulator',
+                    'image': 'images/icons/oxygen.png',
+                    'category': 'Oxygen Equipment'
+                }
+            ]
+        },
+        {
+            'displayName': 'Hospital Beds',
+            'value': 'hospital_bed',
+            'image': 'images/icons/hospital_bed.png'
+        },
+        {
+            'displayName': 'ICU Beds',
+            'value': 'hospital_bed_icu',
+            'image': 'images/icons/icu.png'
+        },
+        {
+            'displayName': 'ECMO',
+            'value': 'ecmo',
+            'image': 'images/icons/ecmo.png'
+        },
+        {
+            'displayName': 'Blood',
+            'value': 'blood',
+            'image': 'images/icons/plasma.png'
+        },
+        {
+            'displayName': 'Food',
+            'value': 'food',
+            'image': 'images/icons/food.png'
+        },
+        {
+            'displayName': 'Testing',
+            'value': 'testing',
+            'image': 'images/icons/testing.png'
+        },
+        {
+            'displayName': 'Medicines',
+            'value': 'medicine',
+            'image': 'images/icons/medicine.png',
+            'children': [
+                {
+                    'displayName': 'All Medicines',
+                    'value': 'medicine',
+                    'image': 'images/icons/medicine.png',
+                    'category': 'Medicine'
+                },
+                {
+                    'displayName': 'Amphotericin B',
+                    'value': 'med_amphotericin',
+                    'image': 'images/icons/medicine.png',
+                    'category': 'Medicine'
+                },
+                {
+                    'displayName': 'Cresemba',
+                    'value': 'med_cresemba',
+                    'image': 'images/icons/medicine.png',
+                    'category': 'Medicine'
+                },
+                {
+                    'displayName': 'Tocilizumab',
+                    'value': 'med_tocilizumab',
+                    'image': 'images/icons/medicine.png',
+                    'category': 'Medicine'
+                },
+                {
+                    'displayName': 'Oseltamivir',
+                    'value': 'med_oseltamivir',
+                    'image': 'images/icons/medicine.png',
+                    'category': 'Medicine'
+                },
+                {
+                    'displayName': 'Ampholyn',
+                    'value': 'med_ampholyn',
+                    'image': 'images/icons/medicine.png',
+                    'category': 'Medicine'
+                },
+                {
+                    'displayName': 'Posacanazole',
+                    'value': 'med_posaconazole',
+                    'image': 'images/icons/medicine.png',
+                    'category': 'Medicine'
+                }
+            ]
+        },
+        {
+            'displayName': 'Ventilator',
+            'value': 'ventilator',
+            'image': 'images/icons/ventilator.png'
+        },
+        {
+            'displayName': 'Helpline',
+            'value': 'helpline',
+            'image': 'images/icons/helpline.png'
+        },
+        {
+            'displayName': 'Plasma',
+            'value': 'plasma',
+            'image': 'images/icons/plasma.png'
+        }
+    ]

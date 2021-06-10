@@ -1,6 +1,6 @@
 <!-- Current Data info -->
 <div class="text-center" ng-if="screenStatus == 'dataFetched'">
-    <span>Currently showing data for <b>{{citySearched}}</b> and
+    <span>Currently showing data for <b class="capitalize">{{citySearched}}</b> and
         <b>
             {{resourceSearched.displayName}} </b><img id="resourceImg" ng-src="{{resourceSearched.image}}"
             ng-alt="{{resourceSearched.image}}"></span>
@@ -194,9 +194,9 @@
                     </div>
                 </div>
                 <div id="share" class="float-right">
-                    <button ng-click="copy(x)"
+                    <button id="copybtn" ng-click="copy(x)"
                     class="btn fa fa-clone font-weight-bold"></button>
-                    <button ng-click="share(x)"
+                    <button id="whatsAppbtn" ng-click="share(x)"
                     class="btn fa fa-whatsapp font-weight-bold" style="color: #128C7E;"></button>
                 </div>
             </div>

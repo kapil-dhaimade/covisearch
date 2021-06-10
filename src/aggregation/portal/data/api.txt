@@ -20,7 +20,7 @@
             ],
             "last_verified_utc": "2021-05-23T10:59:06.467345+00:00",
             "details": "",
-            "address": "",
+            "address": "Sathyamangalam Covid care_null,mumbai,delhi",
             "total_available_icu_beds": null
         },
         {
@@ -167,7 +167,7 @@
                 "08525861540"
             ],
             "hospital_type": null,
-            "contact_name": "Maaruthi _numbers",
+            "contact_name": "",
             "available_covid_beds": 10,
             "available_no_oxygen_beds": 3,
             "available_oxygen_beds": 4,

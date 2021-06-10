@@ -132,3 +132,13 @@ ul{
 {
   font-size: 1.25rem;
 }
+
+#whatsAppbtn
+{
+  font-size: 1.5rem;
+}
+
+.capitalize
+{
+  text-transform: capitalize;
+}

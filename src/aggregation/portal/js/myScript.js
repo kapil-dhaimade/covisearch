@@ -20,7 +20,7 @@ app.controller('formCtrl', function ($scope, $http, $timeout, $window) {
         $scope.retryCount = 5;
         // $scope.screenStatus = 'home';
     };
-
+    
     $scope.resourceList = [
         {
             'displayName': 'Ambulance',
@@ -98,7 +98,7 @@ app.controller('formCtrl', function ($scope, $http, $timeout, $window) {
             'displayName': 'Medicines',
             'value': 'medicine',
             'image': 'images/icons/medicine.png',
-            'children':[
+            'children': [
                 {
                     'displayName': 'All Medicines',
                     'value': 'medicine',
@@ -161,15 +161,7 @@ app.controller('formCtrl', function ($scope, $http, $timeout, $window) {
     ];
 
     $scope.fetch = function (data) {
-        resource = ""
-        if(data.subresource != undefined)
-        {
-            resource = data.subresource.value;
-        }
-        else
-        {
-            resource = data.resource.value;
-        }
+        resource = getResource(data)
         url = api_base_url + "resource_type=" + resource + "&city=" + data.city +
                          "&page_no=" + $scope.pageNumber;
         // url = '../data/api.txt'
@@ -205,6 +197,18 @@ app.controller('formCtrl', function ($scope, $http, $timeout, $window) {
             });
     };
 
+    function getResource(data) {
+        resource = ""
+        if(data.resource.children)
+        {
+            resource = data.subresource.value;
+        }
+        else
+        {
+            resource = data.resource.value;
+        }
+        return resource;
+      }
     $scope.getFromNowDate = function (date) {
         var now;
         if (date && date.trim()) {
@@ -289,49 +293,51 @@ app.controller('formCtrl', function ($scope, $http, $timeout, $window) {
     }
 
     $scope.sharingData = function (x) {
-        str = "";
+        str = "Found this resource for " + getResource($scope.master) + " in " + $scope.master.city;
+
         if (x.contact_name) {
-            str = str + "Name: " + x.contact_name;
+            str = str + "\n*Name:* " + x.contact_name;
         }
         else {
-            str = str + "Name: " + "Not Provided";
+            str = str + "\n*Name:* " + "Not Provided";
         }
         if (x.phones) {
-            str = str + "\nNumber: " + x.phones.join();
+            str = str + "\n*Number:* " + x.phones.join();
         }
         if (x.litres) {
-            str = str + "\nLiters of Oxygen: " + x.liters;
+            str = str + "\n*Liters of Oxygen:* " + x.liters;
         }
         if (x.available_no_ventilator_beds != undefined) {
-            str = str + "\nICU Beds without Ventilators: " + (x.available_no_ventilator_beds >= 0 ? x.available_no_ventilator_beds : "N.A");
+            str = str + "\n*ICU Beds without Ventilators:* " + (x.available_no_ventilator_beds >= 0 ? x.available_no_ventilator_beds : "N.A");
         }
         if (x.available_ventilator_beds != undefined) {
-            str = str + "\nICU Beds with Ventilators: " + (x.available_ventilator_beds >= 0 ? x.available_ventilator_beds : "N.A.");
+            str = str + "\n*ICU Beds with Ventilators:* " + (x.available_ventilator_beds >= 0 ? x.available_ventilator_beds : "N.A.");
         }
         if (x.total_available_icu_beds != undefined) {
-            str = str + "\nTotal ICU beds: " + (x.total_available_icu_beds >= 0 ? x.total_available_icu_beds : "N.A.");
+            str = str + "\n*Total ICU beds:* " + (x.total_available_icu_beds >= 0 ? x.total_available_icu_beds : "N.A.");
         }
         if (x.available_no_oxygen_beds != undefined) {
-            str = str + "\nBeds without Oxygen: " + (x.available_no_oxygen_beds >= 0 ? x.available_no_oxygen_beds : "N.A");
+            str = str + "\n*Beds without Oxygen:* " + (x.available_no_oxygen_beds >= 0 ? x.available_no_oxygen_beds : "N.A");
         }
         if (x.available_oxygen_beds != undefined) {
-            str = str + "\nBeds with Oxygen: " + (x.available_oxygen_beds >= 0 ? x.available_oxygen_beds : "N.A.");
+            str = str + "\n*Beds with Oxygen:* " + (x.available_oxygen_beds >= 0 ? x.available_oxygen_beds : "N.A.");
         }
         if (x.available_covid_beds != undefined) {
-            str = str + "\nBeds for Covid: " + (x.available_covid_beds >= 0 ? x.available_covid_beds : "N.A.");
+            str = str + "\n*Beds for Covid:* " + (x.available_covid_beds >= 0 ? x.available_covid_beds : "N.A.");
         }
         if (x.total_available_beds != undefined) {
-            str = str + "\nTotal Beds: " + (x.total_available_beds >= 0 ? x.total_available_beds : "N.A.");
+            str = str + "\n*Total Beds:* " + (x.total_available_beds >= 0 ? x.total_available_beds : "N.A.");
         }
         if (x.address) {
-            str = str + "\nAddress: " + x.address;
+            str = str + "\n*Address:* " + x.address;
         }
         if (x.details) {
-            str = str + "\nDetails: " + x.details;
+            str = str + "\n*Details:* " + x.details;
         }
         if (x.sources) {
-            str += "\nSource: " + x.sources[0].url;
+            str += "\n*Source:* " + x.sources[0].url;
         }
+        str += "\n\nFound by https://www.covisearch.in"
         return str;
     }
     $scope.copy = function (x) {

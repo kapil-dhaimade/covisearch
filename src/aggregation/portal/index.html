@@ -40,7 +40,7 @@
         <div class="form-inline justify-content-center">
 
           <div class="form-group custom-input">
-            <input name="filter.city" class="form-control form-input" list="city" ng-model="filter.city"
+            <input name="filter.city" class="form-control form-input capitalize" list="city" ng-model="filter.city"
               placeholder="Enter the City" ng-keyup="filterFunction()" required>
             <datalist id="city">
               <option ng-repeat="x in cityList" value={{x}}>{{x}}</option>
@@ -49,15 +49,15 @@
 
           <div class="form-group custom-input">
             <select class="form-control form-input" ng-model="filter.resource"
-              ng-options="x.displayName group by x.category for x in resourceList" required>
+              ng-options="x.displayName group by x.category for x in resourceList" ng-change="console.log('ds')" required>
               <option value="" disabled>Select the Resource</option>
             </select>
           </div>
 
           <div class="form-group custom-input" ng-if="filter.resource.children">
             <select class="form-control form-input" ng-model="filter.subresource"
-              ng-options="x.displayName for x in filter.resource.children"  ng-init="filter.subresource = filter.resource.children[0]" required>
-              <!-- <option value="" disabled>Select the Sub type</option> -->
+              ng-options="x.displayName for x in filter.resource.children" required>
+              <option value="" disabled>Select the Sub type</option>
             </select>
           </div>
 
