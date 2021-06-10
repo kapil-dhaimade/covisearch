@@ -161,16 +161,15 @@ app.controller('formCtrl', function ($scope, $http, $timeout, $window) {
     ];
 
     $scope.fetch = function (data) {
-        resource = getResource(data)
-        url = api_base_url + "resource_type=" + resource + "&city=" + data.city +
+        resource = getResource(data);
+        url = api_base_url + "resource_type=" + resource.value + "&city=" + data.city +
                          "&page_no=" + $scope.pageNumber;
         // url = '../data/api.txt'
-        console.log(url)
         $scope.leads = "";
         $scope.hasMoreData = false;
         $http.get(url).then(function (response) {
             $scope.citySearched = data.city;
-            $scope.resourceSearched = data.resource;
+            $scope.resourceSearched = resource;
             if (response.status == 202) {
                 if ($scope.retryCount > 0) {
                     $timeout(function () { $scope.fetch(data) }, 2000);
@@ -201,11 +200,11 @@ app.controller('formCtrl', function ($scope, $http, $timeout, $window) {
         resource = ""
         if(data.resource.children)
         {
-            resource = data.subresource.value;
+            resource = data.subresource;
         }
         else
         {
-            resource = data.resource.value;
+            resource = data.resource;
         }
         return resource;
       }
@@ -293,7 +292,7 @@ app.controller('formCtrl', function ($scope, $http, $timeout, $window) {
     }
 
     $scope.sharingData = function (x) {
-        str = "Found this resource for " + getResource($scope.master) + " in " + $scope.master.city;
+        str = "Found this resource for " + getResource($scope.master).displayName + " in " + $scope.master.city;
 
         if (x.contact_name) {
             str = str + "\n*Name:* " + x.contact_name;
