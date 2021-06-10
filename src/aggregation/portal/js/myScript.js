@@ -30,7 +30,39 @@ app.controller('formCtrl', function ($scope, $http, $timeout, $window) {
         {
             'displayName': 'Oxygen',
             'value': 'oxygen',
-            'image': 'images/icons/oxygen.png'
+            'image': 'images/icons/oxygen.png',
+            'children': [
+                {
+                    'displayName': 'All equipments',
+                    'value': 'oxygen',
+                    'image': 'images/icons/oxygen.png',
+                    'category': 'Oxygen Equipment'
+                },
+                {
+                    'displayName': 'Oxygen Concentrator',
+                    'value': 'oxy_concentrator',
+                    'image': 'images/icons/oxygen.png',
+                    'category': 'Oxygen Equipment'
+                },
+                {
+                    'displayName': 'Oxygen Cylinder',
+                    'value': 'oxy_cylinder',
+                    'image': 'images/icons/oxygen.png',
+                    'category': 'Oxygen Equipment'
+                },
+                {
+                    'displayName': 'Oxygen refill',
+                    'value': 'oxy_refill',
+                    'image': 'images/icons/oxygen.png',
+                    'category': 'Oxygen Equipment'
+                },
+                {
+                    'displayName': 'Oxygen Regulator',
+                    'value': 'oxy_regulator',
+                    'image': 'images/icons/oxygen.png',
+                    'category': 'Oxygen Equipment'
+                }
+            ]
         },
         {
             'displayName': 'Hospital Beds',
@@ -63,39 +95,53 @@ app.controller('formCtrl', function ($scope, $http, $timeout, $window) {
             'image': 'images/icons/testing.png'
         },
         {
-            'displayName': 'All Medicines',
+            'displayName': 'Medicines',
             'value': 'medicine',
-            'image': 'images/icons/medicine.png'
-        },
-        {
-            'displayName': 'Amphotericin B',
-            'value': 'med_amphotericin',
             'image': 'images/icons/medicine.png',
-            'category': 'Medicine'
-        },
-        {
-            'displayName': 'Cresemba',
-            'value': 'med_cresemba',
-            'image': 'images/icons/medicine.png',
-            'category': 'Medicine'
-        },
-        {
-            'displayName': 'Tocilizumab',
-            'value': 'med_tocilizumab',
-            'image': 'images/icons/medicine.png',
-            'category': 'Medicine'
-        },
-        {
-            'displayName': 'Oseltamivir',
-            'value': 'med_oseltamivir',
-            'image': 'images/icons/medicine.png',
-            'category': 'Medicine'
-        },
-        {
-            'displayName': 'Ampholyn',
-            'value': 'med_ampholyn',
-            'image': 'images/icons/medicine.png',
-            'category': 'Medicine'
+            'children':[
+                {
+                    'displayName': 'All Medicines',
+                    'value': 'medicine',
+                    'image': 'images/icons/medicine.png',
+                    'category': 'Medicine'
+                },
+                {
+                    'displayName': 'Amphotericin B',
+                    'value': 'med_amphotericin',
+                    'image': 'images/icons/medicine.png',
+                    'category': 'Medicine'
+                },
+                {
+                    'displayName': 'Cresemba',
+                    'value': 'med_cresemba',
+                    'image': 'images/icons/medicine.png',
+                    'category': 'Medicine'
+                },
+                {
+                    'displayName': 'Tocilizumab',
+                    'value': 'med_tocilizumab',
+                    'image': 'images/icons/medicine.png',
+                    'category': 'Medicine'
+                },
+                {
+                    'displayName': 'Oseltamivir',
+                    'value': 'med_oseltamivir',
+                    'image': 'images/icons/medicine.png',
+                    'category': 'Medicine'
+                },
+                {
+                    'displayName': 'Ampholyn',
+                    'value': 'med_ampholyn',
+                    'image': 'images/icons/medicine.png',
+                    'category': 'Medicine'
+                },
+                {
+                    'displayName': 'Posacanazole',
+                    'value': 'med_posaconazole',
+                    'image': 'images/icons/medicine.png',
+                    'category': 'Medicine'
+                }
+            ]
         },
         {
             'displayName': 'Ventilator',
@@ -115,8 +161,19 @@ app.controller('formCtrl', function ($scope, $http, $timeout, $window) {
     ];
 
     $scope.fetch = function (data) {
-        url = api_base_url + "resource_type=" + data.resource.value + "&city=" + data.city + "&page_no=" + $scope.pageNumber;
+        resource = ""
+        if(data.subresource != undefined)
+        {
+            resource = data.subresource.value;
+        }
+        else
+        {
+            resource = data.resource.value;
+        }
+        url = api_base_url + "resource_type=" + resource + "&city=" + data.city +
+                         "&page_no=" + $scope.pageNumber;
         // url = '../data/api.txt'
+        console.log(url)
         $scope.leads = "";
         $scope.hasMoreData = false;
         $http.get(url).then(function (response) {

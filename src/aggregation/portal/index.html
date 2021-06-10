@@ -54,6 +54,13 @@
             </select>
           </div>
 
+          <div class="form-group custom-input" ng-if="filter.resource.children">
+            <select class="form-control form-input" ng-model="filter.subresource"
+              ng-options="x.displayName for x in filter.resource.children"  ng-init="filter.subresource = filter.resource.children[0]" required>
+              <!-- <option value="" disabled>Select the Sub type</option> -->
+            </select>
+          </div>
+
           <div class="form-group custom-input">
             <button ng-click="submit()"
               ng-disabled="filterForm.$invalid || screenStatus == 'loading' || screenStatus == 'fetchingData'"
