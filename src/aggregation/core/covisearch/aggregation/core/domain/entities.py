@@ -1,11 +1,7 @@
 from abc import ABC, abstractmethod
-from typing import Dict, List, Callable
+from typing import Dict, List
 import enum
 import urllib.parse
-from datetime import  datetime
-
-import covisearch.util as util
-import covisearch.util.datetimeutil as datetimeutil
 
 
 class CovidResourceType(enum.Enum):
@@ -88,9 +84,10 @@ class CovidResourceInfo:
     SOURCES_LABEL = 'sources'
     SOURCE_URL_LABEL = 'url'
     SOURCE_NAME_LABEL = 'name'
-
-    RESOURCE_TYPE_LABEL = 'resource_type'
-    CITY_LABEL = 'city'
+    SOURCE_NEEDS_SMART_MATCH = 'needs_smart_match'
+    ID_LABEL = 'id'
+    # NOTE: KAPIL: For cases like resource type 'Medicine' and subtype 'Amphotericin B'.
+    RESOURCE_SUBTYPE_LABEL = 'resource_subtype'
 
     @classmethod
     def merge_duplicates(cls, covisearch_resources: List[Dict]) -> List[Dict]:
@@ -153,7 +150,13 @@ class CovidResourceInfo:
         for older_resource_info_source in older_resource_info[sources_label]:
             if not cls._is_source_already_present_in_newer_resource_info(
                     older_resource_info_source, newer_resource_info):
-                newer_resource_info[sources_label].append(older_resource_info_source)
+                newer_resource_info[sources_label].append(
+                    {
+                        cls.SOURCE_NAME_LABEL: older_resource_info_source[cls.SOURCE_NAME_LABEL],
+                        cls.SOURCE_URL_LABEL: older_resource_info_source[cls.SOURCE_URL_LABEL],
+                        cls.SOURCE_NEEDS_SMART_MATCH: older_resource_info_source[cls.SOURCE_NEEDS_SMART_MATCH]
+                    }
+                )
 
     @classmethod
     def _is_source_already_present_in_newer_resource_info(cls, source: Dict,
@@ -176,24 +179,15 @@ class CovidResourceInfo:
                 return True
         return False
 
-
     @classmethod
     def remove_redundant_fields(cls, covisearch_resources: List[Dict]) -> List[Dict]:
+        for resource_info in covisearch_resources:
+            resource_info.pop(cls.ID_LABEL)
+
+            for source in resource_info[cls.SOURCES_LABEL]:
+                source.pop(cls.SOURCE_NEEDS_SMART_MATCH)
+
         return covisearch_resources
-
-    @classmethod
-    def compare(cls, res_info_a: Dict, res_info_b: Dict) -> int:
-        last_verified_times_comp = cls._compare_datetime_field(
-            res_info_a, res_info_b, cls.LAST_VERIFIED_UTC_LABEL)
-        if last_verified_times_comp is not 0:
-            return -1 * last_verified_times_comp
-
-        post_times_comp = cls._compare_datetime_field(
-            res_info_a, res_info_b, cls.POST_TIME_LABEL)
-        if post_times_comp is not 0:
-            return -1 * post_times_comp
-
-        return 0
 
     @classmethod
     def _get_more_recently_verified_res_info(cls, res_info_a: Dict, res_info_b: Dict) -> Dict:
@@ -211,11 +205,6 @@ class CovidResourceInfo:
             return res_info_a
         else:
             return res_info_b
-
-    @classmethod
-    def _compare_datetime_field(cls, res_info_a: Dict, res_info_b: Dict,
-                                field_name: str) -> int:
-        return datetimeutil.compare_datetimes_ascending(res_info_a[field_name], res_info_b[field_name])
 
 
 class BloodGroup(enum.Enum):
@@ -264,10 +253,6 @@ class PlasmaInfo(CovidResourceInfo):
     BLOOD_GROUP_LABEL = 'blood_group'
 
     @classmethod
-    def compare(cls, res_info_a: Dict, res_info_b: Dict) -> int:
-        return super().compare(res_info_a, res_info_b)
-
-    @classmethod
     def _merge_older_with_newer(cls, older_resource_info: Dict, newer_resource_info: Dict):
         super()._merge_older_with_newer(older_resource_info, newer_resource_info)
         cls._merge_field_if_absent(cls.BLOOD_GROUP_LABEL, older_resource_info, newer_resource_info)
@@ -277,10 +262,6 @@ class BloodInfo(CovidResourceInfo):
     BLOOD_GROUP_LABEL = 'blood_group'
 
     @classmethod
-    def compare(cls, res_info_a: Dict, res_info_b: Dict) -> int:
-        return super().compare(res_info_a, res_info_b)
-
-    @classmethod
     def _merge_older_with_newer(cls, older_resource_info: Dict, newer_resource_info: Dict):
         super()._merge_older_with_newer(older_resource_info, newer_resource_info)
         cls._merge_field_if_absent(cls.BLOOD_GROUP_LABEL, older_resource_info, newer_resource_info)
@@ -288,11 +269,6 @@ class BloodInfo(CovidResourceInfo):
 
 class OxygenInfo(CovidResourceInfo):
     LITRES_LABEL = 'litres'
-
-    # TODO: Change when oxygen litres are implemented.
-    @classmethod
-    def compare(cls, res_info_a: Dict, res_info_b: Dict) -> int:
-        return super().compare(res_info_a, res_info_b)
 
     @classmethod
     def _merge_older_with_newer(cls, older_resource_info: Dict, newer_resource_info: Dict):
@@ -367,23 +343,6 @@ class HospitalBedsInfo(CovidResourceInfo):
             resource_info[cls.TOTAL_AVAILABLE_BEDS_LABEL] = total_available_beds
 
     @classmethod
-    def compare(cls, res_info_a: Dict, res_info_b: Dict) -> int:
-        if cls._is_any_of_last_verified_and_total_beds_fields_none(res_info_a, res_info_b):
-            common_info_compare_result = super().compare(res_info_a, res_info_b)
-            if common_info_compare_result is not 0:
-                return common_info_compare_result
-            return cls.get_total_available_bed_compare_result(res_info_a, res_info_b)
-
-        if cls._is_any_of_last_verified_and_total_beds_fields_equal(res_info_a, res_info_b):
-            return cls._get_compare_result_in_case_of_one_field_equal(res_info_a, res_info_b)
-
-        winner = cls._get_winner_of_last_verified_vs_total_beds_compare(res_info_a, res_info_b)
-        if winner is res_info_a:
-            return -1
-        else:
-            return 1
-
-    @classmethod
     def _merge_older_with_newer(cls, older_resource_info: Dict, newer_resource_info: Dict):
         super()._merge_older_with_newer(older_resource_info, newer_resource_info)
         cls._merge_field_if_absent(cls.AVAILABLE_COVID_BEDS_LABEL, older_resource_info, newer_resource_info)
@@ -393,106 +352,6 @@ class HospitalBedsInfo(CovidResourceInfo):
                                    older_resource_info, newer_resource_info)
         cls._merge_field_if_absent(cls.TOTAL_AVAILABLE_BEDS_LABEL, older_resource_info, newer_resource_info)
         cls._merge_field_if_absent(cls.HOSPITAL_TYPE_LABEL, older_resource_info, newer_resource_info)
-
-    @classmethod
-    def _get_winner_of_last_verified_vs_total_beds_compare(cls, res_info_a: Dict, res_info_b: Dict) -> Dict:
-        recently_verified_res_info = cls._get_more_recently_verified_res_info(res_info_a, res_info_b)
-        older_verified_res_info = res_info_b if recently_verified_res_info is res_info_a else res_info_a
-
-        if cls._do_total_beds_of_older_res_info_have_more_weightage(
-                older_verified_res_info, recently_verified_res_info):
-            return older_verified_res_info
-        else:
-            return recently_verified_res_info
-
-    # NOTE: KAPIL: Eg: Returns true if there's gap of 2 days between A's last verified and
-    # B's last verified, but if B's total beds higher than A's total beds by more than 10 (say 11).
-    # Calculation: 11 > 2 * 5 (5 is weightage threshold)
-    # Other examples:
-    #   -100 > 12 * 5 (if older res info's total beds are 100 more than recent res info's total beds)
-    # The purpose of this function is to show hospitals with higher number of beds before those
-    # with fewer beds but which happened to be recently verified.
-    @classmethod
-    def _do_total_beds_of_older_res_info_have_more_weightage(
-            cls, older_verified_res_info: Dict, recently_verified_res_info: Dict) -> bool:
-        last_verified_label = cls.LAST_VERIFIED_UTC_LABEL
-        last_verified_recent: datetime = recently_verified_res_info[last_verified_label]
-        last_verified_older: datetime = older_verified_res_info[last_verified_label]
-        days_between_verification_of_recent_and_earlier = (last_verified_recent - last_verified_older).days
-
-        total_available_beds_label = cls.TOTAL_AVAILABLE_BEDS_LABEL
-        total_beds_of_recent_res_info: int = recently_verified_res_info[total_available_beds_label]
-        total_beds_of_older_res_info: int = older_verified_res_info[total_available_beds_label]
-        diff_between_total_beds_of_older_and_recent = total_beds_of_older_res_info - total_beds_of_recent_res_info
-
-        if diff_between_total_beds_of_older_and_recent > \
-                ((days_between_verification_of_recent_and_earlier + 1) * cls.TOTAL_BEDS_WEIGHTAGE_THRESHOLD):
-            return True
-        else:
-            return False
-
-    @classmethod
-    def _is_any_of_last_verified_and_total_beds_fields_equal(cls, res_info_a: Dict, res_info_b: Dict) -> bool:
-        if res_info_a[cls.LAST_VERIFIED_UTC_LABEL] == res_info_b[cls.LAST_VERIFIED_UTC_LABEL]:
-            return True
-        if res_info_a[cls.TOTAL_AVAILABLE_BEDS_LABEL] == res_info_b[cls.TOTAL_AVAILABLE_BEDS_LABEL]:
-            return True
-        return False
-
-    @classmethod
-    def get_total_available_bed_compare_result(cls, res_info_a: Dict, res_info_b: Dict) -> int:
-        total_available_beds_a = res_info_a[cls.TOTAL_AVAILABLE_BEDS_LABEL]
-        total_available_beds_b = res_info_b[cls.TOTAL_AVAILABLE_BEDS_LABEL]
-        if total_available_beds_a is not None and total_available_beds_b is None:
-            return -1
-        if total_available_beds_b is not None and total_available_beds_a is None:
-            return 1
-        if total_available_beds_a is None and total_available_beds_b is None:
-            return 0
-        if total_available_beds_a > total_available_beds_b:
-            return -1
-        if total_available_beds_b > total_available_beds_a:
-            return 1
-        return 0
-
-    @classmethod
-    def _get_compare_result_in_case_of_one_field_equal(cls, res_info_a: Dict, res_info_b: Dict) -> int:
-        last_verified_compare_result = cls._get_last_verified_compare_result(res_info_a, res_info_b)
-        total_beds_compare_result = cls.get_total_available_bed_compare_result(res_info_a, res_info_b)
-        if last_verified_compare_result == 0 and total_beds_compare_result == 0:
-            return 0
-        if last_verified_compare_result == 0 and total_beds_compare_result == -1:
-            return -1
-        if last_verified_compare_result == 0 and total_beds_compare_result == 1:
-            return 1
-        if last_verified_compare_result == -1 and total_beds_compare_result == 0:
-            return -1
-        if last_verified_compare_result == 1 and total_beds_compare_result == 0:
-            return 1
-
-    @classmethod
-    def _get_last_verified_compare_result(cls, res_info_a: Dict, res_info_b: Dict) -> int:
-        last_verified_label = cls.LAST_VERIFIED_UTC_LABEL
-        last_verified_a = res_info_a[last_verified_label]
-        last_verified_b = res_info_b[last_verified_label]
-        if last_verified_a == last_verified_b:
-            return 0
-        if last_verified_a < last_verified_b:
-            return 1
-        if last_verified_a > last_verified_b:
-            return -1
-
-    @classmethod
-    def _is_any_of_last_verified_and_total_beds_fields_none(cls, res_info_a: Dict, res_info_b: Dict) -> bool:
-        if not res_info_a[cls.LAST_VERIFIED_UTC_LABEL]:
-            return True
-        if not res_info_b[cls.LAST_VERIFIED_UTC_LABEL]:
-            return True
-        if res_info_a[cls.TOTAL_AVAILABLE_BEDS_LABEL] is None:
-            return True
-        if res_info_b[cls.TOTAL_AVAILABLE_BEDS_LABEL] is None:
-            return True
-        return False
 
 
 class HospitalBedsICUInfo(CovidResourceInfo):
@@ -551,23 +410,6 @@ class HospitalBedsICUInfo(CovidResourceInfo):
             resource_info[cls.TOTAL_AVAILABLE_BEDS_LABEL] = total_available_beds
 
     @classmethod
-    def compare(cls, res_info_a: Dict, res_info_b: Dict) -> int:
-        if cls._is_any_of_last_verified_and_total_beds_fields_none(res_info_a, res_info_b):
-            common_info_compare_result = super().compare(res_info_a, res_info_b)
-            if common_info_compare_result is not 0:
-                return common_info_compare_result
-            return cls.get_total_available_bed_compare_result(res_info_a, res_info_b)
-
-        if cls._is_any_of_last_verified_and_total_beds_fields_equal(res_info_a, res_info_b):
-            return cls._get_compare_result_in_case_of_one_field_equal(res_info_a, res_info_b)
-
-        winner = cls._get_winner_of_last_verified_vs_total_beds_compare(res_info_a, res_info_b)
-        if winner is res_info_a:
-            return -1
-        else:
-            return 1
-
-    @classmethod
     def _merge_older_with_newer(cls, older_resource_info: Dict, newer_resource_info: Dict):
         super()._merge_older_with_newer(older_resource_info, newer_resource_info)
         cls._merge_field_if_absent(cls.AVAILABLE_NO_VENTILATOR_BEDS_LABEL, older_resource_info, newer_resource_info)
@@ -577,112 +419,8 @@ class HospitalBedsICUInfo(CovidResourceInfo):
         cls._merge_field_if_absent(cls.HOSPITAL_TYPE_LABEL, older_resource_info, newer_resource_info)
         cls._merge_field_if_absent(cls.AVAILABLE_VENTILATORS_LABEL, older_resource_info, newer_resource_info)
 
-    @classmethod
-    def get_total_available_bed_compare_result(cls, res_info_a: Dict, res_info_b: Dict) -> int:
-        total_available_beds_a = res_info_a[cls.TOTAL_AVAILABLE_BEDS_LABEL]
-        total_available_beds_b = res_info_b[cls.TOTAL_AVAILABLE_BEDS_LABEL]
-        if total_available_beds_a is not None and total_available_beds_b is None:
-            return -1
-        if total_available_beds_b is not None and total_available_beds_a is None:
-            return 1
-        if total_available_beds_a is None and total_available_beds_b is None:
-            return 0
-        if total_available_beds_a > total_available_beds_b:
-            return -1
-        if total_available_beds_b > total_available_beds_a:
-            return 1
-        return 0
-
-    @classmethod
-    def _get_winner_of_last_verified_vs_total_beds_compare(cls, res_info_a: Dict, res_info_b: Dict) -> Dict:
-        recently_verified_res_info = cls._get_more_recently_verified_res_info(res_info_a, res_info_b)
-        older_verified_res_info = res_info_b if recently_verified_res_info is res_info_a else res_info_a
-
-        if cls._do_total_beds_of_older_res_info_have_more_weightage(
-                older_verified_res_info, recently_verified_res_info):
-            return older_verified_res_info
-        else:
-            return recently_verified_res_info
-
-    @classmethod
-    def _get_last_verified_compare_result(cls, res_info_a: Dict, res_info_b: Dict) -> int:
-        last_verified_label = cls.LAST_VERIFIED_UTC_LABEL
-        last_verified_a = res_info_a[last_verified_label]
-        last_verified_b = res_info_b[last_verified_label]
-        if last_verified_a == last_verified_b:
-            return 0
-        if last_verified_a < last_verified_b:
-            return 1
-        if last_verified_a > last_verified_b:
-            return -1
-
-    @classmethod
-    def _is_any_of_last_verified_and_total_beds_fields_none(cls, res_info_a: Dict, res_info_b: Dict) -> bool:
-        if not res_info_a[cls.LAST_VERIFIED_UTC_LABEL]:
-            return True
-        if not res_info_b[cls.LAST_VERIFIED_UTC_LABEL]:
-            return True
-        if res_info_a[cls.TOTAL_AVAILABLE_BEDS_LABEL] is None:
-            return True
-        if res_info_b[cls.TOTAL_AVAILABLE_BEDS_LABEL] is None:
-            return True
-        return False
-
-    @classmethod
-    def _is_any_of_last_verified_and_total_beds_fields_equal(cls, res_info_a: Dict, res_info_b: Dict) -> bool:
-        if res_info_a[cls.LAST_VERIFIED_UTC_LABEL] == res_info_b[cls.LAST_VERIFIED_UTC_LABEL]:
-            return True
-        if res_info_a[cls.TOTAL_AVAILABLE_BEDS_LABEL] == res_info_b[cls.TOTAL_AVAILABLE_BEDS_LABEL]:
-            return True
-        return False
-
-    @classmethod
-    def _get_compare_result_in_case_of_one_field_equal(cls, res_info_a: Dict, res_info_b: Dict) -> int:
-        last_verified_compare_result = cls._get_last_verified_compare_result(res_info_a, res_info_b)
-        total_beds_compare_result = cls.get_total_available_bed_compare_result(res_info_a, res_info_b)
-        if last_verified_compare_result == 0 and total_beds_compare_result == 0:
-            return 0
-        if last_verified_compare_result == 0 and total_beds_compare_result == -1:
-            return -1
-        if last_verified_compare_result == 0 and total_beds_compare_result == 1:
-            return 1
-        if last_verified_compare_result == -1 and total_beds_compare_result == 0:
-            return -1
-        if last_verified_compare_result == 1 and total_beds_compare_result == 0:
-            return 1
-
-    # NOTE: KAPIL: Eg: Returns true if there's gap of 2 days between A's last verified and
-    # B's last verified, but if B's total beds higher than A's total beds by more than 10 (say 11).
-    # Calculation: 11 > 2 * 5 (5 is weightage threshold)
-    # Other examples:
-    #   -100 > 12 * 5 (if older res info's total beds are 100 more than recent res info's total beds)
-    # The purpose of this function is to show hospitals with higher number of beds before those
-    # with fewer beds but which happened to be recently verified.
-    @classmethod
-    def _do_total_beds_of_older_res_info_have_more_weightage(
-            cls, older_verified_res_info: Dict, recently_verified_res_info: Dict) -> bool:
-        last_verified_label = cls.LAST_VERIFIED_UTC_LABEL
-        last_verified_recent: datetime = recently_verified_res_info[last_verified_label]
-        last_verified_older: datetime = older_verified_res_info[last_verified_label]
-        days_between_verification_of_recent_and_earlier = (last_verified_recent - last_verified_older).days
-
-        total_available_beds_label = cls.TOTAL_AVAILABLE_BEDS_LABEL
-        total_beds_of_recent_res_info: int = recently_verified_res_info[total_available_beds_label]
-        total_beds_of_older_res_info: int = older_verified_res_info[total_available_beds_label]
-        diff_between_total_beds_of_older_and_recent = total_beds_of_older_res_info - total_beds_of_recent_res_info
-
-        if diff_between_total_beds_of_older_and_recent > \
-                ((days_between_verification_of_recent_and_earlier + 1) * cls.TOTAL_BEDS_WEIGHTAGE_THRESHOLD):
-            return True
-        else:
-            return False
-
 
 class AmbulanceInfo(CovidResourceInfo):
-    @classmethod
-    def compare(cls, res_info_a: Dict, res_info_b: Dict) -> int:
-        return super().compare(res_info_a, res_info_b)
-
     @classmethod
     def _merge_older_with_newer(cls, older_resource_info: Dict, newer_resource_info: Dict):
         super()._merge_older_with_newer(older_resource_info, newer_resource_info)
@@ -690,19 +428,11 @@ class AmbulanceInfo(CovidResourceInfo):
 
 class EcmoInfo(CovidResourceInfo):
     @classmethod
-    def compare(cls, res_info_a: Dict, res_info_b: Dict) -> int:
-        return super().compare(res_info_a, res_info_b)
-
-    @classmethod
     def _merge_older_with_newer(cls, older_resource_info: Dict, newer_resource_info: Dict):
         super()._merge_older_with_newer(older_resource_info, newer_resource_info)
 
 
 class FoodInfo(CovidResourceInfo):
-    @classmethod
-    def compare(cls, res_info_a: Dict, res_info_b: Dict) -> int:
-        return super().compare(res_info_a, res_info_b)
-
     @classmethod
     def _merge_older_with_newer(cls, older_resource_info: Dict, newer_resource_info: Dict):
         super()._merge_older_with_newer(older_resource_info, newer_resource_info)
@@ -710,29 +440,29 @@ class FoodInfo(CovidResourceInfo):
 
 class TestingInfo(CovidResourceInfo):
     @classmethod
-    def compare(cls, res_info_a: Dict, res_info_b: Dict) -> int:
-        return super().compare(res_info_a, res_info_b)
-
-    @classmethod
     def _merge_older_with_newer(cls, older_resource_info: Dict, newer_resource_info: Dict):
         super()._merge_older_with_newer(older_resource_info, newer_resource_info)
 
 
 class MedicineInfo(CovidResourceInfo):
     @classmethod
-    def compare(cls, res_info_a: Dict, res_info_b: Dict) -> int:
-        return super().compare(res_info_a, res_info_b)
-
-    @classmethod
     def _merge_older_with_newer(cls, older_resource_info: Dict, newer_resource_info: Dict):
         super()._merge_older_with_newer(older_resource_info, newer_resource_info)
 
+    @classmethod
+    def get_med_name(cls, med_resource_type: CovidResourceType):
+        med_type_vs_name = {
+            CovidResourceType.MED_POSACONAZOLE: 'posaconazole',
+            CovidResourceType.MED_AMPHOLYN: 'ampholyn',
+            CovidResourceType.MED_AMPHOTERICIN_B: 'amphotericin b',
+            CovidResourceType.MED_CRESEMBA: 'cresemba',
+            CovidResourceType.MED_OSELTAMIVIR: 'oseltamivir',
+            CovidResourceType.MED_TOCILIZUMAB: 'tocilizumab',
+        }
+        return med_type_vs_name[med_resource_type]
+
 
 class VentilatorInfo(CovidResourceInfo):
-    @classmethod
-    def compare(cls, res_info_a: Dict, res_info_b: Dict) -> int:
-        return super().compare(res_info_a, res_info_b)
-
     @classmethod
     def _merge_older_with_newer(cls, older_resource_info: Dict, newer_resource_info: Dict):
         super()._merge_older_with_newer(older_resource_info, newer_resource_info)
@@ -740,16 +470,8 @@ class VentilatorInfo(CovidResourceInfo):
 
 class HelplineInfo(CovidResourceInfo):
     @classmethod
-    def compare(cls, res_info_a: Dict, res_info_b: Dict) -> int:
-        return super().compare(res_info_a, res_info_b)
-
-    @classmethod
     def _merge_older_with_newer(cls, older_resource_info: Dict, newer_resource_info: Dict):
         super()._merge_older_with_newer(older_resource_info, newer_resource_info)
-
-
-def get_res_info_comparator(resource_type: CovidResourceType):
-    return get_resource_info_class(resource_type).compare
 
 
 def get_resource_info_class(resource_type: CovidResourceType):

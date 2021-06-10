@@ -24,26 +24,36 @@ import covisearch.util.geoutil as geoutil
 # Need to use JSONEncoder to serialize datetime, etc.
 
 
-# Classes related to Covid resource websites and resource mapping
-def map_res_info_to_covisearch(web_src_res_info: Dict, search_filter: SearchFilter,
-                               web_src: 'WebSource') -> Dict:
-    covisearch_res_info = {
-        # NOTE: KAPIL: Commenting for now as res-type and city are redundant.
-        # CovidResourceInfo.RESOURCE_TYPE_LABEL:
-        #     CovidResourceType.to_string(search_filter.resource_type),
-        # CovidResourceInfo.CITY_LABEL: search_filter.city,
-        CovidResourceInfo.SOURCES_LABEL: [
-            {
-                CovidResourceInfo.SOURCE_NAME_LABEL: web_src.name,
-                CovidResourceInfo.SOURCE_URL_LABEL: web_src.card_source_url
-            }
-        ]
-    }
+class ResourceInfoMapper:
+    def __init__(self):
+        self._resource_id: int = 0
 
-    _map_common_res_info(web_src_res_info, web_src.resource_mapping_desc, covisearch_res_info, search_filter)
-    map_specific_res_info = _get_specific_res_info_mapper(search_filter.resource_type)
-    map_specific_res_info(web_src_res_info, web_src.resource_mapping_desc, covisearch_res_info)
-    return covisearch_res_info
+    # Classes related to Covid resource websites and resource mapping
+    def map_res_info_to_covisearch(self, web_src_res_info: Dict, search_filter: SearchFilter,
+                                   web_src: 'WebSource') -> Dict:
+        covisearch_res_info = {
+            # NOTE: KAPIL: Commenting for now as res-type and city are redundant.
+            # CovidResourceInfo.RESOURCE_TYPE_LABEL:
+            #     CovidResourceType.to_string(search_filter.resource_type),
+            # CovidResourceInfo.CITY_LABEL: search_filter.city,
+            CovidResourceInfo.ID_LABEL: self._resource_id,
+            CovidResourceInfo.SOURCES_LABEL: [
+                {
+                    CovidResourceInfo.SOURCE_NAME_LABEL: web_src.name,
+                    CovidResourceInfo.SOURCE_URL_LABEL: web_src.card_source_url,
+                    CovidResourceInfo.SOURCE_NEEDS_SMART_MATCH: web_src.does_resource_need_smart_match(
+                        search_filter.resource_type)
+                }
+            ]
+        }
+
+        self._resource_id = self._resource_id + 1
+
+        _map_common_res_info(web_src_res_info, web_src.resource_mapping_desc, covisearch_res_info, search_filter)
+        map_specific_res_info = _get_specific_res_info_mapper(search_filter.resource_type)
+        map_specific_res_info(web_src_res_info, web_src.resource_mapping_desc, covisearch_res_info)
+
+        return covisearch_res_info
 
 
 class WebSource:
@@ -58,6 +68,7 @@ class WebSource:
                  response_content_type: ContentType,
                  data_table_extract_selectors: Dict[str, str],
                  data_table_filter_templates: Dict[str, str],
+                 resource_types_needing_smart_match: List[CovidResourceType],
                  resource_mapping_desc: Dict[str, 'FieldMappingDesc'],
                  resource_type_label_mapping: Dict[str, str],
                  city_name_case_mapping: LetterCaseType, city_mapping: Dict[str, str],
@@ -84,6 +95,7 @@ class WebSource:
             data_table_extract_selectors
         self._data_table_filters: Dict[str, str] = self._data_table_filters_from_templates(
             data_table_filter_templates, web_src_city, search_filter, resource_type_label_mapping)
+        self._resource_types_needing_smart_match: List[CovidResourceType] = resource_types_needing_smart_match
 
         self._resource_mapping_desc: Dict[str, 'FieldMappingDesc'] = resource_mapping_desc
 
@@ -130,6 +142,9 @@ class WebSource:
     @property
     def resource_mapping_desc(self) -> Dict[str, 'FieldMappingDesc']:
         return self._resource_mapping_desc
+
+    def does_resource_need_smart_match(self, resource_type: CovidResourceType) -> bool:
+        return resource_type in self._resource_types_needing_smart_match
 
     @classmethod
     def _url_from_template(
@@ -289,6 +304,8 @@ def _map_common_res_info(web_src_res_info: Dict, res_mapping_desc: Dict[str, 'Fi
 
     _map_card_source_url(covisearch_res, res_mapping_desc, web_src_res_info)
 
+    _map_resource_subtype(covisearch_res, res_mapping_desc, web_src_res_info)
+
 
 def _map_last_verified_time(covisearch_res, res_mapping_desc, web_src_res_info):
     last_verified_label = CovidResourceInfo.LAST_VERIFIED_UTC_LABEL
@@ -388,6 +405,17 @@ def _map_contact_name(covisearch_res: Dict, res_mapping_desc: Dict[str, 'FieldMa
     contact_name_label = CovidResourceInfo.CONTACT_NAME_LABEL
     name_mapping = res_mapping_desc[contact_name_label]
     covisearch_res[contact_name_label] = web_src_res_info[name_mapping.first_web_src_field_name]
+
+
+def _map_resource_subtype(covisearch_res: Dict, res_mapping_desc: Dict[str, 'FieldMappingDesc'],
+                          web_src_res_info: Dict):
+    resource_subtype_label = CovidResourceInfo.RESOURCE_SUBTYPE_LABEL
+    if resource_subtype_label in res_mapping_desc:
+        resource_subtype_mapping = res_mapping_desc[resource_subtype_label]
+        covisearch_res[resource_subtype_label] = \
+            web_src_res_info[resource_subtype_mapping.first_web_src_field_name]
+    else:
+        covisearch_res[resource_subtype_label] = ''
 
 
 def _map_card_source_url(covisearch_res: Dict, res_mapping_desc: Dict[str, 'FieldMappingDesc'],

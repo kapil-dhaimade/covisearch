@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, List
 
 import google.cloud.firestore as firestore
 
@@ -104,6 +104,11 @@ def _firestore_to_web_src(
         data_table_filter_templates = web_src_dict['data_table_filter_templates'] \
             if 'data_table_filter_templates' in web_src_dict else None
 
+        resource_types_needing_smart_match_str: List[str] = web_src_dict['resource_types_needing_smart_match'] \
+            if 'resource_types_needing_smart_match' in web_src_dict else []
+        resource_types_needing_smart_match: List[entities.CovidResourceType] = \
+            _resource_types_needing_smart_match_from_str(resource_types_needing_smart_match_str)
+
         city_mapping = web_src_dict['city_mapping'] if 'city_mapping' in web_src_dict else None
 
         return resourcemapping.WebSource(
@@ -115,12 +120,19 @@ def _firestore_to_web_src(
             _content_type_from_string(web_src_dict['response_content_type']),
             web_src_dict['data_table_extract_selectors'],
             data_table_filter_templates,
+            resource_types_needing_smart_match,
             _get_resource_mapping_desc_model(web_src_dict['resource_mapping_desc']),
             web_src_dict['resource_type_label_mapping'],
             city_name_case_mapping, city_mapping, search_filter)
 
     except resourcemapping.NoResourceTypeMappingError:
         return None
+
+
+def _resource_types_needing_smart_match_from_str(
+        resource_types_needing_smart_match_str: List[str]) -> List[entities.CovidResourceType]:
+    return [entities.CovidResourceType.from_string(resource_type_str)
+            for resource_type_str in resource_types_needing_smart_match_str]
 
 
 def _get_resource_mapping_desc_model(resource_mapping_desc_dict: Dict[str, str]) -> \

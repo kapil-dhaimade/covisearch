@@ -5,6 +5,7 @@ import covisearch.aggregation.core.domain.entities as entities
 from covisearch.aggregation.core.domain.entities import \
     AggregatedResourceInfoRepo, FilteredAggregatedResourceInfo, SearchFilter, CovidResourceInfo, \
     CovidResourceType
+import covisearch.aggregation.core.domain.relevence as relevance
 import covisearch.aggregation.core.domain.resourcemapping as resourcemapping
 import covisearch.util.websitedatascraper as webdatascraper
 import covisearch.util.elapsedtime as elapsedtime
@@ -26,7 +27,7 @@ def _aggregate_resources_from_covid_sources(
         search_filter: SearchFilter, web_src_repo: resourcemapping.WebSourceRepo) -> List[Dict]:
 
     ctx = elapsedtime.start_measuring_operation('websources fetch')
-    web_sources = web_src_repo.get_web_sources_for_filter(search_filter)
+    web_sources: Dict[str, resourcemapping.WebSource] = web_src_repo.get_web_sources_for_filter(search_filter)
     elapsedtime.stop_measuring_operation(ctx)
 
     if not web_sources:
@@ -46,14 +47,14 @@ def _aggregate_resources_from_covid_sources(
     covisearch_resources = resource_info_class.merge_duplicates(covisearch_resources)
     elapsedtime.stop_measuring_operation(ctx_3)
 
+    ctx_6 = elapsedtime.start_measuring_operation('sorting covid resources')
+    covisearch_resources.sort(key=functools.cmp_to_key(
+        relevance.get_res_info_comparator(search_filter)))
+    elapsedtime.stop_measuring_operation(ctx_6)
+
     ctx_5 = elapsedtime.start_measuring_operation('removing redundant fields')
     covisearch_resources = CovidResourceInfo.remove_redundant_fields(covisearch_resources)
     elapsedtime.stop_measuring_operation(ctx_5)
-
-    ctx_6 = elapsedtime.start_measuring_operation('sorting covid resources')
-    covisearch_resources.sort(key=functools.cmp_to_key(
-        entities.get_res_info_comparator(search_filter.resource_type)))
-    elapsedtime.stop_measuring_operation(ctx_6)
 
     return covisearch_resources
 
@@ -61,8 +62,11 @@ def _aggregate_resources_from_covid_sources(
 def _map_scraped_data_to_covisearch_resources(
         scraped_data_list: List[webdatascraper.ScrapedData],
         search_filter: SearchFilter, web_sources: Dict[str, resourcemapping.WebSource]):
+
+    resource_info_mapper = resourcemapping.ResourceInfoMapper()
+
     return [
-        resourcemapping.map_res_info_to_covisearch(
+        resource_info_mapper.map_res_info_to_covisearch(
             web_src_res_info, search_filter, web_sources[scraped_data.url])
         for scraped_data in scraped_data_list if scraped_data is not None
         for web_src_res_info in scraped_data.table_rows
@@ -113,7 +117,7 @@ def _scrape_data_from_web_sources(web_sources: Dict[str, resourcemapping.WebSour
 #
 #         aggregated_res_info_repo = infra.AggregatedResourceInfoRepoImpl(db)
 #         web_src_repo = infra.WebSourceRepoImpl(db)
-#         search_filter = SearchFilter('nagercoil', entities.CovidResourceType.AMBULANCE, None)
+#         search_filter = SearchFilter('delhi', entities.CovidResourceType.HOSPITAL_BED, None)
 #         aggregate_covid_resources(search_filter, aggregated_res_info_repo, web_src_repo)
 #
 #         elapsedtime.stop_measuring_total()
