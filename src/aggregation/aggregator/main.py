@@ -23,26 +23,35 @@ def aggregate_covid_resources(event, context):
     aggregated_res_info_repo = infra.AggregatedResourceInfoRepoImpl(db)
     web_src_repo = infra.WebSourceRepoImpl(db)
 
-    search_filter_str = base64.b64decode(event['data']).decode('utf-8')
+    search_filters_str: str = base64.b64decode(event['data']).decode('utf-8')
+    print('Search filters to aggregate: \'' + search_filters_str + '\'...')
 
-    try:
-        print('Aggregating covid resources for filter \'' + search_filter_str + '\'...')
+    search_filters_list = search_filters_str.split(',')
 
-        search_filter = entities.SearchFilter.create_from_url_query_string_fmt(search_filter_str)
-        domain.aggregate_covid_resources(search_filter, aggregated_res_info_repo, web_src_repo)
+    for search_filter_str in search_filters_list:
+        try:
+            print('Aggregating covid resources for filter \'' + search_filter_str + '\'...')
 
-        print('Aggregated covid resources successfully for filter \'' + search_filter_str + '\'')
-    except Exception:
-        print('Exception while aggregating covid resources for filter \'' + search_filter_str + '\'')
-        raise
+            search_filter = entities.SearchFilter.create_from_url_query_string_fmt(search_filter_str)
+            domain.aggregate_covid_resources(search_filter, aggregated_res_info_repo, web_src_repo)
+
+            print('Aggregated covid resources successfully for filter \'' + search_filter_str + '\'')
+        except Exception:
+            print('Exception while aggregating covid resources for filter \'' + search_filter_str + '\'')
+            raise
+
+    print('Search filters aggregated successfully: \'' + search_filters_str + '\'...')
 
 
 # if __name__=='__main__':
-#     # city=mumbai&resource_type=ambulance
-#     aggregate_covid_resources({'data': 'Y2l0eT1tdW1iYWkmcmVzb3VyY2VfdHlwZT1hbWJ1bGFuY2U='}, None)
-#     # city=chennai&resource_type=plasma
-#     aggregate_covid_resources({'data': 'Y2l0eT1jaGVubmFpJnJlc291cmNlX3R5cGU9cGxhc21h'}, None)
-#     # # city=mumbai&resource_type=oxygen
-#     # aggregate_covid_resources({'data': 'Y2l0eT1tdW1iYWkmcmVzb3VyY2VfdHlwZT1veHlnZW4='}, None)
+#     # city=mumbai&resource_type=ambulance,city=chennai&resource_type=plasma,city=mumbai&resource_type=oxygen,city=navi%20mumbai&resource_type=ventilator
+#     aggregate_covid_resources({'data': 'Y2l0eT1tdW1iYWkmcmVzb3VyY2VfdHlwZT1hbWJ1bGFuY2UsY2l0eT1jaGVubmFpJnJlc291cmNlX3R5cGU9cGxhc21hLGNpdHk9bXVtYmFpJnJlc291cmNlX3R5cGU9b3h5Z2VuLGNpdHk9bmF2aSUyMG11bWJhaSZyZXNvdXJjZV90eXBlPXZlbnRpbGF0b3I='}, None)
+#
+#     # # city=mumbai&resource_type=ambulance
+#     # aggregate_covid_resources({'data': 'Y2l0eT1tdW1iYWkmcmVzb3VyY2VfdHlwZT1hbWJ1bGFuY2U='}, None)
+#     # # city=chennai&resource_type=plasma
+#     # aggregate_covid_resources({'data': 'Y2l0eT1jaGVubmFpJnJlc291cmNlX3R5cGU9cGxhc21h'}, None)
+#     # # # city=mumbai&resource_type=oxygen
+#     # # aggregate_covid_resources({'data': 'Y2l0eT1tdW1iYWkmcmVzb3VyY2VfdHlwZT1veHlnZW4='}, None)
 #
 #     print(9)
