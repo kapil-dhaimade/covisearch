@@ -111,6 +111,12 @@ app.controller('formCtrl', function ($scope, $http, $timeout, $window) {
                     'image': 'images/icons/medicine.png',
                     'category': 'Medicine'
                 },
+				{
+                    'displayName': 'Fabiflu',
+                    'value': 'med_fabiflu',
+                    'image': 'images/icons/medicine.png',
+                    'category': 'Medicine'
+                },
                 {
                     'displayName': 'Cresemba',
                     'value': 'med_cresemba',
