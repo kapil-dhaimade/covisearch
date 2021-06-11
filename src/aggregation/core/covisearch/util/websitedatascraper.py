@@ -43,8 +43,8 @@ class DataScrapingParams:
         # Refer 'https://jsonpathfinder.com/' to get JSONPaths from JSON
         # Refer 'http://videlibri.sourceforge.net/cgi-bin/xidelcgi' to get XPath from XML/HTML
         self._table_column_selectors = table_column_selectors
-        # NOTE: KAPIL: Filter may be regex or fuzzywuzzy filter. If no prefix is specified, it is
-        # treated as regex. Fuzzywuzzy filters should start with 'fuzzy,' prefix.
+        # NOTE: KAPIL: Filter may be regex filter. Even fuzzy regex with {e<=2} type notation supported.
+        # Refer: https://pypi.org/project/regex/
         self._table_row_filters = table_row_filters
         self._fields_selectors = fields_selectors
 
@@ -289,14 +289,28 @@ class JSONSelectorParser(ContentTypeSelectorParser):
     @classmethod
     def _extract_json_from_content(cls, content: str) -> str:
         json_dict_start_pos = content.find('{')
+        json_array_start_pos = content.find('[')
+
         json_content = '{}'
-        if json_dict_start_pos is not -1:
+        if cls._is_dict_start_before_array_start(json_dict_start_pos, json_array_start_pos):
             json_content = content[json_dict_start_pos:content.rfind('}') + 1]
+
         else:
-            json_array_start_pos = content.find('[')
             if json_array_start_pos is not -1:
                 json_content = content[json_array_start_pos:content.rfind(']') + 1]
+
         return json_content
+
+    @classmethod
+    def _is_dict_start_before_array_start(cls, json_dict_start_pos, json_array_start_pos) -> bool:
+        if json_dict_start_pos is not -1 and json_array_start_pos is -1:
+            return True
+
+        if json_dict_start_pos is not -1 and json_array_start_pos is not -1 and\
+                json_dict_start_pos < json_array_start_pos:
+            return True
+
+        return False
 
 
 # NOTE: KAPIL: Format of selector: <parent_node_selector>||<child_val_selector>
