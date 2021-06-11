@@ -2,7 +2,7 @@ from typing import Dict
 import enum
 from datetime import datetime
 
-from fuzzywuzzy import fuzz
+import regex
 
 from covisearch.aggregation.core.domain.entities import CovidResourceInfo, \
     HospitalBedsICUInfo, HospitalBedsInfo, MedicineInfo, CovidResourceType, SearchFilter, OxygenInfo
@@ -305,7 +305,7 @@ class HospitalBedsICUInfoComparator(CovidResourceInfoComparator):
 
 
 class MedicineSubtypeInfoComparator(CovidResourceInfoComparator):
-    THRESHOLD_FOR_STRING_COMPARISION = 77
+    THRESHOLD_FOR_STRING_COMPARISION = 3
     THRESHOLD_FOR_VERIFICATION_DAYS = 30
 
     def __init__(self, search_filter: SearchFilter):
@@ -320,7 +320,7 @@ class MedicineSubtypeInfoComparator(CovidResourceInfoComparator):
 
 
 class OxygenSubtypeInfoComparator(CovidResourceInfoComparator):
-    THRESHOLD_FOR_STRING_COMPARISION = 80
+    THRESHOLD_FOR_STRING_COMPARISION = 2
     THRESHOLD_FOR_VERIFICATION_DAYS = 30
 
     def __init__(self, search_filter: SearchFilter):
@@ -363,16 +363,14 @@ class ResourceSubtypeInfoComparator(CovidResourceInfoComparator):
             self._resource_match_cache[res_info_id] = True
             return True
 
-        res_match_ratio_in_res_subtype = _get_ratio(self._resource_name_to_match,
-                                                    res_info[CovidResourceInfo.RESOURCE_SUBTYPE_LABEL].lower())
-        if res_match_ratio_in_res_subtype >= self._threshold_for_string_match:
-            self._resource_match_cache[res_info_id] = True
+        if _is_fuzzy_match(self._resource_name_to_match, res_info[CovidResourceInfo.RESOURCE_SUBTYPE_LABEL],
+                           self._threshold_for_string_match):
             return True
 
-        res_match_ratio_in_details = _get_ratio(self._resource_name_to_match,
-                                                res_info[CovidResourceInfo.DETAILS_LABEL].lower())
-        res_info_details_has_match = True if res_match_ratio_in_details >= self._threshold_for_string_match \
-            else False
+        res_info_details_has_match = _is_fuzzy_match(
+            self._resource_name_to_match, res_info[CovidResourceInfo.DETAILS_LABEL].lower(),
+            self._threshold_for_string_match)
+
         self._resource_match_cache[res_info_id] = res_info_details_has_match
         return res_info_details_has_match
 
@@ -441,8 +439,9 @@ class ResourceSubtypeInfoComparator(CovidResourceInfoComparator):
         return (last_verified_recent - last_verified_older).days
 
 
-def _get_ratio(str1, str2):
-    return fuzz.partial_ratio(str1, str2)
+def _is_fuzzy_match(str1, str2, threshold) -> bool:
+    fuzzy_threshold = '{e<=' + str(threshold) + '}'
+    return bool(regex.search('(' + str1 + ')' + fuzzy_threshold, str2, regex.IGNORECASE))
 
 
 def _get_resource_info_comparator_class(resource_type: CovidResourceType):
@@ -455,6 +454,7 @@ def _get_resource_info_comparator_class(resource_type: CovidResourceType):
         CovidResourceType.MED_OSELTAMIVIR: MedicineSubtypeInfoComparator,
         CovidResourceType.MED_TOCILIZUMAB: MedicineSubtypeInfoComparator,
         CovidResourceType.MED_POSACONAZOLE: MedicineSubtypeInfoComparator,
+        CovidResourceType.MED_FABIFLU: MedicineSubtypeInfoComparator,
         CovidResourceType.OXY_CONCENTRATOR: OxygenSubtypeInfoComparator,
         CovidResourceType.OXY_REGULATOR: OxygenSubtypeInfoComparator,
         CovidResourceType.OXY_REFILL: OxygenSubtypeInfoComparator,

@@ -8,7 +8,7 @@ import concurrent.futures
 import requests
 import scrapy
 import jsonpath_ng
-from fuzzywuzzy import fuzz
+import regex
 
 from covisearch.util.mytypes import URL as URL
 from covisearch.util.mytypes import ContentType as ContentType
@@ -236,14 +236,7 @@ def _filter_table_rows(table_rows: List[Dict[str, str]], row_filters: Dict[str, 
 
 def _row_matches_filters(table_row: Dict[str, str], row_filters: Dict[str, str]) -> bool:
     for col_name, row_filter in row_filters.items():
-        if row_filter.startswith('fuzzy,'):
-            fuzzy_filter = row_filter.split(',')[1]
-            # NOTE: KAPIL: '90' tolerance is needed as 'madhya pradesh' and 'andhra pradesh' have
-            # 86% match!
-            if fuzz.partial_ratio(fuzzy_filter.lower(), table_row[col_name].lower()) < 90:
-                return False
-
-        elif not re.search(row_filter, table_row[col_name], re.IGNORECASE):
+        if not regex.search(row_filter, table_row[col_name], re.IGNORECASE):
             return False
 
     return True
