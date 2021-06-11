@@ -284,6 +284,7 @@ def _get_specific_res_info_mapper(res_type: CovidResourceType):
         entities.CovidResourceType.MED_OSELTAMIVIR: _map_medicine,
         entities.CovidResourceType.MED_AMPHOLYN: _map_medicine,
         entities.CovidResourceType.MED_POSACONAZOLE: _map_medicine,
+        entities.CovidResourceType.MED_FABIFLU: _map_medicine,
         entities.CovidResourceType.OXY_CONCENTRATOR: _map_oxygen,
         entities.CovidResourceType.OXY_REGULATOR: _map_oxygen,
         entities.CovidResourceType.OXY_REFILL: _map_oxygen,

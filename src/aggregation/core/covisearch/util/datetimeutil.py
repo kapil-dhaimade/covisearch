@@ -161,10 +161,11 @@ def set_timezone_if_not_present(timestamp: datetime, time_zone) -> datetime:
 # import re
 # import jsonpath_ng
 # import json
+# from fuzzywuzzy import fuzz
 #
 #
 # if __name__=='__main__':
-#
+#     ressss = fuzz.partial_ratio('madhya_pradesh'.lower(), 'madhya Pradesh'.lower())
 #
 #     res1 = {'a': 1}
 #     res2 = None

@@ -23,10 +23,11 @@ class CovidResourceType(enum.Enum):
     MED_OSELTAMIVIR = 16
     MED_AMPHOLYN = 17
     MED_POSACONAZOLE = 18
-    OXY_CYLINDER = 19
-    OXY_CONCENTRATOR = 20
-    OXY_REFILL = 21
-    OXY_REGULATOR = 22
+    MED_FABIFLU = 19
+    OXY_CYLINDER = 20
+    OXY_CONCENTRATOR = 21
+    OXY_REFILL = 22
+    OXY_REGULATOR = 23
 
     @staticmethod
     def to_string(resource_type: 'CovidResourceType') -> str:
@@ -49,6 +50,7 @@ class CovidResourceType(enum.Enum):
             CovidResourceType.MED_OSELTAMIVIR: 'med_oseltamivir',
             CovidResourceType.MED_AMPHOLYN: 'med_ampholyn',
             CovidResourceType.MED_POSACONAZOLE: 'med_posaconazole',
+            CovidResourceType.MED_FABIFLU: 'med_fabiflu',
             CovidResourceType.OXY_CONCENTRATOR: 'oxy_concentrator',
             CovidResourceType.OXY_CYLINDER: 'oxy_cylinder',
             CovidResourceType.OXY_REFILL: 'oxy_refill',
@@ -77,6 +79,7 @@ class CovidResourceType(enum.Enum):
             'med_oseltamivir':	CovidResourceType.MED_OSELTAMIVIR,
             'med_ampholyn': CovidResourceType.MED_AMPHOLYN,
             'med_posaconazole': CovidResourceType.MED_POSACONAZOLE,
+            'med_fabiflu': CovidResourceType.MED_FABIFLU,
             'oxy_concentrator': CovidResourceType.OXY_CONCENTRATOR,
             'oxy_regulator': CovidResourceType.OXY_REGULATOR,
             'oxy_refill': CovidResourceType.OXY_REFILL,
@@ -149,11 +152,14 @@ class CovidResourceInfo:
         cls._merge_field_if_absent(cls.DETAILS_LABEL, older_resource_info, newer_resource_info)
         cls._merge_field_if_absent(cls.ADDRESS_LABEL, older_resource_info, newer_resource_info)
         cls._merge_field_if_absent(cls.POST_TIME_LABEL, older_resource_info, newer_resource_info)
+        cls._merge_field_if_absent(cls.RESOURCE_SUBTYPE_LABEL, older_resource_info, newer_resource_info)
         cls._merge_sources_field(older_resource_info, newer_resource_info)
 
     @classmethod
     def _merge_field_if_absent(cls, field_label: str, older_resource_info: Dict, newer_resource_info: Dict):
         if newer_resource_info[field_label] is None:
+            newer_resource_info[field_label] = older_resource_info[field_label]
+        elif type(newer_resource_info[field_label]) is str and newer_resource_info[field_label] == '':
             newer_resource_info[field_label] = older_resource_info[field_label]
 
     @classmethod
@@ -479,7 +485,8 @@ class MedicineInfo(CovidResourceInfo):
             CovidResourceType.MED_AMPHOTERICIN_B: 'amphotericin b',
             CovidResourceType.MED_CRESEMBA: 'cresemba',
             CovidResourceType.MED_OSELTAMIVIR: 'oseltamivir',
-            CovidResourceType.MED_TOCILIZUMAB: 'tocilizumab'
+            CovidResourceType.MED_TOCILIZUMAB: 'tocilizumab',
+            CovidResourceType.MED_FABIFLU: 'fabiflu'
         }
         return med_type_vs_name[med_resource_type]
 
@@ -516,6 +523,7 @@ def get_resource_info_class(resource_type: CovidResourceType):
         CovidResourceType.MED_OSELTAMIVIR: MedicineInfo,
         CovidResourceType.MED_TOCILIZUMAB: MedicineInfo,
         CovidResourceType.MED_POSACONAZOLE: MedicineInfo,
+        CovidResourceType.MED_FABIFLU: MedicineInfo,
         CovidResourceType.OXY_CYLINDER: OxygenInfo,
         CovidResourceType.OXY_REFILL: OxygenInfo,
         CovidResourceType.OXY_REGULATOR: OxygenInfo,

@@ -305,44 +305,53 @@ class HospitalBedsICUInfoComparator(CovidResourceInfoComparator):
 
 
 class MedicineSubtypeInfoComparator(CovidResourceInfoComparator):
+    THRESHOLD_FOR_STRING_COMPARISION = 77
+    THRESHOLD_FOR_VERIFICATION_DAYS = 30
+
     def __init__(self, search_filter: SearchFilter):
         super().__init__(search_filter)
         med_name_to_match = MedicineInfo.get_med_name(self._search_filter.resource_type)
         self._resource_subtype_comparator = ResourceSubtypeInfoComparator(
-            search_filter, med_name_to_match)
+            search_filter, med_name_to_match, self.THRESHOLD_FOR_STRING_COMPARISION,
+            self.THRESHOLD_FOR_VERIFICATION_DAYS)
 
     def compare(self, res_info_a: Dict, res_info_b: Dict) -> int:
         return self._resource_subtype_comparator.compare(res_info_a, res_info_b)
 
 
 class OxygenSubtypeInfoComparator(CovidResourceInfoComparator):
+    THRESHOLD_FOR_STRING_COMPARISION = 80
+    THRESHOLD_FOR_VERIFICATION_DAYS = 30
+
     def __init__(self, search_filter: SearchFilter):
         super().__init__(search_filter)
         oxy_subtype_name_to_match = OxygenInfo.get_oxy_subtype_name(self._search_filter.resource_type)
         self._resource_subtype_comparator = ResourceSubtypeInfoComparator(
-            search_filter, oxy_subtype_name_to_match)
+            search_filter, oxy_subtype_name_to_match, self.THRESHOLD_FOR_STRING_COMPARISION,
+            self.THRESHOLD_FOR_VERIFICATION_DAYS)
 
     def compare(self, res_info_a: Dict, res_info_b: Dict) -> int:
         return self._resource_subtype_comparator.compare(res_info_a, res_info_b)
 
 
 class ResourceSubtypeInfoComparator(CovidResourceInfoComparator):
-    THRESHOLD_FOR_STRING_COMPARISION = 77
-    THRESHOLD_FOR_VERIFICATION_DAYS = 30
     MAX_DAYS_DIFF = 100000
 
-    def __init__(self, search_filter: SearchFilter, resource_name_to_match: str):
+    def __init__(self, search_filter: SearchFilter, resource_name_to_match: str,
+                 threshold_for_string_match: int, threshold_for_verification_days: int):
         super().__init__(search_filter)
         # NOTE: KAPIL: Resource info Id vs. resource string match val True/False
         self._resource_match_cache: Dict[int, bool] = {}
         self._resource_name_to_match = resource_name_to_match
+        self._threshold_for_string_match: int = threshold_for_string_match
+        self._threshold_for_verification_days: int = threshold_for_verification_days
 
     def compare(self, res_info_a: Dict, res_info_b: Dict) -> int:
         res_info_a_details_has_match = self._is_res_name_present_in_resource_fields(res_info_a)
         res_info_b_details_has_match = self._is_res_name_present_in_resource_fields(res_info_b)
 
-        return self.compare_basedon_relevence(res_info_a, res_info_a_details_has_match,
-                                              res_info_b, res_info_b_details_has_match)
+        return self._compare_basedon_relevence(res_info_a, res_info_a_details_has_match,
+                                               res_info_b, res_info_b_details_has_match)
 
     def _is_res_name_present_in_resource_fields(self, res_info: Dict) -> bool:
         res_info_id = res_info[CovidResourceInfo.ID_LABEL]
@@ -355,14 +364,14 @@ class ResourceSubtypeInfoComparator(CovidResourceInfoComparator):
             return True
 
         res_match_ratio_in_res_subtype = _get_ratio(self._resource_name_to_match,
-                                                    res_info[CovidResourceInfo.RESOURCE_SUBTYPE_LABEL])
-        if res_match_ratio_in_res_subtype >= self.THRESHOLD_FOR_STRING_COMPARISION:
+                                                    res_info[CovidResourceInfo.RESOURCE_SUBTYPE_LABEL].lower())
+        if res_match_ratio_in_res_subtype >= self._threshold_for_string_match:
             self._resource_match_cache[res_info_id] = True
             return True
 
         res_match_ratio_in_details = _get_ratio(self._resource_name_to_match,
-                                                res_info[CovidResourceInfo.DETAILS_LABEL])
-        res_info_details_has_match = True if res_match_ratio_in_details >= self.THRESHOLD_FOR_STRING_COMPARISION \
+                                                res_info[CovidResourceInfo.DETAILS_LABEL].lower())
+        res_info_details_has_match = True if res_match_ratio_in_details >= self._threshold_for_string_match \
             else False
         self._resource_match_cache[res_info_id] = res_info_details_has_match
         return res_info_details_has_match
@@ -381,8 +390,8 @@ class ResourceSubtypeInfoComparator(CovidResourceInfoComparator):
             return True
         return False
 
-    def compare_basedon_relevence(self, res_info_a, res_info_a_details_has_match,
-                                  res_info_b, res_info_b_details_has_match):
+    def _compare_basedon_relevence(self, res_info_a, res_info_a_details_has_match,
+                                   res_info_b, res_info_b_details_has_match):
 
         if self._check_if_res_value_present_or_absent_in_both(res_info_a_details_has_match,
                                                               res_info_b_details_has_match):
@@ -396,10 +405,9 @@ class ResourceSubtypeInfoComparator(CovidResourceInfoComparator):
         else:
             return 1
 
-    @classmethod
-    def _get_most_relevent_res_info(cls, res_info_a, res_info_a_details_has_match, res_info_b,
+    def _get_most_relevent_res_info(self, res_info_a, res_info_a_details_has_match, res_info_b,
                                     res_info_b_details_has_match):
-        recent_verified_res_info = cls._get_more_recently_verified_res_info(res_info_a, res_info_b)
+        recent_verified_res_info = self._get_more_recently_verified_res_info(res_info_a, res_info_b)
         old_verified_res_info = res_info_a if recent_verified_res_info is res_info_b else res_info_b
 
         if res_info_a_details_has_match is True and recent_verified_res_info is res_info_a:
@@ -411,10 +419,10 @@ class ResourceSubtypeInfoComparator(CovidResourceInfoComparator):
         last_verified_recent: datetime = recent_verified_res_info[last_verified_label]
         last_verified_older: datetime = old_verified_res_info[last_verified_label]
         days_between_verification_of_recent_and_earlier = \
-            cls._get_days_between_recent_and_earlier_for_threshold_check(
+            self._get_days_between_recent_and_earlier_for_threshold_check(
                 last_verified_older, last_verified_recent)
 
-        if days_between_verification_of_recent_and_earlier > cls.THRESHOLD_FOR_VERIFICATION_DAYS:
+        if days_between_verification_of_recent_and_earlier > self._threshold_for_verification_days:
             return recent_verified_res_info
         else:
             return old_verified_res_info
