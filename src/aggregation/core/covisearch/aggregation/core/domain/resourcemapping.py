@@ -349,25 +349,15 @@ def _map_details(covisearch_res, res_mapping_desc, web_src_res_info):
     if details_label in res_mapping_desc:
         details_mapping = res_mapping_desc[details_label]
         covisearch_res[details_label] = \
-            _sanitize_string_field(_stitch_all_web_src_detail_fields(details_mapping, web_src_res_info))
+            _sanitize_string_field(_stitch_multiple_mapped_fields(details_mapping, web_src_res_info, '. ', 1))
     else:
         covisearch_res[details_label] = ''
-
-
-def _stitch_all_web_src_detail_fields(details_mapping, web_src_res_info):
-    web_src_details_vals = ''
-    for details_field_name in details_mapping.web_src_field_names:
-        if web_src_res_info[details_field_name]:
-            web_src_details_vals = web_src_details_vals + web_src_res_info[details_field_name] + '. '
-    if web_src_details_vals:
-        web_src_details_vals = web_src_details_vals[:-1]
-    return web_src_details_vals
 
 
 def _map_phones(covisearch_res, res_mapping_desc, web_src_res_info, search_filter: SearchFilter):
     phone_label = CovidResourceInfo.PHONES_LABEL
     phone_mapping = res_mapping_desc[phone_label]
-    web_src_phone_no = _stitch_all_web_src_phone_vals(phone_mapping, web_src_res_info)
+    web_src_phone_no = _stitch_multiple_mapped_fields(phone_mapping, web_src_res_info, '/', 1)
 
     # NOTE: KAPIL: [AS ON 01-Jun-2021] The new field for keeping phone numbers as uniformized list.
     # Should replace old slash separated string later.
@@ -375,34 +365,26 @@ def _map_phones(covisearch_res, res_mapping_desc, web_src_res_info, search_filte
         _extract_and_uniformized_phones(web_src_phone_no, search_filter.city)
 
 
-def _stitch_all_web_src_phone_vals(phone_mapping: 'FieldMappingDesc', web_src_res_info) -> str:
-    web_src_phone_vals: str = ''
-    for phone_field_name in phone_mapping.web_src_field_names:
-        if web_src_res_info[phone_field_name]:
-            web_src_phone_vals = web_src_phone_vals + web_src_res_info[phone_field_name] + '/'
-    if web_src_phone_vals:
-        web_src_phone_vals = web_src_phone_vals[:-1]
-    return web_src_phone_vals
-
-
 def _map_address(covisearch_res, res_mapping_desc, web_src_res_info):
     address_label = CovidResourceInfo.ADDRESS_LABEL
     if address_label in res_mapping_desc:
         address_mapping = res_mapping_desc[address_label]
         covisearch_res[address_label] = \
-            _sanitize_string_field(_stitch_address_fields(address_mapping, web_src_res_info))
+            _sanitize_string_field(_stitch_multiple_mapped_fields(address_mapping, web_src_res_info,
+                                                                  ', ', 2))
     else:
         covisearch_res[address_label] = ''
 
 
-def _stitch_address_fields(address_mapping, web_src_res_info):
-    web_src_address = ''
-    for phone_field_name in address_mapping.web_src_field_names:
-        if web_src_res_info[phone_field_name]:
-            web_src_address = web_src_address + web_src_res_info[phone_field_name] + ', '
-    if web_src_address:
-        web_src_address = web_src_address[:-2]
-    return web_src_address
+def _stitch_multiple_mapped_fields(field_mapping, web_src_res_info, stitch_delim: str,
+                                   last_delim_chars_to_remove: int):
+    stitched_field_val = ''
+    for field_name in field_mapping.web_src_field_names:
+        if web_src_res_info[field_name]:
+            stitched_field_val = stitched_field_val + web_src_res_info[field_name] + stitch_delim
+    if stitched_field_val:
+        stitched_field_val = stitched_field_val[:-1 * last_delim_chars_to_remove]
+    return stitched_field_val
 
 
 def _map_contact_name(covisearch_res: Dict, res_mapping_desc: Dict[str, 'FieldMappingDesc'],
@@ -499,7 +481,8 @@ def _map_hospital_bed_icu(web_src_res_info: Dict, res_mapping_desc: Dict[str, 'F
 def _map_hospital_type(covisearch_res, hospital_type_label, res_mapping_desc, web_src_res_info):
     if hospital_type_label in res_mapping_desc:
         hospital_type_mapping = res_mapping_desc[hospital_type_label]
-        covisearch_res[hospital_type_label] = web_src_res_info[hospital_type_mapping.first_web_src_field_name]
+        covisearch_res[hospital_type_label] = \
+            _stitch_multiple_mapped_fields(hospital_type_mapping, web_src_res_info, ' | ', 3)
     else:
         covisearch_res[hospital_type_label] = None
 
