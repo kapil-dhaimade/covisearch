@@ -136,9 +136,49 @@ ul{
 #whatsAppbtn
 {
   font-size: 1.5rem;
+  color: #128C7E;
 }
 
+#whatsAppbtn:active 
+{
+  font-size: 1.75rem;
+}
+
+#copybtn:active
+{
+  color: blue;
+  font-size: 1.5rem;
+}
 .capitalize
 {
   text-transform: capitalize;
+}
+
+#secloreLogo
+{
+  height: .65rem;
+  vertical-align: baseline;
+}
+
+#sponsor
+{
+  color: #4e4e4e;
+  font-size: .8rem;
+}
+
+
+@media only screen and (min-width: 900px) {
+  #sponsor
+{
+  max-width: 22rem;
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 2rem !important;
+  text-align: left;
+}
+
+#sponsor span{
+  display: block;
+}
 }
