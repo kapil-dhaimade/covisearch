@@ -2,7 +2,6 @@ import google.cloud.firestore as firestore
 
 import covisearch.aggregation.datasyncer.domain as domain
 import covisearch.aggregation.datasyncer.infra as infra
-import covisearch.aggregation.core.infra as coreinfra
 
 
 # NOTE: KAPIL: For testing with Firestore DB:
@@ -31,23 +30,16 @@ import covisearch.aggregation.core.infra as coreinfra
 db = firestore.Client()
 
 
-# NOTE: KAPIL: Parsing this dummy ISO format datetime during init improves performance of
-# subsequent datetime parsing operations and makes mapping websrc resources to covisearch faster!!
-dummy_datetime_for_performance = \
-    domain.resourcemapping._map_isoformat_timestamp_to_covisearch('2021-05-10T13:22:16.075259')
-
-
 # Starting point called by Google Cloud Function
 # Do init and call corresponding domain function
 def resync_aggregated_data(event, context):
     filter_stats_firestore_repo = infra.FilterStatsRepoFirestoreImpl(db)
     resyncer_config_firestore = infra.get_resyncer_config_from_firestore(db)
 
-    aggregated_res_info_repo = coreinfra.AggregatedResourceInfoRepoImpl(db)
-    web_src_repo = coreinfra.WebSourceRepoImpl(db)
+    aggregated_res_info_repo = infra.AggregatedResourceInfoRepoImpl(db)
 
     domain.resync_aggregated_data(filter_stats_firestore_repo, resyncer_config_firestore,
-                                  aggregated_res_info_repo, web_src_repo)
+                                  aggregated_res_info_repo, infra.aggregate_covid_resources_for_filters)
 
 
 # import traceback

@@ -42,7 +42,7 @@ def fetch_resource_for_filter(request: Request):
     page_no = request.args["page_no"]
     supported_resource_type = ["oxygen", "ambulance", "hospital_bed", "hospital_bed_icu", "plasma", "ecmo", "food", "testing",
                                  "medicine", "ventilator", "helpline", "blood", "med_amphotericin", "med_cresemba", "med_tocilizumab",
-                                 "med_oseltamivir", "med_ampholyn", "med_posaconazole", "oxy_concentrator", "oxy_cylinder", "oxy_refill", "oxy_regulator"]
+                                 "med_oseltamivir", "med_ampholyn", "med_posaconazole", "med_fabiflu", "oxy_concentrator", "oxy_cylinder", "oxy_refill", "oxy_regulator"]
 
     if resource_type is None or city is None or resource_type.lower() not in supported_resource_type:
         return "Invalid Input!!!", 400, headers

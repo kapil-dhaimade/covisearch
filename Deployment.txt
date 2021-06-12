@@ -130,7 +130,7 @@
 -Data Syncer:
 	-Cloud Function:
 		-Deployment command and settings:
-			gcloud functions deploy resync_aggregated_data --runtime python37 --trigger-topic resync-schedule-topic --max-instances 1 --memory 256MB --region asia-south1 --timeout 540s
+			gcloud functions deploy resync_aggregated_data --runtime python37 --trigger-topic resync-schedule-topic --max-instances 1 --memory 128MB --region asia-south1 --set-env-vars GOOGLE_CLOUD_PROJECT=covisearch2
 	-Pub/Sub settings:
 		-Topic name: resync-schedule-topic
 	-Cloud Scheduler settings:
@@ -142,7 +142,7 @@
 		-Deployment command and settings:
 			# Need 1024MB for Aggregator as it runs faster and we need to be responsive 
 			# for returning results to user for a new filter.
-			gcloud functions deploy aggregate_covid_resources --runtime python37 --trigger-topic aggregate-topic --memory 1024MB --region asia-south1
+			gcloud functions deploy aggregate_covid_resources --runtime python37 --trigger-topic aggregate-topic --memory 1024MB --region asia-south1 --timeout 300s
 	-Pub/Sub settings:
 		-Topic name: aggregate-topic
 		

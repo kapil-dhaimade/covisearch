@@ -8,6 +8,7 @@ import concurrent.futures
 import requests
 import scrapy
 import jsonpath_ng
+import regex
 
 from covisearch.util.mytypes import URL as URL
 from covisearch.util.mytypes import ContentType as ContentType
@@ -31,7 +32,7 @@ class DataScrapingParams:
     def __init__(self, url: URL, request_content_type: ContentType, request_body: str,
                  additional_http_headers: Dict[str, str],
                  response_content_type: ContentType, table_column_selectors: Dict[str, str],
-                 table_row_regex_filters: Dict[str, str],
+                 table_row_filters: Dict[str, str],
                  fields_selectors: Dict[str, str]):
         self._url = url
         self._request_content_type: ContentType = request_content_type
@@ -42,7 +43,9 @@ class DataScrapingParams:
         # Refer 'https://jsonpathfinder.com/' to get JSONPaths from JSON
         # Refer 'http://videlibri.sourceforge.net/cgi-bin/xidelcgi' to get XPath from XML/HTML
         self._table_column_selectors = table_column_selectors
-        self._table_row_regex_filters = table_row_regex_filters
+        # NOTE: KAPIL: Filter may be regex filter. Even fuzzy regex with {e<=2} type notation supported.
+        # Refer: https://pypi.org/project/regex/
+        self._table_row_filters = table_row_filters
         self._fields_selectors = fields_selectors
 
     @property
@@ -70,8 +73,8 @@ class DataScrapingParams:
         return self._table_column_selectors
 
     @property
-    def table_row_regex_filters(self) -> Dict[str, str]:
-        return self._table_row_regex_filters
+    def table_row_filters(self) -> Dict[str, str]:
+        return self._table_row_filters
 
     @property
     def fields_selectors(self) -> Dict[str, str]:
@@ -222,19 +225,20 @@ def scrape_table_from_response(
     column_names = [col_selector_pair[0] for col_selector_pair in table_column_selectors]
     table_rows = [{col: row_col_val for col, row_col_val in zip(column_names, row_vals)}
                   for row_vals in zip(*table_vals_by_column)]
-    table_rows = _filter_table_rows(table_rows, scraping_params.table_row_regex_filters)
+    table_rows = _filter_table_rows(table_rows, scraping_params.table_row_filters)
     return table_rows
 
 
-def _filter_table_rows(table_rows: List[Dict[str, str]], row_regex_filters: Dict[str, str]) -> \
+def _filter_table_rows(table_rows: List[Dict[str, str]], row_filters: Dict[str, str]) -> \
         List[Dict[str, str]]:
-    return [row for row in table_rows if _row_matches_filters(row, row_regex_filters)]
+    return [row for row in table_rows if _row_matches_filters(row, row_filters)]
 
 
-def _row_matches_filters(table_row: Dict[str, str], row_regex_filters: Dict[str, str]) -> bool:
-    for col_name, regex_filter in row_regex_filters.items():
-        if not re.search(regex_filter, table_row[col_name], re.IGNORECASE):
+def _row_matches_filters(table_row: Dict[str, str], row_filters: Dict[str, str]) -> bool:
+    for col_name, row_filter in row_filters.items():
+        if not regex.search(row_filter, table_row[col_name], re.IGNORECASE):
             return False
+
     return True
 
 
@@ -285,14 +289,28 @@ class JSONSelectorParser(ContentTypeSelectorParser):
     @classmethod
     def _extract_json_from_content(cls, content: str) -> str:
         json_dict_start_pos = content.find('{')
+        json_array_start_pos = content.find('[')
+
         json_content = '{}'
-        if json_dict_start_pos is not -1:
+        if cls._is_dict_start_before_array_start(json_dict_start_pos, json_array_start_pos):
             json_content = content[json_dict_start_pos:content.rfind('}') + 1]
+
         else:
-            json_array_start_pos = content.find('[')
             if json_array_start_pos is not -1:
                 json_content = content[json_array_start_pos:content.rfind(']') + 1]
+
         return json_content
+
+    @classmethod
+    def _is_dict_start_before_array_start(cls, json_dict_start_pos, json_array_start_pos) -> bool:
+        if json_dict_start_pos is not -1 and json_array_start_pos is -1:
+            return True
+
+        if json_dict_start_pos is not -1 and json_array_start_pos is not -1 and\
+                json_dict_start_pos < json_array_start_pos:
+            return True
+
+        return False
 
 
 # NOTE: KAPIL: Format of selector: <parent_node_selector>||<child_val_selector>

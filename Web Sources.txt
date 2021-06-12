@@ -38,3 +38,15 @@ https://coveri.ga/
 
 -Palghar District Hospital Bed Availability:
 https://palghar.gov.in/covid-19-information/
+
+-Covid Care Public Tableau:
+https://public.tableau.com/views/CovidHelp/Details?%3Alanguage=en-GB&%3Adisplay_count=y&publish=yes&%3Aorigin=viz_share_link&%3AshowVizHome=no#
+
+-Covid Meals for India:
+https://covidmealsforindia.com/
+
+-Covid Army: Shows twitter feed:
+https://covid.army/
+
+-SOSIndia4U Fact Checker:
+https://sosindia4u.com/

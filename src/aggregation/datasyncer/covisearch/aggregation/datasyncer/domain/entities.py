@@ -64,3 +64,9 @@ class ResyncerConfig:
     @property
     def idle_resync_threshold_in_days(self):
         return self._idle_resync_threshold_in_days
+
+
+class AggregatedResourceInfoRepo(ABC):
+    @abstractmethod
+    def remove_resources_for_filter(self, search_filter: str):
+        raise NotImplementedError('AggregatedResourceInfoRepo is an interface')
