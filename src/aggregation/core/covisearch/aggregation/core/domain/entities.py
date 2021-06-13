@@ -305,7 +305,7 @@ class OxygenInfo(CovidResourceInfo):
             CovidResourceType.OXY_REGULATOR: 'regulator',
             CovidResourceType.OXY_CONCENTRATOR: 'concentrator'
         }
-        return med_type_vs_name[med_resource_type]
+        return med_type_vs_name.get(med_resource_type, '')
 
 
 class HospitalBedsInfo(CovidResourceInfo):
@@ -492,7 +492,7 @@ class MedicineInfo(CovidResourceInfo):
             CovidResourceType.MED_TOCILIZUMAB: 'tocilizumab',
             CovidResourceType.MED_FABIFLU: 'fabiflu'
         }
-        return med_type_vs_name[med_resource_type]
+        return med_type_vs_name.get(med_resource_type, '')
 
 
 class VentilatorInfo(CovidResourceInfo):
