@@ -310,7 +310,7 @@ class MedicineSubtypeInfoComparator(CovidResourceInfoComparator):
 
     def __init__(self, search_filter: SearchFilter):
         super().__init__(search_filter)
-        med_name_to_match = MedicineInfo.get_med_name(self._search_filter.resource_type)
+        med_name_to_match = MedicineInfo.get_resource_subtype_search_name(self._search_filter.resource_type)
         self._resource_subtype_comparator = ResourceSubtypeInfoComparator(
             search_filter, med_name_to_match, self.THRESHOLD_FOR_STRING_COMPARISION,
             self.THRESHOLD_FOR_VERIFICATION_DAYS)
@@ -325,7 +325,7 @@ class OxygenSubtypeInfoComparator(CovidResourceInfoComparator):
 
     def __init__(self, search_filter: SearchFilter):
         super().__init__(search_filter)
-        oxy_subtype_name_to_match = OxygenInfo.get_oxy_subtype_name(self._search_filter.resource_type)
+        oxy_subtype_name_to_match = OxygenInfo.get_resource_subtype_search_name(self._search_filter.resource_type)
         self._resource_subtype_comparator = ResourceSubtypeInfoComparator(
             search_filter, oxy_subtype_name_to_match, self.THRESHOLD_FOR_STRING_COMPARISION,
             self.THRESHOLD_FOR_VERIFICATION_DAYS)

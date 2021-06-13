@@ -60,6 +60,7 @@ class WebSource:
     WEB_SRC_CITY_PLACEHOLDER = '{CITY}'
     WEB_SRC_RESOURCE_TYPE_PLACEHOLDER = '{RESOURCE_TYPE}'
     WEB_SRC_STATE_PLACEHOLDER = '{STATE}'
+    WEB_SRC_RESOURCE_SUBTYPE_NAME_PLACEHOLDER = '{RESOURCE_SUBTYPE_SEARCH_NAME}'
 
     def __init__(self, name: str, homepage_url: URL, web_resource_url_template: URL,
                  card_source_url_template: URL,
@@ -251,6 +252,13 @@ class WebSource:
             raise NoResourceTypeMappingError()
         data_table_filter = data_table_filter.replace(cls.WEB_SRC_RESOURCE_TYPE_PLACEHOLDER,
                                                       resource_type_label_mapping[filter_res_type_str])
+
+        resource_info_class = entities.get_resource_info_class(search_filter.resource_type)
+        resource_subtype_search_name = resource_info_class.get_resource_subtype_search_name(
+            search_filter.resource_type)
+        data_table_filter = data_table_filter.replace(cls.WEB_SRC_RESOURCE_SUBTYPE_NAME_PLACEHOLDER,
+                                                      resource_subtype_search_name)
+
         return data_table_filter
 
 
@@ -543,6 +551,9 @@ def _extract_and_uniformized_phones(non_uniform_phones: str, city: str) -> List[
             for uniformized_phone in _extract_and_uniformize_one_phone_str(non_uniform_phone_str, city)]
 
 
+re_phones_pattern = re.compile('(\(*\d{3,10}(\s|-|\(|\))*\d{0,10}(\s|-|\(|\))*\d{0,10})')
+
+
 # NOTE: KAPIL: Returns list because one phone number string may end up having more than
 # one phone number
 def _extract_and_uniformize_one_phone_str(non_uniform_phone: str, city: str) -> List[str]:
@@ -552,8 +563,19 @@ def _extract_and_uniformize_one_phone_str(non_uniform_phone: str, city: str) -> 
         return [format_number(match.number, PhoneNumberFormat.NATIONAL).replace(' ', '')
                 for match in phone_no_matcher]
     else:
-        uniformized_phone = _retry_uniformize_phone_by_adding_area_code(non_uniform_phone, city)
-        return uniformized_phone if uniformized_phone else [non_uniform_phone]
+        non_uniform_extracted_phones_matches = re_phones_pattern.findall(non_uniform_phone)
+
+        if non_uniform_extracted_phones_matches:
+            uniformized_phone = []
+
+            for non_uniform_extracted_phones_match in non_uniform_extracted_phones_matches:
+                uniformized_phone.extend(_retry_uniformize_phone_by_adding_area_code(
+                    non_uniform_extracted_phones_match[0], city))
+
+            return uniformized_phone
+
+        else:
+            return []
 
 
 def _retry_uniformize_phone_by_adding_area_code(non_uniform_phone: str, city: str) -> List[str]:
@@ -564,7 +586,7 @@ def _retry_uniformize_phone_by_adding_area_code(non_uniform_phone: str, city: st
         return [format_number(match.number, PhoneNumberFormat.NATIONAL).replace(' ', '')
                 for match in phone_no_matcher]
     else:
-        return []
+        return [non_uniform_phone.replace(' ', '')]
 
 
 def _sanitize_string_field(field_value: str) -> str:

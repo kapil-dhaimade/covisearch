@@ -1659,3 +1659,48 @@ def get_phone_area_code_for_city(city: str) -> str:
         "yavatmal": "7232"
     }
     return city_area_code_mapping.get(city, '')
+
+
+def get_synonym_cities(city: str) -> List[str]:
+    city_vs_synonym_cities = {
+        "gurugram": ["gurgaon"],
+        "gurgaon": ["gurugram"],
+        "bangalore": ["bengaluru"],
+        "bengaluru": ["bangalore"],
+        "kanyakumari": ["kanniyakumari"],
+        "kanniyakumari": ["kanyakumari"],
+        "bombay": ["mumbai"],
+        "mumbai city": ["mumbai"],
+        "mumbai suburban": ["mumbai"],
+        "prayagraj": ["allahabad"],
+        "allahabad": ["prayagraj"],
+        "chennai": ["madras"],
+        "madras": ["chennai"],
+        "kolkata": ["calcutta"],
+        "calcutta": ["kolkata"],
+        "delhi": ["new delhi"],
+        "new delhi": ["delhi"],
+        "vasai-virar": ["vasai", "virar"],
+        "virar": ["vasai-virar", "vasai"],
+        "vasai": ["vasai-virar", "virar"],
+        "mira-bhayandar": ["bhayandar"],
+        "bhayandar": ["mira-bhayandar"],
+        "mysore": ["mysuru"],
+        "mysuru": ["mysore"],
+        "visakhapatnam": ["vizag", "vishakhapatnam"],
+        "vishakhapatnam": ["vizag", "visakhapatnam"],
+        "vizag": ["visakhapatnam", "vishakhapatnam"],
+        "vizagapatnam": ["visakhapatnam", "vizag"],
+        "kochi": ["cochin"],
+        "cochin": ["kochi"],
+        "panjim": ["panaji"],
+        "panaji": ["panjim"],
+        "panji": ["panjim", "panaji"],
+        "nashik": ["nasik"],
+        "nasik": ["nashik"],
+        "vadodara": ["baroda"],
+        "baroda": ["vadodara"],
+        "ahmedabad": ["amdavad"],
+        "amdavad": ["ahmedabad"]
+    }
+    return city_vs_synonym_cities.get(city, [])

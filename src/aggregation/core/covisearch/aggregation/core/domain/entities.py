@@ -131,6 +131,10 @@ class CovidResourceInfo:
         return cls._merge_entries_with_multiple_phones(covisearch_res_by_phone, covisearch_res_without_phone)
 
     @classmethod
+    def get_resource_subtype_search_name(cls, med_resource_type: CovidResourceType) -> str:
+        return ''
+
+    @classmethod
     def _merge_entries_with_multiple_phones(cls, covisearch_res_by_phone, covisearch_res_without_phone) -> List[Dict]:
         duplicates_removed_resources = list(covisearch_res_by_phone.values())
         merged_resources = []
@@ -294,7 +298,7 @@ class OxygenInfo(CovidResourceInfo):
         cls._merge_field_if_absent(cls.LITRES_LABEL, older_resource_info, newer_resource_info)
 
     @classmethod
-    def get_oxy_subtype_name(cls, med_resource_type: CovidResourceType):
+    def get_resource_subtype_search_name(cls, med_resource_type: CovidResourceType) -> str:
         med_type_vs_name = {
             CovidResourceType.OXY_CYLINDER: 'cylinder',
             CovidResourceType.OXY_REFILL: 'refill',
@@ -478,7 +482,7 @@ class MedicineInfo(CovidResourceInfo):
         super()._merge_older_with_newer(older_resource_info, newer_resource_info)
 
     @classmethod
-    def get_med_name(cls, med_resource_type: CovidResourceType):
+    def get_resource_subtype_search_name(cls, med_resource_type: CovidResourceType) -> str:
         med_type_vs_name = {
             CovidResourceType.MED_POSACONAZOLE: 'posaconazole',
             CovidResourceType.MED_AMPHOLYN: 'ampholyn',
