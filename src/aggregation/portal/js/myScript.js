@@ -311,6 +311,10 @@ app.controller('formCtrl', function ($scope, $http, $timeout, $window) {
         if(typeof selectedCitylocationData !== "undefined"){
             $scope.nearbycity = cityLocationData.cities.sort((a,b) => distance(selectedCitylocationData,a)-distance(selectedCitylocationData,b)).slice(1,6);
         }
+        else
+        {
+            $scope.nearbycity = undefined;
+        }
     }
 
     function distance(location1, location2) {
