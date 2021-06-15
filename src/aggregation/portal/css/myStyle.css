@@ -23,6 +23,13 @@ body
   background-color: rgba(0,0,0,.03) !important;
 }
 
+#nearby-container
+{
+  background-color: rgba(0,0,0,.03) !important;
+  text-align: center;
+  padding: 15px;
+
+}
 #card-container
 {
   max-width: 1200px;

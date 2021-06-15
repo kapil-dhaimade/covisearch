@@ -40,7 +40,7 @@
         <div class="form-inline justify-content-center">
 
           <div class="form-group custom-input">
-            <input name="filter.city" class="form-control form-input capitalize" list="city" ng-model="filter.city"
+            <input id="city-input" name="filter.city" class="form-control form-input capitalize" list="city" ng-model="filter.city"
               placeholder="Enter the City" ng-keyup="filterFunction()" required>
             <datalist id="city">
               <option ng-repeat="x in cityList" value={{x}}>{{x}}</option>
@@ -48,7 +48,7 @@
           </div>
 
           <div class="form-group custom-input">
-            <select class="form-control form-input" ng-model="filter.resource"
+            <select id="resource-input" class="form-control form-input" ng-model="filter.resource"
               ng-options="x.displayName group by x.category for x in resourceList" ng-change="console.log('ds')" required>
               <option value="" disabled>Select the Resource</option>
             </select>
@@ -62,7 +62,7 @@
           </div>
 
           <div class="form-group custom-input">
-            <button ng-click="submit()"
+            <button id="submit-button" ng-click="submit()"
               ng-disabled="filterForm.$invalid || screenStatus == 'loading' || screenStatus == 'fetchingData'"
               class="btn btn-info">SUBMIT</button>
           </div>
@@ -73,6 +73,14 @@
       <hr>
       <div ng-include="'card.html'"></div>
 
+    </div>
+    <div id="nearby-container" ng-if="nearbycity.length > 0" class="container-fluid">
+      <div class="container justify-content-center">
+        <h4>Couldn't find resource? Do you want to search nearby cities?</h4>
+        <span style="padding: 5px;">
+          <button type="button" class="btn btn-info" ng-repeat="x in nearbycity" style="margin: 5px;" ng-click="submitCity(x.city)">{{x.city}}</button>
+        </span>
+      </div>
     </div>
   </div>
   <div ng-include="'footer.html'" class="text-center"></div>

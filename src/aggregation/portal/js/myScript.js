@@ -15,6 +15,10 @@ app.controller('formCtrl', function ($scope, $http, $timeout, $window) {
         list = response.data;
     });
 
+    $http.get('../data/cities.json').then(function (response) {
+        cityLocationData = response.data;
+    });
+
     $scope.init = function () {
         $scope.pageNumber = 0;
         $scope.retryCount = 5;
@@ -275,12 +279,64 @@ app.controller('formCtrl', function ($scope, $http, $timeout, $window) {
             $scope.fetch($scope.master);
         }
     };
+    function waitForCityLocationDataAndSetNearbyCity(){
+        if(typeof cityLocationData !== "undefined"){
+            setNearbyCity()
+        }
+        else{
+            setTimeout(waitForCityLocationDataAndSetNearbyCity, 250);
+        }
+    }
+    $scope.submitCity = function (city) {
+        if($scope.filter !== undefined)
+        {
+            $scope.filter.city = city;
+        }
+        else
+        {
+            $scope["filter"] = {}
+            $scope.filter["city"] = city;
+            $scope.filter["resource"] = {
+            'displayName': 'Oxygen',
+            'value': 'oxygen',
+            'image': 'images/icons/oxygen.png'};
+        }
+        $timeout(function() {
+            angular.element('#submit-button').triggerHandler('click');
+        });
+    };
+    function setNearbyCity() {
+        selectedCitylocationData = cityLocationData.cities.find(element => element.city.toLowerCase() === $scope.master["city"].toLowerCase());
+        // For cases whose location is not known yet
+        if(typeof selectedCitylocationData !== "undefined"){
+            $scope.nearbycity = cityLocationData.cities.sort((a,b) => distance(selectedCitylocationData,a)-distance(selectedCitylocationData,b)).slice(1,6);
+        }
+    }
+
+    function distance(location1, location2) {
+        var lat1 = location1.lat, lon1 = location1.lng, lat2 = location2.lat, lon2 = location2.lng
+    	var radlat1 = Math.PI * lat1/180
+    	var radlat2 = Math.PI * lat2/180
+    	var theta = lon1-lon2
+    	var radtheta = Math.PI * theta/180
+    	var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+    	if (dist > 1) {
+    		dist = 1;
+    	}
+    	dist = Math.acos(dist)
+    	dist = dist * 180/Math.PI
+    	dist = dist * 60 * 1.1515
+    	// if (unit=="K") { dist = dist * 1.609344 }
+    	// if (unit=="N") { dist = dist * 0.8684 }
+    	return dist
+    }
 
     $scope.submit = function () {
         $scope.init();
         $scope.screenStatus = 'loading';
         $scope.master = angular.copy($scope.filter);
         $scope.fetchNextBatch($scope.master);
+        waitForCityLocationDataAndSetNearbyCity()
     };
 
     $scope.filterFunction = function () {
@@ -295,6 +351,7 @@ app.controller('formCtrl', function ($scope, $http, $timeout, $window) {
         $scope.init();
         $scope.screenStatus = 'loading';
         $scope.fetchNextBatch($scope.master);
+        waitForCityLocationDataAndSetNearbyCity()
     }
 
     $scope.sharingData = function (x) {
