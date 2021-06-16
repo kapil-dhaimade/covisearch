@@ -13,6 +13,7 @@ import regex
 from covisearch.util.mytypes import URL as URL
 from covisearch.util.mytypes import ContentType as ContentType
 import covisearch.util.elapsedtime as elapsedtime
+import covisearch.util.twitterhack as twitterhack
 
 
 def scrape_data_from_websites(
@@ -118,8 +119,9 @@ class WebsiteDataSpider:
                 try:
                     response = response_future.result()
                     if response.status_code != 200:
-                        print('Requests returned HTTP code: \'' + str(response.status_code) + '\' for url: \'' +
-                              response.url + '\'')
+                        if response.status_code != 404:
+                            print('Requests returned HTTP code: \'' + str(response.status_code) + '\' for url: \'' +
+                                  response.url + '\'')
                         continue
 
                     try:
@@ -147,6 +149,8 @@ class WebsiteDataSpider:
         }
         for header_name, header_value in scraping_params.additional_http_headers.items():
             headers[header_name] = header_value
+
+        twitterhack.add_twitter_guest_token_if_twitter(scraping_params.url, headers)
 
         # Example grequests code for GET, POST JSON and Form Data requests. Similar for requests:
         # https://www.programcreek.com/python/example/103991/grequests.post
@@ -183,18 +187,26 @@ class ScrapingOperationCtx:
 
 # Factory for content type selector parser
 def create_selector_parser_for_content_type(
-        content_type: ContentType, content: str) -> 'ContentTypeSelectorParser':
-    selector_parser = {
+        url: str, content_type: ContentType, content: str) -> 'ContentTypeSelectorParser':
+
+    selector_parser_class = {
         ContentType.HTML: HTMLSelectorParser,
         ContentType.JSON: JSONSelectorParser
     }
-    return selector_parser[content_type](content)
+
+    if twitterhack.is_twitter_url(url):
+        twitter_response_dict = twitterhack.get_denormalized_tweet_dict(content)
+        twitter_response_dict = twitterhack.add_tweet_url_to_tweets(twitter_response_dict)
+        return selector_parser_class[content_type].create_from_dict_content(twitter_response_dict)
+
+    else:
+        return selector_parser_class[content_type].create_from_string_content(content)
 
 
 def scrape_data_from_response(response_content: str,
                               scraping_params: DataScrapingParams) -> ScrapedData:
     selector_parser = create_selector_parser_for_content_type(
-        scraping_params.response_content_type, response_content)
+        scraping_params.url, scraping_params.response_content_type, response_content)
     table_rows = scrape_table_from_response(scraping_params, selector_parser)
     fields = scrape_fields_from_response(scraping_params, selector_parser)
     return ScrapedData(scraping_params.url, table_rows, fields)
@@ -246,11 +258,27 @@ class ContentTypeSelectorParser(ABC):
     def get_all_vals_matching_selector(self, selector: str) -> List[str]:
         raise NotImplementedError('ContentTypeSelectorParser is an interface')
 
+    @classmethod
+    def create_from_string_content(cls, content: str) -> 'ContentTypeSelectorParser':
+        raise NotImplementedError('ContentTypeSelectorParser is an interface')
+
+    @classmethod
+    def create_from_dict_content(cls, dict_content: Dict) -> 'ContentTypeSelectorParser':
+        raise NotImplementedError('ContentTypeSelectorParser is an interface')
+
 
 class JSONSelectorParser(ContentTypeSelectorParser):
-    def __init__(self, content: str):
-        self._json_content = json.loads(self._extract_json_from_content(content))
+    def __init__(self, json_dict: Dict):
+        self._json_content = json_dict
         self._cached_parent_nodes = {}
+
+    @classmethod
+    def create_from_string_content(cls, content: str) -> 'JSONSelectorParser':
+        return JSONSelectorParser(json.loads(cls._extract_json_from_content(content)))
+
+    @classmethod
+    def create_from_dict_content(cls, dict_content: Dict) -> 'JSONSelectorParser':
+        return JSONSelectorParser(dict_content)
 
     def get_all_vals_matching_selector(self, selector: str) -> List[str]:
         selector_tokens = selector.rsplit('.', 1)
@@ -336,6 +364,10 @@ class JSONSelectorParser(ContentTypeSelectorParser):
 class HTMLSelectorParser(ContentTypeSelectorParser):
     def __init__(self, content: str):
         self._selector = scrapy.selector.Selector(text=content)
+
+    @classmethod
+    def create_from_string_content(cls, content: str) -> 'HTMLSelectorParser':
+        return HTMLSelectorParser(content)
 
     def get_all_vals_matching_selector(self, selector: str) -> List[str]:
         html_selector_list = selector.split('||')

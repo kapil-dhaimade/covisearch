@@ -111,10 +111,11 @@ class CovidResourceInfo:
         phones_label = cls.PHONES_LABEL
         for covisearch_res_info in covisearch_resources:
             phones: List[str] = covisearch_res_info[phones_label]
+            if not phones:
+                covisearch_res_without_phone.append(covisearch_res_info)
+
             for phone in phones:
-                if phone == '':
-                    covisearch_res_without_phone.append(covisearch_res_info)
-                elif phone in covisearch_res_by_phone:
+                if phone in covisearch_res_by_phone:
                     old_covisearch_res_for_phone = covisearch_res_by_phone[phone]
                     covisearch_res_by_phone[phone] = \
                         cls._get_more_recently_verified_res_info(

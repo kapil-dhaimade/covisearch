@@ -362,15 +362,17 @@ def _map_details(covisearch_res, res_mapping_desc, web_src_res_info):
         covisearch_res[details_label] = ''
 
 
-def _map_phones(covisearch_res, res_mapping_desc, web_src_res_info, search_filter: SearchFilter):
-    phone_label = CovidResourceInfo.PHONES_LABEL
-    phone_mapping = res_mapping_desc[phone_label]
+def _map_phones(covisearch_res, res_mapping_desc: Dict[str, 'FieldMappingDesc'],
+                web_src_res_info, search_filter: SearchFilter):
+    phones_label = CovidResourceInfo.PHONES_LABEL
+    phone_mapping = res_mapping_desc[phones_label]
     web_src_phone_no = _stitch_multiple_mapped_fields(phone_mapping, web_src_res_info, '/', 1)
 
     # NOTE: KAPIL: [AS ON 01-Jun-2021] The new field for keeping phone numbers as uniformized list.
     # Should replace old slash separated string later.
-    covisearch_res[CovidResourceInfo.PHONES_LABEL] = \
-        _extract_and_uniformized_phones(web_src_phone_no, search_filter.city)
+    covisearch_res[phones_label] = \
+        _extract_and_uniformized_phones(web_src_phone_no, search_filter.city,
+                                        res_mapping_desc[phones_label].need_exact_phone_number_match)
 
 
 def _map_address(covisearch_res, res_mapping_desc, web_src_res_info):
@@ -545,10 +547,11 @@ def _map_helpline(web_src_res_info: Dict, res_mapping_desc: Dict[str, 'FieldMapp
 
 # NOTE: KAPIL: Converts all phones to National phone number format for accurate matching.
 # Eg: 08080867676, 02228763461
-def _extract_and_uniformized_phones(non_uniform_phones: str, city: str) -> List[str]:
+def _extract_and_uniformized_phones(non_uniform_phones: str, city: str, need_exact_match: bool) -> List[str]:
     non_uniform_phone_list = non_uniform_phones.split('/')
     return [uniformized_phone for non_uniform_phone_str in non_uniform_phone_list
-            for uniformized_phone in _extract_and_uniformize_one_phone_str(non_uniform_phone_str, city)]
+            for uniformized_phone in _extract_and_uniformize_one_phone_str(non_uniform_phone_str, city,
+                                                                           need_exact_match)]
 
 
 re_phones_pattern = re.compile('(\(*\d{3,10}(\s|-|\(|\))*\d{0,10}(\s|-|\(|\))*\d{0,10})')
@@ -556,7 +559,8 @@ re_phones_pattern = re.compile('(\(*\d{3,10}(\s|-|\(|\))*\d{0,10}(\s|-|\(|\))*\d
 
 # NOTE: KAPIL: Returns list because one phone number string may end up having more than
 # one phone number
-def _extract_and_uniformize_one_phone_str(non_uniform_phone: str, city: str) -> List[str]:
+def _extract_and_uniformize_one_phone_str(non_uniform_phone: str, city: str,
+                                          need_exact_match: bool) -> List[str]:
     # NOTE: KAPIL: Country code is only IN as we operate in India only.
     phone_no_matcher: PhoneNumberMatcher = PhoneNumberMatcher(non_uniform_phone, 'IN')
     if phone_no_matcher.has_next():
@@ -570,7 +574,7 @@ def _extract_and_uniformize_one_phone_str(non_uniform_phone: str, city: str) -> 
 
             for non_uniform_extracted_phones_match in non_uniform_extracted_phones_matches:
                 uniformized_phone.extend(_retry_uniformize_phone_by_adding_area_code(
-                    non_uniform_extracted_phones_match[0], city))
+                    non_uniform_extracted_phones_match[0], city, need_exact_match))
 
             return uniformized_phone
 
@@ -578,7 +582,8 @@ def _extract_and_uniformize_one_phone_str(non_uniform_phone: str, city: str) -> 
             return []
 
 
-def _retry_uniformize_phone_by_adding_area_code(non_uniform_phone: str, city: str) -> List[str]:
+def _retry_uniformize_phone_by_adding_area_code(non_uniform_phone: str, city: str,
+                                                need_exact_match: bool) -> List[str]:
     area_code = geoutil.get_phone_area_code_for_city(city)
     phone_with_area_code = area_code + non_uniform_phone
     phone_no_matcher: PhoneNumberMatcher = PhoneNumberMatcher(phone_with_area_code, 'IN')
@@ -586,6 +591,9 @@ def _retry_uniformize_phone_by_adding_area_code(non_uniform_phone: str, city: st
         return [format_number(match.number, PhoneNumberFormat.NATIONAL).replace(' ', '')
                 for match in phone_no_matcher]
     else:
+        if need_exact_match:
+            return []
+
         return [non_uniform_phone.replace(' ', '')]
 
 
@@ -606,6 +614,7 @@ def _sanitize_string_field(field_value: str) -> str:
 # Eg: -('phones', 'phone_1+phone_2') where phone_1 and phone_2 are web src fields.
 class FieldMappingDesc:
     DATETIMEFORMAT_TOKEN = 'datetimeformat'
+    NEED_EXACT_PHONE_NUMBER_MATCH_TOKEN = 'need_exact_phone_number_match'
     re_datetime_fmt_str_pattern = re.compile('\((.*)\)')
 
     def __init__(self, field_mapping_desc: Tuple[str, str]):
@@ -615,6 +624,8 @@ class FieldMappingDesc:
         mapping_desc_tokens.pop()
         self._datetime_fmt: covisearch.util.datetimeutil.DatetimeFormat = \
             self._get_datetime_fmt_if_specified(mapping_desc_tokens)
+        self._need_exact_phone_number_match: bool = \
+            self._get_need_exact_phone_flag_if_specified(mapping_desc_tokens)
 
     @staticmethod
     def _get_web_src_field_names(mapping_desc_tokens) -> List[str]:
@@ -637,6 +648,10 @@ class FieldMappingDesc:
     def datetime_fmt(self) -> covisearch.util.datetimeutil.DatetimeFormat:
         return self._datetime_fmt
 
+    @property
+    def need_exact_phone_number_match(self) -> bool:
+        return self._need_exact_phone_number_match
+
     @classmethod
     def _get_datetime_fmt_if_specified(cls, mapping_desc_tokens):
         datetimeformat_mapping_token = [fmt for fmt in mapping_desc_tokens if
@@ -648,6 +663,10 @@ class FieldMappingDesc:
             return datetime_format_from_str(datetime_fmt_str)
         else:
             return None
+
+    @classmethod
+    def _get_need_exact_phone_flag_if_specified(cls, mapping_desc_tokens) -> bool:
+        return cls.NEED_EXACT_PHONE_NUMBER_MATCH_TOKEN in mapping_desc_tokens
 
     @staticmethod
     def _split_mapping_desc_csv(desc: str) -> List[str]:

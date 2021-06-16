@@ -164,12 +164,17 @@ def set_timezone_if_not_present(timestamp: datetime, time_zone) -> datetime:
 #
 #
 # if __name__=='__main__':
+#     dtt98 = dateutilparser.parse('Fri May 07 19:34:24 +0000 2021')
+#
 #     res1 = {'a': 1}
 #     res2 = None
 #     listt = []
 #     # for item in listt:
 #     #     if res1 is item:
 #     #         print(9)
+#
+#     nodes3 = json.loads('{"root": {"abc": {"point": 1}, "def": {"point": 4}}}')
+#     node3 = jsonpath_ng.parse('root.*.point').find(nodes3)[0].value
 #
 #     nodes = json.loads('[{"phones": ["8805989306", "8805989307"]}, {"phones": ["3", "4"]}]')
 #     node = jsonpath_ng.parse('[*]').find(nodes)[0].value
