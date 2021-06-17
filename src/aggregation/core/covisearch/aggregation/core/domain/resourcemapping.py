@@ -100,6 +100,24 @@ class WebSource:
 
         self._resource_mapping_desc: Dict[str, 'FieldMappingDesc'] = resource_mapping_desc
 
+        # NOTE: KAPIL: Saving transient params for cloning
+        self._web_resource_url_template: URL = web_resource_url_template
+        self._card_source_url_template: URL = card_source_url_template
+        self._request_body_template: str = request_body_template
+        self._data_table_filter_templates: Dict[str, str] = data_table_filter_templates
+        self._resource_type_label_mapping: Dict[str, str] = resource_type_label_mapping
+        self._city_name_case_mapping: LetterCaseType = city_name_case_mapping
+        self._city_mapping: Dict[str, str] = city_mapping
+
+    def clone_for_filter(self, search_filter: SearchFilter):
+        return WebSource(self._name, self._homepage_url, self._web_resource_url_template,
+                         self._card_source_url_template, self._request_content_type, self._request_body_template,
+                         self._additional_http_headers, self._response_content_type,
+                         self._data_table_extract_selectors, self._data_table_filter_templates,
+                         self._resource_types_needing_smart_match, self._resource_mapping_desc,
+                         self._resource_type_label_mapping, self._city_name_case_mapping,
+                         self._city_mapping, search_filter)
+
     @property
     def name(self) -> str:
         return self._name

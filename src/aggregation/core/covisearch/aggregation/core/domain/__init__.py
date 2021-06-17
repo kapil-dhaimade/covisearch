@@ -9,6 +9,8 @@ import covisearch.aggregation.core.domain.relevence as relevance
 import covisearch.aggregation.core.domain.resourcemapping as resourcemapping
 import covisearch.util.websitedatascraper as webdatascraper
 import covisearch.util.elapsedtime as elapsedtime
+import covisearch.util.mytypes as mytypes
+import covisearch.util.geoutil as geoutil
 
 
 def aggregate_covid_resources(
@@ -27,12 +29,15 @@ def _aggregate_resources_from_covid_sources(
         search_filter: SearchFilter, web_src_repo: resourcemapping.WebSourceRepo) -> List[Dict]:
 
     ctx = elapsedtime.start_measuring_operation('websources fetch')
-    web_sources: Dict[str, resourcemapping.WebSource] = web_src_repo.get_web_sources_for_filter(search_filter)
+    web_sources: Dict[mytypes.URL, resourcemapping.WebSource] = \
+        web_src_repo.get_web_sources_for_filter(search_filter)
     elapsedtime.stop_measuring_operation(ctx)
 
     if not web_sources:
         raise ValueError('No matching web source found for filter: ' +
                          search_filter.to_url_query_string_fmt())
+
+    web_sources = _add_web_srcs_for_synonym_cities(search_filter, web_sources)
 
     scraped_data_list: List[webdatascraper.ScrapedData] = \
         _scrape_data_from_web_sources(web_sources)
@@ -57,6 +62,24 @@ def _aggregate_resources_from_covid_sources(
     elapsedtime.stop_measuring_operation(ctx_5)
 
     return covisearch_resources
+
+
+def _add_web_srcs_for_synonym_cities(
+        search_filter: SearchFilter, web_sources: Dict[mytypes.URL, resourcemapping.WebSource]) -> \
+        Dict[mytypes.URL, resourcemapping.WebSource]:
+
+    synonym_cities = geoutil.get_synonym_cities(search_filter.city)
+    synonym_city_web_sources = {}
+
+    for synonym_city in synonym_cities:
+        search_filter_for_synonym = SearchFilter(synonym_city, search_filter.resource_type)
+
+        for web_src in web_sources.values():
+            synonym_city_web_src = web_src.clone_for_filter(search_filter_for_synonym)
+            synonym_city_web_sources[synonym_city_web_src.web_resource_url] = synonym_city_web_src
+
+    web_sources.update(synonym_city_web_sources)
+    return web_sources
 
 
 def _map_scraped_data_to_covisearch_resources(

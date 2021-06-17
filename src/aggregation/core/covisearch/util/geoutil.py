@@ -545,6 +545,7 @@ def get_states_for_city(city: str) -> List[str]:
         "shajapur": ["madhya_pradesh", "madhya pradesh"],
         "rayagada": ["odisha"],
         "lonavla": ["maharashtra"],
+        "lonavala": ["maharashtra"],
         "ponnur": ["andhra_pradesh", "andhra pradesh"],
         "kagaznagar": ["telangana"],
         "gadwal": ["telangana"],
@@ -1687,7 +1688,6 @@ def get_synonym_cities(city: str) -> List[str]:
         "bhayandar": ["mira-bhayandar"],
         "mysore": ["mysuru"],
         "mysuru": ["mysore"],
-        "visakhapatnam": ["vizag", "vishakhapatnam"],
         "vishakhapatnam": ["vizag", "visakhapatnam"],
         "vizag": ["visakhapatnam", "vishakhapatnam"],
         "vizagapatnam": ["visakhapatnam", "vizag"],
@@ -1701,6 +1701,11 @@ def get_synonym_cities(city: str) -> List[str]:
         "vadodara": ["baroda"],
         "baroda": ["vadodara"],
         "ahmedabad": ["amdavad"],
-        "amdavad": ["ahmedabad"]
+        "amdavad": ["ahmedabad"],
+        "thiruvananthapuram": ["trivandrum"],
+        "trivandrum": ["thiruvananthapuram"],
+        "kalyan": ["kalyan-dombivali"],
+        "dombivali": ["kalyan-dombivali"],
+        "kalyan-dombivali": ["kalyan", "dombivali"]
     }
     return city_vs_synonym_cities.get(city, [])
