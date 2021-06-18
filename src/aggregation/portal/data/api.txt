@@ -16,7 +16,6 @@
             "hospital_type": null,
             "contact_name": "Sathyamangalam Covid care_null",
             "phones": [
-                "07010261734"
             ],
             "last_verified_utc": "2021-05-23T10:59:06.467345+00:00",
             "details": "",

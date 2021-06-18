@@ -177,7 +177,7 @@
                     <div id="knowMore" class="data" ng-if="x.address || x.details">
                         <span class="pointer rounded-lg light-back px-1" data-toggle="collapse"
                             data-target="#details{{$index}}"><b>Know More ></b></span><br>
-                        <div id="details{{$index}}" class="collapse">
+                        <div id="details{{$index}}" ng-class="{'show':x.phones.length == 0}" class="collapse">
                             <!-- Address -->
                             <div class="data" ng-if="x.address">
                                 <span><span class="fa fa-map-marker"></span> <b>Address</b> <br>{{x.address}}</span><br>

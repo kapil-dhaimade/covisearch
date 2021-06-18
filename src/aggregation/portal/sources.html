@@ -12,38 +12,31 @@
   <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
   <link rel="manifest" href="images/site.webmanifest">
   <link rel="stylesheet" href="css/myStyle.css">
+  <link rel="stylesheet" href="css/srcStyle.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="js/srcScript.js"></script>
 </head>
 
-<body ng-app="">
+<body ng-app="srcApp" ng-controller="srcCtrl">
 
   <div id="wrapper">
 
     <div ng-include="'header.html'" class="text-center"></div>
     <div style="text-align: center;">
       <div style="display: inline-block; text-align: left;">
-
-        <h2>List of sites where we search the data from </h2>
-        <ul>
-          <li><a href="https://www.volunteerscovihelp.org" target="_blank">Volunteers.CoviHelp</a></li>
-          <li><a href="https://covidcitizens.org" target="_blank">Covid Citizens</a></li>
-          <li><a href="https://www.covidfightclub.org" target="_blank">Covid Fight Club</a></li>
-          <li><a href="https://www.covidindiaresources.com" target="_blank">Covid India Resources</a></li>
-          <li><a href="https://covidwin.in" target="_blank">Covid Win</a></li>
-          <li><a href="https://liferesources.in" target="_blank">LifeResources</a></li>
-          <li><a href="http://dashboard.covid19.ap.gov.in/ims/hospbed_reports" target="_blank">COVID 19 Andhra Pradesh</a></li>
-          <li><a href="https://coronabeds.jantasamvad.org/index.html" target="_blank">COVID-19 Delhi Government</a></li>
-          <li><a href="https://www.justdial.com/verticals/Coronavirus-India/Resources" target="_blank">Justdial COVID 19 Resources</a></li>
-          <li><a href="https://www.divcommpunecovid.com/ccsbeddashboard/hsr" target="_blank">COVID CARE SOFTWARE - PUNE DIVISION</a></li>
-          <li><a href="https://stopcorona.tn.gov.in/beds.php" target="_blank">Health & Family Welfare Department Government of Tamil Nadu</a></li>
-          <li>And adding more...</li>
-        </ul>
-
+        <h2 class="text-center">List of sites where we search the data from </h2>
+        <div id="srcMain" ng-repeat="x in sources" class="text-center">
+            <a id="srcItem" href="{{x.url}}" class="btn btn-success" target="_blank">{{x.name}}</a>
+        </div>
+        <div class="text-center">
+          <span>*And adding more...</span>
+        </div>
+        <br>
       </div>
     </div>
   </div>
