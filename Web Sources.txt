@@ -53,3 +53,6 @@ https://sosindia4u.com/
 
 -Get Twitter's guest token:
 https://www.mufaddal.dev/scraping/2020/11/23/Scraping-Twitter.html
+
+-ICMR Testing Center Website:
+https://covid.icmr.org.in/index.php/testing-facilities

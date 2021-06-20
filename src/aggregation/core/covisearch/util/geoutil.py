@@ -14,6 +14,7 @@ def get_states_for_city(city: str) -> List[str]:
         "jaipur": ["rajasthan"],
         "surat": ["gujarat"],
         "lucknow": ["uttar_pradesh", "uttar pradesh"],
+        "gonda": ["uttar_pradesh", "uttar pradesh"],
         "kanpur": ["uttar_pradesh", "uttar pradesh"],
         "nagpur": ["maharashtra"],
         "patna": ["bihar"],

@@ -16,6 +16,12 @@ import covisearch.util.elapsedtime as elapsedtime
 import covisearch.util.twitterhack as twitterhack
 
 
+# NOTE:KAPIL: This is required as urllib3 logs warning when firing requests with SSL check set to False.
+# This suppresses the warnings.
+# Source: https://github.com/influxdata/influxdb-python/issues/240
+requests.packages.urllib3.disable_warnings()
+
+
 def scrape_data_from_websites(
         data_scraping_params: List['DataScrapingParams']) -> List['ScrapedData']:
 

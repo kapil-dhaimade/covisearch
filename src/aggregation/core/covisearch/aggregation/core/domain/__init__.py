@@ -13,6 +13,9 @@ import covisearch.util.mytypes as mytypes
 import covisearch.util.geoutil as geoutil
 
 
+MAX_RESOURCES_STORAGE_LIMIT = 100
+
+
 def aggregate_covid_resources(
         search_filter: SearchFilter, resource_info_repo: AggregatedResourceInfoRepo,
         web_src_repo: resourcemapping.WebSourceRepo):
@@ -32,6 +35,9 @@ def aggregate_covid_resources(
     ctx_5 = elapsedtime.start_measuring_operation('removing redundant fields')
     covisearch_resources = CovidResourceInfo.remove_redundant_fields(covisearch_resources)
     elapsedtime.stop_measuring_operation(ctx_5)
+
+    if len(covisearch_resources) > MAX_RESOURCES_STORAGE_LIMIT:
+        covisearch_resources = covisearch_resources[: MAX_RESOURCES_STORAGE_LIMIT]
 
     filtered_data = FilteredAggregatedResourceInfo(search_filter, covisearch_resources)
 
@@ -165,7 +171,7 @@ def _scrape_data_from_web_sources(web_sources: Dict[str, resourcemapping.WebSour
 #
 #         aggregated_res_info_repo = infra.AggregatedResourceInfoRepoImpl(db)
 #         web_src_repo = infra.WebSourceRepoImpl(db)
-#         search_filter = SearchFilter('coimbatore', entities.CovidResourceType.FOOD, None)
+#         search_filter = SearchFilter('mumbai', entities.CovidResourceType.OXYGEN, None)
 #         aggregate_covid_resources(search_filter, aggregated_res_info_repo, web_src_repo)
 #
 #         elapsedtime.stop_measuring_total()
