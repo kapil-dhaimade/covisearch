@@ -37,6 +37,10 @@ def fetch_resource_for_filter(request: Request):
         'Access-Control-Allow-Origin': '*'
     }
 
+    page_no = None
+    record_offset = None
+    record_count = None
+
     city = request.args["city"]
     resource_type = request.args["resource_type"]
     if "page_no" in request.args:
