@@ -726,23 +726,30 @@ def _map_isoformat_timestamp_to_covisearch(isoformat_datetime_str: str) -> datet
 
 
 def _map_short_datetime_dd_mm_time_to_covisearch(short_datetime_str: str) -> datetime:
+    sanitized_short_datetime_str = _sanitize_short_datetime_str(short_datetime_str)
     # NOTE: KAPIL: Done for smarter logic in case of outlier date of different format.
     try:
         return covisearch.util.datetimeutil.map_short_datetime_dd_mm_to_utc_datetime(
-            short_datetime_str, tz.gettz('Asia/Kolkata'))
+            sanitized_short_datetime_str, tz.gettz('Asia/Kolkata'))
     except:
         return covisearch.util.datetimeutil.map_short_datetime_mm_dd_to_utc_datetime(
-            short_datetime_str, tz.gettz('Asia/Kolkata'))
+            sanitized_short_datetime_str, tz.gettz('Asia/Kolkata'))
 
 
 def _map_short_datetime_mm_dd_time_to_covisearch(short_datetime_str: str) -> datetime:
+    sanitized_short_datetime_str = _sanitize_short_datetime_str(short_datetime_str)
     # NOTE: KAPIL: Done for smarter logic in case of outlier date of different format.
     try:
         return covisearch.util.datetimeutil.map_short_datetime_mm_dd_to_utc_datetime(
-            short_datetime_str, tz.gettz('Asia/Kolkata'))
+            sanitized_short_datetime_str, tz.gettz('Asia/Kolkata'))
     except:
         return covisearch.util.datetimeutil.map_short_datetime_dd_mm_to_utc_datetime(
-            short_datetime_str, tz.gettz('Asia/Kolkata'))
+            sanitized_short_datetime_str, tz.gettz('Asia/Kolkata'))
+
+
+def _sanitize_short_datetime_str(short_datetime_str: str) -> str:
+    sanitized_short_datetime_str = short_datetime_str.replace('|', '')
+    return sanitized_short_datetime_str
 
 
 def _map_unix_timestamp_sec_to_covisearch(unix_timestamp_sec_str: str) -> datetime:
