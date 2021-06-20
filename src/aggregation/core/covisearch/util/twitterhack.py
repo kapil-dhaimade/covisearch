@@ -35,7 +35,7 @@ def _get_twitter_guest_token():
     global guest_token_last_update_time
 
     if guest_token:
-        if (datetime.now() - guest_token_last_update_time).total_seconds() < 30 * 60:
+        if (datetime.now() - guest_token_last_update_time).total_seconds() < 60 * 60:
             return guest_token
         else:
             guest_token_last_update_time = None
