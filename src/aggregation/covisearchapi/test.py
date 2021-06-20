@@ -6,7 +6,7 @@ import main
 def test_success():
     data = {
         "city": "bengaluru",
-        "resource-type": "plasma",
+        "resource_type": "plasma",
         "page_no": 1
     }
     req = Mock(args=data)

@@ -39,9 +39,12 @@ def fetch_resource_for_filter(request: Request):
 
     city = request.args["city"]
     resource_type = request.args["resource_type"]
-    page_no = request.args["page_no"]
-    record_offset = request.args["record_offset"]
-    record_count = request.args["record_count"]
+    if "page_no" in request.args:
+        page_no = int(request.args["page_no"])
+    if "record_offset" in request.args:
+        record_offset = int(request.args["record_offset"])
+    if "record_count" in request.args:
+        record_count = int(request.args["record_count"])
     supported_resource_type = ["oxygen", "ambulance", "hospital_bed", "hospital_bed_icu", "plasma", "ecmo", "food", "testing",
                                  "medicine", "ventilator", "helpline", "blood", "med_amphotericin", "med_cresemba", "med_tocilizumab",
                                  "med_oseltamivir", "med_ampholyn", "med_posaconazole", "med_fabiflu", "oxy_concentrator", "oxy_cylinder", "oxy_refill", "oxy_regulator"]
@@ -54,11 +57,8 @@ def fetch_resource_for_filter(request: Request):
 
     page_size = 12
     if page_no is not None:
-        page_no = int(page_no)
         record_slice = slice((page_no - 1) * page_size, page_no * page_size)
     elif record_offset is not None and record_count is not None:
-        record_offset = int(record_offset)
-        record_count = int(record_count)
         record_slice = slice(record_offset, record_offset + record_count)
     else:
         record_slice = slice(page_size)
@@ -72,10 +72,9 @@ def fetch_resource_for_filter(request: Request):
 
     if not res_info_doc.exists:
         resync_invoke_schedule(res_info_filter_id)
-        return "Collecting data... Try again after few seconds" , 202, headers
+        return "Collecting data... Try again after few seconds", 202, headers
 
     resources = res_info_doc.get(db.field_path('resource_info_data'))
-
     res_info_data = resources[record_slice]
     more_data_available = len(resources) > record_slice.stop
 
