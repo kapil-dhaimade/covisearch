@@ -1298,6 +1298,7 @@ def get_phone_area_code_for_city(city: str) -> str:
         "bokaro steel city": "6542",
         "bombay": "22",
         "boudh": "6841",
+        "brahmapur": "680",
         "bulandshahr": "5732",
         "buldhana": "7262",
         "bundi": "747",
@@ -1634,7 +1635,7 @@ def get_phone_area_code_for_city(city: str) -> str:
         "thrissur": "487",
         "tikamgarh": "7683",
         "tinsukia": "374",
-        "tiruchirapalli": "431",
+        "tiruchirappalli": "431",
         "tirumala": "877",
         "tirunelveli": "462",
         "tiruvallur": "44",
@@ -1707,6 +1708,9 @@ def get_synonym_cities(city: str) -> List[str]:
         "trivandrum": ["thiruvananthapuram"],
         "kalyan": ["kalyan-dombivali"],
         "dombivali": ["kalyan-dombivali"],
-        "kalyan-dombivali": ["kalyan", "dombivali"]
+        "kalyan-dombivali": ["kalyan", "dombivali"],
+        "berhampur": ["brahmapur"],
+        "trichy": ["tiruchirappalli"],
+        "tiruchi": ["tiruchirappalli"]
     }
     return city_vs_synonym_cities.get(city, [])
