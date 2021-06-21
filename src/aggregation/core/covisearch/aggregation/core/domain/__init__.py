@@ -13,43 +13,18 @@ import covisearch.util.mytypes as mytypes
 import covisearch.util.geoutil as geoutil
 
 
+MAX_RESOURCES_STORAGE_LIMIT = 100
+
+
 def aggregate_covid_resources(
         search_filter: SearchFilter, resource_info_repo: AggregatedResourceInfoRepo,
         web_src_repo: resourcemapping.WebSourceRepo):
 
-    aggregated_resources = _aggregate_resources_from_covid_sources(search_filter, web_src_repo)
-    filtered_data = FilteredAggregatedResourceInfo(search_filter, aggregated_resources)
-
-    ctx = elapsedtime.start_measuring_operation('writing resources to repo')
-    resource_info_repo.set_resources_for_filter(filtered_data)
-    elapsedtime.stop_measuring_operation(ctx)
-
-
-def _aggregate_resources_from_covid_sources(
-        search_filter: SearchFilter, web_src_repo: resourcemapping.WebSourceRepo) -> List[Dict]:
-
-    ctx = elapsedtime.start_measuring_operation('websources fetch')
-    web_sources: Dict[mytypes.URL, resourcemapping.WebSource] = \
-        web_src_repo.get_web_sources_for_filter(search_filter)
-    elapsedtime.stop_measuring_operation(ctx)
-
-    if not web_sources:
-        raise ValueError('No matching web source found for filter: ' +
-                         search_filter.to_url_query_string_fmt())
-
-    web_sources = _add_web_srcs_for_synonym_cities(search_filter, web_sources)
-
-    scraped_data_list: List[webdatascraper.ScrapedData] = \
-        _scrape_data_from_web_sources(web_sources)
-
-    ctx_2 = elapsedtime.start_measuring_operation('mapping data to covisearch')
-    covisearch_resources = _map_scraped_data_to_covisearch_resources(
-        scraped_data_list, search_filter, web_sources)
-    elapsedtime.stop_measuring_operation(ctx_2)
+    aggregated_resources = _collect_resources_from_covid_sources(search_filter, web_src_repo)
 
     ctx_3 = elapsedtime.start_measuring_operation('merging duplicates')
     resource_info_class = entities.get_resource_info_class(search_filter.resource_type)
-    covisearch_resources = resource_info_class.merge_duplicates(covisearch_resources)
+    covisearch_resources = resource_info_class.merge_duplicates(aggregated_resources)
     elapsedtime.stop_measuring_operation(ctx_3)
 
     ctx_6 = elapsedtime.start_measuring_operation('sorting covid resources')
@@ -61,32 +36,88 @@ def _aggregate_resources_from_covid_sources(
     covisearch_resources = CovidResourceInfo.remove_redundant_fields(covisearch_resources)
     elapsedtime.stop_measuring_operation(ctx_5)
 
+    if len(covisearch_resources) > MAX_RESOURCES_STORAGE_LIMIT:
+        covisearch_resources = covisearch_resources[: MAX_RESOURCES_STORAGE_LIMIT]
+
+    filtered_data = FilteredAggregatedResourceInfo(search_filter, covisearch_resources)
+
+    ctx = elapsedtime.start_measuring_operation('writing resources to repo')
+    resource_info_repo.set_resources_for_filter(filtered_data)
+    elapsedtime.stop_measuring_operation(ctx)
+
+
+def _collect_resources_from_covid_sources(
+        search_filter: SearchFilter, web_src_repo: resourcemapping.WebSourceRepo) -> List[Dict]:
+
+    resource_info_mapper = resourcemapping.ResourceInfoMapper()
+
+    ctx = elapsedtime.start_measuring_operation('websources fetch')
+    web_sources: Dict[mytypes.URL, resourcemapping.WebSource] = \
+        web_src_repo.get_web_sources_for_filter(search_filter)
+    elapsedtime.stop_measuring_operation(ctx)
+
+    if not web_sources:
+        raise ValueError('No matching web source found for filter: ' +
+                         search_filter.to_url_query_string_fmt())
+
+    covisearch_resources = _collect_resources_from_primary_city(
+        resource_info_mapper, search_filter, web_sources)
+
+    if len(covisearch_resources) < 20:
+        collect_resources_from_synonym_cities(
+            covisearch_resources, resource_info_mapper, search_filter, web_sources)
+
     return covisearch_resources
 
 
-def _add_web_srcs_for_synonym_cities(
-        search_filter: SearchFilter, web_sources: Dict[mytypes.URL, resourcemapping.WebSource]) -> \
-        Dict[mytypes.URL, resourcemapping.WebSource]:
-
+def collect_resources_from_synonym_cities(covisearch_resources, resource_info_mapper, search_filter, web_sources):
     synonym_cities = geoutil.get_synonym_cities(search_filter.city)
-    synonym_city_web_sources = {}
 
     for synonym_city in synonym_cities:
-        search_filter_for_synonym = SearchFilter(synonym_city, search_filter.resource_type)
+        search_filter_for_synonym = SearchFilter(synonym_city,
+                                                 search_filter.resource_type, None)
+        synonym_city_web_sources = _get_web_srcs_for_synonym_city(search_filter_for_synonym, web_sources)
 
-        for web_src in web_sources.values():
-            synonym_city_web_src = web_src.clone_for_filter(search_filter_for_synonym)
-            synonym_city_web_sources[synonym_city_web_src.web_resource_url] = synonym_city_web_src
+        covisearch_resources.extend(_collect_resources_for_city(
+            resource_info_mapper, search_filter_for_synonym, synonym_city_web_sources))
 
-    web_sources.update(synonym_city_web_sources)
-    return web_sources
+        if len(covisearch_resources) >= 20:
+            break
+
+
+def _collect_resources_from_primary_city(
+        resource_info_mapper, primary_city_search_filter, web_sources) -> List[Dict]:
+    return _collect_resources_for_city(resource_info_mapper, primary_city_search_filter, web_sources)
+
+
+def _collect_resources_for_city(resource_info_mapper, search_filter, web_sources) -> List[Dict]:
+    scraped_data_list: List[webdatascraper.ScrapedData] = \
+        _scrape_data_from_web_sources(web_sources)
+    ctx_2 = elapsedtime.start_measuring_operation('mapping data to covisearch')
+    covisearch_resources = _map_scraped_data_to_covisearch_resources(
+        scraped_data_list, search_filter, web_sources, resource_info_mapper)
+    elapsedtime.stop_measuring_operation(ctx_2)
+    return covisearch_resources
+
+
+def _get_web_srcs_for_synonym_city(
+        search_filter_for_synonym: SearchFilter,
+        web_sources: Dict[mytypes.URL, resourcemapping.WebSource]) -> \
+        Dict[mytypes.URL, resourcemapping.WebSource]:
+
+    synonym_city_web_sources = {}
+
+    for web_src in web_sources.values():
+        synonym_city_web_src = web_src.clone_for_filter(search_filter_for_synonym)
+        synonym_city_web_sources[synonym_city_web_src.web_resource_url] = synonym_city_web_src
+
+    return synonym_city_web_sources
 
 
 def _map_scraped_data_to_covisearch_resources(
-        scraped_data_list: List[webdatascraper.ScrapedData],
-        search_filter: SearchFilter, web_sources: Dict[str, resourcemapping.WebSource]):
-
-    resource_info_mapper = resourcemapping.ResourceInfoMapper()
+        scraped_data_list: List[webdatascraper.ScrapedData], search_filter: SearchFilter,
+        web_sources: Dict[str, resourcemapping.WebSource],
+        resource_info_mapper: resourcemapping.ResourceInfoMapper) -> List[Dict]:
 
     return [
         resource_info_mapper.map_res_info_to_covisearch(
@@ -140,7 +171,7 @@ def _scrape_data_from_web_sources(web_sources: Dict[str, resourcemapping.WebSour
 #
 #         aggregated_res_info_repo = infra.AggregatedResourceInfoRepoImpl(db)
 #         web_src_repo = infra.WebSourceRepoImpl(db)
-#         search_filter = SearchFilter('palghar', entities.CovidResourceType.OXYGEN, None)
+#         search_filter = SearchFilter('mumbai', entities.CovidResourceType.OXYGEN, None)
 #         aggregate_covid_resources(search_filter, aggregated_res_info_repo, web_src_repo)
 #
 #         elapsedtime.stop_measuring_total()

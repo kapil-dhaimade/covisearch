@@ -37,9 +37,18 @@ def fetch_resource_for_filter(request: Request):
         'Access-Control-Allow-Origin': '*'
     }
 
+    page_no = None
+    record_offset = None
+    record_count = None
+
     city = request.args["city"]
     resource_type = request.args["resource_type"]
-    page_no = request.args["page_no"]
+    if "page_no" in request.args:
+        page_no = int(request.args["page_no"])
+    if "record_offset" in request.args:
+        record_offset = int(request.args["record_offset"])
+    if "record_count" in request.args:
+        record_count = int(request.args["record_count"])
     supported_resource_type = ["oxygen", "ambulance", "hospital_bed", "hospital_bed_icu", "plasma", "ecmo", "food", "testing",
                                  "medicine", "ventilator", "helpline", "blood", "med_amphotericin", "med_cresemba", "med_tocilizumab",
                                  "med_oseltamivir", "med_ampholyn", "med_posaconazole", "med_fabiflu", "oxy_concentrator", "oxy_cylinder", "oxy_refill", "oxy_regulator"]
@@ -49,10 +58,14 @@ def fetch_resource_for_filter(request: Request):
     else:
         city = urllib.parse.quote(city).lower()
         resource_type = urllib.parse.quote(resource_type).lower()
-    if page_no is None:
-        page_no = 1
+
+    page_size = 12
+    if page_no is not None:
+        record_slice = slice((page_no - 1) * page_size, page_no * page_size)
+    elif record_offset is not None and record_count is not None:
+        record_slice = slice(record_offset, record_offset + record_count)
     else:
-        page_no = int(page_no)
+        record_slice = slice(page_size)
 
     res_info_filter_id = "city=" + city + "&resource_type=" + resource_type
     update_stats(res_info_filter_id, db)
@@ -63,23 +76,16 @@ def fetch_resource_for_filter(request: Request):
 
     if not res_info_doc.exists:
         resync_invoke_schedule(res_info_filter_id)
-        return "Collecting data... Try again after few seconds" , 202, headers
+        return "Collecting data... Try again after few seconds", 202, headers
 
     resources = res_info_doc.get(db.field_path('resource_info_data'))
-    page_size = 12
-    if len(resources) <= page_no * page_size:
-        if len(resources) < (page_no - 1) * page_size:
-            return "Invalid Page no", 400, headers
-        else:
-            more_data_available = False
-            res_info_data = resources[(page_no - 1) * page_size:len(resources)]
-    else:
-        more_data_available = True
-        res_info_data = resources[(page_no - 1) * page_size:page_no * page_size]
+    res_info_data = resources[record_slice]
+    more_data_available = len(resources) > record_slice.stop
 
     response_dict = {
         "meta_info": {
             "more_data_available": more_data_available,
+            "total_records": len(resources)
         },
         "resource_info_data": res_info_data
     }

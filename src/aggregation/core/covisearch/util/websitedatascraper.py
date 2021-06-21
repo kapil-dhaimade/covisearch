@@ -16,6 +16,12 @@ import covisearch.util.elapsedtime as elapsedtime
 import covisearch.util.twitterhack as twitterhack
 
 
+# NOTE:KAPIL: This is required as urllib3 logs warning when firing requests with SSL check set to False.
+# This suppresses the warnings.
+# Source: https://github.com/influxdata/influxdb-python/issues/240
+requests.packages.urllib3.disable_warnings()
+
+
 def scrape_data_from_websites(
         data_scraping_params: List['DataScrapingParams']) -> List['ScrapedData']:
 
@@ -156,13 +162,13 @@ class WebsiteDataSpider:
         # https://www.programcreek.com/python/example/103991/grequests.post
         if scraping_params.request_content_type is ContentType.JSON:
             request_dict = json.loads(scraping_params.request_body)
-            return requests.post(scraping_params.url, json=request_dict, headers=headers)
+            return requests.post(scraping_params.url, json=request_dict, headers=headers, verify=False)
 
         if scraping_params.request_content_type is ContentType.FORMDATA:
             form_data_dict = json.loads(scraping_params.request_body)
-            return requests.post(scraping_params.url, data=form_data_dict, headers=headers)
+            return requests.post(scraping_params.url, data=form_data_dict, headers=headers, verify=False)
 
-        return requests.get(scraping_params.url, headers=headers)
+        return requests.get(scraping_params.url, headers=headers, verify=False)
 
 
 class ScrapingOperationCtx:
