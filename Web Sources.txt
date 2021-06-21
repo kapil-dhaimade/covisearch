@@ -11,6 +11,12 @@ https://coronabeds.jantasamvad.org/all-covid-icu-beds.html
 -Data received in 2 separate responses and needs to be merged. Some fields present in both
 -Data received as a JS variable the value of which is JSON so will need to remove the variable name and semicolon first
 
+-Echospace
+https://www.echospace.in/about
+-Managed by Vedant whom we talked to on call. Can reach out to him for help.
+-Moving to other stuff like Job search volunteer help, Impact networking
+-Needs login to view resources, can do by logging in with dummy Google acc and using its token, does not expire easily
+
 https://covidtools.in/
 -Pan India
 -I am clueless how this website is getting its data, no hints of JSON, no proper HTML webpage seen in network requests!
@@ -56,3 +62,8 @@ https://www.mufaddal.dev/scraping/2020/11/23/Scraping-Twitter.html
 
 -ICMR Testing Center Website:
 https://covid.icmr.org.in/index.php/testing-facilities
+-Does not have phone numbers of labs. 
+-Has list of testing labs across India.
+
+-InCovid app:
+https://incovid.ml/
