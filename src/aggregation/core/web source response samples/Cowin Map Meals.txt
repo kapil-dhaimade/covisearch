@@ -1,0 +1,61 @@
+[
+	[
+		"Surabhi Pankaj",
+		"No.353, 354, Thadagam Main Rd, Luna Nagar, Kovilmedu, Coimbatore, Tamil Nadu 641025",
+		"11.04798274",
+		"76.92054373",
+		"9843019579",
+		"",
+		"Yes",
+		"Will provide the lunch & dinner free of charge- Door Delivery. will require their Covid test reports and aadhaar proof.",
+		"Coimbatore",
+		"Areas Covered: Koundampalayam Edyarpalayam-Kanuvai"
+	],
+	[
+		"Sree Sathya Sai Amudham",
+		"1262, Mettupalayam Rd, Saibaba Colony, Coimbatore, Tamil Nadu 641043",
+		"11.02761462",
+		"76.95023243",
+		"9345225024",
+		"",
+		"Yes",
+		"Delivery Only | Anywhere at Coimbatore | Covid Positive Recent Certificate to be produced",
+		"Coimbatore",
+		"Alternate No: 8608936720/9443898987/9443159614/9842235514"
+	],
+	[
+		"Shiv Sai Caterers",
+		"Udumalaipet",
+		"10.58669214",
+		"77.25167385",
+		"90802 08769",
+		"Both",
+		"No",
+		"Paid | 3 Meals",
+		"Coimbatore"
+	],
+	[
+		"Sai Amudham",
+		"Sai Ram Layout, DV Pattinam Dhali Road, Udumalpettai",
+		"10.5691635",
+		"77.23773992",
+		"98420 49408 | 97502 15034 | 82485 42410",
+		"Veg",
+		"Yes",
+		"Lunch & Dinner Only | 7kms around Udumalpettai",
+		"Coimbatore"
+	],
+	[
+		"Nanga Hittu & Suvai Ruchi",
+		"Thangam & AMP Junction, No.5, Thangam Chamberrs, Cheran Nagar Bus Stop Koundampalayam Post, Mettupalayam Main Road, Coimbatore, Tamil Nadu 641030",
+		"11.05116597",
+		"76.94695103",
+		"9952998443",
+		"Veg, Non-Veg, Healthy Dishes Meals for patients & Chinese",
+		"No",
+		"Either Pickup or Zomato (Custom made food dishes made for Pick-up Orders) Budget: Rs.100/- (Delivery Chargable)",
+		"Coimbatore",
+		"",
+		"Either Pick up or order on Zomato"
+	]
+]
