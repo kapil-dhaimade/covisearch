@@ -13,7 +13,7 @@ import covisearch.util.mytypes as mytypes
 import covisearch.util.geoutil as geoutil
 
 
-MAX_RESOURCES_STORAGE_LIMIT = 100
+MAX_RESOURCES_STORAGE_LIMIT = 300
 
 
 def aggregate_covid_resources(

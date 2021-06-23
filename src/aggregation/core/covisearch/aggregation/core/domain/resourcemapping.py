@@ -337,6 +337,8 @@ def _map_common_res_info(web_src_res_info: Dict, res_mapping_desc: Dict[str, 'Fi
 
     _map_resource_subtype(covisearch_res, res_mapping_desc, web_src_res_info)
 
+    _map_lat_lng(covisearch_res, res_mapping_desc, web_src_res_info)
+
 
 def _map_last_verified_time(covisearch_res, res_mapping_desc, web_src_res_info):
     last_verified_label = CovidResourceInfo.LAST_VERIFIED_UTC_LABEL
@@ -383,6 +385,11 @@ def _map_details(covisearch_res, res_mapping_desc, web_src_res_info):
 def _map_phones(covisearch_res, res_mapping_desc: Dict[str, 'FieldMappingDesc'],
                 web_src_res_info, search_filter: SearchFilter):
     phones_label = CovidResourceInfo.PHONES_LABEL
+
+    if phones_label not in res_mapping_desc:
+        covisearch_res[phones_label] = []
+        return
+
     phone_mapping = res_mapping_desc[phones_label]
     web_src_phone_no = _stitch_multiple_mapped_fields(phone_mapping, web_src_res_info, '/', 1)
 
@@ -431,6 +438,19 @@ def _map_resource_subtype(covisearch_res: Dict, res_mapping_desc: Dict[str, 'Fie
             web_src_res_info[resource_subtype_mapping.first_web_src_field_name]
     else:
         covisearch_res[resource_subtype_label] = ''
+
+
+def _map_lat_lng(covisearch_res: Dict, res_mapping_desc: Dict[str, 'FieldMappingDesc'],
+                 web_src_res_info: Dict):
+    lat_label = CovidResourceInfo.LATITUDE_LABEL
+    lng_label = CovidResourceInfo.LONGITUDE_LABEL
+    if lat_label in res_mapping_desc:
+
+        lat_mapping = res_mapping_desc[lat_label]
+        lng_mapping = res_mapping_desc[lng_label]
+
+        covisearch_res[lat_label] = web_src_res_info[lat_mapping.first_web_src_field_name]
+        covisearch_res[lng_label] = web_src_res_info[lng_mapping.first_web_src_field_name]
 
 
 def _map_card_source_url(covisearch_res: Dict, res_mapping_desc: Dict[str, 'FieldMappingDesc'],

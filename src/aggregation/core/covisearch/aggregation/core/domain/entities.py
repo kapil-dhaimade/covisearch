@@ -100,6 +100,8 @@ class CovidResourceInfo:
     SOURCE_URL_LABEL = 'url'
     SOURCE_NAME_LABEL = 'name'
     SOURCE_NEEDS_SMART_MATCH = 'needs_smart_match'
+    LATITUDE_LABEL = 'lat'
+    LONGITUDE_LABEL = 'lng'
     ID_LABEL = 'id'
     # NOTE: KAPIL: For cases like resource type 'Medicine' and subtype 'Amphotericin B'.
     RESOURCE_SUBTYPE_LABEL = 'resource_subtype'
@@ -158,6 +160,8 @@ class CovidResourceInfo:
         cls._merge_field_if_absent(cls.ADDRESS_LABEL, older_resource_info, newer_resource_info)
         cls._merge_field_if_absent(cls.POST_TIME_LABEL, older_resource_info, newer_resource_info)
         cls._merge_field_if_absent(cls.RESOURCE_SUBTYPE_LABEL, older_resource_info, newer_resource_info)
+        cls._merge_field_if_absent(cls.LATITUDE_LABEL, older_resource_info, newer_resource_info)
+        cls._merge_field_if_absent(cls.LONGITUDE_LABEL, older_resource_info, newer_resource_info)
         cls._merge_sources_field(older_resource_info, newer_resource_info)
 
     @classmethod
