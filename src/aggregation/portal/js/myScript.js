@@ -51,6 +51,7 @@ app.controller('formCtrl', function ($scope, $http, $timeout, $window) {
             }
             else {
                 $scope.leads = response.data.resource_info_data;
+                $scope.totalRecords = response.data.meta_info.total_records; 
                 $scope.hasMoreData = response.data.meta_info.more_data_available;
                 $scope.screenStatus = 'dataFetched';
                 $window.scrollTo(0, 0);
@@ -109,17 +110,18 @@ app.controller('formCtrl', function ($scope, $http, $timeout, $window) {
         return false;
     }
 
-    $scope.fetchNextBatch = function () {
-        if ($scope.hasMoreData == true || $scope.pageNumber == 0) {
-            $scope.pageNumber += 1;
+    $scope.fetchNextBatch = function (currPage) {
+        if (($scope.hasMoreData == true || $scope.pageNumber == 0) 
+            && $scope.pageNumber != currPage) {
+            $scope.pageNumber = currPage;
             $scope.screenStatus = 'loading';
             $scope.fetch($scope.master);
         }
     };
 
-    $scope.fetchPreviousBatch = function () {
+    $scope.fetchPreviousBatch = function (page) {
         if ($scope.pageNumber > 1) {
-            $scope.pageNumber -= 1;
+            $scope.pageNumber = page;
             $scope.screenStatus = 'loading';
             $scope.fetch($scope.master);
         }
@@ -170,7 +172,7 @@ app.controller('formCtrl', function ($scope, $http, $timeout, $window) {
     $scope.onPageLoad = function () {
         $scope.init();
         $scope.screenStatus = 'loading';
-        $scope.fetchNextBatch();
+        $scope.fetchNextBatch(1);
         waitForCityLocationDataAndSetNearbyCity()
     }
 
@@ -188,7 +190,40 @@ app.controller('formCtrl', function ($scope, $http, $timeout, $window) {
         var str = sharingData($scope.master,x);
         window.location.href = "whatsapp://send?text=" + encodeURIComponent(str);
     };
+    $scope.range = function(currPage) {
+        var step = 12;
+        var total = $scope.totalRecords;
+        var input = [];        
+        for (var i = 1;total > 0; i += 1, total = total- step) {
+            var diff= Math.abs(currPage - i);
+            if(diff <= 2)
+            {
+                input.push(i);
+            }
+        }
+        return input;
+    };
 
+    $scope.hasStartMore = function(currPage) {
+        var total = $scope.totalRecords;
+        var numsOfPage = Math.ceil(total/12);
+        if(currPage > 3)
+        {
+            return true;
+        }
+        return false;
+    };
+
+    $scope.hasEndMore = function(currPage) {
+        var total = $scope.totalRecords;
+        var numsOfPage = Math.ceil(total/12);
+        var diff = numsOfPage - currPage;
+        if(diff >= 3)
+        {
+            return true;
+        }
+        return false;
+    };
     $scope.init();
     $scope.onPageLoad();
 });
