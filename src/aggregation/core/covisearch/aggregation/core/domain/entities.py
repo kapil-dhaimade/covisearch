@@ -166,6 +166,9 @@ class CovidResourceInfo:
 
     @classmethod
     def _merge_field_if_absent(cls, field_label: str, older_resource_info: Dict, newer_resource_info: Dict):
+        if field_label not in newer_resource_info and field_label not in older_resource_info:
+            return
+
         if newer_resource_info[field_label] is None:
             newer_resource_info[field_label] = older_resource_info[field_label]
         elif type(newer_resource_info[field_label]) is str and newer_resource_info[field_label] == '':

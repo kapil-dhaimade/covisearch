@@ -171,7 +171,7 @@ def _scrape_data_from_web_sources(web_sources: Dict[str, resourcemapping.WebSour
 #
 #         aggregated_res_info_repo = infra.AggregatedResourceInfoRepoImpl(db)
 #         web_src_repo = infra.WebSourceRepoImpl(db)
-#         search_filter = SearchFilter('mumbai', entities.CovidResourceType.OXYGEN, None)
+#         search_filter = SearchFilter('bengaluru', entities.CovidResourceType.MED_FABIFLU, None)
 #         aggregate_covid_resources(search_filter, aggregated_res_info_repo, web_src_repo)
 #
 #         elapsedtime.stop_measuring_total()
