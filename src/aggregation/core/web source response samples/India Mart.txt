@@ -1,0 +1,2330 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<meta name="referrer" content="always" />
+	<link rel="dns-prefetch" href="https://utils.imimg.com" />
+	<link rel="dns-prefetch" href="https://apps.imimg.com" />
+	<link rel="dns-prefetch" href="https://2.imimg.com" />
+	<link rel="dns-prefetch" href="https://3.imimg.com" />
+	<link rel="dns-prefetch" href="https://4.imimg.com" />
+	<link rel="dns-prefetch" href="https://5.imimg.com" /><!-- view layout main1 called -->
+	<link type="text/css" rel="stylesheet" href="https://utils.imimg.com/imsrchui/css/mcatlayout.min-v254.css">
+	<link type="text/css" rel="stylesheet" href="https://apps.imimg.com/css/enqBl_desktop.min.css?v=1" media="print"
+		onload="this.media='all'">
+	<link rel='preload' href="https://utils.imimg.com/imsrchui/js/jquery2.js" crossorigin="anonymous" as='script'>
+	<link rel='preload' href="https://utils.imimg.com/imsrchui/js/pre_search.min-v40.js" crossorigin="anonymous"
+		as='script'>
+	<link rel='preload' href="https://apps.imimg.com/js/enqBl_desktop.min.js?v=6" crossorigin="anonymous" as='script'>
+	<script async="async" src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
+	<script>
+		window.googletag = window.googletag || {cmd: []};
+	</script>
+	<link type="application/opensearchdescription+xml" rel="search" href="https://dir.indiamart.com/opensearch.xml">
+	<TITLE>cresemba - Indiamart</TITLE>
+	<meta name="robots" content="noindex, nofollow">
+	<meta name="format-detection" content="telephone=no">
+	<meta name="format-detection" content="telephone=no">
+	<script>
+		var ims = {}; var page = {}; page.scriptVer='enqBl_desktop.min.js?v=6'; ims.pageResult = 0; ims.pg = 2; var min="";var sugg_ver = 'suggest.js';  var glmodid = "DIR"; ims.vidcnt = 0; var setest=0; ims.cq = 'Delhi';ims.cq_all = '' ;ims.hcq = ims.cq||ims.cq_all||'All India'
+	</script>
+	<script>
+		function callUntillDefined(fnstring, attemptCounter, time, fnparams) {
+        if (typeof(fnparams) === 'undefined') {
+            fnparams = [];
+        }
+        var fn = window[fnstring];
+        if (typeof fn === "function") {
+            fn.apply(null, fnparams);
+        } else if (attemptCounter <= ims.maxAttempt) {
+            setTimeout(function() {
+                callUntillDefined(fnstring, ++attemptCounter, time * 2, fnparams)
+            }, time);
+        }
+    };
+    function addLoader() {
+        document.getElementById('loadbar').style.display='block';
+        loadScript();
+    };
+    var event = document.createEvent('Event');
+    event.initEvent('jqready', true, true);
+    function triggerJqueryDefined(fnstring, attemptCounter, time, fnparams,callback) {
+        if (typeof(fnparams) === 'undefined') {
+            fnparams = [];
+        }
+        var fn = window[fnstring];
+        if (typeof fn === "function") {
+            callback();
+        } else if (attemptCounter <= ims.maxAttempt) {
+            setTimeout(function() {
+                triggerJqueryDefined(fnstring, ++attemptCounter, time * 2, fnparams,callback)
+            }, time);
+        }
+    };
+document.addEventListener('preready', function (e) {loadScript();});
+document.addEventListener("click", function(e){
+var c_target_id=e.target.id;
+var intent_enable='';
+if(document.readyState != "complete"){
+if(c_target_id!='' && c_target_id!='undefined' && (c_target_id.match(/gtlprc/)||c_target_id.match(/bu/)||c_target_id.match(/sm_quote/)||c_target_id.match(/rp/)||c_target_id.match(/fs/)||c_target_id.match(/dispid/)))
+{
+        addLoader();
+        triggerJqueryDefined('clickform',0,30,[],function(){var fn = window['clickform'];fn.call();var link = document.getElementById(c_target_id);link.click();document.getElementById('loadbar').style.display='none';});
+}
+}
+if(c_target_id.match(/VidClk/)&& (typeof vidfilter == 'undefined'))
+{
+   addLoader();
+   intent_enable = 'novid';
+}
+if(intent_enable=='novid' ){
+var timer = setInterval(function() {
+   if(typeof vidfilter == 'function'){
+   document.getElementById('loadbar').style.display='none';
+   vidfilter();
+   clearInterval(timer);
+ }
+
+}, 200);
+}
+});
+
+    ims.loadScriptCalled=0;
+    function loadScript() {
+        ims.loadScriptCalled++;
+        if(ims.loadScriptCalled > 3){
+            return;
+        }
+        var slash = "/";
+        var u = "utils.imimg.com"+slash;
+        var a = "apps.imimg.com"+slash;
+        if(location.hostname.match(/dev/)){
+            u = 'dev-utils.imimg.com'+slash;
+            a = "dev-apps.imimg.com"+slash;
+        }else if(location.hostname.match(/stg/)){
+            u = 'stg-utils.imimg.com'+slash;
+            a = "stg-apps.imimg.com"+slash;
+        }
+        var p='imsrchui'+slash+'js'+slash;
+        var hp='globalhf'+slash+'header'+slash;
+
+        var jquery  = u+p+'jquery2.js';
+        var pre     = u+p+'pre.min-v432.js';
+        var pre_search     = u+p+'pre_search.min-v40.js';
+        var post    = u+p+'post.min-v45.js';
+        var post_search    = u+p+'post_search.min-v21.js';
+        var blEnq   = a+'js'+slash+'enqBl_desktop.min.js?v=6';
+        var jq_ac   = u+'suggest'+slash+'js'+slash+'suggest.js';
+        var hdr     = (setest==0)?u+hp+'header-new213.js':u+p+'header_srch.js';
+        var links = [jquery, hdr, jq_ac, pre, blEnq];
+        if(ims.loadScriptCalled===1){
+            loadGtm();
+            links = [jquery];
+        }else if(ims.loadScriptCalled===2 && (window.location.pathname.match(/search[1-2]*.mp/i) == null || window.location.href.indexOf('&list_vw=1') >= 0 || ims.pageType == "Company")){
+            links = [ hdr, pre, post, jq_ac];
+        }else if(ims.loadScriptCalled===2 && window.location.pathname.match(/search[1-2]*.mp/i) != null && window.location.href.indexOf('&list_vw=1') < 0){
+            links = [ hdr, pre_search, post_search, jq_ac];
+        }else if(ims.loadScriptCalled===3){
+            links = [ blEnq];
+        }
+
+        var headElement = document.getElementsByTagName("head")[0],
+            script, i;
+        for (i = 0; i < links.length; i++) {
+            script = document.createElement("script");
+            script.setAttribute('type', 'text/javascript');
+            script.setAttribute('crossorigin', 'anonymous');
+            if (script.readyState) { //IE
+                script.onreadystatechange = function() {
+                    if (script.readyState == "loaded" ||
+                        script.readyState == "complete") {
+                        script.onreadystatechange = null;
+                    }
+                };
+            }
+            script.src = '//'+links[i];
+            headElement.appendChild(script);
+            if(i===0 && ims.loadScriptCalled===1){
+                triggerJqueryDefined('jQuery', 5, 50,[],function(){document.dispatchEvent(event);loadScript();});
+            var interval = setInterval(function () {
+                   if ( typeof(jQuery) != 'undefined' && typeof(jQuery.isReady) === 'boolean' && jQuery.isReady ) {
+                       clearInterval(interval);
+                       //$(document).fire('_jquery_ready');
+
+                   }
+            },10);
+            }
+        }
+    }
+    if (window.addEventListener)
+        window.addEventListener("load", loadScript, false);
+    else if (window.attachEvent)
+        window.attachEvent("onload", loadScript);
+    else window.onload = loadScript;
+
+
+document.addEventListener('preready', function (e) {
+      document.getElementById('btnSearch').removeAttribute("disabled");});
+var clearinter = setInterval(function() {
+    if (document.readyState != "complete" && document.getElementById('btnSearch') != null) {
+      document.getElementById('btnSearch').setAttribute("disabled", "disabled");
+    } else {
+
+       clearInterval(clearinter);
+    }
+}, 100)
+
+
+	</script>
+
+	<link type="text/css" rel="stylesheet" href="https://utils.imimg.com/globalhf/header/header-new43.min.css">
+</head>
+
+<body>
+	<div id="centreFrame"></div>
+	<div class="loadbar" id="loadbar" style="display: none">
+		<div class="loader"></div>
+	</div>
+	<script>
+		if( document.getElementById("pstBuy")){
+var hd_pbr = document.getElementById("pstBuy").childNodes[0];
+    if(hd_pbr.hasAttribute("href")){ hd_pbr.removeAttribute("href"); }
+}
+if( document.getElementById("lshead")){
+var signIn = document.getElementById("lshead").childNodes[0];
+    if(signIn.hasAttribute("href")){ signIn.removeAttribute("href"); }
+}
+	</script>
+	<header class="headercntrl Hd_pr">
+		<div class="blk_scrn Hd_dbn" id="ver_sc"></div>
+		<div class="ver_cert Hd_dbn"></div>
+		<div class="gl-wrapper" id="header">
+			<div class="nwHdr"><a href="https://www.indiamart.com/" class="hd_logo Hd_db hdlft Hd_fl">IndiaMART</a>
+				<div class="hdw hdLk clFix Hd_pr Hd_fl">
+					<div class="hd_srch Hd_fl" id="hdSrh">
+						<div class="wrpd3 select-wrapper Hd_pr Hd_fl cpo" id="drpn" style="display:none"></div>
+						<form name="searform" method="get" onsubmit="return validator(document.searform);" class="Hd_pr"
+							id="hdr_frm" action="https://dir.indiamart.com/search.mp?ss="> <input type="submit" id="btnSearch" class="hd_srBtn ch_fr Hd_pa cpo" value=Search data-click="^search_button|header">
+							<input placeholder="Enter product / service to search" id="search_string" name="ss" class="hd_txt ch_fr Hd_fl"> </form>
+					</div> <a href="https://my.indiamart.com/blgen/postbl?modid=IMHOME" id="pstBuy"
+						class="pstBuy Hd_dib ih-pbr ch_post_buy Hd_fl">Get Best Price</a>
+					<div id="cssmenu1" class="fr1 headermenu Hd_pr">
+						<div id="cvdSp" style="display:none"></div>
+						<div id="lead_manager" style="display:none" class="head_Icn hdLeadMn">
+							<span class="nme Hd_dib cpo hdBlk Hd_dib"></span></div>
+						<div id="lead_cen" style="display:none" class="head_Icn hdLeadMn">
+							<span class="nme Hd_dib cpo hdBlk Hd_dib"></span></div>
+						<div id="prod_cen" style="display:none" class="head_Icn">
+							<span class="nme Hd_dib cpo hdBlk Hd_dib"></span></div>
+						<div id="sell-center" style="display:none"></div>
+						<div id="help-center" style="display:none"></div>
+						<div id="message-center" style="display:none"></div>
+						<div class="hgtb Hd_pr Hd_bxCt" id="lshead"><a class="rmv Hd_dib cpo ico-usr"
+								href="https://my.indiamart.com"><span class="Hd_pr">Sign In</span></a></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="ch_clb" id="loginstrip"></div>
+		<div id="sign_in"></div>
+		<div id="bl_overlay_layer_v2"></div>
+		<div id="boxes"></div>
+		<div id="miclag"></div>
+		<div id="blkSrn" class="hd_blkSrn Hd_dbn"></div>
+		<div id="blk_ctpup" style="display:none">
+			<div id="chat_popup"></div>
+		</div>
+	</header>
+	<script>
+		var hd_webLoc=location.hostname;
+var hd_UrlPri = hd_webLoc.match(/^dev/) ? "dev-" : (hd_webLoc.match(/^stg/)) ? "stg-" : "";
+var page_sel = location.hostname.indexOf(hd_UrlPri + "seller") == 0 ? 1 : 0;
+var page_trd = location.hostname.indexOf(hd_UrlPri + "trade") == 0 ? 1 : 0;
+var page_tend = location.hostname.indexOf(hd_UrlPri + "tenders") == 0 ? 1 : 0;
+if(typeof ims!== 'undefined' && typeof ims.hcq!== 'undefined' && typeof ims.hcq!== '' ){
+    changeselect_city(ims.hcq);
+}else{
+    var referrer = document.referrer;
+    if(referrer == ""||(referrer.match(/.indiamart.com/))){
+        var hd_ct = readCookie('hd_ctval');
+        city=(hd_ct)?getparamVal(hd_ct,'ctval'):"All India";
+        changeselect_city(city);
+    }else{
+        changeselect_city("All India");
+    }  
+}
+function getparamVal(cookieStr, key) {
+	if (cookieStr > "") {
+		var val = "|" + cookieStr + "|";
+		var pattern = new RegExp(".*?\\|" + key + "=([^|]*).*|.*");
+		return val.replace(pattern, '$1');
+	} else {
+		return "";
+	}
+}
+function readCookie(cname) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+      }
+    }
+    return "";
+  }
+function hdr_getusercity(city){
+    var city =city||"All India";
+    city=(city==''||city=="null"||city==null)?'All India':city;
+	city=city.replace('-', ' ');
+    var splitcity = city.toLowerCase().split(' ');
+    for (var i = 0; i < splitcity.length; i++) {
+        splitcity[i] = splitcity[i].charAt(0).toUpperCase() + splitcity[i].substring(1);  
+    }
+    city = splitcity.join(' ');
+    var hddrpdn2 = '<button id="hd_searchPlace" class="hd_cFl cpo"><span id="hd_usercity" class="Hd_db">'+city+'</span></button><div id="city_hold" class="hd_cSrb Hd_dbn"><label for="hd_city_sugg"></label><input type="text" id="hd_city_sugg" placeholder ="Enter City" value ="Enter City" class="srin ui-autocomplete-input" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true" onkeyup="AlInd_Op()"><div class="hd_alop Hd_dbn cpo" id="all_India" >All India</div></div>';
+    document.getElementsByClassName("select-wrapper")[0].classList.add("hd_cFMn");
+    document.getElementsByClassName("select-wrapper")[0].innerHTML = hddrpdn2;
+    document.getElementsByClassName("select-wrapper")[0].style.display = "block";
+}
+function changeselect_city(city) {
+    var cookie = readCookie('ImeshVisitor');
+    var imurldata = getparamVal(cookie, 'utyp');
+    if (!(page_sel || page_trd || page_tend)&&!((imurldata == "P") && (window.location.href.indexOf("easybuy") == -1))) {
+            hdr_getusercity(city);
+    }
+}
+
+function setHdCountry()
+{
+    var hdIploc='',hdCcode='';
+    var hdSrch="iploc=";
+    if (document.cookie.length > 0){
+        var offset = document.cookie.indexOf(hdSrch);
+        if (offset != -1){
+            offset += hdSrch.length;
+            end = document.cookie.indexOf(";", offset);
+            if (end == -1)
+                end = document.cookie.length;
+            hdIploc=unescape(document.cookie.substring(offset, end));
+        }
+    }
+    if(hdIploc != '' && hdIploc.indexOf('gcniso=') != -1){
+   
+        var hdcon = hdIploc.split('gcniso=');
+        if(typeof(hdcon[1])!="undefined")
+            var hdcarr = hdcon[1].split('|');
+        hdCcode= hdcarr[0];
+    }
+    if(hdCcode == '')
+    {
+        var hdDate = new Date();
+        var hdgmt = -hdDate.getTimezoneOffset() / 60;
+        if (hdgmt != 5.5)
+            hdCcode = 'OTHER';
+        else
+            hdCcode = 'IN';
+    }
+    if(typeof(hdCcode)!="undefined" && hdCcode != '' && hdCcode == 'IN')
+    {
+        var hdInpt = document.getElementsByClassName('duet');
+        for (var i = 0, len = hdInpt.length; i < len; i++) {
+            var hdMid = hdInpt[i];
+            var hdContent = hdMid.innerHTML;
+            if(hdContent.match(/^\+91/)){
+                hdContent = hdContent.replace('+91-','0');
+                hdMid.innerHTML=hdContent;
+            }
+        }
+    }
+    else if(typeof(hdCcode)!="undefined" && hdCcode != '' && hdCcode != 'IN')
+    {
+        var hdInpt = document.getElementsByClassName('duet');
+        for (var i = 0, len = hdInpt.length; i < len; i++) {
+            var hdMid = hdInpt[i];
+            var hdContent = hdMid.innerHTML;
+            if(hdContent.match(/^0/)){
+                hdContent = hdContent.replace('0','+91-');
+                hdMid.innerHTML=hdContent;
+            }
+        }
+    }
+}
+
+if (window.addEventListener)
+    window.addEventListener("load", function(){setHdCountry();}, false);
+else if (window.attachEvent)
+    window.attachEvent("onload", function(){setHdCountry();});
+else
+    window.onload = function(){setHdCountry();};
+	</script>
+	<div id="content">
+		<div id="page_variables">
+			<script type="text/javascript">
+				/* <![CDATA[ */var city_search = 'delhi';var mcat_image_125= 'https://3.imimg.com/data3/IG/JR/GLADMIN-1466/pharmaceutical-injectables-125x125.jpg';var mcat_image_250='';var mcat_image_500='';var biz_search = ''; /* check, it's using or not*/ var spell_check = '';var cat_name = 'cresemba';var result_status = '';var send_counter=0; var setXnHistCity = 1; var isadult=0; /*global variable to enable set city in xnHist*/ ims.page_begin_tm=new Date().getTime(); ims.randomizer = '1'; ims.tiggered_event_lbl=new Array(); ims.event_cnt=0; ims.lst_count = 10;ims.search_result_language = 'en';ims.lang = 'en'; ims.mcat_ids = [1466, 10149]; ims.pageDisplayResult = 0;ims.ss = 'cresemba';ims.fqs = 'cresemaba';ims.mqs = 'cresemaba'; ims.srchmcat= 'Pharmaceutical Injectables'; ims.srchflname = 'pharmaceutical-injectables';ims.fcilp = '0'; ims.oddFlag = '';ims.unq_list_count = '';ims.cq = 'delhi'; ims.srch_strng = 'cresemba';ims.biz = '';ims.pmcat = ''; ims.geo_cc = ''; ims.geo_cn = ''; ims.cq_all = '';ims.r = '80';/*total result count*/ims.modid = 'DIR';ims.catid = '360';ims.mcatid = '1466';ims.grpid='123';ims.gAdFetch = 0;ims.pr = '0';ims.cat = '';ims.disclaimerflg = '0';ims.temp_record = '';ims.sDivId = 'scroll'+'2';ims.firstResultCount = 14; ims.pageResult = ims.pageResult+ims.firstResultCount; ims.pageDisplayResult = 14;ims.relmcat = '0'; ims.c =((-(new Date).getTimezoneOffset()/60==5.5)==1) ? 'IN' : ''; ims.scroll = new Array(); ims.maxAttempt = 10; /* max attempts of recursive function call*/ ims.stop_pg = 10; /* tostop pagination if no further supplier*/ ims.checkonload = 0; ims.trackCustomVar = '1';ims.bizFilterAppeared = '0';
+ims.in_isq_option = '';ims.myCity = '';ims.qtype='Normal';ims.myCityurl = '';ims.relMcatJsarren='';if(ims.relMcatJsarren !='' && localStorage.getItem('relMcatJsarren')!= ims.relMcatJsarren){localStorage.setItem('relMcatJsarren',ims.relMcatJsarren);} var prod_serv = 'P';page.countryCode = '';page.country = '';page.countryIp = '';page.mcatIds = [1466, 10149];ims.pageType ='Product'; ims.langtrans ="0";  ims.spellcorr ="1";  ; var bl_init={divClass:'bl_dir',option:{customHeadline:"", mcatName:"Pharmaceutical Injectables", catID:"360",modID:"DIR",mcatID:"1466"}}; page.pageType='search'; 
+			</script>
+		</div>
+		<script type="application/ld+json"> </script>
+		<div class="q_hm1 cnhdr fxmn">
+			<div class="msec" style="padding-left:190px" data-click="cresemba##ML|1466|delhi">
+				<div style="margin-left:-190px" id="stk_city">
+					<div class="sh-dv">
+						<h1>cresemaba near Delhi</h1> <span class="cafp" style=""></span>
+						<div class="DisqGrp">
+							<span class="clrfil Disq" style="display:none">Video<u><b class="clrfltr cur"><span class="Cros" id="dsblVid"></span></b></u>
+							</span> </div><input type="hidden" value="80" id="totalresult">
+						<div class="fr gview sid_df"><span class="vwBn fs14">View by: </span>
+							<span class="dspVew sid_df sid_jcc sid_aic sid_fdc"><span class="grdV"><span></span><span></span></span>Grid</span>
+							<span>|</span> <a class="dspVew sid_df sid_jcc sid_aic sid_fdc"
+								href="/search.mp?ss=cresemba&cq=delhi&prdsrc=1&list_vw=1"
+								onclick="recordOutboundLink(this,'shift-view','list-view',0,0);"
+								rel="nofollow"><span class="lstV grdV"><span></span><span></span></span>List</a></div>
+					</div>
+					<style>
+						.ldLocat4 {
+							border: 2px solid #969696;
+							border-radius: 50%;
+							border-top: 2px solid #fff;
+							width: 12px;
+							height: 12px;
+							-webkit-animation: spin 2s linear infinite;
+							animation: spin 2s linear infinite;
+							position: absolute;
+							right: -289px;
+							top: -5px;
+							bottom: 0;
+							z-index: 1;
+							margin: auto
+						}
+					</style>
+					<div class="ldLocat4" id="ldLocat4" style="display: none"></div>
+					<script>
+						function addloader4(cityform,url,page) {
+      if(typeof(cityRedirectToImpcat) !== 'undefined')
+      {
+        document.getElementById('ldLocat4').style.display='none';
+        document.getElementById('locate').style.display='block';
+        return cityRedirectToImpcat(cityform,url,page);
+      }
+      else{
+        document.getElementById('locate').style.display='none';
+        document.getElementById('ldLocat4').style.display='block';
+        setTimeout(function() {addloader4(cityform,url,page)}, 1);
+      }
+    return false;
+    };
+					</script>
+					<div class="wbg tcty">
+						<ul class="fl cWd" id='topCity'>
+							<li><svg height="20" viewBox="-119 -21 682 682.66669" width="22"
+									xmlns="http://www.w3.org/2000/svg" fill="#ed7278" class="ctIcn"
+									style="vertical-align: middle;margin-top: -2px;margin-left:-5px;">
+									<path
+										d="m216.210938 0c-122.664063 0-222.460938 99.796875-222.460938 222.460938 0 154.175781 222.679688 417.539062 222.679688 417.539062s222.242187-270.945312 222.242187-417.539062c0-122.664063-99.792969-222.460938-222.460937-222.460938zm67.121093 287.597656c-18.507812 18.503906-42.8125 27.757813-67.121093 27.757813-24.304688 0-48.617188-9.253907-67.117188-27.757813-37.011719-37.007812-37.011719-97.226562 0-134.238281 17.921875-17.929687 41.761719-27.804687 67.117188-27.804687 25.355468 0 49.191406 9.878906 67.121093 27.804687 37.011719 37.011719 37.011719 97.230469 0 134.238281zm0 0">
+									</path>
+								</svg><span class="slCty">Location</span>
+								<div class="fr">
+									<form method="post"
+										onsubmit="return addloader4(document.cityForm,'https://dir.indiamart.com/search.mp?ss=cresemaba','cresemaba');"
+										name="cityForm">
+										<div class="frpm">
+											<input type="text" name="city_ss" id="txt-city" class="srin ui-autocomplete-input ui-autocomplete-loading frpmi" placeholder="Enter city" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true"><span class="locate nearmecity" id="locate"><span class = 'near2'>Near me</span></span>
+											<div class="clb"></div>
+										</div>
+										<input type="image" src="https://utils.imimg.com/imsrchui/imgs/z.gif" alt="gif" id="city_sugg"></form>
+								</div>
+							</li>
+
+							<li id="allindia" class="right-city"><a id="all"
+									href="https://dir.indiamart.com/search.mp?ss=cresemaba"
+									onmousedown="recordOutboundLink('delhi=>chennai', 'IMS', 'city-clicked', 0, 0);updateCookie('xnHist', {'city':'','cvstate':''});;">All
+									India</a></li>
+							<li class="active right-city" id="active-city">Delhi</li>
+							<li class="right-city rc"><a
+									href="https://dir.indiamart.com/search.mp?ss=cresemaba&cq=chandigarh&cq_src=city-search"
+									onmousedown="recordOutboundLink('delhi=>chandigarh', 'IMS', 'city-clicked', 0, 0);;">Chandigarh</a>
+							</li>
+							<li class="right-city rc"><a
+									href="https://dir.indiamart.com/search.mp?ss=cresemaba&cq=ahmedabad&cq_src=city-search"
+									onmousedown="recordOutboundLink('delhi=>ahmedabad', 'IMS', 'city-clicked', 0, 0);;">Ahmedabad</a>
+							</li>
+							<li class="right-city rc"><a
+									href="https://dir.indiamart.com/search.mp?ss=cresemaba&cq=nagpur&cq_src=city-search"
+									onmousedown="recordOutboundLink('delhi=>nagpur', 'IMS', 'city-clicked', 0, 0);;">Nagpur</a>
+							</li>
+							<li class="right-city rc"><a
+									href="https://dir.indiamart.com/search.mp?ss=cresemaba&cq=mumbai&cq_src=city-search"
+									onmousedown="recordOutboundLink('delhi=>mumbai', 'IMS', 'city-clicked', 0, 0);;">Mumbai</a>
+							</li>
+							<li class="right-city rc"><a
+									href="https://dir.indiamart.com/search.mp?ss=cresemaba&cq=hyderabad&cq_src=city-search"
+									onmousedown="recordOutboundLink('delhi=>hyderabad', 'IMS', 'city-clicked', 0, 0);;">Hyderabad</a>
+							</li>
+							<li class="right-city rc"><a
+									href="https://dir.indiamart.com/search.mp?ss=cresemaba&cq=bengaluru&cq_src=city-search"
+									onmousedown="recordOutboundLink('delhi=>bengaluru', 'IMS', 'city-clicked', 0, 0);;">Bengaluru</a>
+							</li>
+							<li class="right-city rc"><a
+									href="https://dir.indiamart.com/search.mp?ss=cresemaba&cq=chennai&cq_src=city-search"
+									onmousedown="recordOutboundLink('delhi=>chennai', 'IMS', 'city-clicked', 0, 0);;">Chennai</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="lay-left rwth" id="lay-lft" style="float:right">
+					<div class="m10_c" id="m4tTOP"></div>
+					<div class="svgGrp"><svg xmlns="http://www.w3.org/2000/svg" width="7.19" height="13.331"
+							viewBox="0 0 7.19 13.331">
+							<path id="sidarrow"
+								d="M508.266,98.922a.546.546,0,0,1,.094-.609.611.611,0,0,1,.609-.078c1.734,1.555,6.15,6.162,6.234,6.25a.487.487,0,0,1,.188.438.538.538,0,0,1-.187.328c-.086.087-6.159,6.137-6.25,6.219a.49.49,0,0,1-.547-.094.546.546,0,0,1-.125-.609c.089-.1,5.906-5.922,5.906-5.922S508.354,99.021,508.266,98.922Z"
+								transform="translate(-508.21 -98.186)" /></svg></div>
+					<div id="m4ad" class="off llbp">
+						<div class="tc">
+							<span><object><param name="wmode" value="opaque"><span id="m4tTOP1"></span></object></span>
+						</div>
+						<div class="cr"></div>
+					</div>
+					<p class="on" id="m4tgap"></p>
+					<div class="wd100" id="wd100">
+						<!-- <div id='div-gpt-ad-1569494388265-0' style="margin-bottom:10px; height:90px ; text-align: center;"></div> -->
+
+						<!-- <div id='div-gpt-ad-1569494563674-0' style="margin-bottom:10px; height:90px ; text-align: center;"></div> -->
+
+						<!-- <div id='div-gpt-ad-1569300298380-0' style="margin-bottom:10px ; height:90px ; text-align: center;"></div> -->
+
+						<div class="pr">
+							<div class="fl">
+								<span class="shw-rslt1">Showing results for&nbsp;</span><b><i>cresemaba</i></b>
+								<b><i>near Delhi </b></i></div>
+							<div class="clb"></div>
+							<div class="Lokng4">Search instead for <a href="search.mp?ss=cresemba&no_sugg=1"
+									onclick="recordOutboundLink('', 'ML_disabled', 'cresemba-cresemaba', 0, 0);"
+									class="Lkng-lnkJ"><span class="no_sugg">cresemba</span></a></div>
+						</div>
+						<div class="main-tb mDf mW1">
+							<div class="lst-cell flx1">
+								<ul class="mListGrp w100 sid_df fww wlm " id="m">
+									<li class="mList tc bgw mPr br5 sid_df lst_cl slrPrdGrp     mft2 img nlc" id="LST1"
+										data-click="1" data-itemid="1" data-dispid="2" data-datatype="proxy"
+										data-glid="72348100" data-smlrcnt="3" data-csttypwgt="199"
+										data-csttypnm="TSCATALOG" data-tscode="archit-herbals" data-location="Lucknow"
+										data-city="" data-state="Delhi" data-catid="360" data-mcatid="1466"
+										data-disflg="1" data-modref="11" data-blprdnme="cresemaba"
+										data-altdispid="60080202667">
+										<ul class="mListDtl sid_df sid_fdc" data-click="2|1466|proxy">
+											<li class="ht100">
+												<ul class="ht100 sid_df fww">
+													<li class="slrPrd sid_df ofh flx1">
+														<ul id="prd-1" class="slrPrdUl flx1">
+															<li class="mListImg w100 sid_df sid_jcc sid_aic br5 cp5 mPr cp"
+																data-click="^Prod0Img">
+																<span class='blLgSpn'><img src='https://5.imimg.com/data5/ZB/ZZ/AH/SELLER-72348100/zenotis-120x120.jpg' class='blLg' data-limg='https://5.imimg.com/data5/ZB/ZZ/AH/SELLER-72348100/zenotis-120x120.jpg'></span><img alt="Archit Herbals" id="bu1-0" src='https://3.imimg.com/data3/IG/JR/GLADMIN-1466/pharmaceutical-injectables-250x250.jpg' data-limg='https://3.imimg.com/data3/IG/JR/GLADMIN-1466/pharmaceutical-injectables-250x250.jpg'></li>
+															<li class="mListPrc">
+																<span class="mListNme p10b0 mDib clr111 fs14 elps cp noPdp"><span class="noPdp mDb" data-click="^Prod0Name">cresemaba</span></span><span id="1prcenq" class="prc apr NP-1 ilprice getp">Ask Price</span><span class='desc des_p off'>We better know “YOUR HEALTH MATTERS, the idea of ZENOTIS HEALTHCARE comes to an existence in 2010 although we started working in year 2012.</span>
+															</li>
+														</ul>
+														<ul class="slrPrdUl flx1"
+															data-click="21054161991|139577|product"
+															data-isq="Shelf life==24 months,Composition==Amikacin Sulphate Injection I.P,Also gives==Bags,Third Party Manufacturing,PCD Pharma Franchise,Treatment==Bacterial Infection,Prescription/Non prescription==Prescription,Packaging Size==2ml,Brand==Mikazust,Manufacturer==Zenotis Healthcare,Form==Injection">
+															<li
+																class="mListImg w100 sid_df sid_jcc sid_aic br5 cp5 mPr cp ">
+																<img id=bu1-1 data-mcatid="139577" title='Amikacin Sulphate Injection, Treatment: Bacterial Infection' data-prc="<b>&#8377; 90/</b>Piece" alt='Amikacin Sulphate Injection, Treatment: Bacterial Infection' src='https://5.imimg.com/data5/GQ/CM/ZP/SELLER-72348100/amikacin-sulphate-injection-i-p-mikazust-500-500x500.jpg' data-slimg='https://5.imimg.com/data5/GQ/CM/ZP/SELLER-72348100/amikacin-sulphate-injection-i-p-mikazust-500-500x500.jpg' id="rp1_1" data-modref="2" data-datatype="product" data-simdispid="21054161991" data-click= "^Prod1Img"></li>
+															<li class="mListPrc">
+																<span class="mListNme p10b0 mDib clr111 fs14 elps"><a class="smTle mDb" data-click="^Prod1Name" href="https://www.indiamart.com/proddetail/amikacin-sulphate-injection-21054161991.html"  target="_blank">Amikacin Sulphate Injection, Treatment: Bacterial Infection</a></span><span class="NP-1 mPrc mDb"><span class="prc cp">&#8377;90/ <span class="quan">Piece</span></span></span>
+															</li>
+														</ul>
+														<ul class="slrPrdUl flx1"
+															data-click="22692071173|167511|product"
+															data-isq="Country of Origin==Made in India,Prescription/Non prescription==Prescription,Packaging Size==1gm,Brand==Merobig-1 Injection,Manufacturer==Zenotis Healthcare,Form==Injection,Shelf Life==24 months,Injectable Power==1gm,Storage Type==Keep in a cool & dry place,Usage/Application==Hospital,Packaging Type==Glass Bottle,Medicine Type==Allopathic,Injection Site==Intravenous,Composition==Meropenem 1gm,Drug Name==Meropenem For Injection,Drug Strength==1gm,Also Gives==Hospitals,PCD Pharma Franchise,Third Party Manufacturing">
+															<li
+																class="mListImg w100 sid_df sid_jcc sid_aic br5 cp5 mPr cp ">
+																<img id=bu1-2 data-mcatid="167511" title='Merobig-1 Injection 1gm Meropenem Injections, For Hospital, Zenotis Healthcare' data-prc="<b>&#8377; 300/</b>Piece" alt='Merobig-1 Injection 1gm Meropenem Injections, For Hospital, Zenotis Healthcare' src='https://5.imimg.com/data5/SELLER/Default/2020/10/WB/HK/BG/72348100/merobig-1-3d-500x500.jpg' data-slimg='https://5.imimg.com/data5/SELLER/Default/2020/10/WB/HK/BG/72348100/merobig-1-3d-500x500.jpg' id="rp1_2" data-modref="2" data-datatype="product" data-simdispid="22692071173" data-click= "^Prod2Img"></li>
+															<li class="mListPrc">
+																<span class="mListNme p10b0 mDib clr111 fs14 elps"><a class="smTle mDb" data-click="^Prod2Name" href="https://www.indiamart.com/proddetail/meropenem-injections-22692071173.html"  target="_blank">Merobig-1 Injection 1gm Meropenem Injections, For Hospital,...</a></span><span class="NP-1 mPrc mDb"><span class="prc cp">&#8377;300/ <span class="quan">Piece</span></span></span>
+															</li>
+														</ul>
+														<ul class="slrPrdUl flx1"
+															data-click="21053860697|138631|product"
+															data-isq="Packaging Type==Vial with stopper,Composition==Ceftriaxone 1gm,Treatment==Antibiotics,Prescription/Non prescription==Prescription,Packaging Size==1gm,Brand==Bigxone,Manufacturer==Zenotis Healthcare,Form==Injection,Also gives==Hospitals,Third Party Manufacturing,PCD Pharma Franchise,Medicine Type==Allopathic,Shelf Life==24 Months">
+															<li
+																class="mListImg w100 sid_df sid_jcc sid_aic br5 cp5 mPr cp ">
+																<img id=bu1-3 data-mcatid="138631" title='Bigxone Allopathic Ceftriaxone Injection 1gm, Treatment: Antibiotics, Manufacturer: Zenotis Healthcare' data-prc="<b>&#8377; 57/</b>Piece" alt='Bigxone Allopathic Ceftriaxone Injection 1gm, Treatment: Antibiotics, Manufacturer: Zenotis Healthcare' src='https://5.imimg.com/data5/DD/HV/MR/SELLER-72348100/ceftriaxone-1-gm-injection-500x500.jpg' data-slimg='https://5.imimg.com/data5/DD/HV/MR/SELLER-72348100/ceftriaxone-1-gm-injection-500x500.jpg' id="rp1_3" data-modref="2" data-datatype="product" data-simdispid="21053860697" data-click= "^Prod3Img"></li>
+															<li class="mListPrc">
+																<span class="mListNme p10b0 mDib clr111 fs14 elps"><a class="smTle mDb" data-click="^Prod3Name" href="https://www.indiamart.com/proddetail/ceftriaxone-injection-1gm-21053860697.html"  target="_blank">Bigxone Allopathic Ceftriaxone Injection 1gm, Treatment:...</a></span><span class="NP-1 mPrc mDb"><span class="prc cp">&#8377;57/ <span class="quan">Piece</span></span></span>
+															</li>
+														</ul>
+													</li>
+													<li class="sid_df sid_jcc fww sid_aic mCnmGrp flx1 mAse">
+														<h4 class="lcname" data-click="^CompanyName"><a
+																href="https://www.indiamart.com/archit-herbals/?pos=1&kwd=cresemaba&tags=A||Pref||0.0||bl"
+																target="_blank"
+																class="mCnme"><span class="elps">Archit Herbals</span></a>
+														</h4>
+														<p class="mPr sid_df sid_jcc mH17">
+															<span class="bg t_se mPr" data-click="^TrustSEAL" data-val="archit-herbals"></span>
+														</p>
+														<span class="sm clg mDb flx1" data-rlocation="Lucknow"><span class="elps"> Deals in Delhi<span style="display:none">pref_district</span>
+														</span><span class="to-txt tc" id="citytt1"><span class="mDib mToTxt">
+                 F-473, First Floor, Phase-2, Transport Nagar Lucknow Lucknow, Lucknow,<br>New Delhi<span> - </span>110085
+														- Delhi</span></span></span>
+													</li>
+												</ul>
+											</li>
+											<li class="f-div t-c nes mVmn" data-click="TSCATALOG">
+												<span class="hlb cur" id="1mobenq"><span class="ls_co phn bo" data-click="^MobileNo" ><span class="cl">Call </span><span id="pns1" class="pns_h duet">+91-8048843870             </span></span></span><button id="dispid2" data-click="^CTAContactSupplier" class="bp btn2g mo active td NP-1 sen_c on">Contact Supplier</span></button>
+											</li>
+											<li class="sDot">
+												<span id="1_0" class="sActv"></span><span id="1_1" class="cp"></span><span id="1_2" class="cp"></span><span id="1_3" class="cp"></span>
+											</li>
+										</ul>
+									</li>
+									<li class="mList tc bgw mPr br5 sid_df lst_cl slrPrdGrp     mft2 img nlc" id="LST2"
+										data-click="2" data-itemid="1" data-dispid="2" data-datatype="proxy"
+										data-glid="39486320" data-smlrcnt="3" data-csttypwgt="199"
+										data-csttypnm="TSCATALOG" data-tscode="narula-associates-delhi"
+										data-location="Janakpuri" data-city="" data-state="Delhi" data-catid="360"
+										data-mcatid="1466" data-disflg="1" data-modref="11" data-blprdnme="cresemaba"
+										data-altdispid="57083626946">
+										<ul class="mListDtl sid_df sid_fdc" data-click="2|1466|proxy">
+											<li class="ht100">
+												<ul class="ht100 sid_df fww">
+													<li class="slrPrd sid_df ofh flx1">
+														<ul id="prd-2" class="slrPrdUl flx1">
+															<li class="mListImg w100 sid_df sid_jcc sid_aic br5 cp5 mPr cp"
+																data-click="^Prod0Img">
+																<span class='blLgSpn'><img src='https://5.imimg.com/data5/RY/FX/AU/SELLER-39486320/logo-120x120.png' class='blLg' data-limg='https://5.imimg.com/data5/RY/FX/AU/SELLER-39486320/logo-120x120.png'></span><img alt="Imperial Healthcare Private Limited" id="bu2-0" src='https://3.imimg.com/data3/IG/JR/GLADMIN-1466/pharmaceutical-injectables-250x250.jpg' data-limg='https://3.imimg.com/data3/IG/JR/GLADMIN-1466/pharmaceutical-injectables-250x250.jpg'></li>
+															<li class="mListPrc">
+																<span class="mListNme p10b0 mDib clr111 fs14 elps cp noPdp"><span class="noPdp mDb" data-click="^Prod0Name">cresemaba</span></span><span id="2prcenq" class="prc apr NP-2 ilprice getp">Ask Price</span><span class='desc des_p off'>We “Narula Associates are the leading Wholesale, importer And Exporter Pharmaceutical Injection, Pharmaceutical Tablets, Pharmaceutical Capsulesm, Anti Cancer, Lonopin Pen, Infuzyonluk Cozelti Konsantresi Iceren Flakon, etc.</span>
+															</li>
+														</ul>
+														<ul class="slrPrdUl flx1"
+															data-click="23109577230|180204|product"
+															data-isq="Usage Application==Clinical, Hospital,Prescription/Non prescription==Prescription,Packaging Size==4 IU x 1 Vial,Brand==Eutropin 4 IU,Manufacturer==Cipla Ltd,Form==Injection">
+															<li
+																class="mListImg w100 sid_df sid_jcc sid_aic br5 cp5 mPr cp ">
+																<img id=bu2-1 data-mcatid="180204" title='Recombinant Human Growth Hormone Injection' data-prc="<b>&#8377; 750/</b>Box" alt='Recombinant Human Growth Hormone Injection' src='https://5.imimg.com/data5/SELLER/Default/2021/2/DR/OC/YA/39486320/1-500x500.jpg' data-slimg='https://5.imimg.com/data5/SELLER/Default/2021/2/DR/OC/YA/39486320/1-500x500.jpg' id="rp2_1" data-modref="2" data-datatype="product" data-simdispid="23109577230" data-click= "^Prod1Img"></li>
+															<li class="mListPrc">
+																<span class="mListNme p10b0 mDib clr111 fs14 elps"><a class="smTle mDb" data-click="^Prod1Name" href="https://www.indiamart.com/proddetail/recombinant-human-growth-hormone-injection-23109577230.html"  target="_blank">Recombinant Human Growth Hormone Injection</a></span><span class="NP-2 mPrc mDb"><span class="prc cp">&#8377;750/ <span class="quan">Box</span></span></span>
+															</li>
+														</ul>
+														<ul class="slrPrdUl flx1" data-click="23151575062|10149|product"
+															data-isq="Also Gives==PCD Pharma Franchise,Manufacturer==Eli Lilly,Brand Name==Copellor / Taltz,Packaging Size==Pen Injector,Product Type==Finished Product,Brand==Eli Lilly,Form Of Medicine==Injection,Injectable Form==Liquid,Medicine Type==Injection,Composition==Ixekizumab,Gender==Unisex,Shelf Life==2 Years,Case Size==3 Pens,Dose==80mg">
+															<li
+																class="mListImg w100 sid_df sid_jcc sid_aic br5 cp5 mPr cp ">
+																<img id=bu2-2 data-mcatid="10149" title='Eli Lilly Liquid Taltz Ixekizumab, Packaging Size: Pen Injector, 80mg' data-prc="<b>&#8377; 1.25 Lakh/</b>Box" alt='Eli Lilly Liquid Taltz Ixekizumab, Packaging Size: Pen Injector, 80mg' src='https://5.imimg.com/data5/IOS/Default/2021/2/BP/QL/AR/39486320/product-jpeg-500x500.png' data-slimg='https://5.imimg.com/data5/IOS/Default/2021/2/BP/QL/AR/39486320/product-jpeg-500x500.png' id="rp2_2" data-modref="2" data-datatype="product" data-simdispid="23151575062" data-click= "^Prod2Img"></li>
+															<li class="mListPrc">
+																<span class="mListNme p10b0 mDib clr111 fs14 elps"><a class="smTle mDb" data-click="^Prod2Name" href="https://www.indiamart.com/proddetail/taltz-ixekizumab-23151575062.html"  target="_blank">Eli Lilly Liquid Taltz Ixekizumab, Packaging Size: Pen Injector,...</a></span><span class="NP-2 mPrc mDb"><span class="prc cp">&#8377;1.25 Lakh/ <span class="quan">Box</span></span></span>
+															</li>
+														</ul>
+														<ul class="slrPrdUl flx1"
+															data-click="23109491562|162260|product"
+															data-isq="Composition==Chorionic Gonadotrophin 10000 I.U./1Ml,Usage/Application==Clinical, Hospital,Prescription/Non prescription==Prescription,Packaging Size==1 Vial x 10000 I.U./1 1Ml,Brand==Hucog-10000 HP,Manufacturer==Bharat Serums And Vaccines Limited,Packaging Type==Box,Medicine Type==Allopathic">
+															<li
+																class="mListImg w100 sid_df sid_jcc sid_aic br5 cp5 mPr cp ">
+																<img id=bu2-3 data-mcatid="162260" title='Hucog-10000 Hp Allopathic Highly Purified Chorionic Gonadotrophin Injection 10000 I.u., For Clinical, Hospital, Prescription' data-prc="<b>&#8377; 500/</b>Vial" alt='Hucog-10000 Hp Allopathic Highly Purified Chorionic Gonadotrophin Injection 10000 I.u., For Clinical, Hospital, Prescription' src='https://5.imimg.com/data5/GLADMIN/Default/2021/2/DV/AO/ZM/39486320/highly-purified-chorionic-gonadotrophin-injection-10000-i-u--500x500.jpg' data-slimg='https://5.imimg.com/data5/GLADMIN/Default/2021/2/DV/AO/ZM/39486320/highly-purified-chorionic-gonadotrophin-injection-10000-i-u--500x500.jpg' id="rp2_3" data-modref="2" data-datatype="product" data-simdispid="23109491562" data-click= "^Prod3Img"></li>
+															<li class="mListPrc">
+																<span class="mListNme p10b0 mDib clr111 fs14 elps"><a class="smTle mDb" data-click="^Prod3Name" href="https://www.indiamart.com/proddetail/highly-purified-chorionic-gonadotrophin-injection-10000-i-u-23109491562.html"  target="_blank">Hucog-10000 Hp Allopathic Highly Purified Chorionic Gonadotrophin...</a></span><span class="NP-2 mPrc mDb"><span class="prc cp">&#8377;500/ <span class="quan">Vial</span></span></span>
+															</li>
+														</ul>
+													</li>
+													<li class="sid_df sid_jcc fww sid_aic mCnmGrp flx1 mAse">
+														<h4 class="lcname" data-click="^CompanyName"><a
+																href="https://www.indiamart.com/narula-associates-delhi/?pos=2&kwd=cresemaba&tags=A||Pref|Loc|0.0||bl"
+																target="_blank"
+																class="mCnme"><span class="elps">Imperial Healthcare Private Limited</span></a>
+														</h4>
+														<p class="mPr sid_df sid_jcc mH17">
+															<span class="bg t_se mPr" data-click="^TrustSEAL" data-val="narula-associates-delhi"></span><span class="exptr-grp mDb"><span class="exptr ver-img mDb mpr"></span><span class="exptr-tl-tip mpa off">IndiaMART Verified Exporter</span></span>
+														</p>
+														<span class="sm clg mDb flx1" data-rlocation="Janakpuri"><span class="elps">Janakpuri, Delhi </span><span class="to-txt tc" id="citytt2"><span class="mDib mToTxt">
+                 ,Plot No6, L.G.F,Janak Puri,Rajender Sunheri Bhawan,, Janakpuri,<br>Delhi<span> - </span>110058, Dist.
+														Delhi - Delhi</span></span></span>
+													</li>
+												</ul>
+											</li>
+											<li class="f-div t-c nes mVmn" data-click="TSCATALOG">
+												<span class="hlb cur" id="2mobenq"><span class="ls_co phn bo" data-click="^MobileNo" ><span class="cl">Call </span><span id="pns2" class="pns_h duet">+91-7971388957             </span></span></span><button id="dispid2" data-click="^CTAContactSupplier" class="bp btn2g mo active td NP-2 sen_c on">Contact Supplier</span></button>
+											</li>
+											<li class="sDot">
+												<span id="2_0" class="sActv"></span><span id="2_1" class="cp"></span><span id="2_2" class="cp"></span><span id="2_3" class="cp"></span>
+											</li>
+										</ul>
+									</li>
+									<li class="mList tc bgw mPr br5 sid_df lst_cl slrPrdGrp  mr0   mft2 img nlc"
+										id="LST3" data-click="3" data-itemid="1" data-dispid="2" data-datatype="proxy"
+										data-glid="112558477" data-smlrcnt="3" data-csttypwgt="199"
+										data-csttypnm="TSCATALOG" data-tscode="av-pharma-delhi"
+										data-location="CHANDNI CHOWK" data-city="" data-state="Delhi" data-catid="360"
+										data-mcatid="1466" data-disflg="1" data-modref="11" data-blprdnme="cresemaba"
+										data-altdispid="59892286059">
+										<ul class="mListDtl sid_df sid_fdc" data-click="2|1466|proxy">
+											<li class="ht100">
+												<ul class="ht100 sid_df fww">
+													<li class="slrPrd sid_df ofh flx1">
+														<ul id="prd-3" class="slrPrdUl flx1">
+															<li class="mListImg w100 sid_df sid_jcc sid_aic br5 cp5 imgl mPr cp "
+																data-click="^Prod0Img">
+																<img alt="A V Pharma" id="bu3-0" src='https://3.imimg.com/data3/IG/JR/GLADMIN-1466/pharmaceutical-injectables-250x250.jpg' data-limg='https://3.imimg.com/data3/IG/JR/GLADMIN-1466/pharmaceutical-injectables-250x250.jpg'></li>
+															<li class="mListPrc">
+																<span class="mListNme p10b0 mDib clr111 fs14 elps cp noPdp"><span class="noPdp mDb" data-click="^Prod0Name">cresemaba</span></span><span id="3prcenq" class="prc apr NP-3 ilprice getp">Ask Price</span><span class='desc des_p off'>Established in the year 2015 at New Delhi we "A V Pharma" are a Sole Partnership based firm, engaged as the Wholesaler of Pth Cinacalcet 30 MG Tablet and many more .</span>
+															</li>
+														</ul>
+														<ul class="slrPrdUl flx1"
+															data-click="22667479030|193032|product"
+															data-isq="Brand==Intas,Composition==Teriparatide,Treatment==Severe Osteoporosis with a High Risk of Fractures,Prescription/Non prescription==Prescription,Dose Strength==750mcg/3 ml,Packaging Size==1x1 Cartridge,Manufacturer==Intas Pharmaceuticals Ltd,Form==Injection">
+															<li
+																class="mListImg w100 sid_df sid_jcc sid_aic br5 cp5 mPr cp imgl">
+																<img id=bu3-1 data-mcatid="193032" title='Teriparatide Terifrac 750 Mcg Injection, Intas Pharmaceuticals Ltd, 1x1 Cartridge' data-prc="<b>&#8377; 3,800/</b>Piece" alt='Teriparatide Terifrac 750 Mcg Injection, Intas Pharmaceuticals Ltd, 1x1 Cartridge' data-original='https://5.imimg.com/data5/SELLER/Default/2021/4/QC/VT/ML/112558477/terifrac-750-mcg-injection-500x500.jpg' src='https://utils.imimg.com/imsrchui/imgs/z.gif' data-slimg='https://5.imimg.com/data5/SELLER/Default/2021/4/QC/VT/ML/112558477/terifrac-750-mcg-injection-500x500.jpg' class='lazy' loading='lazy' id="rp3_1" data-modref="2" data-datatype="product" data-simdispid="22667479030" data-click= "^Prod1Img"></li>
+															<li class="mListPrc">
+																<span class="mListNme p10b0 mDib clr111 fs14 elps"><a class="smTle mDb" data-click="^Prod1Name" href="https://www.indiamart.com/proddetail/terifrac-750-mcg-injection-22667479030.html"  target="_blank">Teriparatide Terifrac 750 Mcg Injection, Intas Pharmaceuticals...</a></span><span class="NP-3 mPrc mDb"><span class="prc cp">&#8377;3800/ <span class="quan">Piece</span></span></span>
+															</li>
+														</ul>
+														<ul class="slrPrdUl flx1" data-click="23527231448|10149|product"
+															data-isq="Dose==5000,Manufacturer==Bharat serum,Brand Name==hucog 5000iu,Usage/Application==all needy customer and all customer,Packaging Size==vial,Brand==bharat serum,Injectable Form==Suspension,Medicine Type==Injection">
+															<li
+																class="mListImg w100 sid_df sid_jcc sid_aic br5 cp5 mPr cp imgl">
+																<img id=bu3-2 data-mcatid="10149" title='Bharat Serum Suspension Hucog 5000 Iu Injection, Packaging Size: Vial' data-prc="<b>&#8377; 250/</b>Unit" alt='Bharat Serum Suspension Hucog 5000 Iu Injection, Packaging Size: Vial' data-original='https://5.imimg.com/data5/ANDROID/Default/2021/6/LV/LY/AE/112558477/product-jpeg-500x500.jpg' src='https://utils.imimg.com/imsrchui/imgs/z.gif' data-slimg='https://5.imimg.com/data5/ANDROID/Default/2021/6/LV/LY/AE/112558477/product-jpeg-500x500.jpg' class='lazy' loading='lazy' id="rp3_2" data-modref="2" data-datatype="product" data-simdispid="23527231448" data-click= "^Prod2Img"></li>
+															<li class="mListPrc">
+																<span class="mListNme p10b0 mDib clr111 fs14 elps"><a class="smTle mDb" data-click="^Prod2Name" href="https://www.indiamart.com/proddetail/hucog-5000-iu-injection-23527231448.html"  target="_blank">Bharat Serum Suspension Hucog 5000 Iu Injection, Packaging Size:...</a></span><span class="NP-3 mPrc mDb"><span class="prc cp">&#8377;250/ <span class="quan">Unit</span></span></span>
+															</li>
+														</ul>
+														<ul class="slrPrdUl flx1" data-click="23517943988|10149|product"
+															data-isq="Dose==400 mg,Packaging Type==400 mg,Manufacturer==Glenmark,Brand Name==T- planin,Brand==glenmark,Injectable Form==Liquid,Medicine Type==Injection,Composition==ticoplanin 400 mg">
+															<li
+																class="mListImg w100 sid_df sid_jcc sid_aic br5 cp5 mPr cp imgl">
+																<img id=bu3-3 data-mcatid="10149" title='Glenmark Liquid Teicoplanin 400 Mg' data-prc="<b>&#8377; 850/</b>Unit" alt='Glenmark Liquid Teicoplanin 400 Mg' data-original='https://5.imimg.com/data5/ANDROID/Default/2021/6/WS/KE/HV/112558477/product-jpeg-500x500.jpg' src='https://utils.imimg.com/imsrchui/imgs/z.gif' data-slimg='https://5.imimg.com/data5/ANDROID/Default/2021/6/WS/KE/HV/112558477/product-jpeg-500x500.jpg' class='lazy' loading='lazy' id="rp3_3" data-modref="2" data-datatype="product" data-simdispid="23517943988" data-click= "^Prod3Img"></li>
+															<li class="mListPrc">
+																<span class="mListNme p10b0 mDib clr111 fs14 elps"><a class="smTle mDb" data-click="^Prod3Name" href="https://www.indiamart.com/proddetail/teicoplanin-400-mg-23517943988.html"  target="_blank">Glenmark Liquid Teicoplanin 400 Mg</a></span><span class="NP-3 mPrc mDb"><span class="prc cp">&#8377;850/ <span class="quan">Unit</span></span></span>
+															</li>
+														</ul>
+													</li>
+													<li class="sid_df sid_jcc fww sid_aic mCnmGrp flx1 mAse">
+														<h4 class="lcname" data-click="^CompanyName"><a
+																href="https://www.indiamart.com/av-pharma-delhi/?pos=3&kwd=cresemaba&tags=A||Pref||0.0||bl"
+																target="_blank"
+																class="mCnme"><span class="elps">A V Pharma</span></a>
+														</h4>
+														<p class="mPr sid_df sid_jcc mH17">
+															<span class="bg t_se mPr" data-click="^TrustSEAL" data-val="av-pharma-delhi"></span>
+														</p>
+														<span class="sm clg mDb flx1" data-rlocation="CHANDNI CHOWK"><span class="elps"> Deals in Delhi<span style="display:none">pref_district</span>
+														</span><span class="to-txt tc" id="citytt3"><span class="mDib mToTxt">
+                 Second Floor, Shop Bearing Private No. 11, 1725/11/2 S/ Ram Gali, Bhagirath Palace, Chandni Chowk, Central Delhi, CHANDNI CHOWK,<br>New Delhi<span> - </span>110006
+														- Delhi</span></span></span>
+													</li>
+												</ul>
+											</li>
+											<li class="f-div t-c nes mVmn" data-click="TSCATALOG">
+												<span class="hlb cur" id="3mobenq"><span class="ls_co phn bo" data-click="^MobileNo" ><span class="cl">Call </span><span id="pns3" class="pns_h duet">+91-8048941946             </span></span></span><button id="dispid2" data-click="^CTAContactSupplier" class="bp btn2g mo active td NP-3 sen_c on">Contact Supplier</span></button>
+											</li>
+											<li class="sDot">
+												<span id="3_0" class="sActv"></span><span id="3_1" class="cp"></span><span id="3_2" class="cp"></span><span id="3_3" class="cp"></span>
+											</li>
+										</ul>
+									</li>
+									<li id="lm4t" class="bxs gad gpos" style="display:none;">
+										<object><param name="wmode" value="opaque"/> <div id="topm4t"></div></object>
+									</li>
+									<li class="mList tc bgw mPr br5 sid_df lst_cl slrPrdGrp     mft2 img nlcws"
+										id="LST4" data-click="4" data-itemid="161816244" data-dispid="23270776348"
+										data-datatype="product" data-glid="122940290" data-smlrcnt="0"
+										data-csttypwgt="1499" data-csttypnm="OthersPAID FCP" data-tscode=""
+										data-location="Chhattarpur" data-city="" data-state="Delhi" data-catid="360"
+										data-mcatid="1466" data-disflg="1" data-modref="2" data-blprdnme="null"
+										data-altdispid="">
+										<ul class="mListDtl sid_df sid_fdc" data-click="23270776348|1466|product">
+											<li class="ht100">
+												<ul class="ht100 sid_df fww">
+													<li class="snglPrd flx1">
+														<ul id="prd-4" class="snglPrdUl">
+															<li class="mListImg w100 sid_df sid_jcc sid_aic br5 cp5 imgl mPr cp "
+																data-click="^Prod0Img">
+																<img alt="Isavuconazonium Sulfate 372 Mg Cresemba Injection" id="bu4-0" src='https://5.imimg.com/data5/SELLER/Default/2021/3/IS/HL/VR/122940290/cresemba-injection-500x500.jpg' data-limg='https://5.imimg.com/data5/SELLER/Default/2021/3/IS/HL/VR/122940290/cresemba-injection-500x500.jpg'></li>
+															<li class="mListPrc">
+																<span class="mListNme p10b0 mDib clr111 fs14 elps" data-click="^Prod0Name"><a  href= "https://www.indiamart.com/proddetail/cresemba-injection-23270776348.html?pos=4&kwd=cresemaba&tags=B|||Loc|0.0||product" class="mDb" target="_blank" >Isavuconazonium Sulfate 372 Mg Cresemba Injection</a></span><span id="4prcenq" class="prc apr NP-4 ilprice getp">Ask Price</span><span class='desc des_p off'><p><b>Strength</b>: 372 mg</p><p><b>Brand</b>: Cresemba</p><p><b>Composition</b>: Isavuconazonium Sulfate</p><p><b>Treatment</b>: Infections caused by fungus</p><p><b>Prescription/Non prescription</b>: Prescription</p><p><b>Form</b>: Injection</p></span>
+															</li>
+														</ul>
+													</li>
+													<li class="sid_df sid_jcc fww sid_aic mCnmGrp flx1 mAse">
+														<h4 class="lcname" data-click="^CompanyName"><a
+																href="https://www.indiamart.com/vmg-pharmaceuticals-pvt-ltd/?pos=4&kwd=cresemaba&tags=B|||Loc|0.0||product"
+																target="_blank"
+																class="mCnme"><span class="elps">Vmg Pharmaceuticals Pvt. Ltd.</span></a>
+														</h4>
+														<p class="mPr sid_df sid_jcc mH17"></p>
+														<span class="sm clg mDb flx1" data-rlocation="Chhattarpur"><span class="elps">Chhattarpur, Delhi </span><span class="to-txt tc" id="citytt4"><span class="mDib mToTxt">
+                 S. FLOOR 619/19 MAIN ROAD CHHATTARPUR Mian Road Chhattarpur, Chhattarpur,<br>Delhi<span> - </span>110074,
+														Dist. Delhi, Delhi</span></span></span>
+													</li>
+												</ul>
+											</li>
+											<li class="f-div t-c nes mVmn" data-click="OthersPAID FCP">
+												<span class="hlb cur" id="4mobenq"><span class="ls_co phn bo" data-click="^MobileNo" ><span class="cl">Call </span><span id="pns4" class="pns_h duet">+91-7801022571             </span></span></span><button id="dispid23270776348" data-click="^CTAContactSupplier" class="bp btn2g mo active td NP-4 sen_c on">Contact Supplier</span></button>
+											</li>
+										</ul>
+									</li>
+									<li class="mList tc bgw mPr br5 sid_df lst_cl slrPrdGrp     mft2 img nlcws"
+										id="LST5" data-compvid="Dt-81T_NrWg" data-click="5" data-itemid="1"
+										data-dispid="2" data-datatype="bl" data-glid="101808481" data-smlrcnt="0"
+										data-csttypwgt="199" data-csttypnm="TSCATALOG" data-tscode="everlighttradingco."
+										data-location="" data-city="" data-state="Delhi" data-catid="360"
+										data-mcatid="1466" data-disflg="1" data-modref="10" data-blprdnme="cresemaba"
+										data-altdispid="60029441867">
+										<ul class="mListDtl sid_df sid_fdc" data-click="2|1466|bl">
+											<li class="ht100">
+												<ul class="ht100 sid_df fww">
+													<li class="snglPrd flx1">
+														<ul id="prd-5" class="snglPrdUl">
+															<li class="mListImg w100 sid_df sid_jcc sid_aic br5 cp5 imgl mPr cp "
+																data-click="^Prod0Img">
+																<img alt="Everlight Trading Co." id="bu5-0" src='https://3.imimg.com/data3/IG/JR/GLADMIN-1466/pharmaceutical-injectables-250x250.jpg' data-limg='https://3.imimg.com/data3/IG/JR/GLADMIN-1466/pharmaceutical-injectables-250x250.jpg'></li>
+															<li class="mListPrc">
+																<span class="mListNme p10b0 mDib clr111 fs14 elps cp noPdp"><span class="noPdp mDb" data-click="^Prod0Name">cresemaba</span></span><span id="5prcenq" class="prc apr NP-5 ilprice getp">Ask Price</span><span class='desc des_p off'>To fulfill the demands of our clients, we are engaged in the manufacturing of a wide assortment of LED Light. These offered products are recognized for their simple usability.</span>
+															</li>
+														</ul>
+													</li>
+													<li class="sid_df sid_jcc fww sid_aic mCnmGrp flx1 mAse">
+														<h4 class="lcname" data-click="^CompanyName"><a
+																href="https://www.indiamart.com/everlighttrading/?pos=5&kwd=cresemaba&tags=||Pref||0.0||bl"
+																target="_blank"
+																class="mCnme"><span class="elps">Everlight Trading Co.</span></a>
+														</h4>
+														<p class="mPr sid_df sid_jcc mH17">
+															<span class="bg t_se mPr" data-click="^TrustSEAL" data-val="everlighttradingco."></span><span class="comB mPr cp" data-click= "^CompanyVideo"></span>
+														</p>
+														<span class="sm clg mDb flx1" data-rlocation=""><span class="elps"> Deals in Delhi<span style="display:none">pref_district</span>
+														</span><span class="to-txt tc" id="citytt5"><span class="mDib mToTxt">
+                 1515, Mundka, <br>New Delhi<span> - </span>110041 - Delhi</span></span></span>
+													</li>
+												</ul>
+											</li>
+											<li class="f-div t-c nes mVmn" data-click="TSCATALOG">
+												<span class="hlb cur" id="5mobenq"><span class="ls_co phn bo" data-click="^MobileNo" ><span class="cl">Call </span><span id="pns5" class="pns_h duet">+91-7971390268             </span></span></span><button id="dispid2" data-click="^CTAContactSupplier" class="bp btn2g mo active td NP-5 sen_c on">Contact Supplier</span></button>
+											</li>
+										</ul>
+									</li>
+									<li class="mList tc bgw mPr br5 sid_df lst_cl slrPrdGrp  mr0   mft2 img nlc"
+										id="LST6" data-compvid="bvlzcH_9kBw" data-click="6" data-itemid="1"
+										data-dispid="2" data-datatype="proxy" data-glid="67811338" data-smlrcnt="3"
+										data-csttypwgt="199" data-csttypnm="TSCATALOG" data-tscode="iskon-remedies"
+										data-location="Kalaamb" data-city="" data-state="Himachal Pradesh"
+										data-catid="360" data-mcatid="1466" data-disflg="1" data-modref="11"
+										data-blprdnme="cresemaba" data-altdispid="59417644285">
+										<ul class="mListDtl sid_df sid_fdc" data-click="2|1466|proxy">
+											<li class="ht100">
+												<ul class="ht100 sid_df fww">
+													<li class="slrPrd sid_df ofh flx1">
+														<ul id="prd-6" class="slrPrdUl flx1">
+															<li class="mListImg w100 sid_df sid_jcc sid_aic br5 cp5 imgl mPr cp "
+																data-click="^Prod0Img">
+																<span class='blLgSpn'><img src='https://5.imimg.com/data5/RE/ID/MY-67811338/iskon-remedies-120x120.jpg' class='blLg' data-limg='https://5.imimg.com/data5/RE/ID/MY-67811338/iskon-remedies-120x120.jpg'></span><img alt="GMT Pharma International" id="bu6-0" src='https://3.imimg.com/data3/IG/JR/GLADMIN-1466/pharmaceutical-injectables-250x250.jpg' data-limg='https://3.imimg.com/data3/IG/JR/GLADMIN-1466/pharmaceutical-injectables-250x250.jpg'></li>
+															<li class="mListPrc">
+																<span class="mListNme p10b0 mDib clr111 fs14 elps cp noPdp"><span class="noPdp mDb" data-click="^Prod0Name">cresemaba</span></span><span id="6prcenq" class="prc apr NP-6 ilprice getp">Ask Price</span><span class='desc des_p off'>Established in the year 2005, we “Iskon Remedies are a leading Manufacturer and Service provider of a wide range of Pharmaceutical Injection, Veterinary Injection, and many more.</span>
+															</li>
+														</ul>
+														<ul class="slrPrdUl flx1"
+															data-click="19746634612|167511|product"
+															data-isq="Packaging Type==Box,Packaging Size==1 g,Injectable Form==Solution,Grade Standard==Medicine Grade,Use==Use for IV,Injection Site==Intravenous,Medicine Type==Allopathic">
+															<li
+																class="mListImg w100 sid_df sid_jcc sid_aic br5 cp5 mPr cp imgl">
+																<img id=bu6-1 data-mcatid="167511" title='Allopathic Meropenem Injection, For Use For Iv, Intravenous' data-prc="<b>&#8377; 15,000/</b>box of 100 injections" alt='Allopathic Meropenem Injection, For Use For Iv, Intravenous' data-original='https://5.imimg.com/data5/YT/IF/MY-67811338/meropenem-injection-500x500.jpg' src='https://utils.imimg.com/imsrchui/imgs/z.gif' data-slimg='https://5.imimg.com/data5/YT/IF/MY-67811338/meropenem-injection-500x500.jpg' class='lazy' loading='lazy' id="rp6_1" data-modref="2" data-datatype="product" data-simdispid="19746634612" data-click= "^Prod1Img"></li>
+															<li class="mListPrc">
+																<span class="mListNme p10b0 mDib clr111 fs14 elps"><a class="smTle mDb" data-click="^Prod1Name" href="https://www.indiamart.com/proddetail/meropenem-injection-19746634612.html"  target="_blank">Allopathic Meropenem Injection, For Use For Iv, Intravenous</a></span><span class="NP-6 mPrc mDb"><span class="prc cp">&#8377;15000/ <span class="quan">box of 100 injections</span></span></span>
+															</li>
+														</ul>
+														<ul class="slrPrdUl flx1" data-click="19746519362|10149|product"
+															data-isq="Use==Use for IM/IV,Prescription/Non prescription==Prescription,Dosage Form==Injection,Injectable Form==Liquid,Grade Standard==Medicine Grade,Packaging Type==Box,Dose==750 mg,Medicine Type==Allopathic">
+															<li
+																class="mListImg w100 sid_df sid_jcc sid_aic br5 cp5 mPr cp imgl">
+																<img id=bu6-2 data-mcatid="10149" title='Allopathic Cefotaxime And Sulbactam For Injection, Packaging Type: Box' data-prc="<b>&#8377; 1,500/</b>Unit" alt='Allopathic Cefotaxime And Sulbactam For Injection, Packaging Type: Box' data-original='https://5.imimg.com/data5/HF/YE/MY-67811338/cefotaxime-amp-sulbactam-injection-500x500.jpg' src='https://utils.imimg.com/imsrchui/imgs/z.gif' data-slimg='https://5.imimg.com/data5/HF/YE/MY-67811338/cefotaxime-amp-sulbactam-injection-500x500.jpg' class='lazy' loading='lazy' id="rp6_2" data-modref="2" data-datatype="product" data-simdispid="19746519362" data-click= "^Prod2Img"></li>
+															<li class="mListPrc">
+																<span class="mListNme p10b0 mDib clr111 fs14 elps"><a class="smTle mDb" data-click="^Prod2Name" href="https://www.indiamart.com/proddetail/injection-cefotaxime-and-sulbactam-19746519362.html"  target="_blank">Allopathic Cefotaxime And Sulbactam For Injection, Packaging Type:...</a></span><span class="NP-6 mPrc mDb"><span class="prc cp">&#8377;1500/ <span class="quan">Unit</span></span></span>
+															</li>
+														</ul>
+														<ul class="slrPrdUl flx1"
+															data-click="19748884333|144767|product"
+															data-isq="Grade Standard==Medicine Grade,Brand==Dicloser,Use==Use for IM,Injectable Form==Liquid,Medicine Type==Allopathic,Packaging Size==10 x 3 ml,Packaging Type==Box">
+															<li
+																class="mListImg w100 sid_df sid_jcc sid_aic br5 cp5 mPr cp imgl">
+																<img id=bu6-3 data-mcatid="144767" title='Dicloser Diclofenac Sodium Injection, Packaging Size: 10 X 3 Ml' data-prc="<b>&#8377; 4.50/</b>Number" alt='Dicloser Diclofenac Sodium Injection, Packaging Size: 10 X 3 Ml' data-original='https://5.imimg.com/data5/NE/JK/MY-67811338/diclofenac-sodium-injection-500x500.jpg' src='https://utils.imimg.com/imsrchui/imgs/z.gif' data-slimg='https://5.imimg.com/data5/NE/JK/MY-67811338/diclofenac-sodium-injection-500x500.jpg' class='lazy' loading='lazy' id="rp6_3" data-modref="2" data-datatype="product" data-simdispid="19748884333" data-click= "^Prod3Img"></li>
+															<li class="mListPrc">
+																<span class="mListNme p10b0 mDib clr111 fs14 elps"><a class="smTle mDb" data-click="^Prod3Name" href="https://www.indiamart.com/proddetail/diclofenac-sodium-injection-19748884333.html"  target="_blank">Dicloser Diclofenac Sodium Injection, Packaging Size: 10 X 3 Ml</a></span><span class="NP-6 mPrc mDb"><span class="prc cp">&#8377;4.50/ <span class="quan">Number</span></span></span>
+															</li>
+														</ul>
+													</li>
+													<li class="sid_df sid_jcc fww sid_aic mCnmGrp flx1 mAse">
+														<h4 class="lcname" data-click="^CompanyName"><a
+																href="https://www.indiamart.com/iskon-remedies/?pos=6&kwd=cresemaba&tags=A||Pref||189.48073||bl"
+																target="_blank"
+																class="mCnme"><span class="elps">GMT Pharma International</span></a>
+														</h4>
+														<p class="mPr sid_df sid_jcc mH17">
+															<span class="bg t_se mPr" data-click="^TrustSEAL" data-val="iskon-remedies"></span><span class="comB mPr cp" data-click= "^CompanyVideo"></span>
+														</p>
+														<span class="sm clg mDb flx1" data-rlocation="Kalaamb"><span class="elps"> Deals in Delhi<span style="display:none">pref_city</span>
+														</span><span class="to-txt tc" id="citytt6"><span class="mDib mToTxt">
+                 Johron, Trilokpur Road,, Kalaamb,<br>Sirmaur<span> - </span>173030 - Himachal
+														Pradesh</span></span></span>
+													</li>
+												</ul>
+											</li>
+											<li class="f-div t-c nes mVmn" data-click="TSCATALOG">
+												<span class="hlb cur" id="6mobenq"><span class="ls_co phn bo" data-click="^MobileNo" ><span class="cl">Call </span><span id="pns6" class="pns_h duet">+91-8048859154             </span></span></span><button id="dispid2" data-click="^CTAContactSupplier" class="bp btn2g mo active td NP-6 sen_c on">Contact Supplier</span></button>
+											</li>
+											<li class="sDot">
+												<span id="6_0" class="sActv"></span><span id="6_1" class="cp"></span><span id="6_2" class="cp"></span><span id="6_3" class="cp"></span>
+											</li>
+										</ul>
+									</li><!-- DIR Middle AD Unit -->
+									<li class="adCnts " id="div-gpt-ad-1555398468085-0"></li>
+									<li class="mList tc bgw mPr br5 sid_df lst_cl slrPrdGrp     mft2 img nlc" id="LST7"
+										data-click="7" data-itemid="1" data-dispid="2" data-datatype="proxy"
+										data-glid="8510567" data-smlrcnt="3" data-csttypwgt="199"
+										data-csttypnm="TSCATALOG" data-tscode="dlmlifesciences"
+										data-location="Mohali ward no 09" data-city="" data-state="Punjab"
+										data-catid="360" data-mcatid="1466" data-disflg="1" data-modref="11"
+										data-blprdnme="cresemaba" data-altdispid="54662784252">
+										<ul class="mListDtl sid_df sid_fdc" data-click="2|1466|proxy">
+											<li class="ht100">
+												<ul class="ht100 sid_df fww">
+													<li class="slrPrd sid_df ofh flx1">
+														<ul id="prd-7" class="slrPrdUl flx1">
+															<li class="mListImg w100 sid_df sid_jcc sid_aic br5 cp5 imgl mPr cp "
+																data-click="^Prod0Img">
+																<span class='blLgSpn'><img src='https://3.imimg.com/data3/YR/CY/MY-8510567/dlm-life-sciences-logo-120x120.png' class='blLg' data-limg='https://3.imimg.com/data3/YR/CY/MY-8510567/dlm-life-sciences-logo-120x120.png'></span><img alt="Crewmed Healthcare (Unit Of MM Pharma)" id="bu7-0"  data-original='https://3.imimg.com/data3/IG/JR/GLADMIN-1466/pharmaceutical-injectables-250x250.jpg' src='https://utils.imimg.com/imsrchui/imgs/z.gif' data-limg='https://3.imimg.com/data3/IG/JR/GLADMIN-1466/pharmaceutical-injectables-250x250.jpg' class='lazy' loading='lazy'></li>
+															<li class="mListPrc">
+																<span class="mListNme p10b0 mDib clr111 fs14 elps cp noPdp"><span class="noPdp mDb" data-click="^Prod0Name">cresemaba</span></span><span id="7prcenq" class="prc apr NP-7 ilprice getp">Ask Price</span><span class='desc des_p off'>We have gained recognition in this domain by manufacturing and trading of the wide range of Pharmaceutical Medicines. These products are admired for their high effectiveness and accurate composition.</span>
+															</li>
+														</ul>
+														<ul class="slrPrdUl flx1"
+															data-click="10495968555|139577|product"
+															data-isq="Packing Size==500 mg / 2ml,Usage==Hospital,Clinical,Commercial,Personal,Brand==Dollmik,Packing Type==Vial,Composition==Amikacin Sulphate Injection IP,Dose==500 mg">
+															<li
+																class="mListImg w100 sid_df sid_jcc sid_aic br5 cp5 mPr cp imgl">
+																<img id=bu7-1 data-mcatid="139577" title='Dollmik 500 Mg Amikacin-500 Injection, For Hospital' data-prc="<b>&#8377; 75/</b>Box" alt='Dollmik 500 Mg Amikacin-500 Injection, For Hospital' data-original='https://5.imimg.com/data5/DQ/KB/MY-8510567/amikacin-500-injection-500x500.jpg' src='https://utils.imimg.com/imsrchui/imgs/z.gif' data-slimg='https://5.imimg.com/data5/DQ/KB/MY-8510567/amikacin-500-injection-500x500.jpg' class='lazy' loading='lazy' id="rp7_1" data-modref="2" data-datatype="product" data-simdispid="10495968555" data-click= "^Prod1Img"></li>
+															<li class="mListPrc">
+																<span class="mListNme p10b0 mDib clr111 fs14 elps"><a class="smTle mDb" data-click="^Prod1Name" href="https://www.indiamart.com/proddetail/amikacin-500-injection-10495968555.html"  target="_blank">Dollmik 500 Mg Amikacin-500 Injection, For Hospital</a></span><span class="NP-7 mPrc mDb"><span class="prc cp">&#8377;75/ <span class="quan">Box</span></span></span>
+															</li>
+														</ul>
+														<ul class="slrPrdUl flx1"
+															data-click="10495950891|159500|product"
+															data-isq="Manufacture By==DLM Life Science,Usage==Clinical,Hospital,Packaging Size==5 ml,Brand==Dollron-S,Packing Type==Vial,Composition==Iron Sucrose Injection USP">
+															<li
+																class="mListImg w100 sid_df sid_jcc sid_aic br5 cp5 mPr cp imgl">
+																<img id=bu7-2 data-mcatid="159500" title='Iron Sucrose Injection, For Clinical And Hospital' data-prc="<b>&#8377; 220/</b>Box" alt='Iron Sucrose Injection, For Clinical And Hospital' data-original='https://5.imimg.com/data5/VW/YR/MY-8510567/iron-sucrose-injection-500x500.jpg' src='https://utils.imimg.com/imsrchui/imgs/z.gif' data-slimg='https://5.imimg.com/data5/VW/YR/MY-8510567/iron-sucrose-injection-500x500.jpg' class='lazy' loading='lazy' id="rp7_2" data-modref="2" data-datatype="product" data-simdispid="10495950891" data-click= "^Prod2Img"></li>
+															<li class="mListPrc">
+																<span class="mListNme p10b0 mDib clr111 fs14 elps"><a class="smTle mDb" data-click="^Prod2Name" href="https://www.indiamart.com/proddetail/iron-sucrose-injection-10495950891.html"  target="_blank">Iron Sucrose Injection, For Clinical And Hospital</a></span><span class="NP-7 mPrc mDb"><span class="prc cp">&#8377;220/ <span class="quan">Box</span></span></span>
+															</li>
+														</ul>
+														<ul class="slrPrdUl flx1" data-click="7777745733|144767|product"
+															data-isq="Composition==Diclofenac Sodium Injection,Brand==Dafloc,Packing Type==Vial,Packing Size==10 x 1 ml,Manufacture By==DLM Life Science">
+															<li
+																class="mListImg w100 sid_df sid_jcc sid_aic br5 cp5 mPr cp imgl">
+																<img id=bu7-3 data-mcatid="144767" title='Diclofenac Sodium Injection' data-prc="<b>&#8377; 15/</b>Box" alt='Diclofenac Sodium Injection' data-original='https://5.imimg.com/data5/XM/WJ/MY-8510567/diclofenac-sodium-injection-500x500.jpg' src='https://utils.imimg.com/imsrchui/imgs/z.gif' data-slimg='https://5.imimg.com/data5/XM/WJ/MY-8510567/diclofenac-sodium-injection-500x500.jpg' class='lazy' loading='lazy' id="rp7_3" data-modref="2" data-datatype="product" data-simdispid="7777745733" data-click= "^Prod3Img"></li>
+															<li class="mListPrc">
+																<span class="mListNme p10b0 mDib clr111 fs14 elps"><a class="smTle mDb" data-click="^Prod3Name" href="https://www.indiamart.com/proddetail/diclofenac-sodium-injection-7777745733.html"  target="_blank">Diclofenac Sodium Injection</a></span><span class="NP-7 mPrc mDb"><span class="prc cp">&#8377;15/ <span class="quan">Box</span></span></span>
+															</li>
+														</ul>
+													</li>
+													<li class="sid_df sid_jcc fww sid_aic mCnmGrp flx1 mAse">
+														<h4 class="lcname" data-click="^CompanyName"><a
+																href="https://www.crewmedhealthcare.com/?pos=7&kwd=cresemaba&tags=A||Pref||203.72256||bl"
+																target="_blank"
+																class="mCnme"><span class="elps">Crewmed Healthcare (Unit Of MM Pharma)</span></a>
+														</h4>
+														<p class="mPr sid_df sid_jcc mH17">
+															<span class="bg t_se mPr" data-click="^TrustSEAL" data-val="dlmlifesciences"></span>
+														</p>
+														<span class="sm clg mDb flx1" data-rlocation="Mohali ward no 09"><span class="elps"> Deals in Delhi<span style="display:none">pref_city</span>
+														</span><span class="to-txt tc" id="citytt7"><span class="mDib mToTxt">
+                 SCO 24, Wadhava Nagar, Near Sunpark Hotel, Dhakoli, Zirkpur, Mohali ward no 09,<br>Mohali<span> - </span>140604,
+														Dist. Mohali - Punjab</span></span></span>
+													</li>
+												</ul>
+											</li>
+											<li class="f-div t-c nes mVmn" data-click="TSCATALOG">
+												<span class="hlb cur" id="7mobenq"><span class="ls_co phn bo" data-click="^MobileNo" ><span class="cl">Call </span><span id="pns7" class="pns_h duet">+91-8048757718             </span></span></span><button id="dispid2" data-click="^CTAContactSupplier" class="bp btn2g mo active td NP-7 sen_c on">Contact Supplier</span></button>
+											</li>
+											<li class="sDot">
+												<span id="7_0" class="sActv"></span><span id="7_1" class="cp"></span><span id="7_2" class="cp"></span><span id="7_3" class="cp"></span>
+											</li>
+										</ul>
+									</li>
+									<li class="mList tc bgw mPr br5 sid_df lst_cl slrPrdGrp     mft2 img slc" id="LST8"
+										data-click="8" data-itemid="1" data-dispid="2" data-datatype="proxy"
+										data-glid="49906015" data-smlrcnt="3" data-csttypwgt="179" data-csttypnm="STAR"
+										data-tscode="candela-healthcare" data-location="Manimajra" data-city=""
+										data-state="Chandigarh" data-catid="360" data-mcatid="1466" data-disflg="1"
+										data-modref="11" data-blprdnme="cresemaba" data-altdispid="59753125195">
+										<ul class="mListDtl sid_df sid_fdc" data-click="2|1466|proxy">
+											<li class="ht100">
+												<ul class="ht100 sid_df fww">
+													<div class='slc-rib lr0'></div>
+													<li class="slrPrd sid_df ofh flx1">
+														<ul id="prd-8" class="slrPrdUl flx1">
+															<li class="mListImg w100 sid_df sid_jcc sid_aic br5 cp5 imgl mPr cp "
+																data-click="^Prod0Img">
+																<span class='blLgSpn'><img src='https://5.imimg.com/data5/IV/UM/TO/SELLER-49906015/indiamart1-120x120.jpg' class='blLg' data-limg='https://5.imimg.com/data5/IV/UM/TO/SELLER-49906015/indiamart1-120x120.jpg'></span><img alt="Candela Healthcare Private Limited" id="bu8-0"  data-original='https://3.imimg.com/data3/IG/JR/GLADMIN-1466/pharmaceutical-injectables-250x250.jpg' src='https://utils.imimg.com/imsrchui/imgs/z.gif' data-limg='https://3.imimg.com/data3/IG/JR/GLADMIN-1466/pharmaceutical-injectables-250x250.jpg' class='lazy' loading='lazy'></li>
+															<li class="mListPrc">
+																<span class="mListNme p10b0 mDib clr111 fs14 elps cp noPdp"><span class="noPdp mDb" data-click="^Prod0Name">cresemaba</span></span><span id="8prcenq" class="prc apr NP-8 ilprice getp">Ask Price</span><span class='desc des_p off'>We are one of the foremost manufactures and wholesalers an extensive array of Pharmaceutical Products. Our products are known in the market for their high purity and effectiveness. </span>
+															</li>
+														</ul>
+														<ul class="slrPrdUl flx1"
+															data-click="19993559155|144767|product"
+															data-isq="Composition==Diclofenac Sodium,Form==Injection,Brand==Diclocan,Form Of Medicine==Allopathic,Gender==Unisex,Injectable Form==Liquid,Dose==5 x1 ml,Packaging Type==Box">
+															<li
+																class="mListImg w100 sid_df sid_jcc sid_aic br5 cp5 mPr cp imgl">
+																<img id=bu8-1 data-mcatid="144767" title='Diclofenac Sodium Injection, Packaging Type: Box' data-prc="<b>&#8377; 15/</b>Vial" alt='Diclofenac Sodium Injection, Packaging Type: Box' data-original='https://5.imimg.com/data5/GA/RH/MY-49906015/diclofenac-sodium-injection-500x500.jpg' src='https://utils.imimg.com/imsrchui/imgs/z.gif' data-slimg='https://5.imimg.com/data5/GA/RH/MY-49906015/diclofenac-sodium-injection-500x500.jpg' class='lazy' loading='lazy' id="rp8_1" data-modref="2" data-datatype="product" data-simdispid="19993559155" data-click= "^Prod1Img"></li>
+															<li class="mListPrc">
+																<span class="mListNme p10b0 mDib clr111 fs14 elps"><a class="smTle mDb" data-click="^Prod1Name" href="https://www.indiamart.com/proddetail/diclofenac-sodium-injection-19993559155.html"  target="_blank">Diclofenac Sodium Injection, Packaging Type: Box</a></span><span class="NP-8 mPrc mDb"><span class="prc cp">&#8377;15/ <span class="quan">Vial</span></span></span>
+															</li>
+														</ul>
+														<ul class="slrPrdUl flx1"
+															data-click="19993350048|184648|product"
+															data-isq="Packaging Type==Box,Form==Injection,Injectable Form==Liquid,Strength==40 mg,Medicine Type==Allopathic,Composition==Pantoprazole 40 mg Injection,Brand==Canopan">
+															<li
+																class="mListImg w100 sid_df sid_jcc sid_aic br5 cp5 mPr cp imgl">
+																<img id=bu8-2 data-mcatid="184648" title='Canopan 40 Mg Pantoprazole Injection, Packaging Type: Box' data-prc="<b>&#8377; 46.80/</b>Vial" alt='Canopan 40 Mg Pantoprazole Injection, Packaging Type: Box' data-original='https://5.imimg.com/data5/SY/IR/MY-49906015/pantoprazole-injection-500x500.jpg' src='https://utils.imimg.com/imsrchui/imgs/z.gif' data-slimg='https://5.imimg.com/data5/SY/IR/MY-49906015/pantoprazole-injection-500x500.jpg' class='lazy' loading='lazy' id="rp8_2" data-modref="2" data-datatype="product" data-simdispid="19993350048" data-click= "^Prod2Img"></li>
+															<li class="mListPrc">
+																<span class="mListNme p10b0 mDib clr111 fs14 elps"><a class="smTle mDb" data-click="^Prod2Name" href="https://www.indiamart.com/proddetail/pantoprazole-injection-19993350048.html"  target="_blank">Canopan 40 Mg Pantoprazole Injection, Packaging Type: Box</a></span><span class="NP-8 mPrc mDb"><span class="prc cp">&#8377;46.80/ <span class="quan">Vial</span></span></span>
+															</li>
+														</ul>
+														<ul class="slrPrdUl flx1"
+															data-click="19993534662|442858|product"
+															data-isq="Packaging Type==Single - Vial,Brand==Cefobak-S,Dose/Strength==375 mg,Dosage Form==Injection,Composition==Ceftriaxone 250 mg + Sulbactam 125 mg Injection,Medicine Name==Ceftriaxone and Sulbactam Injection">
+															<li
+																class="mListImg w100 sid_df sid_jcc sid_aic br5 cp5 mPr cp imgl">
+																<img id=bu8-3 data-mcatid="442858" title='Ceftriaxone And Sulbactam Injection' data-prc="<b>&#8377; 43/</b>Vial" alt='Ceftriaxone And Sulbactam Injection' data-original='https://5.imimg.com/data5/CV/PI/MY-49906015/ceftriaxone-and-sulbactam-injection-500x500.jpg' src='https://utils.imimg.com/imsrchui/imgs/z.gif' data-slimg='https://5.imimg.com/data5/CV/PI/MY-49906015/ceftriaxone-and-sulbactam-injection-500x500.jpg' class='lazy' loading='lazy' id="rp8_3" data-modref="2" data-datatype="product" data-simdispid="19993534662" data-click= "^Prod3Img"></li>
+															<li class="mListPrc">
+																<span class="mListNme p10b0 mDib clr111 fs14 elps"><a class="smTle mDb" data-click="^Prod3Name" href="https://www.indiamart.com/proddetail/ceftriaxone-and-sulbactam-injection-19993534662.html"  target="_blank">Ceftriaxone And Sulbactam Injection</a></span><span class="NP-8 mPrc mDb"><span class="prc cp">&#8377;43/ <span class="quan">Vial</span></span></span>
+															</li>
+														</ul>
+													</li>
+													<li class="sid_df sid_jcc fww sid_aic mCnmGrp flx1 mAse">
+														<h4 class="lcname" data-click="^CompanyName"><a
+																href="https://www.indiamart.com/candela-healthcare/?pos=8&kwd=cresemaba&tags=A||Pref||205.48125||bl"
+																target="_blank"
+																class="mCnme"><span class="elps">Candela Healthcare Private Limited</span></a>
+														</h4>
+														<p class="mPr sid_df sid_jcc mH17">
+															<span class=""></span><span class="bg t_se mPr" data-click="^TrustSEAL" data-val="candela-healthcare"></span>
+														</p>
+														<span class="sm clg mDb flx1" data-rlocation="Manimajra"><span class="elps"> Deals in Delhi<span style="display:none">pref_city</span>
+														</span><span class="to-txt tc" id="citytt8"><span class="mDib mToTxt">
+                 SCO 311, First Floor, Motor Market, Manimajra,<br>Chandigarh<span> - </span>160101 -
+														Chandigarh</span></span></span>
+													</li>
+												</ul>
+											</li>
+											<li class="f-div t-c nes mVmn" data-click="STAR">
+												<span class="hlb cur" id="8mobenq"><span class="ls_co phn bo" data-click="^MobileNo" ><span class="cl">Call </span><span id="pns8" class="pns_h duet">+91-8048927278             </span></span></span><button id="dispid2" data-click="^CTAContactSupplier" class="bp btn2g mo active td NP-8 sen_c on">Contact Supplier</span></button>
+											</li>
+											<li class="sDot">
+												<span id="8_0" class="sActv"></span><span id="8_1" class="cp"></span><span id="8_2" class="cp"></span><span id="8_3" class="cp"></span>
+											</li>
+										</ul>
+									</li>
+									<li class="mList tc bgw mPr br5 sid_df lst_cl slrPrdGrp  mr0   mft2 img nlc"
+										id="LST9" data-click="9" data-itemid="1" data-dispid="2" data-datatype="proxy"
+										data-glid="461520" data-smlrcnt="3" data-csttypwgt="199"
+										data-csttypnm="TSCATALOG" data-tscode="gmhpharmaceuticals"
+										data-location="Phase 2" data-city="" data-state="Haryana" data-catid="360"
+										data-mcatid="1466" data-disflg="1" data-modref="11" data-blprdnme="cresemaba"
+										data-altdispid="59926337085">
+										<ul class="mListDtl sid_df sid_fdc" data-click="2|1466|proxy">
+											<li class="ht100">
+												<ul class="ht100 sid_df fww">
+													<li class="slrPrd sid_df ofh flx1">
+														<ul id="prd-9" class="slrPrdUl flx1">
+															<li class="mListImg w100 sid_df sid_jcc sid_aic br5 cp5 imgl mPr cp "
+																data-click="^Prod0Img">
+																<span class='blLgSpn'><img src='https://3.imimg.com/data3/ML/VB/MY-461520/gmh-pharmaceuticals-pvt-ltd-logo-120x120.png' class='blLg' data-limg='https://3.imimg.com/data3/ML/VB/MY-461520/gmh-pharmaceuticals-pvt-ltd-logo-120x120.png'></span><img alt="GMH Pharmaceuticals Pvt. Ltd." id="bu9-0"  data-original='https://3.imimg.com/data3/IG/JR/GLADMIN-1466/pharmaceutical-injectables-250x250.jpg' src='https://utils.imimg.com/imsrchui/imgs/z.gif' data-limg='https://3.imimg.com/data3/IG/JR/GLADMIN-1466/pharmaceutical-injectables-250x250.jpg' class='lazy' loading='lazy'></li>
+															<li class="mListPrc">
+																<span class="mListNme p10b0 mDib clr111 fs14 elps cp noPdp"><span class="noPdp mDb" data-click="^Prod0Name">cresemaba</span></span><span id="9prcenq" class="prc apr NP-9 ilprice getp">Ask Price</span><span class='desc des_p off'>We are engaged in Manufacture, Supplier, Trader and Service Provider precisely formulated and processed Pharmaceutical Tablets, Capsules, Syrups, Oral Suspensions etc.</span>
+															</li>
+														</ul>
+														<ul class="slrPrdUl flx1"
+															data-click="12615505862|186394|product"
+															data-isq="Application==Clinic, Hospital,Composition==Cefuroxime 1500 mg,Prescription/Non prescription==Prescription,Packaging Size==Vial+WFI (Monocarton),Brand==Geroxim,Form==Injection,Also gives==PCD Pharma Franchise,Strength==1500 gm,Packaging Type==Box,Medicine Type==Allopathic">
+															<li
+																class="mListImg w100 sid_df sid_jcc sid_aic br5 cp5 mPr cp imgl">
+																<img id=bu9-1 data-mcatid="186394" title='Geroxim Cefuroxime Injection Ip, Vial+wfi (monocarton), Prescription' data-prc="<b>&#8377; 270/</b>Box" alt='Geroxim Cefuroxime Injection Ip, Vial+wfi (monocarton), Prescription' data-original='https://4.imimg.com/data4/SP/KA/MY-461520/cefuroxime-1500-mg-new-introduction-500x500.jpg' src='https://utils.imimg.com/imsrchui/imgs/z.gif' data-slimg='https://4.imimg.com/data4/SP/KA/MY-461520/cefuroxime-1500-mg-new-introduction-500x500.jpg' class='lazy' loading='lazy' id="rp9_1" data-modref="2" data-datatype="product" data-simdispid="12615505862" data-click= "^Prod1Img"></li>
+															<li class="mListPrc">
+																<span class="mListNme p10b0 mDib clr111 fs14 elps"><a class="smTle mDb" data-click="^Prod1Name" href="https://www.indiamart.com/proddetail/cefuroxime-injection-ip-12615505862.html"  target="_blank">Geroxim Cefuroxime Injection Ip, Vial+wfi (monocarton),...</a></span><span class="NP-9 mPrc mDb"><span class="prc cp">&#8377;270/ <span class="quan">Box</span></span></span>
+															</li>
+														</ul>
+														<ul class="slrPrdUl flx1" data-click="22945466012|1466|product"
+															data-isq="Medicine Type==Allopathic,Prescription/Non prescription==Prescription,Packaging Size==1x1 ml (Amp with Syringe),Brand==D Lone,Form==Injection,Also Gives==PCD Pharma Franchise,Strength==50 mg,Packaging Type==Box">
+															<li
+																class="mListImg w100 sid_df sid_jcc sid_aic br5 cp5 mPr cp imgl">
+																<img id=bu9-2 data-mcatid="1466" title='D Lone 50 Mg Nandrolone Decanoate Injections Ip, 1x1 Ml (amp With Syringe), Prescription' data-prc="<b>&#8377; 20/</b>Pack" alt='D Lone 50 Mg Nandrolone Decanoate Injections Ip, 1x1 Ml (amp With Syringe), Prescription' data-original='https://5.imimg.com/data5/SELLER/Default/2020/12/VQ/CS/TK/461520/0fbc7799-7c4b-4952-a62b-7420a736e3dc-copy-copy-500x500.jpg' src='https://utils.imimg.com/imsrchui/imgs/z.gif' data-slimg='https://5.imimg.com/data5/SELLER/Default/2020/12/VQ/CS/TK/461520/0fbc7799-7c4b-4952-a62b-7420a736e3dc-copy-copy-500x500.jpg' class='lazy' loading='lazy' id="rp9_2" data-modref="2" data-datatype="product" data-simdispid="22945466012" data-click= "^Prod2Img"></li>
+															<li class="mListPrc">
+																<span class="mListNme p10b0 mDib clr111 fs14 elps"><a class="smTle mDb" data-click="^Prod2Name" href="https://www.indiamart.com/proddetail/50-mg-nandrolone-decanoate-injections-ip-22945466012.html"  target="_blank">D Lone 50 Mg Nandrolone Decanoate Injections Ip, 1x1 Ml (amp With...</a></span><span class="NP-9 mPrc mDb"><span class="prc cp">&#8377;20/ <span class="quan">Pack</span></span></span>
+															</li>
+														</ul>
+														<ul class="slrPrdUl flx1" data-click="22981759562|1466|product"
+															data-isq="Medicine Type==Allopathic,Prescription/Non prescription==Prescription,Packaging Size==1 x 1 ml (Amp with Syringe),Brand==D Lone,Form==Injection,Also Gives==PCD Pharma Franchise,Country of Origin==Made in India,Strength==50 mg,Packaging Type==Box">
+															<li
+																class="mListImg w100 sid_df sid_jcc sid_aic br5 cp5 mPr cp imgl">
+																<img id=bu9-3 data-mcatid="1466" title='D Lone Nandrolone Decanoate Injection Ip, 1 X 1 Ml (amp With Syringe), Prescription' data-prc="<b>&#8377; 20/</b>Piece" alt='D Lone Nandrolone Decanoate Injection Ip, 1 X 1 Ml (amp With Syringe), Prescription' data-original='https://5.imimg.com/data5/SELLER/Default/2020/12/WV/FG/VO/461520/d-lone-50-500x500.jpeg' src='https://utils.imimg.com/imsrchui/imgs/z.gif' data-slimg='https://5.imimg.com/data5/SELLER/Default/2020/12/WV/FG/VO/461520/d-lone-50-500x500.jpeg' class='lazy' loading='lazy' id="rp9_3" data-modref="2" data-datatype="product" data-simdispid="22981759562" data-click= "^Prod3Img"></li>
+															<li class="mListPrc">
+																<span class="mListNme p10b0 mDib clr111 fs14 elps"><a class="smTle mDb" data-click="^Prod3Name" href="https://www.indiamart.com/proddetail/nandrolone-decanoate-injection-ip-22981759562.html"  target="_blank">D Lone Nandrolone Decanoate Injection Ip, 1 X 1 Ml (amp With...</a></span><span class="NP-9 mPrc mDb"><span class="prc cp">&#8377;20/ <span class="quan">Piece</span></span></span>
+															</li>
+														</ul>
+													</li>
+													<li class="sid_df sid_jcc fww sid_aic mCnmGrp flx1 mAse">
+														<h4 class="lcname" data-click="^CompanyName"><a
+																href="https://www.indiamart.com/gmh-pharmaceuticals/?pos=9&kwd=cresemaba&tags=A||Pref||200.48003||bl"
+																target="_blank"
+																class="mCnme"><span class="elps">GMH Pharmaceuticals Pvt. Ltd.</span></a>
+														</h4>
+														<p class="mPr sid_df sid_jcc mH17">
+															<span class="bg t_se mPr" data-click="^TrustSEAL" data-val="gmhpharmaceuticals"></span>
+														</p>
+														<span class="sm clg mDb flx1" data-rlocation="Phase 2"><span class="elps"> Deals in Delhi<span style="display:none">pref_city</span>
+														</span><span class="to-txt tc" id="citytt9"><span class="mDib mToTxt">
+                 Plot No. 327, Industrial Area Phase 2, Phase 2,<br>Panchkula<span> - </span>134109, Dist. Panchkula -
+														Haryana</span></span></span>
+													</li>
+												</ul>
+											</li>
+											<li class="f-div t-c nes mVmn" data-click="TSCATALOG">
+												<span class="hlb cur" id="9mobenq"><span class="ls_co phn bo" data-click="^MobileNo" ><span class="cl">Call </span><span id="pns9" class="pns_h duet">+91-8048404222             </span></span></span><button id="dispid2" data-click="^CTAContactSupplier" class="bp btn2g mo active td NP-9 sen_c on">Contact Supplier</span></button>
+											</li>
+											<li class="sDot">
+												<span id="9_0" class="sActv"></span><span id="9_1" class="cp"></span><span id="9_2" class="cp"></span><span id="9_3" class="cp"></span>
+											</li>
+										</ul>
+									</li>
+									<li class="bl_f ">
+										<div id="buy_lead_gen_form_btlst_V2" class="blmd">
+									<li class="blh mbt10">
+										<div class="bl_f  ">
+											<div class="tl-item">
+												<div class="sk-p15">
+													<div class="sk-box sk-w70"></div>
+													<div class="sk-flx sk-mt20">
+														<div class="sk-wlb">
+															<div class="sk-box sk-mt20"></div>
+															<div class="sk-box sk-mt20"></div>
+															<div class="sk-box sk-mt20"></div>
+															<div class="sk-box sk-mt20"></div>
+														</div>
+														<div class="sk-flx1 sk-pl50">
+															<div class="sk-box sk-mt20"></div>
+															<div class="sk-box sk-mt20 sk-w50"></div>
+															<div class="sk-box sk-mt20 sk-w50"></div>
+															<div class="sk-box sk-mt20"></div>
+														</div>
+													</div>
+													<div class="sk-flx sk-jce sk-mt20">
+														<div class="sk-btn sk-mt20"></div>
+													</div>
+												</div>
+											</div>
+											<div data-bl="0102" class="drInbl  blmd rmbl bl_dir102 blenvl"
+												style="display:none">
+												<div class="be-mdleWrap belft betbl bebxs bebdr1 h358 newbl"
+													id="t0102_inlineBL">
+													<div class="idsf iJSpb pfstrt" id="t0102_contactdiv">
+														<div class="be-fhdg clr_blue" id="t0102_hdg">Tell us what you
+															need, and we’ll help you get quotes</div>
+													</div>
+													<div id="t0102_wrpDiv" class="bepr betbl">
+														<div class="be-bgb bedtc bedsnone" id="t0102_sidePanel">
+															<div>
+																<div class="be-bls bebxs" id="t0102_benefits">
+																	<div class="be-bnf">
+																		<div class="be-tpd">
+																			<div
+																				class="blnewform_sprit beW bebgp bemb8 beauto">
+																			</div>Tell us what you<br>need</div>
+																			<div class="be-tpd">
+																				<div
+																					class="blnewform_sprit beW bebgp2 bemb8 beauto">
+																				</div>Receive seller<br>details</div>
+																				<div class="be-tpd">
+																					<div
+																						class="blnewform_sprit beW1 bebgp3 bemb8 beauto">
+																					</div>Seal the deal
+																				</div>
+																				<div id="t0102_paywithdiv"
+																					class="be-tpd">
+																					<div
+																						class="blnewform_sprit beW16 bebgp4 bemb8 beauto">
+																					</div>Pay with IndiaMART
+																				</div>
+																			</div>
+																		</div>
+																		<div class="beclr"></div>
+																	</div>
+																</div>
+																<div class="bew2 bedtc bevT bebxs be-mfrm">
+																	<div class="bespc">
+																		<div class="be-fhdg clr_blue bedsnone"
+																			id="t0102_hdg">Tell us what you need, and
+																			we’ll help you get quotes</div>
+																		<div id="t0102flagdiv" class="bedsnone">
+																			<dl id="t0102flag"
+																				class="dropdown bebdr be-flg"></dl>
+																		</div>
+																		<form name="t0102_bl_form" id="t0102_bl_form"
+																			method="post" onsubmit="return!1"
+																			class="bemnh"></form>
+																		<div class="beclr"></div>
+																		<div id="t0102_tCond" class="bedsnone bemt10">
+																			<input type="checkbox" class="bemt2 inEqlTnc" onclick="checkedTNC(&quot;0102&quot;)" id="t0102_tCondCheckBox"><span class="bevT bedblk">I agree to the <a href="https://www.indiamart.com/terms-of-use.html" target="_blank" class="betrmt">terms</a> and <a href="https://www.indiamart.com/privacy-policy.html" target="_blank" class="betrmt">privacy policy</a></span>
+																		</div>
+																		<div id="t0102_q_send_req_button"
+																			class="idsf iJFnd inEql">
+																			<input type="submit" id="t0102_submit" class="inSbtn crP hovsub" value="Submit Requirement"></div>
+																			<div class="befs14 beinfo bedsnone"
+																				id="t0102_byrinfoIn"></div>
+																			<div class="belodrbg bedsnone"
+																				id="t0102_belodr">
+																				<div class="blloader"></div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</div>
+															<div id="t0102_enrichform_maindiv"
+																class="be-frmwrap bedsnone"></div>
+															<!--new Template-->
+														</div>
+														<div class="whcl" dataid="1" id='div-gpt-ad-1555401825397-0'>
+														</div>
+													</div>
+									</li>
+									<li class="mList tc bgw mPr br5 sid_df lst_cl slrPrdGrp     mft2 img nlc" id="LST10"
+										data-click="10" data-itemid="1" data-dispid="2" data-datatype="proxy"
+										data-glid="41009373" data-smlrcnt="3" data-csttypwgt="199"
+										data-csttypnm="TSCATALOG" data-tscode="metamorflifesciences"
+										data-location="Sector 5" data-city="" data-state="Haryana" data-catid="360"
+										data-mcatid="1466" data-disflg="1" data-modref="11" data-blprdnme="cresemaba"
+										data-altdispid="53318570995">
+										<ul class="mListDtl sid_df sid_fdc" data-click="2|1466|proxy">
+											<li class="ht100">
+												<ul class="ht100 sid_df fww">
+													<li class="slrPrd sid_df ofh flx1">
+														<ul id="prd-10" class="slrPrdUl flx1">
+															<li class="mListImg w100 sid_df sid_jcc sid_aic br5 cp5 imgl mPr cp "
+																data-click="^Prod0Img">
+																<span class='blLgSpn'><img src='https://5.imimg.com/data5/JA/KL/MY-41009373/metamorf-lifesciences-120x120.jpg' class='blLg' data-limg='https://5.imimg.com/data5/JA/KL/MY-41009373/metamorf-lifesciences-120x120.jpg'></span><img alt="Metamorf Lifesciences" id="bu10-0"  data-original='https://3.imimg.com/data3/IG/JR/GLADMIN-1466/pharmaceutical-injectables-250x250.jpg' src='https://utils.imimg.com/imsrchui/imgs/z.gif' data-limg='https://3.imimg.com/data3/IG/JR/GLADMIN-1466/pharmaceutical-injectables-250x250.jpg' class='lazy' loading='lazy'></li>
+															<li class="mListPrc">
+																<span class="mListNme p10b0 mDib clr111 fs14 elps cp noPdp"><span class="noPdp mDb" data-click="^Prod0Name">cresemaba</span></span><span id="10prcenq" class="prc apr NP-10 ilprice getp">Ask Price</span><span class='desc des_p off'>We are a famous wholesale trader of quality approved assortment of Pharmaceutical Medicines. This offered range of products is admired in the market for their high effectiveness and long shelf life.</span>
+															</li>
+														</ul>
+														<ul class="slrPrdUl flx1" data-click="16337087573|1466|product"
+															data-isq="Usage==Hospital,Clinical,Commercial">
+															<li
+																class="mListImg w100 sid_df sid_jcc sid_aic br5 cp5 mPr cp imgl">
+																<img id=bu10-1 data-mcatid="1466" title='Imipenam And Cilastatin Injection Ip, For Commercial' data-prc="<b>&#8377; 1,600/</b>Box" alt='Imipenam And Cilastatin Injection Ip, For Commercial' data-original='https://4.imimg.com/data4/RA/LC/ANDROID-41009373/product-250x250.jpeg' src='https://utils.imimg.com/imsrchui/imgs/z.gif' data-slimg='https://4.imimg.com/data4/RA/LC/ANDROID-41009373/product-250x250.jpeg' class='lazy' loading='lazy' id="rp10_1" data-modref="2" data-datatype="product" data-simdispid="16337087573" data-click= "^Prod1Img"></li>
+															<li class="mListPrc">
+																<span class="mListNme p10b0 mDib clr111 fs14 elps"><a class="smTle mDb" data-click="^Prod1Name" href="https://www.indiamart.com/proddetail/imipenam-and-cilastatin-injection-ip-16337087573.html"  target="_blank">Imipenam And Cilastatin Injection Ip, For Commercial</a></span><span class="NP-10 mPrc mDb"><span class="prc cp">&#8377;1600/ <span class="quan">Box</span></span></span>
+															</li>
+														</ul>
+														<ul class="slrPrdUl flx1"
+															data-click="15633310173|138631|product"
+															data-isq="Usage==Hospital,Clinical">
+															<li
+																class="mListImg w100 sid_df sid_jcc sid_aic br5 cp5 mPr cp imgl">
+																<img id=bu10-2 data-mcatid="138631" title='Ceftriaxone Sodium 500 Mg Inj' data-prc="<b>&#8377; 44/</b>Piece" alt='Ceftriaxone Sodium 500 Mg Inj' data-original='https://5.imimg.com/data5/PK/IQ/MY-41009373/ceftriaxone-sodium-500-mg-inj-500x500.jpg' src='https://utils.imimg.com/imsrchui/imgs/z.gif' data-slimg='https://5.imimg.com/data5/PK/IQ/MY-41009373/ceftriaxone-sodium-500-mg-inj-500x500.jpg' class='lazy' loading='lazy' id="rp10_2" data-modref="2" data-datatype="product" data-simdispid="15633310173" data-click= "^Prod2Img"></li>
+															<li class="mListPrc">
+																<span class="mListNme p10b0 mDib clr111 fs14 elps"><a class="smTle mDb" data-click="^Prod2Name" href="https://www.indiamart.com/proddetail/ceftriaxone-sodium-500-mg-inj-15633310173.html"  target="_blank">Ceftriaxone Sodium 500 Mg Inj</a></span><span class="NP-10 mPrc mDb"><span class="prc cp">&#8377;44/ <span class="quan">Piece</span></span></span>
+															</li>
+														</ul>
+														<ul class="slrPrdUl flx1"
+															data-click="15633750091|141248|product"
+															data-isq="Usage==Hospital,Clinical,Dosage Form==Injection">
+															<li
+																class="mListImg w100 sid_df sid_jcc sid_aic br5 cp5 mPr cp imgl">
+																<img id=bu10-3 data-mcatid="141248" title='Arteether 150 Mg Inj' data-prc="<b>&#8377; 75/</b>Piece" alt='Arteether 150 Mg Inj' data-original='https://5.imimg.com/data5/XR/KW/MY-41009373/arteether-150-mg-inj-500x500.jpg' src='https://utils.imimg.com/imsrchui/imgs/z.gif' data-slimg='https://5.imimg.com/data5/XR/KW/MY-41009373/arteether-150-mg-inj-500x500.jpg' class='lazy' loading='lazy' id="rp10_3" data-modref="2" data-datatype="product" data-simdispid="15633750091" data-click= "^Prod3Img"></li>
+															<li class="mListPrc">
+																<span class="mListNme p10b0 mDib clr111 fs14 elps"><a class="smTle mDb" data-click="^Prod3Name" href="https://www.indiamart.com/proddetail/arteether-150-mg-inj-15633750091.html"  target="_blank">Arteether 150 Mg Inj</a></span><span class="NP-10 mPrc mDb"><span class="prc cp">&#8377;75/ <span class="quan">Piece</span></span></span>
+															</li>
+														</ul>
+													</li>
+													<li class="sid_df sid_jcc fww sid_aic mCnmGrp flx1 mAse">
+														<h4 class="lcname" data-click="^CompanyName"><a
+																href="https://www.metamorflifesciences.com/?pos=10&kwd=cresemaba&tags=A||Pref||200.48003||bl"
+																target="_blank"
+																class="mCnme"><span class="elps">Metamorf Lifesciences</span></a>
+														</h4>
+														<p class="mPr sid_df sid_jcc mH17">
+															<span class="bg t_se mPr" data-click="^TrustSEAL" data-val="metamorflifesciences"></span>
+														</p>
+														<span class="sm clg mDb flx1" data-rlocation="Sector 5"><span class="elps"> Deals in Delhi<span style="display:none">pref_city</span>
+														</span><span class="to-txt tc" id="citytt10"><span class="mDib mToTxt">
+                 SCF 495, 2nd Floor, Motor Market, Manimajra, Sector 5,<br>Panchkula<span> - </span>134113, Dist.
+														Panchkula - Haryana</span></span></span>
+													</li>
+												</ul>
+											</li>
+											<li class="f-div t-c nes mVmn" data-click="TSCATALOG">
+												<span class="hlb cur" id="10mobenq"><span class="ls_co phn bo" data-click="^MobileNo" ><span class="cl">Call </span><span id="pns10" class="pns_h duet">+91-8042983215             </span></span></span><button id="dispid2" data-click="^CTAContactSupplier" class="bp btn2g mo active td NP-10 sen_c on">Contact Supplier</span></button>
+											</li>
+											<li class="sDot">
+												<span id="10_0" class="sActv"></span><span id="10_1" class="cp"></span><span id="10_2" class="cp"></span><span id="10_3" class="cp"></span>
+											</li>
+										</ul>
+									</li>
+									<li class="mList tc bgw mPr br5 sid_df lst_cl slrPrdGrp     mft2 img nlc" id="LST11"
+										data-click="11" data-itemid="1" data-dispid="2" data-datatype="proxy"
+										data-glid="14479717" data-smlrcnt="3" data-csttypwgt="199"
+										data-csttypnm="TSCATALOG" data-tscode="uninorbiotech" data-location="Manimajra"
+										data-city="" data-state="Chandigarh" data-catid="360" data-mcatid="1466"
+										data-disflg="1" data-modref="11" data-blprdnme="cresemaba"
+										data-altdispid="60192480234">
+										<ul class="mListDtl sid_df sid_fdc" data-click="2|1466|proxy">
+											<li class="ht100">
+												<ul class="ht100 sid_df fww">
+													<li class="slrPrd sid_df ofh flx1">
+														<ul id="prd-11" class="slrPrdUl flx1">
+															<li class="mListImg w100 sid_df sid_jcc sid_aic br5 cp5 imgl mPr cp "
+																data-click="^Prod0Img">
+																<img alt="M/s Uninor Biotech" id="bu11-0"  data-original='https://3.imimg.com/data3/IG/JR/GLADMIN-1466/pharmaceutical-injectables-250x250.jpg' src='https://utils.imimg.com/imsrchui/imgs/z.gif' data-limg='https://3.imimg.com/data3/IG/JR/GLADMIN-1466/pharmaceutical-injectables-250x250.jpg' class='lazy' loading='lazy'></li>
+															<li class="mListPrc">
+																<span class="mListNme p10b0 mDib clr111 fs14 elps cp noPdp"><span class="noPdp mDb" data-click="^Prod0Name">cresemaba</span></span><span id="11prcenq" class="prc apr NP-11 ilprice getp">Ask Price</span><span class='desc des_p off'>We “Uninor Biotech are a well-renowned Wholesale Trader and Service Provider of an effective range of PPharmaceutical Tablets, Pharmaceutical Syrup, Pharmaceutical Capsules &amp; PCD Pharma Franchise.</span>
+															</li>
+														</ul>
+														<ul class="slrPrdUl flx1"
+															data-click="20169420512|217298|product"
+															data-isq="Packaging Type==Vial,Composition==Pantoprazole,Dosage Form==Injection,Packaging Size==40 mg,Manufacturer==UNINOR BIOTECH,Brand==Peptrack-40,Medicine Type==Allopathic">
+															<li
+																class="mListImg w100 sid_df sid_jcc sid_aic br5 cp5 mPr cp imgl">
+																<img id=bu11-1 data-mcatid="217298" title='Peptrack-40 Allopathic Pantoprazole For Injection, Uninor Biotech, Packaging Type: Vial' data-prc="<b>&#8377; 46.80/</b>Pack" alt='Peptrack-40 Allopathic Pantoprazole For Injection, Uninor Biotech, Packaging Type: Vial' data-original='https://5.imimg.com/data5/DG/RF/YG/SELLER-14479717/pantoprazole-injection-500x500.jpg' src='https://utils.imimg.com/imsrchui/imgs/z.gif' data-slimg='https://5.imimg.com/data5/DG/RF/YG/SELLER-14479717/pantoprazole-injection-500x500.jpg' class='lazy' loading='lazy' id="rp11_1" data-modref="2" data-datatype="product" data-simdispid="20169420512" data-click= "^Prod1Img"></li>
+															<li class="mListPrc">
+																<span class="mListNme p10b0 mDib clr111 fs14 elps"><a class="smTle mDb" data-click="^Prod1Name" href="https://www.indiamart.com/proddetail/injection-pantoprazole-20169420512.html"  target="_blank">Peptrack-40 Allopathic Pantoprazole For Injection, Uninor Biotech,...</a></span><span class="NP-11 mPrc mDb"><span class="prc cp">&#8377;46.80/ <span class="quan">Pack</span></span></span>
+															</li>
+														</ul>
+														<ul class="slrPrdUl flx1"
+															data-click="22465093330|192055|product"
+															data-isq="Manufactured By==UNINOR BIOTECH,Packaging Size==1.2 gm,Packaging Type==Vial,Brand==ChecMox,Composition==Amoxicillin + Potassium Clavulanate,Medicine Type==Allopathic">
+															<li
+																class="mListImg w100 sid_df sid_jcc sid_aic br5 cp5 mPr cp imgl">
+																<img id=bu11-2 data-mcatid="192055" title='Checmox Amoxicillin And Potassium Clavulanate Injection Ip, Packaging Size: 1.2 Gm' data-prc="<b>&#8377; 140/</b>Pack" alt='Checmox Amoxicillin And Potassium Clavulanate Injection Ip, Packaging Size: 1.2 Gm' data-original='https://5.imimg.com/data5/HQ/SO/BF/SELLER-14479717/amoxycillin-1000mg-claunalic-acid-200mg-500x500.jpg' src='https://utils.imimg.com/imsrchui/imgs/z.gif' data-slimg='https://5.imimg.com/data5/HQ/SO/BF/SELLER-14479717/amoxycillin-1000mg-claunalic-acid-200mg-500x500.jpg' class='lazy' loading='lazy' id="rp11_2" data-modref="2" data-datatype="product" data-simdispid="22465093330" data-click= "^Prod2Img"></li>
+															<li class="mListPrc">
+																<span class="mListNme p10b0 mDib clr111 fs14 elps"><a class="smTle mDb" data-click="^Prod2Name" href="https://www.indiamart.com/proddetail/amoxicillin-and-potassium-clavulanate-injection-ip-22465093330.html"  target="_blank">Checmox Amoxicillin And Potassium Clavulanate Injection Ip,...</a></span><span class="NP-11 mPrc mDb"><span class="prc cp">&#8377;140/ <span class="quan">Pack</span></span></span>
+															</li>
+														</ul>
+														<ul class="slrPrdUl flx1"
+															data-click="20712438791|144767|product"
+															data-isq="Packaging Type==Vial,Manufacturer==UNINOR BIOTECH,Brand==Aquadic,Composition==Diclofenac Sodium,Form of Medicine==Injection,Packaging Size==10 x 1 ml">
+															<li
+																class="mListImg w100 sid_df sid_jcc sid_aic br5 cp5 mPr cp imgl">
+																<img id=bu11-3 data-mcatid="144767" title='Aquadic Diclofenac Sodium Injection Ip, Uninor Biotech, Packaging Size: 10 X 1 Ml' data-prc="<b>&#8377; 21/</b>Piece" alt='Aquadic Diclofenac Sodium Injection Ip, Uninor Biotech, Packaging Size: 10 X 1 Ml' data-original='https://5.imimg.com/data5/FF/UT/KV/SELLER-14479717/aquadic-injection-500x500.jpg' src='https://utils.imimg.com/imsrchui/imgs/z.gif' data-slimg='https://5.imimg.com/data5/FF/UT/KV/SELLER-14479717/aquadic-injection-500x500.jpg' class='lazy' loading='lazy' id="rp11_3" data-modref="2" data-datatype="product" data-simdispid="20712438791" data-click= "^Prod3Img"></li>
+															<li class="mListPrc">
+																<span class="mListNme p10b0 mDib clr111 fs14 elps"><a class="smTle mDb" data-click="^Prod3Name" href="https://www.indiamart.com/proddetail/diclofenac-sodium-injection-ip-20712438791.html"  target="_blank">Aquadic Diclofenac Sodium Injection Ip, Uninor Biotech, Packaging...</a></span><span class="NP-11 mPrc mDb"><span class="prc cp">&#8377;21/ <span class="quan">Piece</span></span></span>
+															</li>
+														</ul>
+													</li>
+													<li class="sid_df sid_jcc fww sid_aic mCnmGrp flx1 mAse">
+														<h4 class="lcname" data-click="^CompanyName"><a
+																href="https://www.indiamart.com/uninorbiotech/?pos=11&kwd=cresemaba&tags=A||Pref||205.48125||bl"
+																target="_blank"
+																class="mCnme"><span class="elps">M/s Uninor Biotech</span></a>
+														</h4>
+														<p class="mPr sid_df sid_jcc mH17">
+															<span class="bg t_se mPr" data-click="^TrustSEAL" data-val="uninorbiotech"></span>
+														</p>
+														<span class="sm clg mDb flx1" data-rlocation="Manimajra"><span class="elps"> Deals in Delhi<span style="display:none">pref_city</span>
+														</span><span class="to-txt tc" id="citytt11"><span class="mDib mToTxt">
+                 Scf 361, Motor Market, Manimajra,<br>Chandigarh<span> - </span>160101 -
+														Chandigarh</span></span></span>
+													</li>
+												</ul>
+											</li>
+											<li class="f-div t-c nes mVmn" data-click="TSCATALOG">
+												<span class="hlb cur" id="11mobenq"><span class="ls_co phn bo" data-click="^MobileNo" ><span class="cl">Call </span><span id="pns11" class="pns_h duet">+91-8048555049             </span></span></span><button id="dispid2" data-click="^CTAContactSupplier" class="bp btn2g mo active td NP-11 sen_c on">Contact Supplier</span></button>
+											</li>
+											<li class="sDot">
+												<span id="11_0" class="sActv"></span><span id="11_1" class="cp"></span><span id="11_2" class="cp"></span><span id="11_3" class="cp"></span>
+											</li>
+										</ul>
+									</li>
+									<li class="mList tc bgw mPr br5 sid_df lst_cl slrPrdGrp  mr0   mft2 img nlc"
+										id="LST12" data-click="12" data-itemid="1" data-dispid="2" data-datatype="proxy"
+										data-glid="7201880" data-smlrcnt="3" data-csttypwgt="199"
+										data-csttypnm="TSCATALOG" data-tscode="zestica-pharma" data-location="Baddi"
+										data-city="" data-state="Himachal Pradesh" data-catid="360" data-mcatid="1466"
+										data-disflg="1" data-modref="11" data-blprdnme="cresemaba"
+										data-altdispid="53983232095">
+										<ul class="mListDtl sid_df sid_fdc" data-click="2|1466|proxy">
+											<li class="ht100">
+												<ul class="ht100 sid_df fww">
+													<li class="slrPrd sid_df ofh flx1">
+														<ul id="prd-12" class="slrPrdUl flx1">
+															<li class="mListImg w100 sid_df sid_jcc sid_aic br5 cp5 imgl mPr cp "
+																data-click="^Prod0Img">
+																<span class='blLgSpn'><img src='https://5.imimg.com/data5/RA/HS/MY-7201880/zestica-pharma-120x120.jpg' class='blLg' data-limg='https://5.imimg.com/data5/RA/HS/MY-7201880/zestica-pharma-120x120.jpg'></span><img alt="Zestica Pharma" id="bu12-0"  data-original='https://3.imimg.com/data3/IG/JR/GLADMIN-1466/pharmaceutical-injectables-250x250.jpg' src='https://utils.imimg.com/imsrchui/imgs/z.gif' data-limg='https://3.imimg.com/data3/IG/JR/GLADMIN-1466/pharmaceutical-injectables-250x250.jpg' class='lazy' loading='lazy'></li>
+															<li class="mListPrc">
+																<span class="mListNme p10b0 mDib clr111 fs14 elps cp noPdp"><span class="noPdp mDb" data-click="^Prod0Name">cresemaba</span></span><span id="12prcenq" class="prc apr NP-12 ilprice getp">Ask Price</span><span class='desc des_p off'>Established in the year 2006, we “Zestica Pharma are a prominent firm that is engaged in Manufacturer a wide range of Pharmaceutical Tablets, Pharmaceutical Capsules, Pharmaceutical Syrups, etc.</span>
+															</li>
+														</ul>
+														<ul class="slrPrdUl flx1"
+															data-click="22004168955|139577|product"
+															data-isq="Dose==As Prescription,Composition==Amikacin 500 MG Injections,Usage/Application==Hospital,Treatment==Used to treat with bacteria meningitis and infections of the blood abdomen lungs,skin,bones .,Prescription/Non prescription==Prescription,Product Type==Available,Packaging Size==1X1,Manufacturer==Zestica Pharma,Form==Injection,Injectable Form==Liquid,Also Gives==PCD Pharma Franchise,Third Party Manufacturing,Medicine Type==Injection">
+															<li
+																class="mListImg w100 sid_df sid_jcc sid_aic br5 cp5 mPr cp imgl">
+																<img id=bu12-1 data-mcatid="139577" title='Liquid Amikacin Injections, For Hospital, As Prescription' data-prc="<b>&#8377; 95/</b>Piece" alt='Liquid Amikacin Injections, For Hospital, As Prescription' data-original='https://5.imimg.com/data5/SELLER/Default/2021/4/SR/JJ/GJ/7201880/amikacin-injections-500x500.jpg' src='https://utils.imimg.com/imsrchui/imgs/z.gif' data-slimg='https://5.imimg.com/data5/SELLER/Default/2021/4/SR/JJ/GJ/7201880/amikacin-injections-500x500.jpg' class='lazy' loading='lazy' id="rp12_1" data-modref="2" data-datatype="product" data-simdispid="22004168955" data-click= "^Prod1Img"></li>
+															<li class="mListPrc">
+																<span class="mListNme p10b0 mDib clr111 fs14 elps"><a class="smTle mDb" data-click="^Prod1Name" href="https://www.indiamart.com/proddetail/amikacin-injections-22004168955.html"  target="_blank">Liquid Amikacin Injections, For Hospital, As Prescription</a></span><span class="NP-12 mPrc mDb"><span class="prc cp">&#8377;95/ <span class="quan">Piece</span></span></span>
+															</li>
+														</ul>
+														<ul class="slrPrdUl flx1"
+															data-click="22628869748|217298|product"
+															data-isq="Country of Origin==Made in India,Composition==Pantaprazole 40mg iv,Usage/Application==Hospital,Prescription/Non prescription==Prescription,Product Type==Finished Product,Also Gives==PCD Pharma Franchise,Packaging Size==1GM,Brand==Pantoprazole 40 Mg IV/IM ZESWIN 40 INJECTION,Form==Injection,Medicine Type==Allopathic,Gender==Unisex">
+															<li
+																class="mListImg w100 sid_df sid_jcc sid_aic br5 cp5 mPr cp imgl">
+																<img id=bu12-2 data-mcatid="217298" title='Allopathic Pantaprazole 40mg Iv Pantoprazole 40 Mg Iv/im Zeswin 40 Injection, For Hospital, Prescription' data-prc="<b>&#8377; 45/</b>Vial" alt='Allopathic Pantaprazole 40mg Iv Pantoprazole 40 Mg Iv/im Zeswin 40 Injection, For Hospital, Prescription' data-original='https://5.imimg.com/data5/ANDROID/Default/2020/9/PS/XN/FZ/7201880/product-jpeg-500x500.jpg' src='https://utils.imimg.com/imsrchui/imgs/z.gif' data-slimg='https://5.imimg.com/data5/ANDROID/Default/2020/9/PS/XN/FZ/7201880/product-jpeg-500x500.jpg' class='lazy' loading='lazy' id="rp12_2" data-modref="2" data-datatype="product" data-simdispid="22628869748" data-click= "^Prod2Img"></li>
+															<li class="mListPrc">
+																<span class="mListNme p10b0 mDib clr111 fs14 elps"><a class="smTle mDb" data-click="^Prod2Name" href="https://www.indiamart.com/proddetail/pantoprazole-40-mg-iv-im-zeswin-40-injection-22628869748.html"  target="_blank">Allopathic Pantaprazole 40mg Iv Pantoprazole 40 Mg Iv/im Zeswin 40...</a></span><span class="NP-12 mPrc mDb"><span class="prc cp">&#8377;45/ <span class="quan">Vial</span></span></span>
+															</li>
+														</ul>
+														<ul class="slrPrdUl flx1"
+															data-click="23346377862|144767|product"
+															data-isq="50000==200000,Prescription/Non prescription==Prescription,Deals in==Third Party Manufacturing,PCD Pharma,Packaging Size==10X1ML,Brand==DICLOZEST,Manufacturer==ZESTICA PHARMA,Form==Injection,Composition==Diclofenac Sodium Injection IP,Gender==Unisex,Injectable Form==Liquid,Product Type==Finished Product,Shelf Life==24MONTH,Usage/Application==Hospital,Country of Origin==Made in India">
+															<li
+																class="mListImg w100 sid_df sid_jcc sid_aic br5 cp5 mPr cp imgl">
+																<img id=bu12-3 data-mcatid="144767" title='Diclofenac Sodium Injection Ip, 10x1 Ml, Diclozest Injection, Zestica Pharma' data-prc="<b>&#8377; 16.75/</b>Piece" alt='Diclofenac Sodium Injection Ip, 10x1 Ml, Diclozest Injection, Zestica Pharma' data-original='https://5.imimg.com/data5/SELLER/Default/2021/4/ND/UY/JG/7201880/diclozest-500x500.jpg' src='https://utils.imimg.com/imsrchui/imgs/z.gif' data-slimg='https://5.imimg.com/data5/SELLER/Default/2021/4/ND/UY/JG/7201880/diclozest-500x500.jpg' class='lazy' loading='lazy' id="rp12_3" data-modref="2" data-datatype="product" data-simdispid="23346377862" data-click= "^Prod3Img"></li>
+															<li class="mListPrc">
+																<span class="mListNme p10b0 mDib clr111 fs14 elps"><a class="smTle mDb" data-click="^Prod3Name" href="https://www.indiamart.com/proddetail/diclofenac-sodium-injection-ip-10x1-ml-diclozest-injection-23346377862.html"  target="_blank">Diclofenac Sodium Injection Ip, 10x1 Ml, Diclozest Injection,...</a></span><span class="NP-12 mPrc mDb"><span class="prc cp">&#8377;16.75/ <span class="quan">Piece</span></span></span>
+															</li>
+														</ul>
+													</li>
+													<li class="sid_df sid_jcc fww sid_aic mCnmGrp flx1 mAse">
+														<h4 class="lcname" data-click="^CompanyName"><a
+																href="https://www.indiamart.com/zestica-pharma/?pos=12&kwd=cresemaba&tags=A||Pref||220.0434||bl"
+																target="_blank"
+																class="mCnme"><span class="elps">Zestica Pharma</span></a>
+														</h4>
+														<p class="mPr sid_df sid_jcc mH17">
+															<span class="bg t_se mPr" data-click="^TrustSEAL" data-val="zestica-pharma"></span>
+														</p>
+														<span class="sm clg mDb flx1" data-rlocation="Baddi"><span class="elps"> Deals in Delhi<span style="display:none">pref_city</span>
+														</span><span class="to-txt tc" id="citytt12"><span class="mDib mToTxt">
+                 PLOT NO. 290A, 2nd Floor, Motia Plaza, Near Baddi Police Station, Baddi, Baddi,<br>Solan<span> - </span>134109,
+														Dist. Solan - Himachal Pradesh</span></span></span>
+													</li>
+												</ul>
+											</li>
+											<li class="f-div t-c nes mVmn" data-click="TSCATALOG">
+												<span class="hlb cur" id="12mobenq"><span class="ls_co phn bo" data-click="^MobileNo" ><span class="cl">Call </span><span id="pns12" class="pns_h duet">+91-7971382517             </span></span></span><button id="dispid2" data-click="^CTAContactSupplier" class="bp btn2g mo active td NP-12 sen_c on">Contact Supplier</span></button>
+											</li>
+											<li class="sDot">
+												<span id="12_0" class="sActv"></span><span id="12_1" class="cp"></span><span id="12_2" class="cp"></span><span id="12_3" class="cp"></span>
+											</li>
+										</ul>
+									</li>
+									<li class="lst mft2 img llc vidSectGrp mft">
+										<ul class="f-div r-e-h ft bdr1 vdf vfdc">
+											<li class="vidLi">
+												<h3 class="lg">Watch related videos</h3>
+											</li>
+											<li class="vidLi vmt10">
+												<ul class="vdf">
+													<div class="vidIfrmGrp" id="mplyr" data-ifid="BLMcheztqAM"></div>
+													<div class="lstng_loadbar" id="lstng_loadbar">
+														<div class="lstng_loader"></div>
+													</div>
+													<li class="vidThmb vidpr">
+														<ul class="vThmbBtn">
+															<li class="vnxt enb vNxtPrv"><svg class="vidarwIcn">
+																	<use xlink:href="#vidarw"></use>
+																</svg></li>
+															<li class="vprv vNxtPrv"><svg class="vidarwIcn">
+																	<use xlink:href="#vidarw"></use>
+																</svg></li>
+														</ul>
+														<ul class="vdf vThmbGrp vfdc">
+															<li class="trvid">
+																<ul>
+																	<li class="vThmb vaic vact cp"
+																		data-vidid="BLMcheztqAM"
+																		data-vidurl="https://www.youtube.com/watch?v=BLMcheztqAM">
+																		<span class="vVid aftr"><span class="vplay"><span class="vfst"></span><span class="vscn"></span></span>
+																		<span class="vThmbImg vaic vdf"><img  class ="lazy" loading="lazy" alt="Aprachitol vitamin d3 injection" src="https://utils.imimg.com/imsrchui/imgs/z.gif" data-original="https://img.youtube.com/vi/BLMcheztqAM/hqdefault.jpg"></span></span><span class="vThmbTxt">Aprachitol vitamin d3 injection</span>
+																	</li>
+																	<li class="vThmb vaic vnact cp"
+																		data-vidid="2bUSf1AJc7k"
+																		data-vidurl="https://www.youtube.com/watch?v=2bUSf1AJc7k">
+																		<span class="vVid aftr"><span class="vplay"><span class="vfst"></span><span class="vscn"></span></span>
+																		<span class="vThmbImg vaic vdf"><img  class ="lazy" loading="lazy" alt="Vitamin b complex injection with vitamin b12" src="https://utils.imimg.com/imsrchui/imgs/z.gif" data-original="https://img.youtube.com/vi/2bUSf1AJc7k/hqdefault.jpg"></span></span><span class="vThmbTxt">Vitamin b complex injection with vitamin b12</span>
+																	</li>
+																	<li class="vThmb vaic vnact cp"
+																		data-vidid="ReKHwnHNsRQ"
+																		data-vidurl="https://www.youtube.com/watch?v=ReKHwnHNsRQ">
+																		<span class="vVid aftr"><span class="vplay"><span class="vfst"></span><span class="vscn"></span></span>
+																		<span class="vThmbImg vaic vdf"><img  class ="lazy" loading="lazy" alt="Calcium sandoz injection" src="https://utils.imimg.com/imsrchui/imgs/z.gif" data-original="https://img.youtube.com/vi/ReKHwnHNsRQ/hqdefault.jpg"></span></span><span class="vThmbTxt">Calcium sandoz injection</span>
+																	</li>
+																	<li class="vThmb vaic vnact cp"
+																		data-vidid="lwoO4eNOXu4"
+																		data-vidurl="https://www.youtube.com/watch?v=lwoO4eNOXu4&feature=youtu.be&t=37">
+																		<span class="vVid aftr"><span class="vplay"><span class="vfst"></span><span class="vscn"></span></span>
+																		<span class="vThmbImg vaic vdf"><img  class ="lazy" loading="lazy" alt="Cortisone injection" src="https://utils.imimg.com/imsrchui/imgs/z.gif" data-original="https://img.youtube.com/vi/lwoO4eNOXu4/hqdefault.jpg"></span></span><span class="vThmbTxt">Cortisone injection</span>
+																	</li>
+																	<li class="vThmb vaic vnact cp"
+																		data-vidid="a-4j7KNhCtk"
+																		data-vidurl="https://www.youtube.com/watch?v=a-4j7KNhCtk">
+																		<span class="vVid aftr"><span class="vplay"><span class="vfst"></span><span class="vscn"></span></span>
+																		<span class="vThmbImg vaic vdf"><img  class ="lazy" loading="lazy" alt="Lycortin s hydrocortisone sodium succinate injection" src="https://utils.imimg.com/imsrchui/imgs/z.gif" data-original="https://img.youtube.com/vi/a-4j7KNhCtk/hqdefault.jpg"></span></span><span class="vThmbTxt">Lycortin s hydrocortisone sodium succinate injection</span>
+																	</li>
+																	<li class="vThmb vaic vnact cp"
+																		data-vidid="c2StiINdZl0"
+																		data-vidurl="https://www.youtube.com/watch?v=c2StiINdZl0&feature=youtu.be&t=32">
+																		<span class="vVid aftr"><span class="vplay"><span class="vfst"></span><span class="vscn"></span></span>
+																		<span class="vThmbImg vaic vdf"><img  class ="lazy" loading="lazy" alt="Hcort hydrocortisone injection use" src="https://utils.imimg.com/imsrchui/imgs/z.gif" data-original="https://img.youtube.com/vi/c2StiINdZl0/hqdefault.jpg"></span></span><span class="vThmbTxt">Hcort hydrocortisone injection use</span>
+																	</li>
+																	<li class="vThmb vaic vnact cp"
+																		data-vidid="0dMnp0niIyE"
+																		data-vidurl="https://www.youtube.com/watch?v=0dMnp0niIyE">
+																		<span class="vVid aftr"><span class="vplay"><span class="vfst"></span><span class="vscn"></span></span>
+																		<span class="vThmbImg vaic vdf"><img  class ="lazy" loading="lazy" alt="How to do trigger point injections" src="https://utils.imimg.com/imsrchui/imgs/z.gif" data-original="https://img.youtube.com/vi/0dMnp0niIyE/hqdefault.jpg"></span></span><span class="vThmbTxt">How to do trigger point injections</span>
+																	</li>
+																	<li class="vThmb vaic vnact cp"
+																		data-vidid="z4av7h5RH_o"
+																		data-vidurl="https://www.youtube.com/watch?v=z4av7h5RH_o">
+																		<span class="vVid aftr"><span class="vplay"><span class="vfst"></span><span class="vscn"></span></span>
+																		<span class="vThmbImg vaic vdf"><img  class ="lazy" loading="lazy" alt="Hydrocortisone sodium phosphate injection" src="https://utils.imimg.com/imsrchui/imgs/z.gif" data-original="https://img.youtube.com/vi/z4av7h5RH_o/hqdefault.jpg"></span></span><span class="vThmbTxt">Hydrocortisone sodium phosphate injection</span>
+																	</li>
+																	<li class="vThmb vaic vnact cp"
+																		data-vidid="0MudsWmWFGs"
+																		data-vidurl="https://www.youtube.com/watch?v=0MudsWmWFGs&feature=youtu.be&t=61">
+																		<span class="vVid aftr"><span class="vplay"><span class="vfst"></span><span class="vscn"></span></span>
+																		<span class="vThmbImg vaic vdf"><img  class ="lazy" loading="lazy" alt="Estradiol valerate, e2v and delestrogen ivf injection" src="https://utils.imimg.com/imsrchui/imgs/z.gif" data-original="https://img.youtube.com/vi/0MudsWmWFGs/hqdefault.jpg"></span></span><span class="vThmbTxt">Estradiol valerate, e2v and delestrogen ivf injection</span>
+																	</li>
+																	<li class="vThmb vaic vnact cp"
+																		data-vidid="rIO2fGG4hm8"
+																		data-vidurl="https://www.youtube.com/watch?v=rIO2fGG4hm8&feature=youtu.be&t=100">
+																		<span class="vVid aftr"><span class="vplay"><span class="vfst"></span><span class="vscn"></span></span>
+																		<span class="vThmbImg vaic vdf"><img  class ="lazy" loading="lazy" alt="About dexamethasone injection" src="https://utils.imimg.com/imsrchui/imgs/z.gif" data-original="https://img.youtube.com/vi/rIO2fGG4hm8/hqdefault.jpg"></span></span><span class="vThmbTxt">About dexamethasone injection</span>
+																	</li>
+																	<li class="vThmb vaic vnact cp"
+																		data-vidid="nCsd0U9zmZc"
+																		data-vidurl="https://www.youtube.com/watch?v=nCsd0U9zmZc&feature=youtu.be&t=40">
+																		<span class="vVid aftr"><span class="vplay"><span class="vfst"></span><span class="vscn"></span></span>
+																		<span class="vThmbImg vaic vdf"><img  class ="lazy" loading="lazy" alt="Pain killer injection review" src="https://utils.imimg.com/imsrchui/imgs/z.gif" data-original="https://img.youtube.com/vi/nCsd0U9zmZc/hqdefault.jpg"></span></span><span class="vThmbTxt">Pain killer injection review</span>
+																	</li>
+																	<li class="vThmb vaic vnact cp"
+																		data-vidid="VR9aHVPxdrE"
+																		data-vidurl="https://www.youtube.com/watch?v=VR9aHVPxdrE&feature=youtu.be&t=35">
+																		<span class="vVid aftr"><span class="vplay"><span class="vfst"></span><span class="vscn"></span></span>
+																		<span class="vThmbImg vaic vdf"><img  class ="lazy" loading="lazy" alt="Dexasone 2ml injection review" src="https://utils.imimg.com/imsrchui/imgs/z.gif" data-original="https://img.youtube.com/vi/VR9aHVPxdrE/hqdefault.jpg"></span></span><span class="vThmbTxt">Dexasone 2ml injection review</span>
+																	</li>
+																	<li class="vThmb vaic vnact cp"
+																		data-vidid="A-7In7UCI8M"
+																		data-vidurl="https://www.youtube.com/watch?v=A-7In7UCI8M">
+																		<span class="vVid aftr"><span class="vplay"><span class="vfst"></span><span class="vscn"></span></span>
+																		<span class="vThmbImg vaic vdf"><img  class ="lazy" loading="lazy" alt="Flexed knee inferior lateral injection" src="https://utils.imimg.com/imsrchui/imgs/z.gif" data-original="https://img.youtube.com/vi/A-7In7UCI8M/hqdefault.jpg"></span></span><span class="vThmbTxt">Flexed knee inferior lateral injection</span>
+																	</li>
+																	<li class="vThmb vaic vnact cp"
+																		data-vidid="yBbTqAZEx3E"
+																		data-vidurl="https://www.youtube.com/watch?v=yBbTqAZEx3E&feature=youtu.be&t=63">
+																		<span class="vVid aftr"><span class="vplay"><span class="vfst"></span><span class="vscn"></span></span>
+																		<span class="vThmbImg vaic vdf"><img  class ="lazy" loading="lazy" alt="All about of ringer lactate solution" src="https://utils.imimg.com/imsrchui/imgs/z.gif" data-original="https://img.youtube.com/vi/yBbTqAZEx3E/hqdefault.jpg"></span></span><span class="vThmbTxt">All about of ringer lactate solution</span>
+																	</li>
+																	<li class="vThmb vaic vnact cp"
+																		data-vidid="xxSgP2IvRWY"
+																		data-vidurl="https://www.youtube.com/watch?v=xxSgP2IvRWY">
+																		<span class="vVid aftr"><span class="vplay"><span class="vfst"></span><span class="vscn"></span></span>
+																		<span class="vThmbImg vaic vdf"><img  class ="lazy" loading="lazy" alt="Pain management injections" src="https://utils.imimg.com/imsrchui/imgs/z.gif" data-original="https://img.youtube.com/vi/xxSgP2IvRWY/hqdefault.jpg"></span></span><span class="vThmbTxt">Pain management injections</span>
+																	</li>
+																	<li class="vThmb vaic vnact cp"
+																		data-vidid="0D-J1UVVpsw"
+																		data-vidurl="https://www.youtube.com/watch?v=0D-J1UVVpsw&feature=youtu.be&t=6">
+																		<span class="vVid aftr"><span class="vplay"><span class="vfst"></span><span class="vscn"></span></span>
+																		<span class="vThmbImg vaic vdf"><img  class ="lazy" loading="lazy" alt="Subcutaneous application of immunoglobulin" src="https://utils.imimg.com/imsrchui/imgs/z.gif" data-original="https://img.youtube.com/vi/0D-J1UVVpsw/hqdefault.jpg"></span></span><span class="vThmbTxt">Subcutaneous application of immunoglobulin</span>
+																	</li>
+																	<li class="vThmb vaic vnact cp"
+																		data-vidid="exbaCZhzsfo"
+																		data-vidurl="https://www.youtube.com/watch?v=exbaCZhzsfo&feature=youtu.be&t=32">
+																		<span class="vVid aftr"><span class="vplay"><span class="vfst"></span><span class="vscn"></span></span>
+																		<span class="vThmbImg vaic vdf"><img  class ="lazy" loading="lazy" alt="Preparing ampicillin and gentamicin for injection" src="https://utils.imimg.com/imsrchui/imgs/z.gif" data-original="https://img.youtube.com/vi/exbaCZhzsfo/hqdefault.jpg"></span></span><span class="vThmbTxt">Preparing ampicillin and gentamicin for injection</span>
+																	</li>
+																	<li class="vThmb vaic vnact cp"
+																		data-vidid="sjainj6UXto"
+																		data-vidurl="https://www.youtube.com/watch?v=sjainj6UXto">
+																		<span class="vVid aftr"><span class="vplay"><span class="vfst"></span><span class="vscn"></span></span>
+																		<span class="vThmbImg vaic vdf"><img  class ="lazy" loading="lazy" alt="Injections with merional" src="https://utils.imimg.com/imsrchui/imgs/z.gif" data-original="https://img.youtube.com/vi/sjainj6UXto/hqdefault.jpg"></span></span><span class="vThmbTxt">Injections with merional</span>
+																	</li>
+																	<li class="vThmb vaic vnact cp"
+																		data-vidid="c-6kF2PWshI"
+																		data-vidurl="https://www.youtube.com/watch?v=c-6kF2PWshI">
+																		<span class="vVid aftr"><span class="vplay"><span class="vfst"></span><span class="vscn"></span></span>
+																		<span class="vThmbImg vaic vdf"><img  class ="lazy" loading="lazy" alt="Secukinumab injection for plaque psoriasis" src="https://utils.imimg.com/imsrchui/imgs/z.gif" data-original="https://img.youtube.com/vi/c-6kF2PWshI/hqdefault.jpg"></span></span><span class="vThmbTxt">Secukinumab injection for plaque psoriasis</span>
+																	</li>
+																	<li class="vThmb vaic vnact cp"
+																		data-vidid="YyYLXSuOil8"
+																		data-vidurl="https://www.youtube.com/watch?v=YyYLXSuOil8">
+																		<span class="vVid aftr"><span class="vplay"><span class="vfst"></span><span class="vscn"></span></span>
+																		<span class="vThmbImg vaic vdf"><img  class ="lazy" loading="lazy" alt="Psoriasis/cosentyx injection unboxing" src="https://utils.imimg.com/imsrchui/imgs/z.gif" data-original="https://img.youtube.com/vi/YyYLXSuOil8/hqdefault.jpg"></span></span><span class="vThmbTxt">Psoriasis/cosentyx injection unboxing</span>
+																	</li>
+																</ul>
+															</li>
+														</ul>
+													</li>
+												</ul>
+											<li class="vidLi vsgstTxt">Aprachitol Vitamin D3 Injection</li>
+										</ul><svg xmlns="https://www.w3.org/2000/svg" viewBox="0 0 22.12 11.244"
+											class="off">
+											<path id="vidarw" d="M3550.538-6235l10 9.167 10-9.167" class="cls-1"
+												data-name="Path 522" transform="translate(-3549.478 6236.061)"></path>
+										</svg>
+									</li>
+									<li class="mList tc bgw mPr br5 sid_df lst_cl slrPrdGrp     mft2 img nlc" id="LST13"
+										data-click="13" data-itemid="1" data-dispid="2" data-datatype="proxy"
+										data-glid="126671776" data-smlrcnt="3" data-csttypwgt="199"
+										data-csttypnm="TSCATALOG" data-tscode="pray-healthcare-chandigarh"
+										data-location="Motor Market" data-city="" data-state="Chandigarh"
+										data-catid="360" data-mcatid="1466" data-disflg="1" data-modref="11"
+										data-blprdnme="cresemaba" data-altdispid="60171603459">
+										<ul class="mListDtl sid_df sid_fdc" data-click="2|1466|proxy">
+											<li class="ht100">
+												<ul class="ht100 sid_df fww">
+													<li class="slrPrd sid_df ofh flx1">
+														<ul id="prd-13" class="slrPrdUl flx1">
+															<li class="mListImg w100 sid_df sid_jcc sid_aic br5 cp5 imgl mPr cp "
+																data-click="^Prod0Img">
+																<img alt="PRAY HEALTHCARE" id="bu13-0"  data-original='https://3.imimg.com/data3/IG/JR/GLADMIN-1466/pharmaceutical-injectables-250x250.jpg' src='https://utils.imimg.com/imsrchui/imgs/z.gif' data-limg='https://3.imimg.com/data3/IG/JR/GLADMIN-1466/pharmaceutical-injectables-250x250.jpg' class='lazy' loading='lazy'></li>
+															<li class="mListPrc">
+																<span class="mListNme p10b0 mDib clr111 fs14 elps cp noPdp"><span class="noPdp mDb" data-click="^Prod0Name">cresemaba</span></span><span id="13prcenq" class="prc apr NP-13 ilprice getp">Ask Price</span><span class='desc des_p off'>We PRAY HEALTHCARE are the Leading Manufacturer And Supplier of Pharmaceutical Tablets, Pharmaceutical Injection, Pharmaceutical Capsules, Oral Suspension, Softgel Capsules, Preeactiv Powder, etc</span>
+															</li>
+														</ul>
+														<ul class="slrPrdUl flx1"
+															data-click="23464038733|189588|product"
+															data-isq="Injection Routes==Subcutaneous (SC),Intramuscular (IM),Intravenous (IV),Country of Origin==Made in India">
+															<li
+																class="mListImg w100 sid_df sid_jcc sid_aic br5 cp5 mPr cp imgl">
+																<img id=bu13-1 data-mcatid="189588" title='Ascorbic Acid Injection'  alt='Ascorbic Acid Injection' data-original='https://5.imimg.com/data5/SELLER/Default/2021/5/BF/HI/ZL/126671776/whatsapp-image-2021-05-18-at-12-44-58-pm-500x500.jpeg' src='https://utils.imimg.com/imsrchui/imgs/z.gif' data-slimg='https://5.imimg.com/data5/SELLER/Default/2021/5/BF/HI/ZL/126671776/whatsapp-image-2021-05-18-at-12-44-58-pm-500x500.jpeg' class='lazy' loading='lazy' id="rp13_1" data-modref="2" data-datatype="product" data-simdispid="23464038733" data-click= "^Prod1Img"></li>
+															<li class="mListPrc">
+																<span class="mListNme p10b0 mDib clr111 fs14 elps"><a class="smTle mDb" data-click="^Prod1Name" href="https://www.indiamart.com/proddetail/ascorbic-acid-injection-23464038733.html"  target="_blank">Ascorbic Acid Injection</a></span>
+																<span id="13prcenq" class="prc apr NP-13 ilprice getp">Ask Price</span>
+															</li>
+														</ul>
+														<ul class="slrPrdUl flx1"
+															data-click="23464050297|444208|product"
+															data-isq="Brand==Oxiclline -100,Prescription Required==Yes,Packaging Size==1 Injection in Vial,Manufacturer Name==Pray Healthcare,Dosage==100mg,Composition (Salts)==Doxycycline">
+															<li
+																class="mListImg w100 sid_df sid_jcc sid_aic br5 cp5 mPr cp imgl">
+																<img id=bu13-2 data-mcatid="444208" title='Oxiclline -100 100mg Doxycycline For Injection Usp'  alt='Oxiclline -100 100mg Doxycycline For Injection Usp' data-original='https://5.imimg.com/data5/SELLER/Default/2021/5/LX/EY/PX/126671776/whatsapp-image-2021-05-18-at-11-16-02-am-500x500.jpeg' src='https://utils.imimg.com/imsrchui/imgs/z.gif' data-slimg='https://5.imimg.com/data5/SELLER/Default/2021/5/LX/EY/PX/126671776/whatsapp-image-2021-05-18-at-11-16-02-am-500x500.jpeg' class='lazy' loading='lazy' id="rp13_2" data-modref="2" data-datatype="product" data-simdispid="23464050297" data-click= "^Prod2Img"></li>
+															<li class="mListPrc">
+																<span class="mListNme p10b0 mDib clr111 fs14 elps"><a class="smTle mDb" data-click="^Prod2Name" href="https://www.indiamart.com/proddetail/injection-usp-doxycycline-23464050297.html"  target="_blank">Oxiclline -100 100mg Doxycycline For Injection Usp</a></span>
+																<span id="13prcenq" class="prc apr NP-13 ilprice getp">Ask Price</span>
+															</li>
+														</ul>
+														<ul class="slrPrdUl flx1" data-click="23369663162|1466|product"
+															data-isq="Packaging Type==Box,Treatment==Treatment of Anemias and Wasting Syndromes,Prescription/Non prescription==Prescription,Packaging Size==1 ml,Brand==Zoldac,Manufacturer==PRAY HEALTHCARE,Form==Injection,Strength==50 mg">
+															<li
+																class="mListImg w100 sid_df sid_jcc sid_aic br5 cp5 mPr cp imgl">
+																<img id=bu13-3 data-mcatid="1466" title='Zoldac Nandrolone Decanoate Injections Ip, Pray Healthcare, 1 Ml' data-prc="<b>&#8377; 140/</b>Box" alt='Zoldac Nandrolone Decanoate Injections Ip, Pray Healthcare, 1 Ml' data-original='https://5.imimg.com/data5/SELLER/Default/2021/4/JU/PM/HE/126671776/img-20210424-wa0030-500x500.jpg' src='https://utils.imimg.com/imsrchui/imgs/z.gif' data-slimg='https://5.imimg.com/data5/SELLER/Default/2021/4/JU/PM/HE/126671776/img-20210424-wa0030-500x500.jpg' class='lazy' loading='lazy' id="rp13_3" data-modref="2" data-datatype="product" data-simdispid="23369663162" data-click= "^Prod3Img"></li>
+															<li class="mListPrc">
+																<span class="mListNme p10b0 mDib clr111 fs14 elps"><a class="smTle mDb" data-click="^Prod3Name" href="https://www.indiamart.com/proddetail/nandrolone-decanoate-injections-ip-23369663162.html"  target="_blank">Zoldac Nandrolone Decanoate Injections Ip, Pray Healthcare, 1 Ml</a></span><span class="NP-13 mPrc mDb"><span class="prc cp">&#8377;140/ <span class="quan">Box</span></span></span>
+															</li>
+														</ul>
+													</li>
+													<li class="sid_df sid_jcc fww sid_aic mCnmGrp flx1 mAse">
+														<h4 class="lcname" data-click="^CompanyName"><a
+																href="https://www.indiamart.com/pray-healthcare-chandigarh/?pos=13&kwd=cresemaba&tags=A||Pref||205.48125||bl"
+																target="_blank"
+																class="mCnme"><span class="elps">PRAY HEALTHCARE</span></a>
+														</h4>
+														<p class="mPr sid_df sid_jcc mH17">
+															<span class="bg t_se mPr" data-click="^TrustSEAL" data-val="pray-healthcare-chandigarh"></span>
+														</p>
+														<span class="sm clg mDb flx1" data-rlocation="Motor Market"><span class="elps"> Deals in Delhi<span style="display:none">pref_city</span>
+														</span><span class="to-txt tc" id="citytt13"><span class="mDib mToTxt">
+                 SCF -283, First Floor, Manimajra, Motor Market,<br>Chandigarh<span> - </span>160101 -
+														Chandigarh</span></span></span>
+													</li>
+												</ul>
+											</li>
+											<li class="f-div t-c nes mVmn" data-click="TSCATALOG">
+												<span class="hlb cur" id="13mobenq"><span class="ls_co phn bo" data-click="^MobileNo" ><span class="cl">Call </span><span id="pns13" class="pns_h duet">+91-8043049876             </span></span></span><button id="dispid2" data-click="^CTAContactSupplier" class="bp btn2g mo active td NP-13 sen_c on">Contact Supplier</span></button>
+											</li>
+											<li class="sDot">
+												<span id="13_0" class="sActv"></span><span id="13_1" class="cp"></span><span id="13_2" class="cp"></span><span id="13_3" class="cp"></span>
+											</li>
+										</ul>
+									</li>
+									<li class="mList tc bgw mPr br5 sid_df lst_cl slrPrdGrp     mft2 img nlcws"
+										id="LST14" data-click="14" data-itemid="164241468" data-dispid="23513298762"
+										data-datatype="product" data-glid="62227841" data-smlrcnt="0"
+										data-csttypwgt="199" data-csttypnm="TSCATALOG" data-tscode="metaforehealthcare"
+										data-location="Industrial Area Phase 1" data-city="" data-state="Haryana"
+										data-catid="360" data-mcatid="1466" data-disflg="1" data-modref="2"
+										data-blprdnme="null" data-altdispid="">
+										<ul class="mListDtl sid_df sid_fdc" data-click="23513298762|1466|product">
+											<li class="ht100">
+												<ul class="ht100 sid_df fww">
+													<li class="snglPrd flx1">
+														<ul id="prd-14" class="snglPrdUl">
+															<li class="mListImg w100 sid_df sid_jcc sid_aic br5 cp5 imgl mPr cp "
+																data-click="^Prod0Img">
+																<img alt="Cresemba Injection" id="bu14-0"  data-original='https://5.imimg.com/data5/SELLER/Default/2021/6/AC/NH/RQ/62227841/cresamba-500x500.jpg' src='https://utils.imimg.com/imsrchui/imgs/z.gif' data-limg='https://5.imimg.com/data5/SELLER/Default/2021/6/AC/NH/RQ/62227841/cresamba-500x500.jpg' class='lazy' loading='lazy'></li>
+															<li class="mListPrc">
+																<span class="mListNme p10b0 mDib clr111 fs14 elps" data-click="^Prod0Name"><a  href= "https://www.indiamart.com/proddetail/cresemba-injection-23513298762.html?pos=14&kwd=cresemaba&tags=A||Pref||200.48003|Price|product" class="mDb" target="_blank" >Cresemba Injection</a></span><span id="14prcenq" class="NP-14 mPrc mDb"><span class="prc cp" >&#8377;10,000/<span class="quan"> INJECTION</span></span></span><span class='desc des_p off'><p><b>Brand Name</b>: CRESAMBA</p><p><b>Prescription/Non prescription</b>: CRITICAL CARE INJECTION</p><p><b>Packaging Type</b>: VIAL</p><p><b>Medicine Type</b>: Finished Product</p><p><b>Injection Site</b>: Intravenous</p><p><b>Dose</b>: ABC</p></span>
+															</li>
+														</ul>
+													</li>
+													<li class="sid_df sid_jcc fww sid_aic mCnmGrp flx1 mAse">
+														<h4 class="lcname" data-click="^CompanyName"><a
+																href="https://www.indiamart.com/metaforehealthcare/?pos=14&kwd=cresemaba&tags=A||Pref||200.48003|Price|product"
+																target="_blank"
+																class="mCnme"><span class="elps">Metafore Healthcare Private Limited</span></a>
+														</h4>
+														<p class="mPr sid_df sid_jcc mH17">
+															<span class="bg t_se mPr" data-click="^TrustSEAL" data-val="metaforehealthcare"></span>
+														</p>
+														<span class="sm clg mDb flx1" data-rlocation="Industrial Area Phase 1"><span class="elps"> Deals in Delhi<span style="display:none">pref_city</span>
+														</span><span class="to-txt tc" id="citytt14"><span class="mDib mToTxt">
+                 Shop No. 1, Ist Floor, Plot No. 614 Abheypur, Shiva Complex, Industrial Area Phase 1,<br>Panchkula<span> - </span>134109,
+														Dist. Panchkula, Haryana</span></span></span>
+													</li>
+												</ul>
+											</li>
+											<li class="f-div t-c nes mVmn" data-click="TSCATALOG">
+												<span class="hlb cur" id="14mobenq"><span class="ls_co phn bo" data-click="^MobileNo" ><span class="cl">Call </span><span id="pns14" class="pns_h duet">+91-8048729068             </span></span></span><button id="dispid23513298762" data-click="^CTAContactSupplier" class="bp btn2g mo active td NP-14 sen_c on">Contact Supplier</span></button>
+											</li>
+										</ul>
+									</li>
+								</ul>
+							</div>
+							<div class="tb-cell">
+								<div id="top1rgt_m4t" class="sbnr whmr off">
+									<object>
+        <param name="wmode" value="opaque">
+        <span id="TOP1RIGHT"></span>
+    </object>
+								</div>
+								<div id='div-gpt-ad-1568283321000-0' class='sbnr ' style="width: 300px; height: 250px;">
+								</div>
+								<div class="mcatVid wtRelVid">
+									<div class="rfbl gtid">
+										<div class="btb col-clk" target="6">Watch related
+											videos<span class="arr_up"></span></div>
+										<ul class="cell-bx">
+											<li class="colps mvideoId cp" data-vidid="ReKHwnHNsRQ"
+												data-vidurl="https://www.youtube.com/watch?v=ReKHwnHNsRQ">
+												<span class="ig wrpmg mvdi1"><span class="comB"></span><img src="https://utils.imimg.com/imsrchui/imgs/z.gif" alt="Calcium Sandoz Injection" class="lazy" loading="lazy" data-original="https://img.youtube.com/vi/ReKHwnHNsRQ/hqdefault.jpg"></span><span class="wrptx mvdi1">Calcium Sandoz Injection</span>
+											</li>
+											<li class="colps mvideoId cp" data-vidid="2bUSf1AJc7k"
+												data-vidurl="https://www.youtube.com/watch?v=2bUSf1AJc7k">
+												<span class="ig wrpmg mvdi1"><span class="comB"></span><img src="https://utils.imimg.com/imsrchui/imgs/z.gif" alt="Vitamin B Complex Injection with Vitamin B12" class="lazy" loading="lazy" data-original="https://img.youtube.com/vi/2bUSf1AJc7k/hqdefault.jpg"></span><span class="wrptx mvdi1">Vitamin B Complex Injection with Vitamin B12</span>
+											</li>
+											<li class="colps mvideoId cp" data-vidid="BLMcheztqAM"
+												data-vidurl="https://www.youtube.com/watch?v=BLMcheztqAM">
+												<span class="ig wrpmg mvdi1"><span class="comB"></span><img src="https://utils.imimg.com/imsrchui/imgs/z.gif" alt="Aprachitol Vitamin D3 Injection" class="lazy" loading="lazy" data-original="https://img.youtube.com/vi/BLMcheztqAM/hqdefault.jpg"></span><span class="wrptx mvdi1">Aprachitol Vitamin D3 Injection</span>
+											</li>
+										</ul>
+										<span class="shwMorVid cp"><span>Show More Video <span> V </span></span></span>
+									</div>
+								</div>
+								<div id='div-gpt-ad-1568283370930-0' class='sbnr1 '
+									style="width: 300px; height: 250px;"></div>
+								<div id='shwChatBl'></div>
+							</div>
+						</div>
+						<div class='c3'></div>
+						<div class="prsWd off" id="persWdgt"></div>
+						<div class="blh">
+							<div class="bl_f  bl2_bot" id="bl_frm_scrll">
+								<div class="tl-item">
+									<div class="sk-p15">
+										<div class="sk-box sk-w70"></div>
+										<div class="sk-flx sk-mt20">
+											<div class="sk-wlb">
+												<div class="sk-box sk-mt20"></div>
+												<div class="sk-box sk-mt20"></div>
+												<div class="sk-box sk-mt20"></div>
+												<div class="sk-box sk-mt20"></div>
+											</div>
+											<div class="sk-flx1 sk-pl50">
+												<div class="sk-box sk-mt20"></div>
+												<div class="sk-box sk-mt20 sk-w50"></div>
+												<div class="sk-box sk-mt20 sk-w50"></div>
+												<div class="sk-box sk-mt20"></div>
+											</div>
+										</div>
+										<div class="sk-flx sk-jce sk-mt20">
+											<div class="sk-btn sk-mt20"></div>
+										</div>
+									</div>
+								</div>
+								<div id="buy_lead_gen_formV2" data-bl="0101" class="blad rmbl blblock blenvl inblwd"
+									style="display:none">
+
+									<div class="be-mdleWrap belft betbl bebxs bebdr1 h358 newbl" id="t0101_inlineBL">
+										<div class="idsf iJSpb pfstrt" id="t0101_contactdiv">
+											<div class="be-fhdg clr_blue" id="t0101_hdg">Tell us what you need, and
+												we’ll help you get quotes</div>
+										</div>
+										<div id="t0101_wrpDiv" class="bepr betbl">
+											<div class="be-bgb bedtc bedsnone" id="t0101_sidePanel">
+												<div>
+													<div class="be-bls bebxs" id="t0101_benefits">
+														<div class="be-bnf">
+															<div class="be-tpd">
+																<div class="blnewform_sprit beW bebgp bemb8 beauto">
+																</div>Tell us what you<br>need</div>
+																<div class="be-tpd">
+																	<div
+																		class="blnewform_sprit beW bebgp2 bemb8 beauto">
+																	</div>Receive seller<br>details</div>
+																	<div class="be-tpd">
+																		<div
+																			class="blnewform_sprit beW1 bebgp3 bemb8 beauto">
+																		</div>Seal the deal
+																	</div>
+																	<div id="t0101_paywithdiv" class="be-tpd">
+																		<div
+																			class="blnewform_sprit beW16 bebgp4 bemb8 beauto">
+																		</div>Pay with IndiaMART
+																	</div>
+																</div>
+															</div>
+															<div class="beclr"></div>
+														</div>
+													</div>
+													<div class="bew2 bedtc bevT bebxs be-mfrm">
+														<div class="bespc">
+															<div class="be-fhdg clr_blue bedsnone" id="t0101_hdg">Tell
+																us what you need, and we’ll help you get quotes</div>
+															<div id="t0101flagdiv" class="bedsnone">
+																<dl id="t0101flag" class="dropdown bebdr be-flg"></dl>
+															</div>
+															<form name="t0101_bl_form" id="t0101_bl_form" method="post"
+																onsubmit="return!1" class="bemnh"></form>
+															<div class="beclr"></div>
+															<div id="t0101_tCond" class="bedsnone bemt10">
+																<input type="checkbox" class="bemt2 inEqlTnc" onclick="checkedTNC(&quot;0101&quot;)" id="t0101_tCondCheckBox"><span class="bevT bedblk">I agree to the <a href="https://www.indiamart.com/terms-of-use.html" target="_blank" class="betrmt">terms</a> and <a href="https://www.indiamart.com/privacy-policy.html" target="_blank" class="betrmt">privacy policy</a></span>
+															</div>
+															<div id="t0101_q_send_req_button" class="idsf iJFnd inEql">
+																<input type="submit" id="t0101_submit" class="inSbtn crP hovsub" value="Submit Requirement"></div>
+																<div class="befs14 beinfo bedsnone"
+																	id="t0101_byrinfoIn"></div>
+																<div class="belodrbg bedsnone" id="t0101_belodr">
+																	<div class="blloader"></div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div id="t0101_enrichform_maindiv" class="be-frmwrap bedsnone"></div>
+												<!--new Template-->
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="filter" style="width:180px;margin-left:-190px;">
+								<div id="sidebar_left">
+									<div class="t-con bxs">
+										<div class="dwth"><span>Results With</span>
+											<ul class="pmct">
+												<li class="r-pr" id="city_fil" onclick="city_filter();">
+													<input type="checkbox"  class="filled-in VidClk city_fil"><a
+														class="vidhvr">Show suppliers from <b>Delhi</b> only </a></li>
+											</ul>
+										</div>
+										<div class="rfch bnone">
+											<div class="wohm gtid ftr-stk">
+												<div class="btb col-clk" target="11">Related
+													Category<span class="arr_up"></span></div>
+												<div class="cell-bx" id="stk11">
+													<ul>
+														<li data-click="^Parentmcat|0|Pharmaceutical Injectables"><a
+																href="/search.mp?ss=pharmaceutical+injectables">Pharmaceutical
+																Injectables</a>
+
+															<ul class="cmct dmre">
+
+																<li><a href="/search.mp?ss=buminate"
+																		onclick="recordOutboundLink(this,'Child-Mcat','Related Product Matches-10 of  2',0,0);">Buminate</a>
+																</li>
+
+																<li><a href="/search.mp?ss=methylene+blue+injection"
+																		onclick="recordOutboundLink(this,'Child-Mcat','Related Product Matches-11 of  2',0,0);">Methylene
+																		Blue Injection</a></li>
+
+																<li><a href="/search.mp?ss=dexmedetomidine+injection"
+																		onclick="recordOutboundLink(this,'Child-Mcat','Related Product Matches-12 of  2',0,0);">Dexmedetomidine
+																		Injection</a></li>
+
+																<li><a href="/search.mp?ss=linezolid+injection"
+																		onclick="recordOutboundLink(this,'Child-Mcat','Related Product Matches-13 of  2',0,0);">Linezolid
+																		Injection</a></li>
+
+																<li><a href="/search.mp?ss=human+growth+hormone"
+																		onclick="recordOutboundLink(this,'Child-Mcat','Related Product Matches-14 of  2',0,0);">Human
+																		Growth Hormone Injection</a></li>
+
+																<li><a href="/search.mp?ss=terlipressin+injection"
+																		onclick="recordOutboundLink(this,'Child-Mcat','Related Product Matches-15 of  2',0,0);">Terlipressin
+																		Injection</a></li>
+																<li class="mclr mshow remr">+4 more</li>
+																<li class="mshow" style="display:none;"><a
+																		href="/search.mp?ss=pantoprazole+sodium+injection"
+																		onclick="recordOutboundLink(this,'Child-Mcat','Related Product Matches-16 of  2',0,0);">Pantoprazole
+																		Sodium Injection</a></li>
+
+																<li class="mshow" style="display:none;"><a
+																		href="/search.mp?ss=zienam+injection"
+																		onclick="recordOutboundLink(this,'Child-Mcat','Related Product Matches-17 of  2',0,0);">Zienam
+																		Injection</a></li>
+
+																<li class="mshow" style="display:none;"><a
+																		href="/search.mp?ss=bonmax+injection"
+																		onclick="recordOutboundLink(this,'Child-Mcat','Related Product Matches-18 of  2',0,0);">Bonmax
+																		Injection</a></li>
+
+																<li class="mshow" style="display:none;"><a
+																		href="/search.mp?ss=clarithromycin+injection"
+																		onclick="recordOutboundLink(this,'Child-Mcat','Related Product Matches-19 of  2',0,0);">Clarithromycin
+																		Injection</a></li>
+															</ul>
+														</li>
+														<li data-click="^Parentmcat|1|Injectable Products"><a
+																href="/search.mp?ss=injectable+products">Injectable
+																Products</a>
+
+														</li>
+													</ul>
+												</div>
+											</div>
+											<div class="wohm gtid ftr-stk">
+												<div class="btb col-clk " target="12">Business
+													Type<span class="arr_up"></span></div>
+												<ul class="cell-bx" bizfilter="1" id="stk12">
+													<li><a href="https://dir.indiamart.com/search.mp?ss=cresemaba&biz=10&amp;cq=delhi"
+															onclick="recordOutboundLink('Manufacturer', 'IMS', 'biztype-clicked', 0, 0);">Manufacturer</a>
+													</li>
+													<li><a href="https://dir.indiamart.com/search.mp?ss=cresemaba&biz=20&amp;cq=delhi"
+															onclick="recordOutboundLink('Exporter', 'IMS', 'biztype-clicked', 0, 0);">Exporter</a>
+													</li>
+													<li><a href="https://dir.indiamart.com/search.mp?ss=cresemaba&biz=30&amp;cq=delhi"
+															onclick="recordOutboundLink('Wholesaler', 'IMS', 'biztype-clicked', 0, 0);">Wholesaler</a>
+													</li>
+													<li><a href="https://dir.indiamart.com/search.mp?ss=cresemaba&biz=40&amp;cq=delhi"
+															onclick="recordOutboundLink('Retailer', 'IMS', 'biztype-clicked', 0, 0);">Retailer</a>
+													</li>
+												</ul>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div id="bl_overlay_layer" class="layer1" style="display:none"></div>
+							<!--Div for blpopup-->
+							<div id="t0901_bewrapper" class="be-frmwrap bedsnone">
+								<div id="t0901_blkwrap" class="be-blckbg"></div>
+								<div class="be-frmcont">
+									<div id="t0901_thankDiv" class="be-mcont bezid bedsnone"></div>
+									<div id="t0901_mcont" class="be-mcont bezid">
+										<div id="t0901_leftS" class="be-Lsc">
+											<div class="belodrbg bedsnone" id="t0901_belodrYT">
+												<div class="blloader"></div>
+											</div>
+											<div id="t0901_leftsection"></div>
+										</div>
+										<div id="t0901_leftR" class="be-Rsc  be-frmpop">
+											<div id="t0901_cls" class="be-cls">X</div>
+											<div id="t0901flagdiv" class="bedsnone">
+												<dl id="t0901flag" class="dropdown bebdr be-flg"></dl>
+											</div>
+											<div id="t0901_rightsection"></div>
+											<div id="t0901_byrinfo" class="befs14 beinfo eqBotm bedsnone"></div>
+											<input type="hidden" id="t0901_tmpId"></div>
+										</div>
+									</div>
+								</div>
+								<div id="t0801_msgDiv" class="chtHnt p15 cbl_bg1 txt33 cbl_fs16 cbl_br10 dn">
+									<span id="t0801_msgCls" class="cbl_bg1 cbl_pa crsIn"> <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"> <path d="M19.8 2.4c.3.3.3.8 0 1.1l-6 6c-.3.3-.3.8 0 1.1l6 6c.3.3.3.8 0 1.1l-2.2 2.2c-.3.3-.8.3-1.1 0l-6-6c-.3-.3-.8-.3-1.1 0l-6 6c-.3.3-.8.3-1.1 0L.1 17.7c-.3-.3-.3-.8 0-1.1l6-6c.3-.3.3-.8 0-1.1l-6-6c-.3-.3-.3-.8 0-1.1L2.3.2c.3-.3.8-.3 1.1 0l6 6c.3.3.8.3 1.1 0l6-6c.3-.3.8-.3 1.1 0l2.2 2.2z"></path> </svg> </span>
+									<div id="t0801_msg" class="cp">Looking for
+										<span id ="t0801_msgSpan" class="BL_Fwb"></span> Just provide a few details and
+										we will help you get quick quotes!</div>
+								</div>
+								<div id=t0801_chatBL
+									class="cbl_wrp cbl_br8 cbl_df cbl_fdc be-frmwrap be-frmwrap bedsnone">
+									<div id=t0801_blchatheader class="cbl_hed cbl_df cbl_p025 cbl_aic cbl_br8 cbl_bg1">
+										<div id=t0801_prodimg class="be-prdimg cbl_img cbl_df cbl_aic cbl_jcc cbl_ofh">
+										</div>
+										<div class="cbl_fs16 cbl_flx1" id=t0801_productname></div>
+										<div class="cbl_pr cbl_clsgrp">
+											<div id=t0801_cls class="cbl_closbtn cbl_cp cbl_pa"></div>
+											<div id="t0801flagdiv">
+												<dl id="t0801flag" class="dropdown"></dl>
+											</div><svg class=cbl_cross>
+												<use xlink:href=#t0801cblcross></use>
+											</svg>
+										</div>
+									</div>
+									<div id=t0801_blchatbody class="cbl_windw cbl_df cbl_ofh">
+										<div class=cbl_scrl id=t0801_chatScroll><span></span></div>
+										<div class="cbl_windw_iner cbl_df cbl_fdc" id=t0801_scroll>
+											<div class="cbl_ques cbl_hi dn" id=t0801hi isstatic=yes>
+												<div class="txt_area cbl_bg1" id=t0801_hiid>Hi</div>
+											</div>
+											<div id=t0801_new_chatbl class=cbl_ques_grp></div>
+										</div>
+									</div>
+									<div id=t0801_tCond class="cbl_tnc cbl_pa bedsnone">
+										<input type=checkbox class=bemt2 onclick='checkedTNC("0801")' id=t0801_tCondCheckBox><span class="bevT bedblk">I agree to the <a href=https://www.indiamart.com/terms-of-use.html target=_blank class=betrmt>terms</a> and <a href=https://www.indiamart.com/privacy-policy.html target=_blank class=betrmt>privacy policy</a></span>
+									</div>
+									<div id=t0801_fBtn class=bepr>
+										<div class="backdiv bedsnone" id=t0801_backdiv>
+											<input value=Back class=be-backbtn id=t0801_be-backbtn type=submit></div>
+										</div>
+										<div id=t0801_blchatfooter class="cbl_inpt cbl_pr cbl_df cbl_aic">
+											<div class="cbl_whtbx cbl_pa cbl_bg1 cbl_br10"></div>
+											<div id=t0801cbl_bluline class="cbl_bluline cbl_pa cbl_br10"></div>
+											<div class="cbl_dtls cbl_typhere dn" id="t0801_typehere">
+												<input readonly name=type_field class=cbl_name placeholder="Type Here..."></div>
+												<div id=t0801_newblchatReply class=cbl_dtls></div>
+												<div class="cbl_error cbl_pa" data-role="">
+													<span id=t0801verify_error></span></div>
+												<div class="cbl_vrfy cbl_pa dn" data-role="">
+													<span id=t0801cbl_msg>Verifying...</span></div>
+												<div class="cbl_sbmt_btn cbl_zi3 cbl_pa cbl_df cbl_aic cbl_jcc">
+													<button id=t0801_submit class="cbl_sbmtbt cbl_pa cbl_cp"></button>
+													<svg class=cbl_sbmt>
+														<use xlink:href=#t0801sendbtn></use>
+													</svg></div>
+											</div>
+										</div>
+										<div class="t0801blk_scrn blk_scrn dn"></div>
+										<div id=t0801_bl_form_wrapper_cta class="chat-blCta bedsnone">
+											<span id=t0801message_indicator class=chat-ntify>1</span><i class="chat-CinBg chat-blCin"></i>
+											<p class=chat-rqtx>
+												<span>Have a requirement?</span><br><span class=getbestprice_span> Get Best Price</span>
+											</p>
+										</div> <svg style=display:none xmlns=http://www.w3.org/2000/svg> <symbol
+											viewBox="0 0 18 18" id=t0801cblcheck>
+											<path
+												d=M0,9a9,9,0,1,1,9,9A9.01,9.01,0,0,1,0,9ZM1,9A8,8,0,1,0,9,1,8.01,8.01,0,0,0,1,9Zm7.377,2.888a.6.6,0,0,1-.366-.134L5.4,9.642a.6.6,0,0,1,.76-.939l2.2,1.784L11.828,6.06a.6.6,0,1,1,.951.743l-3.8,4.865a.605.605,0,0,1-.6.22Z>
+											</path>
+											</symbol>
+											<symbol id=t0801cblcross viewBox="0 0 21.213 21.213">
+												<path
+													d=M-632.745-856.141l-9.9,9.9-.707-.706,9.9-9.9-9.9-9.9.707-.707,9.9,9.9,9.9-9.9.707.707-9.9,9.9,9.9,9.9-.707.706Z
+													transform="translate(643.352 867.454)"></path>
+											</symbol>
+											<symbol viewBox="0 0 35 30" id=t0801sendbtn>
+												<path d=M0,68.25l35-15-35-15V49.917L25,53.25,0,56.583Z
+													transform="translate(0 -38.25)"></path>
+											</symbol>
+											<symbol viewBox="0 0 10 7" id=t0801dwnarow>
+												<path d=M5,0l5,7H0Z transform="translate(10 7) rotate(180)"></path>
+											</symbol>
+										</svg>
+										<div id="t0802_msgDiv" class="chtHnt p15 cbl_bg1 txt33 cbl_fs16 cbl_br10 dn">
+											<span id="t0802_msgCls" class="cbl_bg1 cbl_pa crsIn"> <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"> <path d="M19.8 2.4c.3.3.3.8 0 1.1l-6 6c-.3.3-.3.8 0 1.1l6 6c.3.3.3.8 0 1.1l-2.2 2.2c-.3.3-.8.3-1.1 0l-6-6c-.3-.3-.8-.3-1.1 0l-6 6c-.3.3-.8.3-1.1 0L.1 17.7c-.3-.3-.3-.8 0-1.1l6-6c.3-.3.3-.8 0-1.1l-6-6c-.3-.3-.3-.8 0-1.1L2.3.2c.3-.3.8-.3 1.1 0l6 6c.3.3.8.3 1.1 0l6-6c.3-.3.8-.3 1.1 0l2.2 2.2z"></path> </svg> </span>
+											<div id="t0802_msg" class="cp">Looking for
+												<span id ="t0802_msgSpan" class="BL_Fwb"></span> Just provide a few
+												details and we will help you get quick quotes!</div>
+										</div>
+										<div id=t0802_chatBL
+											class="cbl_wrp cbl_br8 cbl_df cbl_fdc be-frmwrap be-frmwrap bedsnone">
+											<div id=t0802_blchatheader
+												class="cbl_hed cbl_df cbl_p025 cbl_aic cbl_br8 cbl_bg1">
+												<div id=t0802_prodimg
+													class="be-prdimg cbl_img cbl_df cbl_aic cbl_jcc cbl_ofh"></div>
+												<div class="cbl_fs16 cbl_flx1" id=t0802_productname></div>
+												<div class="cbl_pr cbl_clsgrp">
+													<div id=t0802_cls class="cbl_closbtn cbl_cp cbl_pa"></div>
+													<div id="t0802flagdiv">
+														<dl id="t0802flag" class="dropdown"></dl>
+													</div><svg class=cbl_cross>
+														<use xlink:href=#t0802cblcross></use>
+													</svg>
+												</div>
+											</div>
+											<div id=t0802_blchatbody class="cbl_windw cbl_df cbl_ofh">
+												<div class=cbl_scrl id=t0802_chatScroll><span></span></div>
+												<div class="cbl_windw_iner cbl_df cbl_fdc" id=t0802_scroll>
+													<div class="cbl_ques cbl_hi dn" id=t0802hi isstatic=yes>
+														<div class="txt_area cbl_bg1" id=t0802_hiid>Hi</div>
+													</div>
+													<div id=t0802_new_chatbl class=cbl_ques_grp></div>
+												</div>
+											</div>
+											<div id=t0802_tCond class="cbl_tnc cbl_pa bedsnone">
+												<input type=checkbox class=bemt2 onclick='checkedTNC("0802")' id=t0802_tCondCheckBox><span class="bevT bedblk">I agree to the <a href=https://www.indiamart.com/terms-of-use.html target=_blank class=betrmt>terms</a> and <a href=https://www.indiamart.com/privacy-policy.html target=_blank class=betrmt>privacy policy</a></span>
+											</div>
+											<div id=t0802_fBtn class=bepr>
+												<div class="backdiv bedsnone" id=t0802_backdiv>
+													<input value=Back class=be-backbtn id=t0802_be-backbtn type=submit></div>
+												</div>
+												<div id=t0802_blchatfooter class="cbl_inpt cbl_pr cbl_df cbl_aic">
+													<div class="cbl_whtbx cbl_pa cbl_bg1 cbl_br10"></div>
+													<div id=t0802cbl_bluline class="cbl_bluline cbl_pa cbl_br10"></div>
+													<div class="cbl_dtls cbl_typhere dn" id="t0802_typehere">
+														<input readonly name=type_field class=cbl_name placeholder="Type Here..."></div>
+														<div id=t0802_newblchatReply class=cbl_dtls></div>
+														<div class="cbl_error cbl_pa" data-role="">
+															<span id=t0802verify_error></span></div>
+														<div class="cbl_vrfy cbl_pa dn" data-role="">
+															<span id=t0802cbl_msg>Verifying...</span></div>
+														<div class="cbl_sbmt_btn cbl_zi3 cbl_pa cbl_df cbl_aic cbl_jcc">
+															<button id=t0802_submit class="cbl_sbmtbt cbl_pa cbl_cp"></button>
+															<svg class=cbl_sbmt>
+																<use xlink:href=#t0802sendbtn></use>
+															</svg></div>
+													</div>
+												</div>
+												<div class="t0802blk_scrn blk_scrn dn"></div>
+												<div id=t0802_bl_form_wrapper_cta class="chat-blCta bedsnone">
+													<span id=t0802message_indicator class=chat-ntify>1</span><i class="chat-CinBg chat-blCin"></i>
+													<p class=chat-rqtx>
+														<span>Have a requirement?</span><br><span class=getbestprice_span> Get Best Price</span>
+													</p>
+												</div> <svg style=display:none xmlns=http://www.w3.org/2000/svg> <symbol
+													viewBox="0 0 18 18" id=t0802cblcheck>
+													<path
+														d=M0,9a9,9,0,1,1,9,9A9.01,9.01,0,0,1,0,9ZM1,9A8,8,0,1,0,9,1,8.01,8.01,0,0,0,1,9Zm7.377,2.888a.6.6,0,0,1-.366-.134L5.4,9.642a.6.6,0,0,1,.76-.939l2.2,1.784L11.828,6.06a.6.6,0,1,1,.951.743l-3.8,4.865a.605.605,0,0,1-.6.22Z>
+													</path>
+													</symbol>
+													<symbol id=t0802cblcross viewBox="0 0 21.213 21.213">
+														<path
+															d=M-632.745-856.141l-9.9,9.9-.707-.706,9.9-9.9-9.9-9.9.707-.707,9.9,9.9,9.9-9.9.707.707-9.9,9.9,9.9,9.9-.707.706Z
+															transform="translate(643.352 867.454)"></path>
+													</symbol>
+													<symbol viewBox="0 0 35 30" id=t0802sendbtn>
+														<path d=M0,68.25l35-15-35-15V49.917L25,53.25,0,56.583Z
+															transform="translate(0 -38.25)"></path>
+													</symbol>
+													<symbol viewBox="0 0 10 7" id=t0802dwnarow>
+														<path d=M5,0l5,7H0Z transform="translate(10 7) rotate(180)">
+														</path>
+													</symbol>
+												</svg>
+												<script type="text/javascript">
+													var s_city = 1; ims.cityID = '';ims.prc_cnt_flg=''; ims.time = 50; ims.attemptCounter = 0; var ga_clk = 0; ims.loginjs = 'imlogin-v375.js'; ims.prsnlizejs = 'pers.js?v=90';ims.identjs = 'identification_popup-v22.js'; ims.im_msgjs = 'im_msg.js?v=36'; setTimeout(function(){ try {intialize_bl(bl_init);} catch (e) {}}, 50);ims.relcat = 1;ims.zeroPrdflg = 0;ims.ctydiv = 1;ims.nameOnlyflg = 0;ims.isq = '';var ads_flag = '1'; ims.relkwrdstrp = 1;ims.jsFile = 'post.min-v502.js';    // Need to remove below code post migration of GCP
+    /**
+     *  * Delete a cookie
+     *   * @param {String} cname, cookie name
+     *    */
+    function deleteCookieW3C(cname) {
+        var d = new Date(); //Create an date object
+        d.setTime(d.getTime() - (1000*60*60*24)); //Set the time to the past. 1000 milliseonds = 1 second
+        var expires = "expires=" + d.toGMTString(); //Compose the expirartion date
+        window.document.cookie = cname+"="+"; path=/; domain=.indiamart.com; "+expires ;//Set the cookie with name and the expiration date
+
+    }
+    //R cookiw will help to decide GCP host name
+    //Now we are using GCP and DIR server
+    function getCookieW3C(t){for(var n=t+"=",r=document.cookie.split(";"),e=0;e<r.length;e++){for(var i=r[e];" "==i.charAt(0);)i=i.substring(1);if(0==i.indexOf(n))return i.substring(n.length,i.length)}return""}
+    var r_cookie = getCookieW3C('r');
+    if(r_cookie != '' && r_cookie=='g'){
+        r_cookie = 'google';
+        deleteCookieW3C('r');
+    }else{
+        r_cookie = 'unknown';
+    }
+    var pg_url = window.location.href;
+    if(pg_url.match(/&cq=/)){
+        var url_cq_chng = pg_url.replace(/(&cq=)[^&]*(&|$)/, '$1'+ims.cq+'$2');
+        history.replaceState(null, "", url_cq_chng);
+    }
+    else if(ims.cq!=''){
+        var cq_srca =  '';
+     if(localStorage.getItem('cq_src_pge') != ''  && localStorage.getItem('cq_src_pge')!= undefined && localStorage.getItem('cq_src_pge') != null){
+     cq_srca = localStorage.getItem('cq_src_pge');
+    }
+        history.replaceState(null, "", pg_url+'&cq='+ims.cq+'&cq_src='+cq_srca);
+    }
+												</script>
+												<script type="text/javascript">
+													imgtm = [{'CD_User-Mode': 'unidentified','PV_Tracking': '','CD_Group': '123','CD_Subcat': '360','CD_MCAT': '1466','CD_Miscellaneous': 'DIR-Search-r-SS0|FilterL|PNG|vid0-p0|sc:200|bad_kwd:F|kwd_type:Normal|lang:en||Mspl:1_ML|City:delhi|cresemba|DetectLang:en','CD_List-Count': '80','CD_Source':'Direct-Url','CD_HostName': r_cookie }]; function loadGtm(){(function(w, d, s, l, i) { w[l] = w[l] || [];w[l].push({'gtm.start': new Date().getTime(),event: 'gtm.js'});var f = d.getElementsByTagName(s)[0],j = d.createElement(s),dl = l != 'dataLayer' ? '&l=' + l : '';j.async = true;j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;f.parentNode.insertBefore(j, f);})(window, document, 'script', 'imgtm', 'GTM-NR4G');}
+												</script>
+											</div><!-- Payment Protection html -->
+											<div class="c3"></div>
+											<div class="payxb">
+												<div id='afscontainer2' class="ftads"></div>
+											</div>
+											<script>
+												var sugg = '';var sugg1 = '';var sugg_city = '';var city_nm = '';function auto_suggest(){ if(typeof(Suggester)!="undefined" && typeof(selecttext) != 'undefined'){ sugg = new Suggester({"element":"search_string", "onSelect":selecttext, "placeholder":"Enter product / service to search", "classPlaceholder":"ui-placeholder-input","autocompleteClass":"im-gl-header","defaultBox":true,"module":"IM-HEADER","dispstyle":2}); $('#btnSearch').click(function(){ if(typeof(sugg.onEnd) === 'function'){sugg.onEnd();}}); sugg_city = new Suggester({"element":"txt-city","onSelect":select_city,"type":"location","placeholder":"Enter city", "classPlaceholder":".drop1","minStringLengthToDisplaySuggestion":1,"autocompleteClass":"cls-city","onlyCity":"true", "rowsToDisplay" :10,"displayFields": "value,state","displaySeparator": ", ","fields": "state,state_id,flname,alias,location_id","showloc":1,"filters":"type:1"});} else{ setTimeout(function(){auto_suggest()}, 50);}}auto_suggest();
+function recordOutboundLink(link, category, action, value, timeOutFlag, nonInteractionFlag,cdmisc){
+ var linkHref = '';
+ if (typeof(link) == 'string' || typeof(link) == 'number') linkHref = link;
+ else linkHref = link.href;
+ var posno = action.match(/^Pos(\d+)/);
+ if(action.match(/^Pos/) && ga_clk == 0){
+  ga_clk = ga_clk + 1;var firstClick = 'FirstClick-'+posno[1]; var filterArr = new Array(); var filter = '';
+  if(city_search) filterArr.push('L');
+  if(filterArr.length > 0) filter = filterArr.join("");
+  if(filter){filter = filter+'F';firstClick += '-'+filter;}
+  if(ims.bizFilterAppeared == 1) firstClick += '-BFilter';
+  imgtm.push({ 'event' : 'IMEvent','eventCategory' : category,'eventAction' : firstClick,'eventLabel' : linkHref,'eventValue': value});
+ }
+ if(!nonInteractionFlag) nonInteractionFlag = false;
+if(category == 'EXP'){
+    imgtm.push({ 'event' : 'optimize.activate','eventCategory' : category,'eventAction' : action,'eventLabel' : linkHref,'eventValue': value});
+}else{
+ if(nonInteractionFlag == false) imgtm.push({ 'event' : 'IMEvent','eventCategory' : category,'eventAction' : action,'eventLabel' : linkHref,'eventValue': value,'CD_Additional_Data' : cdmisc});
+ else imgtm.push({ 'event' : 'IMEvent-NI','eventCategory' : category,'eventAction' : action,'eventLabel' : linkHref,'eventValue': value});
+}
+ if ( timeOutFlag == 1 ) setTimeout('document.location = "' + linkHref + '"', 100);
+}
+function enableAdsJS(){
+    if(ads_flag ==1 && isadult===0){(function(G,o,O,g,L,e){G[g]=G[g]||function(){(G[g]['q']=G[g]['q']||[]).push(arguments)},G[g]['t']=1*new Date;L=o.createElement(O),e=o.getElementsByTagName(O)[0];L.async=1;L.src='//www.google.com/adsense/search/ads.js'; e.parentNode.insertBefore(L,e)})(window,document,'script','_googCsa');}
+}
+dirType = (window.location.search.match(/ss=/)) ? "s": ((window.location.href.indexOf("dir.indiamart.com/impcat/")>0) ? "i" : "o");
+if(typeof(ims.ss) != 'undefined' && ims.ss != '')   //avoid js error in search page for blank string
+{
+if (window.addEventListener)
+    window.addEventListener("load", enableAdsJS, false);
+else if (window.attachEvent)
+    window.attachEvent("onload", enableAdsJS);
+else window.onload = enableAdsJS;
+}
+function checkNsetPV()
+{
+    if(setXnHistCity && typeof userDataCookie === 'function'){ var new_Cook = new userDataCookie(); var pv = new_Cook.get('xnHist').pv || 0; var set_obj = {'city':'delhi','pv' : pv }; new_Cook.set(set_obj, 'xnHist'); return true; }else{ setTimeout( checkNsetPV, 500);};
+}
+checkNsetPV();
+var IMAppBanner = 'NO'; if (typeof(dirType) != 'undefined' && dirType == 's') { document.getElementById('search_string').value = 'cresemba'; }
+if (typeof _gaq === 'undefined' || typeof _gaq !== 'object') { var _gaq = {};
+_gaq.push =  function(array){
+ if(array[0] === '_trackPageview')
+  imgtm.push({'event':'VirtualPageview','virtualPageURL':array[1],'virtualPageTitle' :(array[2] ? array[2] : "")});
+ else if(array[0] === '_trackEvent'){
+  var triggerevent = (array[5] == true) ? 'IMEvent-NI' : 'IMEvent';
+  imgtm.push({'event': triggerevent,'eventCategory': array[1],'eventAction': array[2], 'eventLabel': array[3], 'eventValue': array[4]});
+
+ }
+}
+}
+											</script>
+										</div>
+									</div>
+									<!-- content -->
+									<div class="c3"></div>
+									<div id="hdiv"></div>
+									<div class="cf_clb cf_footer">
+										<div class="cf_ftHd">
+											<div class="cf_wd">
+												<div class="cf_social">Follow us on: <a
+														href="https://www.facebook.com/IndiaMART" class="cf_fb"
+														target="_blank">Facebook</a> <a
+														href="https://twitter.com/IndiaMART" class="tw_ft"
+														target="_blank">Twitter</a> <a
+														href="https://www.linkedin.com/company/indiamart-intermesh-limited/"
+														class="cf_lkd_in" target="_blank">linkedin</a> </div>
+												<div class="cf_goMob cf_rht">Go Mobile: <a
+														href="https://itunes.apple.com/us/app/indiamart-buy-sell-products/id668561641?mt=8"
+														class="cf_iOS" target="_blank">iOS App</a> <a
+														href="https://play.google.com/store/apps/details?id=com.indiamart.m"
+														class="cf_anrd" target="_blank">Android App</a><a
+														href="https://m.indiamart.com/" class="cf_mSit"
+														target="_blank">https://m.indiamart.com</a></div>
+												<span class="cf_fhd">We are here to help you!</span>
+											</div>
+										</div>
+										<div class="cf_wd cf_ftlk" id="sag"></div>
+										<div class="cf_cryt">
+											<div class="cf_wd">
+												<span class="cf_rht"><a href="https://www.indiamart.com/terms-of-use.html">Terms of Use</a> - <a href="https://www.indiamart.com/privacy-policy.html">Privacy Policy</a> - <a href="https://www.indiamart.com/link-to-us.html">Link to Us</a></span><span>Copyright &copy; 1996-2021 IndiaMART InterMESH Ltd. All rights reserved.</span>
+											</div>
+										</div>
+										<div class="chat_window" style="position:absolute; right:0px"></div>
+									</div>
+									<div id="IdentifiedPopUpHTML"></div>
+									<script>
+										var css = document.createElement("style");
+css.type = "text/css";
+css.innerHTML = ".cf_wd a{text-decoration:none; outline:none;-webkit-backface-visibility:hidden;}.cf_social,.cf_rht,.cf_ftlk li.last{float:right}.cf_clb, .cf_cryt{clear:both}.cf_wd{width:1001px;margin:0 auto} .cf_footer{background:#f6f6f6;border-top:solid 1px #e6e6e6; font-weight:300;font-size:14px;font-family: arial;}.cf_footer a{text-decoration:none; outline:none; -webkit-backface-visibility: hidden}.cf_footer ul, .cf_footer li{margin:0;padding:0}.cf_ftHd{background:#eeeeee;border-top:solid 1px #fff;border-bottom:solid 1px #e6e6e6;line-height:42px;font-weight:400}.cf_fhd{color:#2e3192;font-size:20px}.cf_social a{ display:inline-block;width:31px;height:42px;margin:0;text-indent:-99999px;transition: all 0.2s ease-out 0s}.cf_fb{background-position:-138px -189px}.cf_fb:hover{background-position:-170px -189px}.tw_ft{background-position:-202px -189px}.tw_ft:hover{background-position:-234px -189px}.cf_lkd_in{background-position:-265px -189px}.cf_lkd_in:hover{background-position:-297px -189px}.cf_gpls{background-position:-262px -189px}.cf_gpls:hover{background-position:-294px -189px}.cf_wndw{background-position:-335px -189px} .cf_wndw:hover{background-position:-355px -189px}.cf_bb{background-position:-392px -183px;width:32px!important}.cf_bb:hover{background-position:-427px -183px}.cf_goMob{margin-right:15px}.cf_goMob a{ display:inline-block;width:24px;height:42px;margin:0;text-indent:-99999px;transition: all 0.2s ease-out 0s}.cf_iOS{background-position:-45px -187px}.cf_iOS:hover{background-position:-68px -187px}.cf_anrd{background-position:0 -187px}.cf_anrd:hover{background-position:-23px -187px}.cf_mSit{background-position:-90px -187px}.cf_mSit:hover{background-position:-113px -187px}.cf_ftlk li{margin:7px 0;display:inline-block;width:190px;float:left;list-style:none;line-height:19px}.cf_ftlk li.last{margin-right:0 !important; width:140px}.cf_ftlk li.cf_wdth{width:240px}.cf_ftlk li a{display:block;padding:1px 0;color:#727272}.cf_ftlk li a:hover, .cf_cryt a:hover{color:#2e3192}.cf_ftlk .cf_lihd{font-size:17px;color:#000;padding:0 0 4px;font-weight:400}.cf_cryt{border-top:solid 1px #e1e1e1;color:#727272;padding:5px;font-size:13px}.cf_cryt a{color:#727272}.cf_ftlk .cf_lihd a{color:#000;}";
+document.body.appendChild(css);
+var jobs_career = '<a href="https://corporate.indiamart.com/careers-at-im/ ">Jobs &amp; Careers</a>';
+if(window.location.href.match(/my/i)=='my'||glmodid=="IMHOME")
+{  
+var IMhome_invest = '<a href="https://investor.indiamart.com/index.htm ">Investor Section</a>';
+var IMhome_jobs = jobs_career ;
+}else{
+    var IMhome_invest = jobs_career;
+    var IMhome_jobs = '' ;
+}
+document.getElementById('sag').innerHTML='<ul><li><a href="https://corporate.indiamart.com/about-us/">About Us</a><a href="https://corporate.indiamart.com/partner-with-us/">Join Sales</a><a href="https://corporate.indiamart.com/category/everything-else/indiamart-achievers/">Success Stories</a> <a href="https://corporate.indiamart.com/category/everything-else/press-releases/">Press Section</a> <a href="https://corporate.indiamart.com/advertise-with-indiamart/">Advertise with Us</a>'+IMhome_invest+'</li><li><a href="https://help.indiamart.com/">Help</a> <a href="https://help.indiamart.com/user-feedback/">Feedback</a> <a href="https://help.indiamart.com/complaint-registration/">Complaints</a> <a href="https://corporate.indiamart.com/customer-care-services/">Customer Care</a>'+IMhome_jobs+'<a href="https://corporate.indiamart.com/branch-offices/">Contact Us</a></li><li class="cf_wdth"><div class="cf_lihd"><a href="https://seller.indiamart.com" class="ch_supplier_head">Suppliers Tool Kit</a></div><span id="ch_free_web"><a href="https://seller.indiamart.com/" class="ch_free_web">Sell on IndiaMART</a></span> <a href="https://seller.indiamart.com/bltxn/?pref=recent" class="bl_log_link">Latest BuyLead</a> <a href="https://corporate.indiamart.com/quick-learn/">Learning Centre</a> <a href="https://seller.indiamart.com/pwim/invoice/whatispwim/?bannerid=cntrlfooter" id="pypd_footer" style="display:none">Pay With IndiaMART</a></li><li class="cf_wdth"><div class="cf_lihd"><a href="https://my.indiamart.com" class="ch_buyers_head">Buyers Tool Kit</a></div><a href="https://my.indiamart.com/buyertools/postbl" class="ch_post_buy">Post Your Requirement</a> <a href="https://my.indiamart.com/buyertools/myproductbuy" class="mang_pro">Products You Buy</a> <a href="https://www.indiamart.com/search.html">Search Products &amp; Suppliers</a> <a href="https://paywith.indiamart.com?bannerid=cntrlfooter"  id="pay_footer">Pay With IndiaMART</a></li><li class="last"><div class="cf_lihd">Events</div><a href="https://10times.com/tradeshows" target="_blank">Trade Shows</a> <a href="https://10times.com/conferences" target="_blank">Conferences</a> <a href="https://10times.com/events/by-country" target="_blank">Events by Country</a></li></ul>';   
+
+var webAddress=location.hostname;var UrlPri =webAddress.match(/^dev/)?"dev-":(webAddress.match(/^stg/))?"stg-":"";var c_imesh = (typeof(readCookie("ImeshVisitor")) !== "undefined")?readCookie("ImeshVisitor"):'';var pv_count=0;if(readCookie("xnHist") > ""){    
+if(getparamVal(decodeURIComponent(readCookie("xnHist")), "pv") !=""){pv_count=getparamVal(decodeURIComponent(readCookie("xnHist")), "pv")}}
+var rspv = 0;
+var newVal = "";
+var o = new Date;
+o.setTime(o.getTime() + (30*60*1000));
+ if(readCookie("sessid").length > 0)
+ {
+    var spv1 = readCookie("sessid").split('='); 
+    rspv = parseInt(spv1[1]);
+    newVal = "spv="+ ++rspv;
+ }
+ else{
+ newVal = "spv=1";
+ } 
+function callIdentifyPopup()
+{
+    var match=window.location.href.match(/back=1/) ;
+    if((c_imesh == '' || c_imesh==null) && (rspv == 2 || rspv == 4 || rspv == 6)&& match==null){
+        $.ajaxSetup({ cache: true }); $.getScript("https://"+UrlPri+"utils.imimg.com/globalhf/identified_popup.js",function(){getIdentifiedPopUpHTMLForm1(); setTimeout(function(){identify_Banner()},3000);});
+        $('#IdentifiedPopUpHTML').on("click","#countrySuggesterIdenPop",function(){changePopUpInput(identifiedPopName,1);});is_form_open=0; }
+}  
+function activeFooterOnReady()
+{
+    if(typeof(jQuery) === 'function'){
+        document.cookie = "sessid="+newVal + ";expires=" + o.toGMTString() + ";domain=.indiamart.com;path=/;"
+        //callIdentifyPopup();
+         pop_imesh = readCookie("ImeshVisitor");
+         pop_xnhist = readCookie("xnHist");
+         var ipv = getparamVal(pop_xnhist, "ipv");
+         var fpv = getparamVal(pop_xnhist, "fpv");
+         var glUserId = getparamVal(pop_imesh, "glid");
+        var name = getparamVal(pop_imesh, "mb1");
+        var modid = glmodid;
+        var email = getparamVal(pop_imesh, "em");
+        var city = getparamVal(pop_imesh, "ct");
+        var ph_country = getparamVal(pop_imesh, "phcc");
+        var cn_iso = getparamVal(pop_imesh, "iso");
+         //Mobile Verification Popup for 3rd and 5th Page view
+        //  if(((ipv == 2)||(ipv==4))&& (!(window.location.href.indexOf("my") > -1))) {  
+        //      var screen = 'VER';
+        //      if (name!=''&& getparamVal(pop_imesh, "phcc") == '91' && getparamVal(pop_imesh, "uv") != 'V'){        
+        //          $.getScript("https://"+UrlPri+"utils.imimg.com/header/js/imlogin.js", function(){ send_otp(glUserId,modid,name,ph_country,'121',cn_iso,'2','4',screen);
+        //          });
+        //      }
+        // }   
+    } else{ setTimeout(function(){activeFooterOnReady()}, 50);}
+}
+if(document.readyState !== "complete" && typeof jQuery === 'function'){
+    $(document).ready(function(){ activeFooterOnReady(); });
+}else{
+    activeFooterOnReady();
+}
+function recordInboundLinkS_bounce(category, action, label, value, noninteraction) { _gaq.push(['_trackEvent', window.location.href , action, label, value, noninteraction]); }
+function recordOutboundLink3(category, action){_gaq.push(['_trackEvent', category, action, 'trackPageviewParam']);}
+function callConversionCode()
+{
+    /* <![CDATA[ */
+    var google_conversion_id = 1067418746;
+    var google_custom_params = window.google_tag_params;
+    var google_remarketing_only = true;/* ]]> */
+    $.getScript( "https://www.googleadservices.com/pagead/conversion.js" );
+    $('.cf_ftlk ul li a').on('click',function(){var value=$(this).text();_gaq.push(['_trackEvent', 'IM Global Footer ', window.location.host, value, 0]); }); 
+}
+if(typeof jQuery === 'function' && document.readyState !== "complete"){
+    $(window).load(function() { callConversionCode(); });
+}else{
+    document.addEventListener('jqready', function (e){ callConversionCode(); });
+}
+									</script><noscript>
+										<div style="display:inline;">
+											<img height="1" width="1" style="border-style:none;" alt="google" src="https://googleads.g.doubleclick.net/pagead/viewthroughconversion/1067418746/?value=0&amp;guid=ON&amp;script=0"/></div>
+									</noscript><noscript><img height="1" width="1" alt="facebook" style="display:none" src="https://www.facebook.com/tr?id=1000024446685311&amp;ev=PixelInitialized" /></noscript>
+</body>
+
+</html>

@@ -5,6 +5,10 @@ app.controller('srcCtrl', function ($scope) {
             'url': 'https://www.volunteerscovihelp.org',
             'name': 'Volunteers.CoviHelp'
         },
+		{
+			'url': 'http://cowinmap.com/',
+            'name': 'The Cowin Map'
+		},
         {
             'url': 'https://covidcitizens.org',
             'name': 'Covid Citizens'
@@ -48,6 +52,10 @@ app.controller('srcCtrl', function ($scope) {
         {
             'url': 'https://twitter.com',
             'name': 'Twitter'
-        }
+        },
+		{
+			'url': 'https://www.indiamart.com/',
+            'name': 'IndiaMART'
+		}
     ];
 });
