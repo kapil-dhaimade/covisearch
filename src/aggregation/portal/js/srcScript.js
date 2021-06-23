@@ -29,6 +29,10 @@ app.controller('srcCtrl', function ($scope) {
             'url': 'https://liferesources.in',
             'name': 'LifeResources'
         },
+		{
+            'url': 'https://covid.icmr.org.in/',
+            'name': 'Indian Council of Medical Research (ICMR) Testing Labs Portal'
+        },
         {
             'url': 'http://dashboard.covid19.ap.gov.in/ims/hospbed_reports',
             'name': 'Covid 19 Andhra Pradesh'
