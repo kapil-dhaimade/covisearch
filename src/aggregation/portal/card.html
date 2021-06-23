@@ -207,12 +207,14 @@
 <div class="text-center py-1" ng-if="screenStatus == 'dataFetched' && (hasMoreData == true || pageNumber >1) ">
     <nav>
         <ul class="pagination justify-content-center">
-            <li class="page-item" ng-class="{'disabled':pageNumber == 1}" ng-click="fetchPreviousBatch()">
-                <a class="page-link" href="#" tabindex="-1">&laquo; Previous</a>
+            <li class="page-item" ng-class="{'disabled':pageNumber == 1}" ng-click="fetchPreviousBatch(pageNumber-1)">
+                <a class="page-link" href="#" tabindex="-1">&#8249;</a>
             </li>
-            <li class="page-item disabled"><span class="page-link">{{pageNumber}}</span></li>
-            <li class="page-item" ng-class="{'disabled':hasMoreData == false}" ng-click="fetchNextBatch()">
-                <span class="page-link">Next &raquo;</span>
+            <li class="page-item disabled" ng-if="hasStartMore(pageNumber)"><span class="page-link">..</span></li>
+            <li class="page-item" ng-repeat="n in range(pageNumber)" ng-class="{'disabled':n == pageNumber}" ng-click="fetchNextBatch(n)"><span class="page-link">{{n}}</span></li>
+            <li class="page-item disabled" ng-if="hasEndMore(pageNumber)"><span class="page-link">..</span></li>
+            <li class="page-item" ng-class="{'disabled':hasMoreData == false}" ng-click="fetchNextBatch(pageNumber+1)">
+                <span class="page-link">&#8250;</span>
             </li>
         </ul>
     </nav>

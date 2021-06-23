@@ -1,7 +1,8 @@
 {
-    "meta_info": {
-        "more_data_available": true
-    },
+    "meta_info":{
+		"more_data_available": true,
+		"total_records": 100
+	},
     "resource_info_data": [
         {
             "post_time": null,
