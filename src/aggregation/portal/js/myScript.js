@@ -29,6 +29,10 @@ app.controller('formCtrl', function ($scope, $http, $timeout, $window) {
 
     $scope.fetch = function (data) {
         resource = getResource(data);
+        if(typeof $scope.pageNumber === "undefined")
+        {
+            $scope.pageNumber = 1;
+        }
         url = api_base_url + "resource_type=" + resource.value + "&city=" + data.city +
                          "&page_no=" + $scope.pageNumber;
         // url = '../data/api.txt'
