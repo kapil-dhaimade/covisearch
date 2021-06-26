@@ -211,7 +211,7 @@
                 <a class="page-link" href="#" tabindex="-1">&#8249;</a>
             </li>
             <li class="page-item disabled" ng-if="hasStartMore(pageNumber)"><span class="page-link">..</span></li>
-            <li class="page-item" ng-repeat="n in range(pageNumber)" ng-class="{'disabled':n == pageNumber}" ng-click="fetchNextBatch(n)"><span class="page-link">{{n}}</span></li>
+            <li class="page-item" ng-repeat="n in range(pageNumber)" ng-class="{'disabled':n == pageNumber}" ng-click="fetchBatchAsPage(n)"><span class="page-link">{{n}}</span></li>
             <li class="page-item disabled" ng-if="hasEndMore(pageNumber)"><span class="page-link">..</span></li>
             <li class="page-item" ng-class="{'disabled':hasMoreData == false}" ng-click="fetchNextBatch(pageNumber+1)">
                 <span class="page-link">&#8250;</span>

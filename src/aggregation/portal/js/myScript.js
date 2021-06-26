@@ -29,10 +29,6 @@ app.controller('formCtrl', function ($scope, $http, $timeout, $window) {
 
     $scope.fetch = function (data) {
         resource = getResource(data);
-        if(typeof $scope.pageNumber === "undefined")
-        {
-            $scope.pageNumber = 1;
-        }
         url = api_base_url + "resource_type=" + resource.value + "&city=" + data.city +
                          "&page_no=" + $scope.pageNumber;
         // url = '../data/api.txt'
@@ -123,6 +119,15 @@ app.controller('formCtrl', function ($scope, $http, $timeout, $window) {
         }
     };
 
+    $scope.fetchBatchAsPage = function (currPage) {
+        if ($scope.pageNumber != currPage) {
+            $scope.pageNumber = currPage;
+            $scope.screenStatus = 'loading';
+            $scope.fetch($scope.master);
+        }
+    };
+
+
     $scope.fetchPreviousBatch = function (page) {
         if ($scope.pageNumber > 1) {
             $scope.pageNumber = page;
@@ -161,7 +166,7 @@ app.controller('formCtrl', function ($scope, $http, $timeout, $window) {
         $scope.init();
         $scope.screenStatus = 'loading';
         $scope.master = angular.copy($scope.filter);
-        $scope.fetchNextBatch();
+        $scope.fetchNextBatch(1);
         waitForCityLocationDataAndSetNearbyCity()
     };
 
