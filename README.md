@@ -8,9 +8,10 @@ This repo contains the code used to make the Covisearch system. Google Cloud Pla
 Screenshots:
 
 <p align="center">
-<img src="screenshots/mobile-header.jpeg" width="300" height="576" />&emsp;&emsp;<img src="screenshots/mobile-footer.jpeg" width="300" height="576" />&emsp;&emsp;<img src="screenshots/mobile-entry-expanded.jpeg" width="300" height="576" />  
+<img src="screenshots/mobile-header.jpeg" width="250" height="480" />&emsp;&emsp;<img src="screenshots/mobile-footer.jpeg" width="250" height="480" />&emsp;&emsp;<img src="screenshots/mobile-entry-expanded.jpeg" width="250" height="480" />  
 </p>
 <p align="center">Mobile</p>
+
 
 
 <p align="center">
